@@ -5630,6 +5630,17 @@ export type TranslationKeys = {
   "progress.student_fallback": string;
   "progress.unauthenticated": string;
   "progress.unknown_error": string;
+  "push_padres.activating": string;
+  "push_padres.button": string;
+  "push_padres.desc": string;
+  "push_padres.error_prefix": string;
+  "push_padres.no_auth": string;
+  "push_padres.permission_pending": string;
+  "push_padres.status_blocked": string;
+  "push_padres.status_off": string;
+  "push_padres.status_on": string;
+  "push_padres.status_unsupported": string;
+  "push_padres.title": string;
   "rec.academic_high_body": string;
   "rec.academic_high_title": string;
   "rec.academic_low_body": string;
@@ -5930,12 +5941,12 @@ export type TranslationKeys = {
   "streak.tier_imparable": string;
   "streak.xp": string;
   "streak.you": string;
-  "streak_ctx_0": string;
-  "streak_ctx_1": string;
-  "streak_ctx_2": string;
-  "streak_ctx_3": string;
-  "streak_ctx_5": string;
-  "streak_ctx_7": string;
+  streak_ctx_0: string;
+  streak_ctx_1: string;
+  streak_ctx_2: string;
+  streak_ctx_3: string;
+  streak_ctx_5: string;
+  streak_ctx_7: string;
   "study_groups.create": string;
   "study_groups.create_first": string;
   "study_groups.form_desc_placeholder": string;
@@ -5955,11 +5966,11 @@ export type TranslationKeys = {
   "summary.stat_days": string;
   "summary.stat_points": string;
   "summary.stat_sessions": string;
-  "time_avg": string;
-  "time_days_active": string;
-  "time_title": string;
-  "time_today": string;
-  "time_week": string;
+  time_avg: string;
+  time_days_active: string;
+  time_title: string;
+  time_today: string;
+  time_week: string;
   "vak.informe.desc": string;
   "vak.informe.email_label": string;
   "vak.informe.name_label": string;
@@ -11754,6 +11765,17 @@ const translationKeySet: Record<string, true> = {
   "progress.student_fallback": true,
   "progress.unauthenticated": true,
   "progress.unknown_error": true,
+  "push_padres.activating": true,
+  "push_padres.button": true,
+  "push_padres.desc": true,
+  "push_padres.error_prefix": true,
+  "push_padres.no_auth": true,
+  "push_padres.permission_pending": true,
+  "push_padres.status_blocked": true,
+  "push_padres.status_off": true,
+  "push_padres.status_on": true,
+  "push_padres.status_unsupported": true,
+  "push_padres.title": true,
   "rec.academic_high_body": true,
   "rec.academic_high_title": true,
   "rec.academic_low_body": true,
@@ -12054,12 +12076,12 @@ const translationKeySet: Record<string, true> = {
   "streak.tier_imparable": true,
   "streak.xp": true,
   "streak.you": true,
-  "streak_ctx_0": true,
-  "streak_ctx_1": true,
-  "streak_ctx_2": true,
-  "streak_ctx_3": true,
-  "streak_ctx_5": true,
-  "streak_ctx_7": true,
+  streak_ctx_0: true,
+  streak_ctx_1: true,
+  streak_ctx_2: true,
+  streak_ctx_3: true,
+  streak_ctx_5: true,
+  streak_ctx_7: true,
   "study_groups.create": true,
   "study_groups.create_first": true,
   "study_groups.form_desc_placeholder": true,
@@ -12079,11 +12101,11 @@ const translationKeySet: Record<string, true> = {
   "summary.stat_days": true,
   "summary.stat_points": true,
   "summary.stat_sessions": true,
-  "time_avg": true,
-  "time_days_active": true,
-  "time_title": true,
-  "time_today": true,
-  "time_week": true,
+  time_avg: true,
+  time_days_active: true,
+  time_title: true,
+  time_today: true,
+  time_week: true,
   "vak.informe.desc": true,
   "vak.informe.email_label": true,
   "vak.informe.name_label": true,

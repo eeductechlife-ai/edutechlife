@@ -27,9 +27,11 @@ function crearSupabaseFalso() {
         }
         const filas = (tablas[nombre] = tablas[nombre] || []);
         const coincide = (f) =>
-          q.filtros.every(([col, cmp, val]) =>
-            cmp === 'eq' ? f[col] === val : Date.parse(f[col]) < Date.parse(val),
-          );
+          q.filtros.every(([col, cmp, val]) => {
+            if (cmp === 'eq') return f[col] === val;
+            if (cmp === 'in') return val.includes(f[col]);
+            return Date.parse(f[col]) < Date.parse(val);
+          });
         if (q.op === 'insert') {
           const clave = filas.find((f) => f.student_id === q.set.student_id);
           if (clave) return { data: null, error: { message: 'duplicate', code: '23505' } };
@@ -54,6 +56,7 @@ function crearSupabaseFalso() {
         select: () => b,
         eq: (col, val) => (q.filtros.push([col, 'eq', val]), b),
         lt: (col, val) => (q.filtros.push([col, 'lt', val]), b),
+        in: (col, val) => (q.filtros.push([col, 'in', val]), b),
         limit: (n) => ((q.limite = n), b),
         maybeSingle: () => ((q.maybe = true), b),
         insert: (fila) => ((q.op = 'insert'), (q.set = fila), b),
@@ -92,6 +95,7 @@ function sembrar({ edad = 10, vinculos = [{ parent: PADRE }], nombre = 'Mateo P�
       is_active: v.activo ?? true,
     })),
     aviso_padre_login: [],
+    push_subscriptions: [],
   };
 }
 
@@ -101,6 +105,9 @@ describe('avisarInicioSesionMenor', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.RESEND_API_KEY = 're_test';
+    delete process.env.VAPID_PUBLIC_KEY;
+    delete process.env.VAPID_PRIVATE_KEY;
+    delete process.env.VAPID_SUBJECT;
     mockEmail.sendEmail.mockResolvedValue({ success: true, messageId: 'm1' });
     sembrar();
   });
@@ -232,5 +239,101 @@ describe('avisarInicioSesionMenor', () => {
       motivo: 'error_inesperado',
     });
     expect(mockEmail.sendEmail).not.toHaveBeenCalled();
+  });
+});
+
+describe('avisarInicioSesionMenor y la notificación push al padre', () => {
+  const crypto = require('node:crypto');
+  const par = crypto.generateKeyPairSync('ec', { namedCurve: 'P-256' });
+  const jwk = par.privateKey.export({ format: 'jwk' });
+  const publica = Buffer.concat([Buffer.from([4]), Buffer.from(jwk.x, 'base64url'), Buffer.from(jwk.y, 'base64url')]);
+  const suscripcion = (n) => ({
+    id: `sus-${n}`,
+    user_id: PADRE,
+    subscription: { endpoint: `https://fcm.googleapis.com/fcm/send/${n}`, keys: { p256dh: 'p'.repeat(87), auth: 'a'.repeat(22) } },
+  });
+  const fetchPush = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env.RESEND_API_KEY = 're_test';
+    process.env.VAPID_PUBLIC_KEY = publica.toString('base64url');
+    process.env.VAPID_PRIVATE_KEY = Buffer.from(jwk.d, 'base64url').toString('base64url');
+    process.env.VAPID_SUBJECT = 'mailto:avisos@edutechlife.co';
+    mockEmail.sendEmail.mockResolvedValue({ success: true, messageId: 'm1' });
+    fetchPush.mockReset().mockResolvedValue({ status: 201 });
+    vi.stubGlobal('fetch', fetchPush);
+    sembrar();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    delete process.env.VAPID_PUBLIC_KEY;
+    delete process.env.VAPID_PRIVATE_KEY;
+    delete process.env.VAPID_SUBJECT;
+  });
+
+  test('envía la push a todas las suscripciones del padre y conserva el correo', async () => {
+    tablas.push_subscriptions = [suscripcion(1), suscripcion(2)];
+    const r = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+
+    expect(r).toEqual({ enviado: true, motivo: 'enviado' });
+    expect(fetchPush).toHaveBeenCalledTimes(2);
+    expect(mockEmail.sendEmail).toHaveBeenCalledTimes(1);
+  });
+
+  test('si la push falla por red, el correo sale igual y el aviso cuenta como enviado', async () => {
+    tablas.push_subscriptions = [suscripcion(1)];
+    fetchPush.mockRejectedValueOnce(new Error('ECONNRESET'));
+    const r = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+
+    expect(r.enviado).toBe(true);
+    expect(mockEmail.sendEmail).toHaveBeenCalledTimes(1);
+  });
+
+  test('si la base de datos falla al leer las suscripciones, el correo sale igual', async () => {
+    tablas.__error = 'push_subscriptions';
+    const r = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+
+    expect(r.enviado).toBe(true);
+    expect(mockEmail.sendEmail).toHaveBeenCalledTimes(1);
+  });
+
+  test('si fallan la push y el correo, libera la reserva y el siguiente inicio vuelve a avisar', async () => {
+    tablas.push_subscriptions = [suscripcion(1)];
+    fetchPush.mockRejectedValueOnce(new Error('ECONNRESET'));
+    mockEmail.sendEmail.mockRejectedValueOnce(new Error('Resend caído'));
+    const fallido = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+    expect(fallido).toEqual({ enviado: false, motivo: 'fallo_envio' });
+
+    const reintento = await avisarInicioSesionMenor(NIÑO, { ahora: new Date(AHORA.getTime() + 60 * 1000) });
+    expect(reintento.enviado).toBe(true);
+  });
+
+  test('sin suscripciones push solo cuenta el correo', async () => {
+    const r = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+    expect(r.enviado).toBe(true);
+    expect(fetchPush).not.toHaveBeenCalled();
+    expect(mockEmail.sendEmail).toHaveBeenCalledTimes(1);
+  });
+
+  test('sin RESEND_API_KEY pero con VAPID envía solo la push y no llama al correo', async () => {
+    delete process.env.RESEND_API_KEY;
+    tablas.push_subscriptions = [suscripcion(1)];
+    const r = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+
+    expect(r.enviado).toBe(true);
+    expect(fetchPush).toHaveBeenCalledTimes(1);
+    expect(mockEmail.sendEmail).not.toHaveBeenCalled();
+  });
+
+  test('sin RESEND_API_KEY ni VAPID no envía ni reserva (motivo sin_resend)', async () => {
+    delete process.env.RESEND_API_KEY;
+    delete process.env.VAPID_PRIVATE_KEY;
+    tablas.push_subscriptions = [suscripcion(1)];
+    const r = await avisarInicioSesionMenor(NIÑO, { ahora: AHORA });
+    expect(r.motivo).toBe('sin_resend');
+    expect(fetchPush).not.toHaveBeenCalled();
+    expect(tablas.aviso_padre_login).toHaveLength(0);
   });
 });

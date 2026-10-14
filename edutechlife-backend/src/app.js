@@ -25,6 +25,7 @@ const wompiRoutes = require('./routes/wompi');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
+const notificationPushRoutes = require('./routes/notificationsPush');
 const institutionRoutes = require('./routes/institutions');
 const complianceRoutes = require('./routes/compliance');
 const leadRoutes = require('./routes/leads');
@@ -191,6 +192,8 @@ app.use('/api/stripe', stripeRoutes);
 app.use('/api/payments/wompi', wompiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);
+// Push del padre: antes del guard de sesión de /api/notifications (la clave pública es pública).
+app.use('/api/notifications/push', notificationPushRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/compliance', complianceRoutes);

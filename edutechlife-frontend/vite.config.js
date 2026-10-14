@@ -99,6 +99,8 @@ export default defineConfig({
         globIgnores: [
           '**/pdf-vendor*',
         ],
+        // Avisos push del padre (public/sw-push.js): solo eventos push y notificationclick.
+        importScripts: ['sw-push.js'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         // Evita que chunks viejos (hash desactualizado) crasheen la app tras un deploy
         cleanupOutdatedCaches: true,

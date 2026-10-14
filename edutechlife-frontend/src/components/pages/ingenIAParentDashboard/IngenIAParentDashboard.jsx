@@ -41,6 +41,7 @@ import {
 } from "./components/ParentStats";
 import WeeklyReportCard from "./components/WeeklyReportCard";
 import SchoolCodeCard from "./components/SchoolCodeCard";
+import PushAvisosCard from "./components/PushAvisosCard";
 import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
 import ParentRecommendations from "./components/ParentRecommendations";
@@ -1532,6 +1533,7 @@ const IngenIAParentDashboard = () => {
                           authToken={authToken}
                           studentId={studentId || userId}
                         />
+                        <PushAvisosCard authToken={authToken} />
                       </div>
                     </div>
                   </div>

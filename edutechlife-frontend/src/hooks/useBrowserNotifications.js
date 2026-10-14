@@ -77,7 +77,8 @@ export const useBrowserNotifications = () => {
             user_agent: navigator.userAgent,
             updated_at: new Date().toISOString(),
           },
-          { onConflict: "user_id" },
+          // Clave (user_id, endpoint): un usuario puede tener varios dispositivos (migración 108).
+          { onConflict: "user_id,endpoint" },
         );
       } catch (e) {
         console.warn("[PUSH] sync error:", e);

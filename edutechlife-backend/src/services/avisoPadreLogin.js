@@ -17,6 +17,7 @@
 const supabase = require('../db/supabase');
 const { sendEmail } = require('./emailService');
 const logger = require('../utils/logger');
+const { configuracionVapid, enviarPushPadre } = require('./webPush');
 
 const TABLA_REGISTRO = 'aviso_padre_login';
 const MAYORIA_DE_EDAD = 18; // Ley 1581 de 2012: menor de 18 años
@@ -96,8 +97,11 @@ async function cargarMenor(studentId) {
   return { nombre: usuario?.first_name || estudiante.name || '' };
 }
 
-/** Correos de los padres/acudientes con vínculo activo (sin duplicados). */
-async function cargarEmailsPadres(studentId) {
+/**
+ * Padres/acudientes con vínculo activo (sin duplicados por correo).
+ * Devuelve [{ id, email }]: el id sirve para la notificación push.
+ */
+async function cargarPadres(studentId) {
   const { data: vinculos, error } = await supabase
     .from('parent_student_links')
     .select('parent_user_id')
@@ -106,7 +110,7 @@ async function cargarEmailsPadres(studentId) {
   if (error) throw error;
 
   const ids = [...new Set((vinculos || []).map((v) => v.parent_user_id).filter(Boolean))];
-  const emails = [];
+  const padres = [];
   for (const id of ids) {
     const { data: padre, error: errorPadre } = await supabase
       .from('users')
@@ -115,9 +119,9 @@ async function cargarEmailsPadres(studentId) {
       .maybeSingle();
     if (errorPadre) throw errorPadre;
     const email = padre?.email?.trim().toLowerCase();
-    if (email && !emails.includes(email)) emails.push(email);
+    if (email && !padres.some((p) => p.email === email)) padres.push({ id, email });
   }
-  return emails;
+  return padres;
 }
 
 /**
@@ -196,24 +200,35 @@ async function avisarInicioSesionMenor(studentId, { ahora = new Date() } = {}) {
     const menor = await cargarMenor(studentId);
     if (!menor) return resultado(false, 'no_menor');
 
-    const padres = await cargarEmailsPadres(studentId);
+    const padres = await cargarPadres(studentId);
     if (padres.length === 0) {
       logger.warn('[aviso-padre] menor sin padre o acudiente vinculado: no se envió aviso', { studentId });
       return resultado(false, 'sin_padre');
     }
 
-    // Sin Resend, emailService imprime el HTML completo en consola.
-    if (!process.env.RESEND_API_KEY) {
-      logger.warn('[aviso-padre] RESEND_API_KEY no configurado: no se envió aviso', { studentId });
+    // Sin Resend, emailService imprime el HTML completo en consola: no se llama.
+    const correoActivo = Boolean(process.env.RESEND_API_KEY);
+    const pushActiva = configuracionVapid() !== null;
+    if (!correoActivo && !pushActiva) {
+      logger.warn('[aviso-padre] RESEND_API_KEY y VAPID no configurados: no se envió aviso', { studentId });
       return resultado(false, 'sin_resend');
+    }
+    if (!correoActivo) {
+      logger.warn('[aviso-padre] RESEND_API_KEY no configurado: solo se envía push', { studentId });
     }
 
     const reserva = await reservarEnvio(studentId, ahora);
     if (!reserva.ok) return resultado(false, reserva.motivo);
 
     const mensaje = construirAviso({ nombre: menor.nombre, ahora });
-    const envios = await Promise.all(padres.map((to) => enviarSeguro(to, mensaje)));
-    if (!envios.some(Boolean)) {
+    // El correo se conserva. La push va en paralelo y nunca lanza excepción.
+    const [envios, push] = await Promise.all([
+      correoActivo ? Promise.all(padres.map((p) => enviarSeguro(p.email, mensaje))) : [],
+      Promise.all(padres.map((p) => enviarPushPadre(p.id))),
+    ]);
+    const correoEnviado = envios.some(Boolean);
+    const pushEnviada = push.some((r) => r.enviadas > 0);
+    if (!correoEnviado && !pushEnviada) {
       await liberarReserva(studentId, reserva);
       logger.warn('[aviso-padre] no se pudo enviar el aviso; se liberó la reserva', { studentId });
       return resultado(false, 'fallo_envio');
