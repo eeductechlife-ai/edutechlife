@@ -6,21 +6,8 @@
 
 const NOMBRE_ADJUNTO = 'informe-diagnostico.pdf';
 
-const INTRO =
-  'Gracias por hacer el diagnóstico de aprendizaje con tu hijo o hija. ' +
-  'Te enviamos el informe en PDF adjunto. Ahí encontrarás el estilo de aprendizaje que más usa ' +
-  'y el que le sigue, con ideas prácticas para acompañarlo en casa y en el estudio.';
-
-const CONFIANZA =
-  'Tu correo se usa solo para enviarte este informe y responder tus preguntas. ' +
-  'Si no quieres recibir más comunicaciones, escríbenos y lo retiramos de nuestra lista.';
-
-const NOTA =
-  'Es un punto de partida para conocer cómo aprende, no un examen ni un diagnóstico clínico. ' +
-  'Los estilos cambian con la edad y la práctica, así que combinar varias formas de aprender suele dar mejores resultados.';
-
-const AYUDA =
-  'Si el PDF no se abre en tu teléfono o computador, responde a este correo y te lo enviamos de nuevo.';
+// Logo en PNG: los clientes de correo no siempre muestran WebP.
+const LOGO_URL = 'https://www.edutechlife.co/images/logo-edutechlife-email.png';
 
 // Datos públicos verificados en el sitio (ContactModal, Footer).
 const CONTACTO = {
@@ -36,62 +23,129 @@ const CONTACTO = {
   ],
 };
 
-function bloqueContactoHtml() {
-  const redes = CONTACTO.redes
-    .map((r) => `<a href="${r.url}" style="color:#004B63">${r.nombre}</a>`)
-    .join(' · ');
+// Texto en la voz de Valeria, la guía de aprendizaje. Tono cálido y cercano.
+const SALUDO = 'Hola, qué alegría que hayas hecho este recorrido con tu hijo o hija.';
+
+const PRESENTACION =
+  'Soy Valeria, la guía de aprendizaje de Edutechlife. Ya preparé el informe de hoy y lo encuentras en el PDF adjunto.';
+
+const QUE_ENCONTRARAS = [
+  'La mezcla con la que hoy aprende mejor, y cómo se combina con las otras formas.',
+  'Trucos sencillos para estudiar que puede practicar en casa.',
+  'Ideas para acompañarlo sin presionarlo, con cosas que puedes hacer hoy mismo.',
+];
+
+const LECTURA =
+  'Te pido que lo leas con calma: es una fotografía de cómo aprende hoy, no una etiqueta. ' +
+  'Puede cambiar con los meses y según la materia. No reemplaza la mirada de su docente ni la de un especialista.';
+
+const AYUDA =
+  'Si algo no se ve bien o tienes una pregunta, escríbenos a contacto@edutechlife.co o por WhatsApp. Con gusto te ayudamos.';
+
+const PRIVACIDAD =
+  'Tu correo se usa solo para enviarte este informe y responder tus preguntas. ' +
+  'Si no quieres recibir más comunicaciones, escríbenos y te retiramos de nuestra lista.';
+
+const FIRMA = ['Con cariño,', 'Valeria', 'Guía de aprendizaje · Edutechlife'];
+
+const ESTILO = {
+  fuente: 'font-family:Arial,Helvetica,sans-serif',
+  texto: 'font-size:15px;line-height:1.7;color:#1E293B;margin:0 0 14px',
+  pequeno: 'font-size:12px;line-height:1.6;color:#64748B;margin:0',
+  boton:
+    'display:inline-block;padding:12px 22px;border-radius:999px;background:#199DB9;color:#FFFFFF;' +
+    'font-weight:bold;font-size:14px;text-decoration:none',
+};
+
+function listaHtml(items) {
+  const lis = items
+    .map(
+      (i) =>
+        `<tr><td style="vertical-align:top;padding:0 10px 10px 0;color:#199DB9;font-size:16px">&#10022;</td>` +
+        `<td style="${ESTILO.texto};padding:0 0 10px">${i}</td></tr>`,
+    )
+    .join('');
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 10px">${lis}</table>`;
+}
+
+function redesHtml() {
+  return CONTACTO.redes
+    .map((r) => `<a href="${r.url}" style="color:#004B63;text-decoration:none">${r.nombre}</a>`)
+    .join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+}
+
+function construirHtml() {
   return (
-    '<div style="margin-top:20px;padding:14px 16px;border-radius:12px;background:#F0F9FC;border:1px solid #B2D8E5">' +
-    '<p style="margin:0 0 6px;font-weight:bold;color:#004B63">Estamos para acompañarte</p>' +
-    `<p style="margin:0 0 4px">WhatsApp: <a href="${CONTACTO.whatsappUrl}" style="color:#004B63">${CONTACTO.whatsapp}</a></p>` +
-    `<p style="margin:0 0 4px">Correo: <a href="mailto:${CONTACTO.email}" style="color:#004B63">${CONTACTO.email}</a></p>` +
-    `<p style="margin:0 0 4px">Web: <a href="${CONTACTO.sitio}" style="color:#004B63">edutechlife.co</a></p>` +
-    `<p style="margin:0">Redes: ${redes}</p>` +
+    `<div style="${ESTILO.fuente};background:#F1F7F9;padding:24px 12px">` +
+    '<div style="max-width:560px;margin:0 auto;background:#FFFFFF;border-radius:18px;overflow:hidden;' +
+    'box-shadow:0 2px 12px rgba(0,75,99,0.08)">' +
+    // Cabecera con logo
+    '<div style="background:#004B63;padding:26px 28px;text-align:center">' +
+    `<img src="${LOGO_URL}" alt="Edutechlife" width="220" style="display:block;margin:0 auto;width:220px;height:auto;border:0">` +
+    '<p style="margin:12px 0 0;color:#B2D8E5;font-size:12px;letter-spacing:2px;text-transform:uppercase">ADN de Aprendizaje</p>' +
+    '</div>' +
+    // Cuerpo
+    '<div style="padding:30px 30px 8px">' +
+    `<p style="${ESTILO.texto};font-size:17px;font-weight:bold;color:#004B63">${SALUDO}</p>` +
+    `<p style="${ESTILO.texto}">${PRESENTACION}</p>` +
+    `<p style="${ESTILO.texto};margin-bottom:4px">En el informe vas a encontrar:</p>` +
+    listaHtml(QUE_ENCONTRARAS) +
+    `<p style="${ESTILO.texto}">${LECTURA}</p>` +
+    `<p style="${ESTILO.texto}">${AYUDA}</p>` +
+    `<p style="margin:22px 0 26px;text-align:center"><a href="${CONTACTO.whatsappUrl}" style="${ESTILO.boton}">Escribirme por WhatsApp</a></p>` +
+    `<p style="${ESTILO.texto};margin-bottom:2px">${FIRMA[0]}</p>` +
+    `<p style="${ESTILO.texto};margin:0;font-weight:bold;color:#004B63">${FIRMA[1]}</p>` +
+    `<p style="${ESTILO.pequeno};margin-bottom:24px">${FIRMA[2]}</p>` +
+    '</div>' +
+    // Pie de contacto
+    '<div style="background:#F0F9FC;border-top:1px solid #DDEEF4;padding:20px 28px;text-align:center">' +
+    `<p style="${ESTILO.pequeno};color:#004B63;margin-bottom:8px;font-weight:bold">Estamos para acompañarte</p>` +
+    `<p style="${ESTILO.pequeno};margin-bottom:6px">WhatsApp: <a href="${CONTACTO.whatsappUrl}" style="color:#004B63">${CONTACTO.whatsapp}</a>` +
+    ` &nbsp;·&nbsp; <a href="mailto:${CONTACTO.email}" style="color:#004B63">${CONTACTO.email}</a></p>` +
+    `<p style="${ESTILO.pequeno};margin-bottom:12px"><a href="${CONTACTO.sitio}" style="color:#004B63">edutechlife.co</a></p>` +
+    `<p style="${ESTILO.pequeno};margin-bottom:14px">${redesHtml()}</p>` +
+    `<p style="${ESTILO.pequeno};font-size:11px">${PRIVACIDAD}</p>` +
+    `<p style="${ESTILO.pequeno};font-size:11px;margin-top:8px">Ley 1581 de 2012 · Habeas Data · edutechlife.co</p>` +
+    '</div>' +
+    '</div>' +
     '</div>'
   );
 }
 
-function bloqueContactoTexto() {
-  const redes = CONTACTO.redes.map((r) => `${r.nombre}: ${r.url}`).join('\n');
+function construirTexto() {
   return [
+    SALUDO,
+    '',
+    PRESENTACION,
+    '',
+    'En el informe vas a encontrar:',
+    ...QUE_ENCONTRARAS.map((i) => `  - ${i}`),
+    '',
+    LECTURA,
+    '',
+    AYUDA,
+    '',
+    `Escribirme por WhatsApp: ${CONTACTO.whatsappUrl}`,
+    '',
+    ...FIRMA,
+    '',
+    '--',
     'Estamos para acompañarte',
-    `WhatsApp: ${CONTACTO.whatsapp} (${CONTACTO.whatsappUrl})`,
+    `WhatsApp: ${CONTACTO.whatsapp}`,
     `Correo: ${CONTACTO.email}`,
     `Web: ${CONTACTO.sitio}`,
-    'Redes:',
-    redes,
+    `Redes: ${CONTACTO.redes.map((r) => `${r.nombre} ${r.url}`).join(' | ')}`,
+    '',
+    PRIVACIDAD,
+    'Ley 1581 de 2012 · Habeas Data · edutechlife.co',
   ].join('\n');
 }
 
 function construirCorreoInforme() {
   return {
     subject: 'Informe de diagnóstico de aprendizaje de Edutechlife',
-    html:
-      '<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#1E293B">' +
-      '<p>Hola,</p>' +
-      `<p>${INTRO}</p>` +
-      `<p>${CONFIANZA}</p>` +
-      `<p style="color:#6B7280;font-size:12px">${NOTA}</p>` +
-      `<p>${AYUDA}</p>` +
-      '<p style="margin-top:24px">Un abrazo,<br>El equipo de Edutechlife</p>' +
-      bloqueContactoHtml() +
-      '</div>',
-    text: [
-      'Hola,',
-      '',
-      INTRO,
-      '',
-      CONFIANZA,
-      '',
-      NOTA,
-      '',
-      AYUDA,
-      '',
-      'Un abrazo,',
-      'El equipo de Edutechlife',
-      '',
-      bloqueContactoTexto(),
-    ].join('\n'),
+    html: construirHtml(),
+    text: construirTexto(),
     attachments: [{ filename: NOMBRE_ADJUNTO }],
   };
 }
