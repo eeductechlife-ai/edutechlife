@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { getPlans, startCheckout } from "../../services/stripeClient";
 import SEO from "../SEO";
@@ -8,7 +9,7 @@ const STRIPE_ENABLED = !!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 // Los planes en pesos se cobran con Wompi (el backend decide si está activo).
 const canPay = (plan) => STRIPE_ENABLED || plan.currency === "cop";
 
-const PlanCard = ({ plan, onSelect, isAuthenticated }) => {
+const PlanCard = ({ plan, onSelect }) => {
   const isFree = plan.price === 0;
   const isEnterprise = plan.isCustom;
   const priceDisplay = isEnterprise
@@ -38,7 +39,7 @@ const PlanCard = ({ plan, onSelect, isAuthenticated }) => {
       </ul>
       <button
         onClick={onSelect}
-        disabled={isFree || !isAuthenticated || !canPay(plan)}
+        disabled={isFree}
         className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all ${
           plan.id === "pro" || (!isFree && !isEnterprise && canPay(plan))
             ? "bg-[#004B63] text-white hover:bg-[#003A4E]"
@@ -62,8 +63,10 @@ const PlanCard = ({ plan, onSelect, isAuthenticated }) => {
 const PlanesPage = () => {
   const { isSignedIn } = useAuthIdentity();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [checkoutMessage, setCheckoutMessage] = useState("");
 
   useEffect(() => {
     getPlans()
@@ -73,12 +76,22 @@ const PlanesPage = () => {
   }, []);
 
   const handleSelect = async (plan) => {
-    if (!isSignedIn || !canPay(plan)) return;
+    setCheckoutMessage("");
+    if (!canPay(plan)) {
+      setCheckoutMessage(t("planes.checkout_unavailable"));
+      return;
+    }
+    if (!isSignedIn) {
+      navigate("/login?returnTo=/planes");
+      return;
+    }
     try {
       const { url } = await startCheckout(plan.id);
-      if (url) window.location.href = url;
+      if (!url) throw new Error("El pago no devolvió una URL");
+      window.location.href = url;
     } catch (err) {
       console.error("Error:", err);
+      setCheckoutMessage(t("planes.checkout_error"));
     }
   };
 
@@ -96,6 +109,15 @@ const PlanesPage = () => {
             </p>
           </div>
 
+          {checkoutMessage && (
+            <p
+              role="alert"
+              className="text-center text-sm font-semibold text-red-600 mb-6"
+            >
+              {checkoutMessage}
+            </p>
+          )}
+
           {loading ? (
             <div className="grid md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
@@ -112,7 +134,6 @@ const PlanesPage = () => {
                   key={plan.id}
                   plan={plan}
                   onSelect={() => handleSelect(plan)}
-                  isAuthenticated={isSignedIn}
                 />
               ))}
             </div>

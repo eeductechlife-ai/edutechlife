@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "../i18n/I18nProvider";
 import { useABExperiment, trackConversion } from "../hooks/useABExperiment";
+import { useAuthIdentity } from "../hooks/useAuthIdentity";
+import { startCheckout } from "../services/stripeClient";
 import {
   getVakStyles,
   getPricingPlans,
@@ -26,6 +28,7 @@ import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
 import IngenIAWhatsappCta from "./ingenia/IngenIAWhatsappCta";
 import IngenIAMobileBar from "./ingenia/IngenIAMobileBar";
 import IngenIAValoracion from "./ingenia/IngenIAValoracion";
+import { elegirPlanIngenIA } from "./ingenia/ingeniaPlanCheckout";
 import "./ingenia/ingenia-theme.css";
 
 // Anclas de cada sección. El wrapper usa un id con prefijo para NO chocar con
@@ -131,6 +134,27 @@ const IngenIALandingInfo = ({ onNavigate }) => {
     else navigate("/sign-up/ingenia");
   }, [onNavigate, navigate, variant, activeStep, stepLabels]);
 
+  // Botón "Elegir" de un plan: los de pago van al checkout de Wompi; el resto, al registro.
+  const { isSignedIn } = useAuthIdentity();
+  const [planError, setPlanError] = useState("");
+  const handlePlanSelect = useCallback(
+    (plan) => {
+      setPlanError("");
+      return elegirPlanIngenIA({
+        planId: plan.id,
+        isSignedIn,
+        startCheckout,
+        navigate: (to) => (onNavigate ? onNavigate(to) : navigate(to)),
+        onRegister: handleCta,
+        redirect: (url) => {
+          window.location.href = url;
+        },
+        onError: () => setPlanError(t("planes.checkout_error")),
+      });
+    },
+    [isSignedIn, onNavigate, navigate, handleCta, t],
+  );
+
   const sections = [
     <IngenIAQueEsSection key="que-es" t={t} vakStyles={vakStyles} />,
     <IngenIABeneficiosTranquilidadSection
@@ -151,7 +175,8 @@ const IngenIALandingInfo = ({ onNavigate }) => {
       pricingPlans={pricingPlans}
       paymentMethods={paymentMethods}
       guarantee={guarantee}
-      handleCta={handleCta}
+      onSelectPlan={handlePlanSelect}
+      planError={planError}
     />,
     <IngenIATestimoniosSection
       key="testimonios"

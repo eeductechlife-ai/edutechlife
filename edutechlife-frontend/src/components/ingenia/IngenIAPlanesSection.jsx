@@ -9,7 +9,8 @@ export default function IngenIAPlanesSection({
   pricingPlans,
   paymentMethods,
   guarantee,
-  handleCta,
+  onSelectPlan,
+  planError = "",
 }) {
   return (
     <section
@@ -137,7 +138,7 @@ export default function IngenIAPlanesSection({
                 ) : null}
               </ul>
               <MagneticButton
-                onClick={handleCta}
+                onClick={() => onSelectPlan(plan)}
                 className={`w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-bold transition-all duration-300 ${
                   plan.popular
                     ? "bg-white text-petroleum shadow-premium-lg hover:shadow-xl hover:-translate-y-0.5"
@@ -152,6 +153,15 @@ export default function IngenIAPlanesSection({
             </motion.div>
           ))}
         </motion.div>
+
+        {planError ? (
+          <p
+            role="alert"
+            className="mt-6 text-center text-sm font-semibold text-red-600"
+          >
+            {planError}
+          </p>
+        ) : null}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -222,5 +232,6 @@ IngenIAPlanesSection.propTypes = {
   pricingPlans: PropTypes.array.isRequired,
   paymentMethods: PropTypes.array.isRequired,
   guarantee: PropTypes.object.isRequired,
-  handleCta: PropTypes.func.isRequired,
+  onSelectPlan: PropTypes.func.isRequired,
+  planError: PropTypes.string,
 };
