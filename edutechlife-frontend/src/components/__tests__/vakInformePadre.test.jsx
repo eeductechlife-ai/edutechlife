@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import VakEnviarInforme from "../DiagnosticoVAK/VakEnviarInforme";
 import IngenIAValoracion from "../ingenia/IngenIAValoracion";
@@ -45,8 +45,14 @@ describe("VakEnviarInforme (PDF adjunto al correo del adulto)", () => {
     localStorage.clear();
     sessionStorage.clear();
     vi.restoreAllMocks();
+    generarInformePDF.mockClear();
     generarInformePDF.mockResolvedValue(pdfFalso());
     fetchMock = vi.spyOn(globalThis, "fetch");
+  });
+
+  // Sin restaurar, el spy de fetch conserva llamadas y rompe la prueba de IngenIAValoracion.
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("envía un PDF válido en base64 y solo datos del adulto", async () => {
