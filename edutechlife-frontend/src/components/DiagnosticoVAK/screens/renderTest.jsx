@@ -21,13 +21,7 @@ export default function renderTest({
 
   return (
     <div className="max-w-2xl mx-auto p-2 sm:p-4">
-      <div className="flex items-center justify-between mb-3">
-        <p className="!m-0 text-sm font-bold text-[#004B63]">
-          {t("vak.ui.progress_label", {
-            current: currentQuestion + 1,
-            total,
-          })}
-        </p>
+      <div className="flex items-center justify-end mb-3">
         <p className="!m-0 text-xs text-[#004B63]/60 hidden md:block">
           {t("vak.ui.keys_hint")}
         </p>
