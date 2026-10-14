@@ -11,7 +11,7 @@ import { submitLead, LeadSubmitError } from "../../services/leads";
 
 export const POLITICA_DATOS = {
   texto: "Política de tratamiento de datos",
-  url: "/privacy",
+  url: "/privacidad",
 };
 export const WHATSAPP = "+57 323 836 5517";
 

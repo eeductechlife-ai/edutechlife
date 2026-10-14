@@ -7,7 +7,7 @@ export const privacyContent = {
     {
       title: "1. Introduction",
       content:
-        "At Edutechlife, accessible from edutechlife.com, one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by Edutechlife and how we use it.",
+        "At Edutechlife, accessible from edutechlife.co, one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by Edutechlife and how we use it.",
     },
     {
       title: "2. Information We Collect",

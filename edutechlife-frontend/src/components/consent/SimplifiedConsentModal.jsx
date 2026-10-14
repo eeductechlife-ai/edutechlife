@@ -238,7 +238,7 @@ const SimplifiedConsentModal = memo(({ onConsent, onReject }) => {
             <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
               Lee nuestra{" "}
               <a
-                href="/privacy"
+                href="/privacidad"
                 className="font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
               >
                 Política de Privacidad <ExternalLink className="w-3 h-3" />
