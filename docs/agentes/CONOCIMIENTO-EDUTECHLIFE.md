@@ -17,7 +17,7 @@ Todo agente de Edutechlife lee este archivo antes de trabajar. Fuentes completas
 | **IngenIA** (antes SmartBoard) — plataforma 8–16 años, misiones, tienda, panel para padres | Niños, padres, colegios | `/conoce-ingenia`, `/ingenia`, `/ingenia/padres`, `/sign-up/ingenia` | **Dani** (tutor infantil) |
 | **Diagnóstico VAK** — evaluación de estilo de aprendizaje con informe PDF | 6–17 años, padres, colegios | `/vak`, `/vak-simple`, `/vak-premium` | **Valeria** (psicóloga educativa) |
 | **Automatización / IA Empresarial** — agentes, ROI, Automation Architect | Empresas, instituciones | `/automation`, `/consultoria`, `/consultoria-b2b` | — |
-| **Proyectos nacionales** | General | `/proyectos` | **Nico**, **Max** (asistentes del sitio) |
+| **Neuroentorno, Proyectos nacionales** | General | `/neuroentorno`, `/proyectos` | **Nico**, **Max** (asistentes del sitio) |
 
 Apps Android: `edutechlife-frontend/android-ialab`, `android-ingenia`.
 

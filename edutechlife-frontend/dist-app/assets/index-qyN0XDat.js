@@ -1,0 +1,1 @@
+import{D as t}from"./DiagnosticoVAK-CvqgWryC.js";import"./index-BZLi2btq.js";import"./synthesis-EmAfgSUn.js";import"./voiceUtils-B4ZjTx7f.js";import"./vakStyles-CJ7041wR.js";import"./institutionalAnalytics-N-ArwRxs.js";import"./tutorAvatars-BqyKa6DM.js";import"./browser-BJzWpxwN.js";import"./rotate-ccw-XJgTzURz.js";import"./wrench-B3KKWCC4.js";export{t as default};

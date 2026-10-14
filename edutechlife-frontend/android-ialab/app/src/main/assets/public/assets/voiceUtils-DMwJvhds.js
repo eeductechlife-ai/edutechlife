@@ -1,0 +1,1 @@
+import{bs as s}from"./index-Voi6mD1E.js";import{s as o}from"./synthesis-DbyuAgTV.js";const f=e=>s(()=>import("./confetti.module-y_e1spQv.js"),[]).then(t=>t.default({zIndex:80,...e||{}})),_=async(e,t=12,n,i)=>{let a="valentina";return t>=6&&t<=10?a="valentina_child":t>=15&&t<=17&&(a="valentina_teen"),await o(e,a,{},n,i)};export{f,_ as s};

@@ -1,0 +1,21 @@
+- generic [ref=e5]:
+  - generic [ref=e12]:
+    - img "Edutechlife" [ref=e15]
+    - generic [ref=e16]: 100%
+    - generic [ref=e21]: ¡Todo listo!
+    - generic [ref=e26]:
+      - generic [ref=e27]: IA Integrada
+      - generic [ref=e33]: VAK Metodología
+      - generic [ref=e44]: Certificaciones
+  - generic [ref=e50]:
+    - banner [ref=e51]:
+      - generic [ref=e52]:
+        - button "Ir al inicio" [ref=e53] [cursor=pointer]:
+          - img "Edutechlife" [ref=e54]
+        - generic [ref=e55]:
+          - 'button "Idioma actual: Español" [ref=e56] [cursor=pointer]':
+            - generic [ref=e60]: ES
+          - button "Iniciar Sesión" [ref=e64] [cursor=pointer]
+          - button "Contacto" [ref=e69] [cursor=pointer]
+    - main [ref=e72]:
+      - generic [ref=e73]: Cargando...

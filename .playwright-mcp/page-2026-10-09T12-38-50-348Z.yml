@@ -1,0 +1,323 @@
+- generic [ref=e5]:
+  - generic [ref=e52]:
+    - banner [ref=e54]:
+      - generic [ref=e55]:
+        - button "Ir al inicio" [ref=e56] [cursor=pointer]:
+          - img "Edutechlife" [ref=e57]
+        - generic [ref=e58]:
+          - 'button "Idioma actual: Español" [ref=e59] [cursor=pointer]':
+            - generic [ref=e63]: ES
+          - button "Iniciar Sesión" [ref=e67] [cursor=pointer]
+          - button "Contacto" [ref=e72] [cursor=pointer]
+    - main [ref=e75]:
+      - generic [ref=e84]:
+        - region "Presentación de Edutechlife, AI Lab Academic e IngenIA" [ref=e86]:
+          - generic [ref=e87]:
+            - tabpanel [aria-hidden] [ref=e775]:
+              - generic [ref=e778]:
+                - paragraph [ref=e779]: Para estudiantes de colegio y sus familias
+                - heading [level=2] [ref=e781]:
+                  - generic [ref=e782]: Tareas
+                  - generic [ref=e784]: sin
+                  - generic [ref=e786]: peleas.
+                  - generic [ref=e788]: Aprender
+                  - generic [ref=e790]: con
+                  - generic [ref=e792]: ganas.
+                - paragraph [ref=e794]: Dani, su tutor con IA, conoce sus materias y notas, y cada semana arma su plan de mejora.
+                - link [ref=e796] [cursor=pointer]:
+                  - /url: /conoce-ingenia
+                  - text: Descubre IngenIA para tu hijo
+              - generic [ref=e802]:
+                - generic [ref=e803]: edutechlife.co/ingenia
+                - button [pressed] [ref=e810] [cursor=pointer]: Silenciar a Dani
+            - generic [ref=e816]:
+              - tablist "Elige qué quieres ver" [ref=e817]:
+                - tab "Edutechlife IA y pedagogía" [selected] [ref=e818] [cursor=pointer]:
+                  - generic [ref=e824]:
+                    - generic [ref=e825]: Edutechlife
+                    - generic [ref=e826]: IA y pedagogía
+                - tab "AI Lab Academic Aprende IA con MAX" [ref=e827] [cursor=pointer]:
+                  - generic [ref=e832]:
+                    - generic [ref=e833]: AI Lab Academic
+                    - generic [ref=e834]: Aprende IA con MAX
+                - tab "IngenIA Dani acompaña a tu hijo" [ref=e835] [cursor=pointer]:
+                  - generic [ref=e840]:
+                    - generic [ref=e841]: IngenIA
+                    - generic [ref=e842]: Dani acompaña a tu hijo
+              - button "Pausar presentación" [ref=e843] [cursor=pointer]
+        - generic [ref=e160]:
+          - generic [ref=e162]:
+            - heading "Herramientas de Élite" [level=2] [ref=e163]
+            - paragraph [ref=e164]: "Cuatro herramientas para necesidades distintas: formación profesional, automatización empresarial, diagnóstico de aprendizaje y acompañamiento infantil."
+          - generic [ref=e165]:
+            - generic [ref=e168] [cursor=pointer]:
+              - generic [ref=e176]:
+                - heading "AI Lab Academic" [level=3] [ref=e177]
+                - generic [ref=e178]:
+                  - generic [ref=e179]: ACADEMIC
+                  - generic [ref=e180]: CERTIFIED
+              - paragraph [ref=e181]: Aprende con mentores de IA y proyectos reales, la misma formación que usan equipos de tecnología líderes.
+              - link [ref=e183]:
+                - /url: /ialab-academic
+            - generic [ref=e187]:
+              - generic [ref=e188]:
+                - heading "Automatización" [level=3] [ref=e193]
+                - paragraph [ref=e194]: "Lleva IA a tu empresa sin improvisar: diagnóstico, retorno de inversión y una hoja de ruta clara, con estándares internacionales."
+                - generic [ref=e195]:
+                  - generic [ref=e196]: Arquitectura de IA empresarial
+                  - generic [ref=e201]: Calculadora ROI interactiva
+                  - generic [ref=e206]: Estándares ISO/IEC 42001 y NIST AI RMF
+              - link "Comenzar" [ref=e212] [cursor=pointer]:
+                - /url: /automation
+            - generic [ref=e215]:
+              - generic [ref=e216]:
+                - heading "ADN de Aprendizaje" [level=3] [ref=e226]
+                - paragraph [ref=e227]: NEURO-COGNITIVO
+                - paragraph [ref=e228]: "Descubre en 10 minutos cómo aprendes mejor tú o tu hijo. Sin tecnicismos: un diagnóstico claro y un plan a la medida."
+              - link "Comenzar Diagnóstico" [ref=e230] [cursor=pointer]:
+                - /url: /vak
+            - generic [ref=e236] [cursor=pointer]:
+              - generic [ref=e243]:
+                - heading "IngenIA" [level=3] [ref=e244]
+                - paragraph [ref=e245]: Dashboard 8-16 Años
+                - paragraph [ref=e246]: El compañero de estudio que escucha, motiva y explica a su ritmo. Para niños y adolescentes de 8 a 16 años.
+              - link "Prueba la IngenIA" [ref=e247]:
+                - /url: /conoce-ingenia
+        - generic [ref=e252]:
+          - generic [ref=e253]:
+            - heading "Nuestra Esencia" [level=2] [ref=e254]
+            - paragraph [ref=e255]: Somos pedagogos, magísteres y desarrolladores que creemos que ningún estudiante debería adaptarse a un solo método de enseñanza.
+          - generic [ref=e257]:
+            - generic [ref=e261]:
+              - heading "Innovación" [level=4] [ref=e266]
+              - paragraph [ref=e267]: IA al servicio de la educación
+            - generic [ref=e271]:
+              - heading "Pasión" [level=4] [ref=e275]
+              - paragraph [ref=e276]: Por la educación
+            - generic [ref=e280]:
+              - heading "Compromiso" [level=4] [ref=e285]
+              - paragraph [ref=e286]: Con cada estudiante
+            - generic [ref=e290]:
+              - heading "Comunidad" [level=4] [ref=e297]
+              - paragraph [ref=e298]: Juntos crecemos
+          - generic [ref=e299]:
+            - generic [ref=e300]:
+              - generic [ref=e301]:
+                - generic [ref=e308]:
+                  - generic [ref=e309]: Objetivo
+                  - heading "Misión" [level=3] [ref=e310]
+                - paragraph [ref=e311]: Usar la inteligencia artificial para que la educación se adapte a cada estudiante, y no al revés.
+                - generic [ref=e312]: Impulsando el futuro
+              - generic [ref=e320]:
+                - generic [ref=e326]:
+                  - generic [ref=e327]: Proyección
+                  - heading "Visión" [level=3] [ref=e328]
+                - paragraph [ref=e329]: Ser la plataforma de referencia en Latinoamérica para aprender con inteligencia artificial, sin perder de vista lo humano.
+                - generic [ref=e330]: Liderazgo regional
+            - region "Galería de imágenes" [ref=e337]:
+              - generic [ref=e338]:
+                - img "Innovación Educativa" [ref=e340]
+                - img "Aprendizaje Personalizado" [ref=e343]
+                - img "Comunidad STEAM" [ref=e346]
+                - img "Metodología VAK" [ref=e349]
+                - img "Proyectos Prácticos" [ref=e352]
+                - img "Neuro-Entorno" [ref=e355]
+                - img "Consultoría B2B" [ref=e358]
+                - img "Proyectos Nacionales" [ref=e361]
+              - heading "Metodología VAK" [level=3] [ref=e847]
+              - button "Slide anterior" [ref=e366] [cursor=pointer]
+              - button "Siguiente slide" [ref=e369] [cursor=pointer]
+        - generic [ref=e377]:
+          - generic [ref=e378]:
+            - heading "Ecosistema Interconectado" [level=2] [ref=e379]
+            - paragraph [ref=e380]: "Tres formas de trabajar con nosotros: en el aula, en tu empresa, o formando a los próximos líderes digitales de tu país."
+          - generic [ref=e381]:
+            - generic [ref=e382]:
+              - img "Neuro-Entorno Educativo" [ref=e385]
+              - generic [ref=e386]:
+                - heading "Neuro-Entorno Educativo" [level=3] [ref=e396]
+                - paragraph [ref=e397]: Docentes con maestría combinan metodología VAK y STEAM para diseñar un acompañamiento a la medida de cada estudiante, con apoyo de IA.
+            - generic [ref=e398]:
+              - img "Proyectos de Impacto Nacional" [ref=e401]
+              - generic [ref=e402]:
+                - heading "Proyectos de Impacto Nacional" [level=3] [ref=e407]
+                - paragraph [ref=e408]: Más de 6,000 estudiantes certificados con respaldo de IBM y Coursera, y más de 200 docentes colombianos formados como líderes digitales. Como operadores oficiales de SenaTIC.
+            - generic [ref=e409]:
+              - img "Consultoría B2B y Automatización" [ref=e412]
+              - generic [ref=e413]:
+                - heading "Consultoría B2B y Automatización" [level=3] [ref=e420]
+                - paragraph [ref=e421]: Capacitamos a tu equipo y automatizamos procesos con IA aplicada a tu operación. Resultados medibles desde el primer mes.
+        - generic [ref=e426]:
+          - generic [ref=e427]:
+            - heading "Nuestro Método" [level=2] [ref=e428]
+            - paragraph [ref=e429]: "Cuatro pasos, sin vueltas: diagnóstico, plan a tu medida, práctica guiada y certificación."
+          - generic [ref=e430]:
+            - generic [ref=e442]:
+              - heading "ADN de Aprendizaje" [level=3] [ref=e443]
+              - paragraph [ref=e444]: En 10 minutos, nuestro sistema de IA identifica cómo aprendes mejor.
+            - generic [ref=e452]:
+              - heading "Ruta Personalizada" [level=3] [ref=e453]
+              - paragraph [ref=e454]: Diseñamos un plan de estudio STEAM que se ajusta a tus fortalezas, no al revés.
+            - generic [ref=e460]:
+              - heading "Ejecución Práctica" [level=3] [ref=e461]
+              - paragraph [ref=e462]: Pones en práctica lo aprendido en IngenIA, con mentores expertos guiándote paso a paso.
+            - generic [ref=e472]:
+              - heading "Certificación" [level=3] [ref=e473]
+              - paragraph [ref=e474]: Recibes una certificación oficial respaldada por empresas líderes en tecnología.
+          - button "Cuéntanos qué Necesitas" [ref=e476] [cursor=pointer]
+        - generic [ref=e489]:
+          - generic [ref=e490]:
+            - generic [ref=e491]: Confían en nosotros
+            - heading "Nuestros Aliados Estratégicos" [level=2] [ref=e495]
+          - list "Logos de aliados" [ref=e498]:
+            - listitem [ref=e499]:
+              - generic [ref=e504]:
+                - generic [ref=e505]: SENA
+                - generic [ref=e506]: Educación Técnica
+            - listitem [ref=e507]:
+              - generic [ref=e512]:
+                - generic [ref=e513]: UNESCO
+                - generic [ref=e514]: Organización Internacional
+            - listitem [ref=e515]:
+              - generic [ref=e521]:
+                - generic [ref=e522]: Ministerio
+                - generic [ref=e523]: Educación Nacional
+            - listitem [ref=e524]:
+              - generic [ref=e529]:
+                - generic [ref=e530]: Google
+                - generic [ref=e531]: Tecnología
+            - listitem [ref=e532]:
+              - generic [ref=e536]:
+                - generic [ref=e537]: Microsoft
+                - generic [ref=e538]: Cloud Computing
+            - listitem [ref=e539]:
+              - generic [ref=e543]:
+                - generic [ref=e544]: AWS
+                - generic [ref=e545]: Infraestructura
+            - listitem [ref=e546]:
+              - generic [ref=e551]:
+                - generic [ref=e552]: ICETEX
+                - generic [ref=e553]: Financiamiento
+            - listitem [ref=e554]:
+              - generic [ref=e558]:
+                - generic [ref=e559]: Colciencias
+                - generic [ref=e560]: Ciencia y Tecnología
+            - listitem [ref=e561]:
+              - generic [ref=e565]:
+                - generic [ref=e566]: Apple
+                - generic [ref=e567]: Tecnología
+            - listitem [ref=e568]:
+              - generic [ref=e573]:
+                - generic [ref=e574]: IBM
+                - generic [ref=e575]: Inteligencia Artificial
+            - listitem [ref=e576]:
+              - generic [ref=e581]:
+                - generic [ref=e582]: Coursera
+                - generic [ref=e583]: Educación Online
+            - listitem [ref=e584]:
+              - generic [ref=e589]:
+                - generic [ref=e590]: Steam
+                - generic [ref=e591]: Educación STEM
+            - listitem [aria-hidden] [ref=e592]:
+              - generic [ref=e597]:
+                - generic [ref=e598]: SENA
+                - generic [ref=e599]: Educación Técnica
+            - listitem [aria-hidden] [ref=e600]:
+              - generic [ref=e605]:
+                - generic [ref=e606]: UNESCO
+                - generic [ref=e607]: Organización Internacional
+            - listitem [aria-hidden] [ref=e608]:
+              - generic [ref=e614]:
+                - generic [ref=e615]: Ministerio
+                - generic [ref=e616]: Educación Nacional
+            - listitem [aria-hidden] [ref=e617]:
+              - generic [ref=e622]:
+                - generic [ref=e623]: Google
+                - generic [ref=e624]: Tecnología
+            - listitem [aria-hidden] [ref=e625]:
+              - generic [ref=e629]:
+                - generic [ref=e630]: Microsoft
+                - generic [ref=e631]: Cloud Computing
+            - listitem [aria-hidden] [ref=e632]:
+              - generic [ref=e636]:
+                - generic [ref=e637]: AWS
+                - generic [ref=e638]: Infraestructura
+            - listitem [aria-hidden] [ref=e639]:
+              - generic [ref=e644]:
+                - generic [ref=e645]: ICETEX
+                - generic [ref=e646]: Financiamiento
+            - listitem [aria-hidden] [ref=e647]:
+              - generic [ref=e651]:
+                - generic [ref=e652]: Colciencias
+                - generic [ref=e653]: Ciencia y Tecnología
+            - listitem [aria-hidden] [ref=e654]:
+              - generic [ref=e658]:
+                - generic [ref=e659]: Apple
+                - generic [ref=e660]: Tecnología
+            - listitem [aria-hidden] [ref=e661]:
+              - generic [ref=e666]:
+                - generic [ref=e667]: IBM
+                - generic [ref=e668]: Inteligencia Artificial
+            - listitem [aria-hidden] [ref=e669]:
+              - generic [ref=e674]:
+                - generic [ref=e675]: Coursera
+                - generic [ref=e676]: Educación Online
+            - listitem [aria-hidden] [ref=e677]:
+              - generic [ref=e682]:
+                - generic [ref=e683]: Steam
+                - generic [ref=e684]: Educación STEM
+        - generic [ref=e687]:
+          - generic [ref=e688]:
+            - generic [ref=e689]:
+              - img "Edutechlife" [ref=e691]
+              - paragraph [ref=e692]: Transformando la educación...
+              - generic [ref=e693]:
+                - link "Facebook" [ref=e694] [cursor=pointer]:
+                  - /url: https://web.facebook.com/eductechlife/
+                - link "Instagram" [ref=e697] [cursor=pointer]:
+                  - /url: https://www.instagram.com/edu_techlife/
+                - link "LinkedIn" [ref=e701] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/company/edutechlife
+                - link "YouTube" [ref=e706] [cursor=pointer]:
+                  - /url: https://www.youtube.com/@edutechlife
+            - generic [ref=e710]:
+              - button "Herramientas"
+              - list [ref=e711]:
+                - listitem [ref=e712]:
+                  - button "IA Lab con MAX" [ref=e713] [cursor=pointer]
+                - listitem [ref=e716]:
+                  - button "IngenIA" [ref=e717] [cursor=pointer]
+                - listitem [ref=e720]:
+                  - button "ADN de Aprendizaje" [ref=e721] [cursor=pointer]
+                - listitem [ref=e724]:
+                  - button "ROI Calculator" [ref=e725] [cursor=pointer]
+                - listitem [ref=e728]:
+                  - button "Automatización Empresarial" [ref=e729] [cursor=pointer]
+            - generic [ref=e732]:
+              - button "Recursos"
+              - list [ref=e733]:
+                - listitem [ref=e734]:
+                  - button "Metodología VAK" [ref=e735] [cursor=pointer]
+                - listitem [ref=e738]:
+                  - button "Proyectos SenaTIC" [ref=e739] [cursor=pointer]
+                - listitem [ref=e742]:
+                  - button "Certificaciones" [ref=e743] [cursor=pointer]
+                - listitem [ref=e746]:
+                  - button "Blog Educativo" [ref=e747] [cursor=pointer]
+                - listitem [ref=e750]:
+                  - button "Documentación" [ref=e751] [cursor=pointer]
+            - generic [ref=e754]:
+              - heading "Newsletter" [level=4] [ref=e755]
+              - paragraph [ref=e756]: Recibe novedades educativas y actualizaciones de la plataforma.
+              - generic [ref=e757]:
+                - textbox "Ingresa un email válido" [ref=e759] [cursor=pointer]
+                - button "Suscribirme" [ref=e760] [cursor=pointer]
+          - generic [ref=e766]:
+            - paragraph [ref=e768]: © 2026 Edutechlife Premium. Todos los derechos reservados.
+            - generic [ref=e769]:
+              - button "Política de Privacidad" [ref=e770] [cursor=pointer]
+              - generic [ref=e771]: •
+              - button "Términos de Uso" [ref=e772] [cursor=pointer]
+              - generic [ref=e773]: •
+              - button "Contacto" [ref=e774] [cursor=pointer]
+  - button "Abrir chat con Nico, asistente virtual" [ref=e848] [cursor=pointer]

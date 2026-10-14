@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender.mjs && node scripts/generate-sitemap.mjs",
+    "build": "node scripts/build-optimized.mjs",
     "build:fast": "vite build",
-    "build:full": "vite build && node scripts/prerender.mjs && node scripts/generate-sitemap.mjs",
+    "build:full": "node scripts/build-optimized.mjs",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

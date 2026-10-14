@@ -4,20 +4,14 @@ import { motion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { buildCertVerificationUrl } from "../../utils/certificateVerification";
-
-// Paleta fiel al diseño original del certificado
-const NAVY = "#1B3A5F";
-const GOLD = "#B08D3F";
-const GOLD_LINE = "#C9A227";
-const LINK = "#2563EB";
-
-// Logos reales del certificado (colócalos en edutechlife-frontend/public/images/cert/).
-// Si un archivo no existe, el generador cae a un texto de respaldo (no rompe el PDF).
-const CERT_LOGOS = {
-  tic: "/images/cert/tic.png",
-  mzlAlcaldia: "/images/cert/mzl-alcaldia.png",
-  edutechlife: "/images/cert/edutechlife.png",
-};
+import {
+  NAVY,
+  GOLD,
+  GOLD_LINE,
+  LINK,
+  CERT_LOGOS,
+  loadImageWithTimeout,
+} from "./utils/certificateUtils";
 
 const CertificatePreview = ({
   studentName,
@@ -47,43 +41,6 @@ const CertificatePreview = ({
         month: "long",
         year: "numeric",
       });
-
-  // Carga cualquier imagen a data URL PNG y devuelve también sus dimensiones
-  // naturales (para conservar la proporción al insertarla en el PDF).
-  const loadImageDataUrl = (src) =>
-    new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          resolve({
-            dataUrl: canvas.toDataURL("image/png"),
-            width: img.naturalWidth,
-            height: img.naturalHeight,
-          });
-        } catch (err) {
-          reject(err);
-        }
-      };
-      img.onerror = () => reject(new Error("image load failed: " + src));
-      img.src = src;
-    });
-
-  const loadImageWithTimeout = async (src, ms = 2500) => {
-    try {
-      return await Promise.race([
-        loadImageDataUrl(src),
-        new Promise((res) => setTimeout(() => res(null), ms)),
-      ]);
-    } catch {
-      return null;
-    }
-  };
 
   const handleDownloadPDF = async () => {
     setIsDownloading(true);

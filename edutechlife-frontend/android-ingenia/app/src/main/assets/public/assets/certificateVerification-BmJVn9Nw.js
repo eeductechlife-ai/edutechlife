@@ -1,0 +1,1 @@
+const n="https://edutechlife.co/verificar",i=/^[A-Z0-9-]{6,}$/;function e(r){return String(r??"").trim().toUpperCase()}function o(r){const t=e(r);return t?i.test(t):!1}function u(r){const t=e(r);return o(t)?`${n}/${t}`:null}export{u as b,o as i,e as n};

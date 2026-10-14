@@ -1,0 +1,64 @@
+- generic [ref=e4]:
+  - generic [ref=e9]:
+    - generic [ref=e15]:
+      - img "Símbolo de Meta" [ref=e20]
+      - generic [ref=e30]:
+        - generic [ref=e35]:
+          - text: Empieza a usar el
+          - generic [ref=e36]: administrador de anuncios
+        - generic [ref=e37]: "Con el administrador de anuncios, podrás:"
+        - list [ref=e46]:
+          - listitem [ref=e47]:
+            - generic [aria-hidden] [ref=e48]: •
+            - generic [ref=e49]: Publicar anuncios en Facebook, Instagram, Messenger y WhatsApp
+          - listitem [ref=e50]:
+            - generic [aria-hidden] [ref=e51]: •
+            - generic [ref=e52]: Definir tu público para segmentar anuncios de forma más eficaz
+          - listitem [ref=e53]:
+            - generic [aria-hidden] [ref=e54]: •
+            - generic [ref=e55]: Establecer y administrar tus presupuestos publicitarios
+          - listitem [ref=e56]:
+            - generic [aria-hidden] [ref=e57]: •
+            - generic [ref=e58]: Obtener estadísticas en tiempo real
+        - generic [ref=e59]: Desde el administrador de anuncios, puedes acceder a todas las herramientas empresariales, como Meta Business Suite, el administrador de ventas y otras, para conectarte con tus clientes y obtener mejores resultados comerciales.
+    - generic [ref=e68]:
+      - generic [ref=e70]: Iniciar sesión en el administrador de anuncios
+      - button "Continuar con Facebook" [ref=e74] [cursor=pointer]
+      - button "Continuar con Instagram" [ref=e83] [cursor=pointer]
+      - button "Crear cuenta nueva" [ref=e92] [cursor=pointer]
+      - separator [ref=e97]
+      - button "Iniciar sesión con cuenta de Meta administrada" [ref=e100] [cursor=pointer]
+      - img "Logotipo de Meta" [ref=e105]
+  - generic [ref=e116]:
+    - link "© 2026 Meta" [ref=e118] [cursor=pointer]:
+      - /url: https://www.facebook.com/
+    - generic [ref=e119]:
+      - generic [ref=e120]:
+        - link "Información" [ref=e121] [cursor=pointer]:
+          - /url: https://www.meta.com/about/
+        - link "Desarrolladores" [ref=e122] [cursor=pointer]:
+          - /url: https://developers.meta.com/
+        - link "Empleo" [ref=e123] [cursor=pointer]:
+          - /url: https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.metacareers.com%2F&h=AUCKn3lJhbGEOWhWHzp-Xz83tUL09cuSrwi2yn6okfAbC6kv21lwTcKTqwRDsGzjNCG4wA-8UyJ1G5RGo7KEZWyXEWBBQOJoNjJgig6xIHwUVXaa60YYvj5wn67W9tUbd-3BKBi46VKeBNV6hu7k5SsbxDY
+        - link "Privacidad" [ref=e124] [cursor=pointer]:
+          - /url: https://www.facebook.com/privacy/explanation
+        - link "Cookies" [ref=e125] [cursor=pointer]:
+          - /url: https://www.facebook.com/help/cookies
+        - link "Condiciones" [ref=e126] [cursor=pointer]:
+          - /url: https://www.facebook.com/policies/
+        - link "Servicio de ayuda" [ref=e127] [cursor=pointer]:
+          - /url: https://www.facebook.com/business/help/
+      - generic [ref=e128]:
+        - link "Español" [ref=e129] [cursor=pointer]:
+          - /url: https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fadsmanager.facebook.com%2Fadsmanager%2Fmanage%2Faccounts%3Fact%3D311332930&login_options%5B0%5D=FB&login_options%5B1%5D=SSO&login_options%5B2%5D=IG&config_ref=biz_login_tool_flavor_adsmanager&locale=es_LA
+        - link "English (US)" [ref=e130] [cursor=pointer]:
+          - /url: https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fadsmanager.facebook.com%2Fadsmanager%2Fmanage%2Faccounts%3Fact%3D311332930&login_options%5B0%5D=FB&login_options%5B1%5D=SSO&login_options%5B2%5D=IG&config_ref=biz_login_tool_flavor_adsmanager
+        - link "English (UK)" [ref=e131] [cursor=pointer]:
+          - /url: https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fadsmanager.facebook.com%2Fadsmanager%2Fmanage%2Faccounts%3Fact%3D311332930&login_options%5B0%5D=FB&login_options%5B1%5D=SSO&login_options%5B2%5D=IG&config_ref=biz_login_tool_flavor_adsmanager&locale=en_GB
+        - link "Português (Brasil)" [ref=e132] [cursor=pointer]:
+          - /url: https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fadsmanager.facebook.com%2Fadsmanager%2Fmanage%2Faccounts%3Fact%3D311332930&login_options%5B0%5D=FB&login_options%5B1%5D=SSO&login_options%5B2%5D=IG&config_ref=biz_login_tool_flavor_adsmanager&locale=pt_BR
+        - link "Français (France)" [ref=e133] [cursor=pointer]:
+          - /url: https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fadsmanager.facebook.com%2Fadsmanager%2Fmanage%2Faccounts%3Fact%3D311332930&login_options%5B0%5D=FB&login_options%5B1%5D=SSO&login_options%5B2%5D=IG&config_ref=biz_login_tool_flavor_adsmanager&locale=fr_FR
+        - link "Español (España)" [ref=e134] [cursor=pointer]:
+          - /url: https://business.facebook.com/business/loginpage/?next=https%3A%2F%2Fadsmanager.facebook.com%2Fadsmanager%2Fmanage%2Faccounts%3Fact%3D311332930&login_options%5B0%5D=FB&login_options%5B1%5D=SSO&login_options%5B2%5D=IG&config_ref=biz_login_tool_flavor_adsmanager&locale=es_ES
+        - button "Más idiomas" [ref=e135] [cursor=pointer]

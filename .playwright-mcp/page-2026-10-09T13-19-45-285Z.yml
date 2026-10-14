@@ -1,0 +1,20 @@
+- generic [ref=f1e5]:
+  - generic [ref=f1e12]:
+    - img "Edutechlife" [ref=f1e15]
+    - generic [ref=f1e16]: 85%
+    - generic [ref=f1e21]: Activando tus tutores con IA...
+    - generic [ref=f1e28]:
+      - generic [ref=f1e29]: IA Integrada
+      - generic [ref=f1e35]: VAK Metodología
+      - generic [ref=f1e46]: Certificaciones
+  - generic [ref=f1e52]:
+    - banner [ref=f1e54]:
+      - generic [ref=f1e55]:
+        - button "nav.home_aria" [ref=f1e56] [cursor=pointer]:
+          - img "Edutechlife" [ref=f1e57]
+        - generic [ref=f1e58]:
+          - 'button "Idioma actual: Español" [ref=f1e59] [cursor=pointer]':
+            - generic [ref=f1e63]: ES
+          - button "nav.login" [ref=f1e67] [cursor=pointer]
+          - button "nav.contact" [ref=f1e72] [cursor=pointer]
+    - main [ref=f1e75]

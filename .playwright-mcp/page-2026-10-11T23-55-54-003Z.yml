@@ -1,0 +1,42 @@
+- generic [ref=f16e5]:
+  - generic [ref=f16e12]:
+    - img "Edutechlife" [ref=f16e15]
+    - generic [ref=f16e16]: 60%
+    - generic [ref=f16e21]: Personalizando con metodología VAK...
+    - generic [ref=f16e28]:
+      - generic [ref=f16e29]: IA Integrada
+      - generic [ref=f16e35]: VAK Metodología
+      - generic [ref=f16e46]: Certificaciones
+  - main [ref=f16e53]:
+    - generic [ref=f16e54]:
+      - generic [ref=f16e55]: Cargando IngenIA...
+      - generic [ref=f16e67]:
+        - generic [ref=f16e68]:
+          - generic [ref=f16e69]:
+            - img "Edutechlife" [ref=f16e71]
+            - paragraph [ref=f16e72]: Transformando la educación...
+            - generic [ref=f16e73]:
+              - link "Facebook" [ref=f16e74] [cursor=pointer]:
+                - /url: https://web.facebook.com/eductechlife/
+              - link "Instagram" [ref=f16e77] [cursor=pointer]:
+                - /url: https://www.instagram.com/edu_techlife/
+              - link "LinkedIn" [ref=f16e81] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/edutechlife
+              - link "YouTube" [ref=f16e86] [cursor=pointer]:
+                - /url: https://www.youtube.com/@edutechlife
+          - button "Herramientas" [ref=f16e91] [cursor=pointer]
+          - button "Recursos" [ref=f16e95] [cursor=pointer]
+          - generic [ref=f16e98]:
+            - heading "Newsletter" [level=4] [ref=f16e99]
+            - paragraph [ref=f16e100]: Recibe novedades educativas y actualizaciones de la plataforma.
+            - generic [ref=f16e101]:
+              - textbox "Tu correo electrónico" [ref=f16e103] [cursor=pointer]
+              - button "Suscribirme" [ref=f16e104] [cursor=pointer]
+        - generic [ref=f16e110]:
+          - paragraph [ref=f16e112]: © 2026 Edutechlife Premium. Todos los derechos reservados.
+          - generic [ref=f16e113]:
+            - button "Política de Privacidad" [ref=f16e114] [cursor=pointer]
+            - generic [ref=f16e115]: •
+            - button "Términos de Uso" [ref=f16e116] [cursor=pointer]
+            - generic [ref=f16e117]: •
+            - button "Contacto" [ref=f16e118] [cursor=pointer]
