@@ -4,7 +4,7 @@ const { getWompiConfig } = require('./wompi');
 
 // Planes pagados por periodo (Wompi cobra una vez por periodo, no renueva
 // solo). Cada pago aprobado extiende el plan un mes o un año y el backend
-// apaga cada hora los que vencieron. Columnas de la migración 103.
+// apaga cada hora los que vencieron. Columnas de la migración 104.
 
 function addInterval(date, interval) {
   const next = new Date(date.getTime());
@@ -113,7 +113,7 @@ async function expirePaidPlans(now = new Date()) {
 const HOUR_MS = 60 * 60 * 1000;
 
 // Corre al arrancar y cada hora. Solo se enciende con las tres llaves de Wompi:
-// sin ellas no hay planes con fecha que vencer (y la 103 puede no estar).
+// sin ellas no hay planes con fecha que vencer (y la 104 puede no estar).
 function startPaidPlanExpiry() {
   if (!getWompiConfig()) return null;
   expirePaidPlans();

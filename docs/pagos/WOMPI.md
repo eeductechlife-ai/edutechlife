@@ -28,7 +28,7 @@ Sin las tres variables siguientes todo queda apagado:
 
 ## Antes de encenderlo en producción
 
-1. **Aplicar la migración 103** (`supabase/migrations/103_planes_pagados_con_vencimiento.sql`)
+1. **Aplicar la migración 104** (`supabase/migrations/104_planes_pagados_con_vencimiento.sql`)
    en Supabase. Agrega la fecha de vencimiento del plan. Las migraciones se
    aplican a mano en producción.
 2. **Botón en el frontend.** Listo: `/planes` y el candado Premium de IngenIA

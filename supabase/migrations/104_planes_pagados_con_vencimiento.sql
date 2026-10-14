@@ -1,5 +1,5 @@
 -- ============================================================================
--- Migración 103 — Vencimiento de planes pagados con Wompi
+-- Migración 104 — Vencimiento de planes pagados con Wompi
 --
 -- Wompi Web Checkout cobra una sola vez. Para que un pago mensual no deje el
 -- plan activo para siempre, se guarda hasta cuándo está pagado:

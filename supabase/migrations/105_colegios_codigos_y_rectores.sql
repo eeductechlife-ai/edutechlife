@@ -1,5 +1,5 @@
 -- ============================================================================
--- Migración 104 — Colegios: estudiantes ligados, rectores/docentes y códigos
+-- Migración 105 — Colegios: estudiantes ligados, rectores/docentes y códigos
 --
 -- Piloto para colegios (docs del proyecto: plan-colegios.md):
 --   * smartboard.students.institution_id / grupo: el niño pertenece a un
@@ -9,7 +9,7 @@
 --   * public.redeem_institution_code(): gasta un uso del código de forma
 --     atómica (solo la service role del backend la puede llamar).
 -- No toca precios. Idempotente: se puede ejecutar más de una vez.
--- Requiere la 103 (premium_until), que el backend limpia al ligar al colegio.
+-- Requiere la 104 (premium_until), que el backend limpia al ligar al colegio.
 -- ============================================================================
 
 ALTER TABLE smartboard.students

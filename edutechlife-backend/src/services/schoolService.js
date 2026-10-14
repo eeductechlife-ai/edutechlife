@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const supabase = require('../db/supabase');
 
-// Piloto de colegios (migración 104): el padre liga a su hijo con un código
+// Piloto de colegios (migración 105): el padre liga a su hijo con un código
 // de colegio y el niño queda en Premium mientras el colegio esté activo; el
 // rector ve un resumen agregado de sus grupos, sin datos de cada niño.
 
