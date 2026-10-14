@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { Fragment, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
@@ -23,6 +23,9 @@ import IngenIAComoFuncionaSection from "./ingenia/IngenIAComoFuncionaSection";
 import IngenIAPlanesSection from "./ingenia/IngenIAPlanesSection";
 import IngenIATestimoniosSection from "./ingenia/IngenIATestimoniosSection";
 import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
+import IngenIAWhatsappCta from "./ingenia/IngenIAWhatsappCta";
+import IngenIAMobileBar from "./ingenia/IngenIAMobileBar";
+import IngenIAValoracion from "./ingenia/IngenIAValoracion";
 import "./ingenia/ingenia-theme.css";
 
 // Anclas de cada sección. El wrapper usa un id con prefijo para NO chocar con
@@ -52,6 +55,13 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   const navigate = useNavigate();
 
   const [activeStep, setActiveStep] = useState(0);
+  // Formulario corto del hero: lo abre el botón del hero o la barra móvil.
+  const [heroFormAbierto, setHeroFormAbierto] = useState(false);
+  const abrirFormularioHero = useCallback(() => setHeroFormAbierto(true), []);
+  const irAlHeroYProbar = useCallback(() => {
+    setHeroFormAbierto(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const vakStyles = getVakStyles(locale);
   const pricingPlans = getPricingPlans(locale);
@@ -184,7 +194,10 @@ const IngenIALandingInfo = ({ onNavigate }) => {
         <meta name="description" content={seoDescriptions[activeStep]} />
       </Helmet>
 
-      <IngenIAInfoHero handleCta={handleCta}>
+      <IngenIAInfoHero
+        formAbierto={heroFormAbierto}
+        onAbrirFormulario={abrirFormularioHero}
+      >
         <IngenIASectionNav
           currentStep={activeStep}
           totalSteps={totalSteps}
@@ -208,17 +221,20 @@ const IngenIALandingInfo = ({ onNavigate }) => {
           Antes vivían ocultas tras un carrusel, lo que dañaba UX y SEO. */}
       <div className="relative">
         {sections.map((section, i) => (
-          <div
-            key={SECTION_ANCHORS[i]}
-            id={anchorId(SECTION_ANCHORS[i])}
-            className="scroll-mt-16"
-          >
-            {section}
-          </div>
+          <Fragment key={SECTION_ANCHORS[i]}>
+            {/* Antes de «Planes»: valoración gratis de 20 minutos para el plan personalizado. */}
+            {i === 3 && <IngenIAValoracion />}
+            <div id={anchorId(SECTION_ANCHORS[i])} className="scroll-mt-16">
+              {section}
+            </div>
+            {/* Tras «Cómo funciona»: contacto directo por WhatsApp, sin formulario. */}
+            {i === 2 && <IngenIAWhatsappCta />}
+          </Fragment>
         ))}
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 pb-12 pt-6 flex items-center justify-between gap-3">
+      {/* pb extra en móvil para que la barra fija inferior no tape el final */}
+      <div className="max-w-3xl mx-auto px-4 pb-24 pt-6 md:pb-12 flex items-center justify-between gap-3">
         {activeStep > 0 ? (
           <button
             onClick={goPrev}
@@ -258,6 +274,8 @@ const IngenIALandingInfo = ({ onNavigate }) => {
           </button>
         )}
       </div>
+
+      <IngenIAMobileBar onProbar={irAlHeroYProbar} />
     </div>
   );
 };

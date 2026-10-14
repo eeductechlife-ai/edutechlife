@@ -3192,6 +3192,12 @@ export type TranslationKeys = {
   "ingenia.landing_what_desc2": string;
   "ingenia.landing_what_title_line1": string;
   "ingenia.landing_what_title_line2": string;
+  "ingenia.lead_child_notice": string;
+  "ingenia.lead_contact_label": string;
+  "ingenia.lead_name_label": string;
+  "ingenia.lead_sent_desc": string;
+  "ingenia.lead_sent_title": string;
+  "ingenia.lead_submit": string;
   "ingenia.learning_stats": string;
   "ingenia.level": string;
   "ingenia.level_label": string;
@@ -3217,6 +3223,8 @@ export type TranslationKeys = {
   "ingenia.missions_label": string;
   "ingenia.missions_view_title": string;
   "ingenia.mobile_nav": string;
+  "ingenia.mobile_try": string;
+  "ingenia.mobile_wa": string;
   "ingenia.nav_label": string;
   "ingenia.no_access": string;
   "ingenia.no_points_data": string;
@@ -3351,8 +3359,14 @@ export type TranslationKeys = {
   "ingenia.vak_report": string;
   "ingenia.vak_techniques": string;
   "ingenia.vak_title": string;
+  "ingenia.val_desc": string;
+  "ingenia.val_title": string;
   "ingenia.valeria_ready": string;
   "ingenia.view_all": string;
+  "ingenia.wa_btn": string;
+  "ingenia.wa_desc": string;
+  "ingenia.wa_message": string;
+  "ingenia.wa_title": string;
   "ingenia.weekly_activity": string;
   "ingenia.your_subjects": string;
   "kid.a11y.skip_to_content": string;
@@ -5940,6 +5954,13 @@ export type TranslationKeys = {
   "time_title": string;
   "time_today": string;
   "time_week": string;
+  "vak.informe.desc": string;
+  "vak.informe.email_label": string;
+  "vak.informe.name_label": string;
+  "vak.informe.sent_desc": string;
+  "vak.informe.sent_title": string;
+  "vak.informe.submit": string;
+  "vak.informe.title": string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_title": string;
@@ -9289,6 +9310,12 @@ const translationKeySet: Record<string, true> = {
   "ingenia.landing_what_desc2": true,
   "ingenia.landing_what_title_line1": true,
   "ingenia.landing_what_title_line2": true,
+  "ingenia.lead_child_notice": true,
+  "ingenia.lead_contact_label": true,
+  "ingenia.lead_name_label": true,
+  "ingenia.lead_sent_desc": true,
+  "ingenia.lead_sent_title": true,
+  "ingenia.lead_submit": true,
   "ingenia.learning_stats": true,
   "ingenia.level": true,
   "ingenia.level_label": true,
@@ -9314,6 +9341,8 @@ const translationKeySet: Record<string, true> = {
   "ingenia.missions_label": true,
   "ingenia.missions_view_title": true,
   "ingenia.mobile_nav": true,
+  "ingenia.mobile_try": true,
+  "ingenia.mobile_wa": true,
   "ingenia.nav_label": true,
   "ingenia.no_access": true,
   "ingenia.no_points_data": true,
@@ -9448,8 +9477,14 @@ const translationKeySet: Record<string, true> = {
   "ingenia.vak_report": true,
   "ingenia.vak_techniques": true,
   "ingenia.vak_title": true,
+  "ingenia.val_desc": true,
+  "ingenia.val_title": true,
   "ingenia.valeria_ready": true,
   "ingenia.view_all": true,
+  "ingenia.wa_btn": true,
+  "ingenia.wa_desc": true,
+  "ingenia.wa_message": true,
+  "ingenia.wa_title": true,
   "ingenia.weekly_activity": true,
   "ingenia.your_subjects": true,
   "kid.a11y.skip_to_content": true,
@@ -12037,6 +12072,13 @@ const translationKeySet: Record<string, true> = {
   "time_title": true,
   "time_today": true,
   "time_week": true,
+  "vak.informe.desc": true,
+  "vak.informe.email_label": true,
+  "vak.informe.name_label": true,
+  "vak.informe.sent_desc": true,
+  "vak.informe.sent_title": true,
+  "vak.informe.submit": true,
+  "vak.informe.title": true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_title": true,

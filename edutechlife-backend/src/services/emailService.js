@@ -14,7 +14,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'alerts@edutechlife.com';
  * @param {string} text - Plain text content
  * @returns {Promise<{success: boolean, messageId?: string, error?: string}>}
  */
-async function sendEmail(to, subject, html, text) {
+async function sendEmail(to, subject, html, text, attachments) {
   if (!to) {
     return { success: false, error: 'Recipient email is required' };
   }
@@ -25,7 +25,7 @@ async function sendEmail(to, subject, html, text) {
   try {
     // If Resend is configured, use it
     if (RESEND_API_KEY) {
-      return await sendViaResend(to, subject, html, text);
+      return await sendViaResend(to, subject, html, text, attachments);
     }
 
     // Fallback: Log to console (development)
@@ -47,7 +47,7 @@ async function sendEmail(to, subject, html, text) {
 /**
  * Sends email via Resend API
  */
-async function sendViaResend(to, subject, html, text) {
+async function sendViaResend(to, subject, html, text, attachments) {
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -61,6 +61,7 @@ async function sendViaResend(to, subject, html, text) {
         subject,
         html,
         text,
+        ...(attachments && attachments.length ? { attachments } : {}),
       }),
     });
 

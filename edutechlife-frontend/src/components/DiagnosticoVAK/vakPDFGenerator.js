@@ -58,3 +58,32 @@ export async function generatePDF({ diagnosis, t, setError, setPdfLoading }) {
     setPdfLoading(false);
   }
 }
+
+/**
+ * Genera el informe como Blob PDF para enviarlo por correo (no lo descarga).
+ * Usa la vista previa ya en pantalla. Escala y calidad más bajas que la descarga
+ * para mantenerlo bajo el límite de 2 MB del envío.
+ */
+export async function generarInformePDF() {
+  const el = document.getElementById("document-preview-content");
+  if (!el || el.innerHTML.length < 100) {
+    throw new Error("Abre la vista previa del informe antes de enviarlo.");
+  }
+  const { default: html2pdf } = await import("html2pdf.js");
+  return html2pdf()
+    .set({
+      margin: [15, 15, 15, 15],
+      image: { type: "jpeg", quality: 0.9 },
+      html2canvas: {
+        scale: 2,
+        width: 794,
+        useCORS: true,
+        letterRendering: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+      },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    })
+    .from(el)
+    .outputPdf("blob");
+}
