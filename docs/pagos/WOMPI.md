@@ -31,7 +31,8 @@ Sin las tres variables siguientes todo queda apagado:
 1. **Aplicar la migración 103** (`supabase/migrations/103_planes_pagados_con_vencimiento.sql`)
    en Supabase. Agrega la fecha de vencimiento del plan. Las migraciones se
    aplican a mano en producción.
-2. **Botón en el frontend.** `/planes` y la landing de IngenIA siguen llamando
-   a Stripe. Falta elegir la pasarela según el país del usuario.
+2. **Botón en el frontend.** Listo: `/planes` y el candado Premium de IngenIA
+   piden primero el pago a Wompi y, si el backend responde 503 (sin llaves),
+   caen a Stripe. La llave pública vive solo en el backend (Render).
 3. **Probar en sandbox** con llaves `pub_test_` y las tarjetas de prueba de Wompi,
    y registrar la URL de eventos `https://<backend>/api/payments/wompi/events`.

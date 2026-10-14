@@ -1,5 +1,6 @@
 const supabase = require('../db/supabase');
 const { getPlanById, INGENIA_PLAN_IDS } = require('../data/plans');
+const { getWompiConfig } = require('./wompi');
 
 // Planes pagados por periodo (Wompi cobra una vez por periodo, no renueva
 // solo). Cada pago aprobado extiende el plan un mes o un año y el backend
@@ -111,10 +112,10 @@ async function expirePaidPlans(now = new Date()) {
 
 const HOUR_MS = 60 * 60 * 1000;
 
-// Corre al arrancar y cada hora. Solo se enciende con Wompi configurado: sin
-// él no hay planes con fecha que vencer (y la migración 103 puede no estar).
+// Corre al arrancar y cada hora. Solo se enciende con las tres llaves de Wompi:
+// sin ellas no hay planes con fecha que vencer (y la 103 puede no estar).
 function startPaidPlanExpiry() {
-  if (!process.env.WOMPI_PUBLIC_KEY) return null;
+  if (!getWompiConfig()) return null;
   expirePaidPlans();
   const timer = setInterval(expirePaidPlans, HOUR_MS);
   timer.unref();
