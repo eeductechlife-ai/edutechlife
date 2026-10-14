@@ -79,7 +79,9 @@ function createWompiCheckout({ planId, userId, email, redirectUrl }) {
 }
 
 function readPath(obj, path) {
-  return path.split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), obj);
+  return path
+    .split('.')
+    .reduce((acc, key) => (acc != null && Object.hasOwn(acc, key) ? Reflect.get(acc, key) : undefined), obj);
 }
 
 // Checksum del evento: SHA256(valores de signature.properties tomados de

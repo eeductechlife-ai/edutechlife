@@ -40,6 +40,7 @@ import {
   WeeklySummary,
 } from "./components/ParentStats";
 import WeeklyReportCard from "./components/WeeklyReportCard";
+import SchoolCodeCard from "./components/SchoolCodeCard";
 import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
 import ParentRecommendations from "./components/ParentRecommendations";
@@ -1526,6 +1527,10 @@ const IngenIAParentDashboard = () => {
                         <WeeklyReportCard
                           authToken={authToken}
                           studentName={data.vakResult?.studentName}
+                        />
+                        <SchoolCodeCard
+                          authToken={authToken}
+                          studentId={studentId || userId}
                         />
                       </div>
                     </div>
