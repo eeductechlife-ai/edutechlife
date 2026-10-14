@@ -4,7 +4,7 @@
  */
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || 'alerts@edutechlife.com';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'alerts@edutechlife.co';
 
 /**
  * Sends an email
