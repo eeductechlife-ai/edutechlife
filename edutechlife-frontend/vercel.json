@@ -64,6 +64,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/privacidad",
+      "destination": "/index.html"
+    },
+    {
       "source": "/conoce-ingenia",
       "destination": "/index.html"
     },
