@@ -1,31 +1,14 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useTranslation } from "../i18n/I18nProvider";
 import { getMetrics, getStandards } from "./AutomationData";
 import IngenIATilt3D from "./ingenia/IngenIATilt3D";
 
-const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
+const AutomationHero = ({ onStartDiagnosis }) => {
   const { t, locale } = useTranslation();
   const metrics = getMetrics(locale);
   const standards = getStandards(locale);
   const navigate = useNavigate();
-  const [counts, setCounts] = useState([0, 0, 0, 0]);
-
-  useEffect(() => {
-    const targets = [340, 60, 12, 42];
-    const duration = 2000;
-    const steps = 60;
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      setCounts(
-        targets.map((t) => Math.min(Math.floor((t / steps) * step), t)),
-      );
-      if (step >= steps) clearInterval(interval);
-    }, duration / steps);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-white via-bg-dark to-white">
@@ -97,52 +80,25 @@ const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
               </svg>
               {t("automation.hero.btn_diagnosis")}
             </button>
-            <button
-              onClick={onViewCases}
-              className="px-8 py-3.5 border-2 border-primary-light/30 text-petroleum rounded-full font-semibold text-sm hover:border-primary-light hover:bg-primary-light/5 transition-all duration-300 flex items-center gap-2 justify-center"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                />
-              </svg>
-              {t("automation.hero.btn_cases")}
-            </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-3xl mx-auto mb-12">
-            {metrics.map((m, i) => (
+          <div className="max-w-md mx-auto mb-12">
+            {metrics.map((m) => (
               <IngenIATilt3D key={m.label} intensity={5}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
-                  className="bg-white/70 backdrop-blur-xl border border-white/40 rounded-2xl p-4 text-center shadow-premium will-change-transform"
-                >
+                <div className="bg-white/70 backdrop-blur-xl border border-white/40 rounded-2xl p-4 text-center shadow-premium">
                   <div
                     className="text-3xl md:text-4xl font-black mb-1"
                     style={{ color: m.color }}
                   >
-                    {i === 0
-                      ? `+${counts[0]}%`
-                      : i === 1
-                        ? `-${counts[1]}%`
-                        : i === 2
-                          ? `${counts[2]}+`
-                          : `${(counts[3] / 10).toFixed(1)}x`}
+                    {m.value}
                   </div>
                   <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     {m.label}
                   </div>
-                </motion.div>
+                  <div className="text-[11px] text-slate-400 mt-2">
+                    {m.source}
+                  </div>
+                </div>
               </IngenIATilt3D>
             ))}
           </div>

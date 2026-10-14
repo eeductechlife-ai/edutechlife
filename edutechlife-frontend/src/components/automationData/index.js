@@ -3,7 +3,6 @@ export * from "./standards.js";
 export * from "./questions.js";
 export * from "./config.js";
 export * from "./processes.js";
-export * from "./cases.js";
 
 // `export *` reexporta, pero no crea bindings locales: getData() referenciaba
 // nombres inexistentes y lanzaba ReferenceError al llamarla.
@@ -33,7 +32,6 @@ import {
   PROCESS_TO_SOLUTIONS_EN,
   PROCESS_TO_SOLUTIONS_PT,
 } from "./processes.js";
-import { CASES_ES, CASES_EN, CASES_PT } from "./cases.js";
 
 const getData = (locale) =>
   locale === "en"
@@ -43,7 +41,6 @@ const getData = (locale) =>
         questions: QUESTIONS_EN,
         levels: LEVELS_EN,
         processToSolutions: PROCESS_TO_SOLUTIONS_EN,
-        cases: CASES_EN,
         procesosOptions: PROCESOS_OPTIONS_EN,
         industrias: INDUSTRIAS_EN,
         arquitecturasPredefinidas: ARQUITECTURAS_PREDEFINIDAS_EN,
@@ -56,7 +53,6 @@ const getData = (locale) =>
           questions: QUESTIONS_PT,
           levels: LEVELS_PT,
           processToSolutions: PROCESS_TO_SOLUTIONS_PT,
-          cases: CASES_PT,
           procesosOptions: PROCESOS_OPTIONS_PT,
           industrias: INDUSTRIAS_PT,
           arquitecturasPredefinidas: ARQUITECTURAS_PREDEFINIDAS_PT,
@@ -68,7 +64,6 @@ const getData = (locale) =>
           questions: QUESTIONS_ES,
           levels: LEVELS_ES,
           processToSolutions: PROCESS_TO_SOLUTIONS_ES,
-          cases: CASES_ES,
           procesosOptions: PROCESOS_OPTIONS_ES,
           industrias: INDUSTRIAS_ES,
           arquitecturasPredefinidas: ARQUITECTURAS_PREDEFINIDAS,
@@ -81,7 +76,6 @@ export const getQuestions = (locale) => getData(locale).questions;
 export const getLevels = (locale) => getData(locale).levels;
 export const getProcessToSolutions = (locale) =>
   getData(locale).processToSolutions;
-export const getCases = (locale) => getData(locale).cases;
 export const getProcesosOptions = (locale) => getData(locale).procesosOptions;
 export const getIndustrias = (locale) => getData(locale).industrias;
 export const getArquitecturasPredefinidas = (locale) =>
