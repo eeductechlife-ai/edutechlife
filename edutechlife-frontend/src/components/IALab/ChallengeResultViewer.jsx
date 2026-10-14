@@ -22,21 +22,21 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
     4,
   );
 
-  const buildEvaluation = (lessons, { score, emptyText }) => {
-    const base = { notaGlobal: score ?? 0 };
-    for (let i = 1; i <= totalSteps; i++) {
-      base[`nota_ej${i}`] =
-        lessons && typeof lessons[`nota_ej${i}`] === "number"
-          ? lessons[`nota_ej${i}`]
-          : 0;
-      base[`feedback_ej${i}`] =
-        (lessons && lessons[`feedback_ej${i}`]) || emptyText;
-    }
-    return base;
-  };
-
   useEffect(() => {
     if (!userId || !moduleId) return;
+
+    const buildEvaluation = (lessons, { score, emptyText }) => {
+      const base = { notaGlobal: score ?? 0 };
+      for (let i = 1; i <= totalSteps; i++) {
+        base[`nota_ej${i}`] =
+          lessons && typeof lessons[`nota_ej${i}`] === "number"
+            ? lessons[`nota_ej${i}`]
+            : 0;
+        base[`feedback_ej${i}`] =
+          (lessons && lessons[`feedback_ej${i}`]) || emptyText;
+      }
+      return base;
+    };
 
     const loadEvaluation = async () => {
       try {
@@ -80,7 +80,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
     };
 
     loadEvaluation();
-  }, [userId, moduleId]);
+  }, [userId, moduleId, t]);
 
   if (loading) {
     return (
