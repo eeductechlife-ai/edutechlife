@@ -37,7 +37,7 @@ const Sparkle = ({ x, y, size, delay, color }) => (
   </motion.div>
 );
 
-const cardVariants = {
+const defaultCardVariants = {
   hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: (i) => ({
     opacity: 1,
@@ -63,19 +63,20 @@ const BadgeCard = ({
   const prefersReducedMotion = useReducedMotion();
   const { t, locale } = useTranslation();
 
-  if (!prefersReducedMotion) {
-    cardVariants.visible = (i) => ({
+  const cardVariants = {
+    hidden: defaultCardVariants.hidden,
+    visible: (i) => ({
       opacity: 1,
       y: 0,
       scale: 1,
       transition: {
-        delay: i * 0.05,
+        delay: prefersReducedMotion ? 0 : i * 0.05,
         type: "spring",
         stiffness: 300,
         damping: 24,
       },
-    });
-  }
+    }),
+  };
 
   return (
     <motion.button

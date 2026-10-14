@@ -14,7 +14,7 @@ const CourseCompletionSection = ({
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation();
-  const [showContent, setShowContent] = useState(prefersReducedMotion);
+  const [showContent, setShowContent] = useState(false);
   const tracked = useRef(false);
 
   useEffect(() => {
