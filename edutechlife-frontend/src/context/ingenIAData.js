@@ -8,7 +8,7 @@ export const DEFAULT_NEWS = [
     summary:
       "La inteligencia artificial está cambiando la forma en que aprendemos. ¡Descubre cómo!",
     category: "IA",
-    ageRange: "8-16",
+    ageRange: "6-16",
     date: "2026-05-04",
     readTime: "2 min",
     icon: "🤖",
@@ -19,7 +19,7 @@ export const DEFAULT_NEWS = [
     summary:
       "Proyectos de ciencia, tecnología, ingeniería, arte y matemáticas que puedes hacer en casa.",
     category: "STEAM",
-    ageRange: "8-16",
+    ageRange: "6-16",
     date: "2026-05-03",
     readTime: "3 min",
     icon: "🔬",
@@ -30,7 +30,7 @@ export const DEFAULT_NEWS = [
     summary:
       "Tips sencillos para que cumplas con tus tareas y tengas tiempo para jugar.",
     category: "Tips",
-    ageRange: "8-16",
+    ageRange: "6-16",
     date: "2026-05-02",
     readTime: "2 min",
     icon: "⏰",

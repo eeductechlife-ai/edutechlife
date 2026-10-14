@@ -53,7 +53,7 @@ describe("OnboardingWizard: paso de edad y grado", () => {
     ctx.gradeLevel = null;
   });
 
-  it("pide la edad con lista cerrada 8–16", () => {
+  it("pide la edad con lista cerrada 6–16", () => {
     render(<OnboardingWizard />);
     const options = [
       ...screen
@@ -63,6 +63,8 @@ describe("OnboardingWizard: paso de edad y grado", () => {
       .map((o) => o.value)
       .filter(Boolean);
     expect(options).toEqual([
+      "6",
+      "7",
       "8",
       "9",
       "10",
@@ -75,11 +77,10 @@ describe("OnboardingWizard: paso de edad y grado", () => {
     ]);
   });
 
-  it("solo ofrece grados de 3.º a 11.º", () => {
+  it("ofrece grados de 1.º a 11.º", () => {
     render(<OnboardingWizard />);
-    expect(screen.queryByText("1°")).toBeNull();
-    expect(screen.queryByText("2°")).toBeNull();
-    expect(screen.getByText("3°")).toBeTruthy();
+    expect(screen.getByText("1°")).toBeTruthy();
+    expect(screen.getByText("2°")).toBeTruthy();
     expect(screen.getByText("11°")).toBeTruthy();
   });
 

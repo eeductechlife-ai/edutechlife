@@ -107,7 +107,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "IngenIA es un dashboard de acompañamiento académico y emocional para estudiantes de 8 a 16 años. Incluye misiones educativas, seguimiento de progreso, ADN de Aprendizaje y chat con Dani AI.",
+      "IngenIA es un dashboard de acompañamiento académico y emocional para estudiantes de 6 a 16 años. Incluye misiones educativas, seguimiento de progreso, ADN de Aprendizaje y chat con Dani AI.",
   },
   {
     id: "que_es_ai_lab",
@@ -163,7 +163,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "IngenIA incluye misiones educativas interactivas, seguimiento de progreso en tiempo real, ADN de Aprendizaje integrado, chat con Dani AI, y reportes para padres. Está diseñado para estudiantes de 8 a 16 años.",
+      "IngenIA incluye misiones educativas interactivas, seguimiento de progreso en tiempo real, ADN de Aprendizaje integrado, chat con Dani AI, y reportes para padres. Está diseñado para estudiantes de 6 a 16 años.",
   },
   {
     id: "grupales",

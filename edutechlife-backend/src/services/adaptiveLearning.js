@@ -550,7 +550,7 @@ async function recommendContent(studentId, state) {
   return { recommendations: out, persisted };
 }
 
-// Frase que ve el estudiante (de 8 a 16 años) en «Tu siguiente actividad».
+// Frase que ve el estudiante (de 6 a 16 años) en «Tu siguiente actividad».
 // No lleva palabras internas (goal) y, con pocos datos, no dice «0 % de
 // dominio»: eso era "sin datos", no un nivel real.
 const MIN_CONFIDENCE_FOR_PERCENT = 0.5;

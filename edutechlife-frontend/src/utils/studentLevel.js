@@ -5,9 +5,9 @@
  * de 12 años quedaba en «Grado 9» y los retos le traían temas de 10.º y 11.º.
  */
 
-export const AGE_MIN = 8;
+export const AGE_MIN = 6;
 export const AGE_MAX = 16;
-export const GRADE_MIN = 3;
+export const GRADE_MIN = 1;
 export const GRADE_MAX = 11;
 
 export const AGE_OPTIONS = Array.from(

@@ -13,7 +13,7 @@ import {
 } from "../../utils/studentLevel";
 
 // El perfil guarda el grado como texto libre ("9", "6B"); el formulario solo
-// ofrece 3.º–11.º, así que un valor que no esté en la lista se pide de nuevo.
+// ofrece 1.º–11.º, así que un valor que no esté en la lista se pide de nuevo.
 const gradeFromProfile = (grade) => {
   const n = parseInt(grade, 10);
   return GRADE_OPTIONS.includes(n) ? String(n) : "";
