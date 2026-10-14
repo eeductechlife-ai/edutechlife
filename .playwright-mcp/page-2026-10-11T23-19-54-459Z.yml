@@ -1,0 +1,66 @@
+- generic [ref=f11e5]:
+  - generic [ref=f11e12]:
+    - img "Edutechlife" [ref=f11e15]
+    - generic [ref=f11e16]: 60%
+    - generic [ref=f11e21]: Personalizando con metodología VAK...
+    - generic [ref=f11e28]:
+      - generic [ref=f11e29]: IA Integrada
+      - generic [ref=f11e35]: VAK Metodología
+      - generic [ref=f11e46]: Certificaciones
+  - main [ref=f11e53]:
+    - generic [ref=f11e54]:
+      - generic [ref=f11e55]: Cargando IngenIA...
+      - generic [ref=f11e67]:
+        - generic [ref=f11e68]:
+          - generic [ref=f11e69]:
+            - img "Edutechlife" [ref=f11e71]
+            - paragraph [ref=f11e72]: Transformando la educación...
+            - generic [ref=f11e73]:
+              - link "Facebook" [ref=f11e74] [cursor=pointer]:
+                - /url: https://web.facebook.com/eductechlife/
+              - link "Instagram" [ref=f11e77] [cursor=pointer]:
+                - /url: https://www.instagram.com/edu_techlife/
+              - link "LinkedIn" [ref=f11e81] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/edutechlife
+              - link "YouTube" [ref=f11e86] [cursor=pointer]:
+                - /url: https://www.youtube.com/@edutechlife
+          - generic [ref=f11e90]:
+            - button "Herramientas"
+            - list [ref=f11e91]:
+              - listitem [ref=f11e92]:
+                - button "IA Lab con MAX" [ref=f11e93] [cursor=pointer]
+              - listitem [ref=f11e96]:
+                - button "IngenIA" [ref=f11e97] [cursor=pointer]
+              - listitem [ref=f11e100]:
+                - button "ADN de Aprendizaje" [ref=f11e101] [cursor=pointer]
+              - listitem [ref=f11e104]:
+                - button "ROI Calculator" [ref=f11e105] [cursor=pointer]
+              - listitem [ref=f11e108]:
+                - button "Automatización Empresarial" [ref=f11e109] [cursor=pointer]
+          - generic [ref=f11e112]:
+            - button "Recursos"
+            - list [ref=f11e113]:
+              - listitem [ref=f11e114]:
+                - button "Metodología VAK" [ref=f11e115] [cursor=pointer]
+              - listitem [ref=f11e118]:
+                - button "Proyectos SenaTIC" [ref=f11e119] [cursor=pointer]
+              - listitem [ref=f11e122]:
+                - button "Certificaciones" [ref=f11e123] [cursor=pointer]
+              - listitem [ref=f11e126]:
+                - button "Blog Educativo" [ref=f11e127] [cursor=pointer]
+              - listitem [ref=f11e130]:
+                - button "Documentación" [ref=f11e131] [cursor=pointer]
+          - generic [ref=f11e134]:
+            - heading "Newsletter" [level=4] [ref=f11e135]
+            - paragraph [ref=f11e136]: Recibe novedades educativas y actualizaciones de la plataforma.
+            - generic [ref=f11e137]:
+              - textbox "Tu correo electrónico" [ref=f11e139] [cursor=pointer]
+              - button "Suscribirme" [ref=f11e140] [cursor=pointer]
+        - generic [ref=f11e146]:
+          - paragraph [ref=f11e148]: © 2026 Edutechlife Premium. Todos los derechos reservados.
+          - generic [ref=f11e149]:
+            - button "Política de Privacidad" [ref=f11e150] [cursor=pointer]
+            - generic [ref=f11e151]: •
+            - button "Términos de Uso" [ref=f11e152] [cursor=pointer]
+            - generic [ref=f11e153]: •
+            - button "Contacto" [ref=f11e154] [cursor=pointer]

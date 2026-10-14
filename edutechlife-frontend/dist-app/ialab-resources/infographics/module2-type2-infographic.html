@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain-of-Thought & Few-Shot - IALab EdutechLife</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .infographic {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(45, 122, 148, 0.12);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content { padding: 30px; }
+        
+        .section { margin-bottom: 30px; }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #2D7A94;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #B2D8E5;
+        }
+        
+        .technique-box {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f5fafc 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .technique-box h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #2D7A94;
+            font-size: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .technique-box h3 span {
+            margin-right: 10px;
+        }
+        
+        .technique-box p {
+            color: #5a6c7d;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .comp-box {
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .comp-box.cot {
+            background: #fff8e8;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .comp-box.fewshot {
+            background: #e8f4ff;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comp-box h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .comp-box.cot h4 { color: #f39c12; }
+        .comp-box.fewshot h4 { color: #3498db; }
+        
+        .comp-box pre {
+            background: #1a1a2e;
+            color: #eee;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            overflow-x: auto;
+        }
+        
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            background: #f8fbfe;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #4DA8C4;
+        }
+        
+        .step-num {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #2D7A94, #4DA8C4);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step p {
+            color: #5a6c7d;
+            font-size: 13px;
+        }
+        
+        .examples-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .examples-table th {
+            background: #2D7A94;
+            color: white;
+            padding: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            text-align: left;
+        }
+        
+        .examples-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e8f0f5;
+            font-size: 12px;
+            color: #5a6c7d;
+        }
+        
+        .examples-table tr:hover {
+            background: #f8fbfe;
+        }
+        
+        .footer {
+            background: #f8fbfe;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #e8f0f5;
+        }
+        
+        .footer p { color: #5a6c7d; font-size: 12px; }
+        
+        .footer .brand {
+            font-family: 'Montserrat', sans-serif;
+            color: #2D7A94;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>Chain-of-Thought & Few-Shot Learning</h1>
+            <div class="subtitle">Módulo 2: Técnicas Avanzadas • IALab EdutechLife</div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">🔄 Chain-of-Thought (CoT)</h2>
+                <div class="technique-box">
+                    <h3><span>🧠</span> ¿Qué es?</h3>
+                    <p>
+                        El Chain-of-Thought es una técnica que诱导 al modelo a mostrar su proceso de razonamiento 
+                        paso a paso antes de dar la respuesta final. Esto mejora significativamente la calidad 
+                        de respuestas en tareas de razonamiento complejo.
+                    </p>
+                    
+                    <h3 style="margin-top: 15px;"><span>📝</span> Cómo implementarlo:</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <p>Agrega "Pensemos paso a paso" o "Razonemos"</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <p>Solicita explícitamente que muestre el proceso</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <p>Pide justificaciones para cada paso</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison">
+                    <div class="comp-box cot">
+                        <h4>❌ Sin CoT</h4>
+                        <pre>P: Si tengo 5 manzanas y me como 2, ¿cuántas me quedan?
+R: 3 manzanas</pre>
+                    </div>
+                    <div class="comp-box cot">
+                        <h4>✅ Con CoT</h4>
+                        <pre>P: Pensemos paso a paso...
+1. Tenía 5 manzanas
+2. Me comí 2
+3. 5 - 2 = 3
+R: 3 manzanas</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">📚 Few-Shot Learning</h2>
+                <div class="technique-box">
+                    <h3><span>🎯</span> ¿Qué es?</h3>
+                    <p>
+                        Few-Shot Learning es una técnica donde proporcionas ejemplos de entrada-salida 
+                        en el prompt para que el modelo entienda el patrón deseado sin necesidad 
+                        de entrenamiento adicional.
+                    </p>
+                </div>
+                
+                <table class="examples-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Ejemplos</th>
+                            <th>Uso Ideal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Zero-Shot</strong></td>
+                            <td>Sin ejemplos</td>
+                            <td>Tareas simples y directas</td>
+                        </tr>
+                        <tr>
+                            <td><strong>One-Shot</strong></td>
+                            <td>1 ejemplo</td>
+                            <td>Cuando hay un claro formato</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Few-Shot</strong></td>
+                            <td>2-5 ejemplos</td>
+                            <td>Tareas complejas con variaciones</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="comparison" style="margin-top: 20px;">
+                    <div class="comp-box fewshot">
+                        <h4>Ejemplo Few-Shot</h4>
+                        <pre>Input:El gato dormía→ Output:dormir
+Input:El pez nada→ Output:nadar
+Input:El pájaro{vuelar}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">💡 Cuándo usar cada técnica</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div style="background: #fff8e8; padding: 15px; border-radius: 10px; border-left: 3px solid #f39c12;">
+                        <strong style="color: #f39c12;">Chain-of-Thought:</strong>
+                        <ul style="margin-top: 8px; padding-left: 18px; color: #5a6c7d; font-size: 13px;">
+                            <li>Problemas matemáticos</li>
+                            <li>Razonamiento lógico</li>
+                            <li>Análisis complejo</li>
+                            <li>Decisiones multi-paso</li>
+                        </ul>
+                    </div>
+                    <div style="background: #e8f4ff; padding: 15px; border-radius: 10px; border-left: 3px solid #3498db;">
+                        <strong style="color: #3498db;">Few-Shot Learning:</strong>
+                        <ul style="margin-top: 8px; padding-left: 18px; color: #5a6c7d; font-size: 13px;">
+                            <li>Clasificación de texto</li>
+                            <li>Formateo específico</li>
+                            <li>Traducción</li>
+                            <li>Sentiment analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><span class="brand">IALab</span> • Inteligencia Artificial Aplicada • 12 Horas • <span class="brand">EdutechLife</span></p>
+        </div>
+    </div>
+</body>
+</html>

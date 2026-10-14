@@ -1,0 +1,46 @@
+- generic [active] [ref=f9e1]:
+  - link "Skip to content":
+    - /url: "#geist-skip-nav"
+  - generic [ref=f9e3]:
+    - banner [ref=f9e4]:
+      - link "Vercel logo":
+        - /url: /home
+        - button [ref=f9e5] [cursor=pointer]:
+          - img "Vercel Logo" [ref=f9e6]
+      - navigation [ref=f9e8]:
+        - navigation [ref=f9e9]:
+          - link [ref=f9e10] [cursor=pointer]:
+            - /url: /signup?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fedutechlife-688uhomx1-eeductechlife-ais-projects.vercel.app%252F%26nonce%3D60126b3b7f524e45dd81bc229288930d2507ad8000cab7506b99812cef2ba809
+            - paragraph [ref=f9e12]: Sign Up
+    - main [ref=f9e13]:
+      - generic [ref=f9e15]:
+        - heading "Log in to Vercel" [level=1] [ref=f9e18]
+        - generic [ref=f9e19]:
+          - generic [ref=f9e20]:
+            - textbox "Email Address" [ref=f9e23]
+            - button "Continue with Email" [ref=f9e26] [cursor=pointer]
+          - generic [ref=f9e29]:
+            - button "Continue with Google" [ref=f9e30] [cursor=pointer]:
+              - generic [ref=f9e34]:
+                - generic [ref=f9e35]: Continue with
+                - text: Google
+            - button "Continue with GitHub" [ref=f9e36] [cursor=pointer]:
+              - generic [ref=f9e40]:
+                - generic [ref=f9e41]: Continue with
+                - text: GitHub
+            - button "Continue with ChatGPT" [ref=f9e42] [cursor=pointer]:
+              - generic [ref=f9e46]:
+                - generic [ref=f9e47]: Continue with
+                - text: ChatGPT
+            - button "Continue with SAML SSO" [ref=f9e49] [cursor=pointer]
+            - button "Continue with Passkey" [ref=f9e54] [cursor=pointer]
+            - button "Show other options" [ref=f9e59] [cursor=pointer]
+        - paragraph [ref=f9e62]:
+          - text: Don't have an account?
+          - link "Sign Up" [ref=f9e63] [cursor=pointer]:
+            - /url: /signup?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fedutechlife-688uhomx1-eeductechlife-ais-projects.vercel.app%252F%26nonce%3D60126b3b7f524e45dd81bc229288930d2507ad8000cab7506b99812cef2ba809
+      - generic [ref=f9e66]:
+        - link "Terms" [ref=f9e67] [cursor=pointer]:
+          - /url: /legal/terms
+        - link "Privacy Policy" [ref=f9e68] [cursor=pointer]:
+          - /url: /legal/privacy-policy

@@ -1,0 +1,1 @@
+const a=12,e=10,S=80,E=3;const s=1200,t=3,n=["Advertencia: No cambies de ventana durante el examen","Segunda advertencia: El sistema detectó que abriste otra ventana","Última advertencia: Si vuelves a cambiar de ventana, el examen se cerrará automáticamente"],T=1,_=3e3,c="exam_security_logs";export{e as E,E as M,S as P,c as S,a as T,t as a,_ as b,T as c,n as d,s as e};

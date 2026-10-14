@@ -1,0 +1,15 @@
+{
+	"appId": "co.edutechlife.ingenia",
+	"appName": "IngenIA",
+	"webDir": "dist-app",
+	"android": {
+		"path": "android-ingenia"
+	},
+	"plugins": {
+		"SystemBars": {
+			"insetsHandling": "native",
+			"initialViewportFitValueHint": "auto",
+			"style": "DEFAULT"
+		}
+	}
+}

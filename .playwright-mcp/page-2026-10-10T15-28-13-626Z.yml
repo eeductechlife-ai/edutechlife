@@ -1,0 +1,11 @@
+- generic [ref=f4e5]:
+  - generic [ref=f4e12]:
+    - img "Edutechlife" [ref=f4e15]
+    - generic [ref=f4e16]: 100%
+    - generic [ref=f4e21]: ¡Todo listo!
+    - generic [ref=f4e26]:
+      - generic [ref=f4e27]: IA Integrada
+      - generic [ref=f4e33]: VAK Metodología
+      - generic [ref=f4e44]: Certificaciones
+  - main [ref=f4e51]:
+    - generic [ref=f4e52]: common.loading

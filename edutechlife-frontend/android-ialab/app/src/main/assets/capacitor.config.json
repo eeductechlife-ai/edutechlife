@@ -1,0 +1,15 @@
+{
+	"appId": "co.edutechlife.ialab",
+	"appName": "IALab Academic",
+	"webDir": "dist-app",
+	"android": {
+		"path": "android-ialab"
+	},
+	"plugins": {
+		"SystemBars": {
+			"insetsHandling": "native",
+			"initialViewportFitValueHint": "auto",
+			"style": "DEFAULT"
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "/ialab",
+  "name": "IALab Academic — Edutechlife",
+  "short_name": "IALab",
+  "description": "Formación profesional en Inteligencia Artificial: módulos, lecciones, quizzes y certificados con Valerio.",
+  "lang": "es",
+  "start_url": "/ialab",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#004B63",
+  "background_color": "#FFFFFF",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192x192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mis módulos",
+      "short_name": "Módulos",
+      "description": "Continúa tu formación en IALab",
+      "url": "/ialab"
+    }
+  ]
+}
