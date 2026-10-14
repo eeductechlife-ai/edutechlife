@@ -6,9 +6,8 @@ const { getPlanById } = require('../data/plans');
 // eventos que Wompi envía. Sin las variables WOMPI_* no hace nada: el cobro
 // sigue apagado hasta que el CEO cargue las llaves en Render.
 //
-// Web Checkout es un pago único: no renueva solo. Antes de ofrecer planes
-// mensuales por Wompi hace falta guardar la fecha de vencimiento del plan o
-// cobrar con fuentes de pago (docs/pagos/WOMPI.md).
+// Web Checkout es un pago único: no renueva solo. Cada pago extiende el plan
+// un periodo y services/paidPlans.js lo apaga al vencer (docs/pagos/WOMPI.md).
 
 const CHECKOUT_URL = 'https://checkout.wompi.co/p/';
 const REF_SEPARATOR = '__';

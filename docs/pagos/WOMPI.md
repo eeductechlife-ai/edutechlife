@@ -10,8 +10,12 @@ Stripe no abre cuentas a empresas colombianas y no ofrece PSE ni Nequi. Wompi
 - `POST /api/payments/wompi/checkout` (con sesión): devuelve la URL de pago de
   un plan en COP. Responde 503 sin llaves.
 - `POST /api/payments/wompi/events`: URL de eventos para el panel de Wompi.
-  Si la transacción queda `APPROVED` por el monto exacto del plan, activa el
-  plan con la misma función que usa Stripe.
+  Si la transacción queda `APPROVED` por el monto exacto del plan, activa o
+  extiende el plan un mes (o un año en el plan anual) y guarda hasta cuándo
+  está pagado. Un evento repetido no extiende dos veces.
+- `src/services/paidPlans.js`: cada hora apaga los planes cuyo periodo pagado
+  terminó (solo corre con Wompi configurado). Los planes de Stripe y de
+  colegios no tienen fecha y no se tocan.
 - Montos: salen de `src/data/plans.js` (centavos de COP, la unidad de Wompi).
 
 Sin las tres variables siguientes todo queda apagado:
@@ -24,11 +28,9 @@ Sin las tres variables siguientes todo queda apagado:
 
 ## Antes de encenderlo en producción
 
-1. **Renovación.** Web Checkout cobra una sola vez. Hoy un pago aprobado deja
-   el plan activo sin fecha de fin. Antes de vender planes mensuales hay que
-   (a) guardar `paid_until` y apagar el plan al vencer, o (b) cobrar cada mes
-   con fuentes de pago (tarjeta tokenizada o Nequi) desde el backend.
-   El plan anual (`ingenia_base_anual`) es el que mejor encaja con un pago único.
+1. **Aplicar la migración 103** (`supabase/migrations/103_planes_pagados_con_vencimiento.sql`)
+   en Supabase. Agrega la fecha de vencimiento del plan. Las migraciones se
+   aplican a mano en producción.
 2. **Botón en el frontend.** `/planes` y la landing de IngenIA siguen llamando
    a Stripe. Falta elegir la pasarela según el país del usuario.
 3. **Probar en sandbox** con llaves `pub_test_` y las tarjetas de prueba de Wompi,

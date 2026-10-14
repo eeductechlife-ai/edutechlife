@@ -6,7 +6,7 @@ const {
   verifyEventChecksum,
   getActivationFromEvent,
 } = require('../services/wompi');
-const { updateSupabaseUserSubscription } = require('../services/stripe');
+const { activatePaidPeriod } = require('../services/paidPlans');
 
 const router = Router();
 
@@ -38,7 +38,8 @@ router.post('/checkout', requireAuth, (req, res) => {
 /**
  * POST /api/payments/wompi/events
  * URL de eventos que se registra en el panel de Wompi. Verifica el checksum
- * y, si la transacción quedó APROBADA por el monto exacto del plan, lo activa.
+ * y, si la transacción quedó APROBADA por el monto exacto del plan, activa o
+ * extiende el plan un mes o un año (según el plan).
  */
 router.post('/events', async (req, res) => {
   const config = getWompiConfig();
@@ -51,12 +52,19 @@ router.post('/events', async (req, res) => {
 
   const activation = getActivationFromEvent(event);
   if (activation) {
-    await updateSupabaseUserSubscription(activation.userId, {
+    const result = await activatePaidPeriod({
+      userId: activation.userId,
       planId: activation.planId,
-      subscriptionId: `wompi_${activation.transactionId}`,
-      status: 'active',
+      paymentId: `wompi_${activation.transactionId}`,
     });
-    console.log('Wompi: plan activado', activation.planId, activation.userId);
+    if (result.error) {
+      // 500 para que Wompi reintente: el pago está aprobado y el plan no quedó activo.
+      console.error('Wompi: no se pudo activar el plan', activation.planId, result.error);
+      return res.status(500).json({ error: 'No se pudo activar el plan' });
+    }
+    if (result.paidUntil) {
+      console.log('Wompi: plan activo hasta', result.paidUntil, activation.planId, activation.userId);
+    }
   }
 
   res.json({ received: true });
