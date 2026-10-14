@@ -25,6 +25,7 @@ import IngenIATestimoniosSection from "./ingenia/IngenIATestimoniosSection";
 import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
 import IngenIAWhatsappCta from "./ingenia/IngenIAWhatsappCta";
 import IngenIAMobileBar from "./ingenia/IngenIAMobileBar";
+import IngenIAValoracion from "./ingenia/IngenIAValoracion";
 import "./ingenia/ingenia-theme.css";
 
 // Anclas de cada sección. El wrapper usa un id con prefijo para NO chocar con
@@ -221,6 +222,8 @@ const IngenIALandingInfo = ({ onNavigate }) => {
       <div className="relative">
         {sections.map((section, i) => (
           <Fragment key={SECTION_ANCHORS[i]}>
+            {/* Antes de «Planes»: valoración gratis de 20 minutos para el plan personalizado. */}
+            {i === 3 && <IngenIAValoracion />}
             <div id={anchorId(SECTION_ANCHORS[i])} className="scroll-mt-16">
               {section}
             </div>

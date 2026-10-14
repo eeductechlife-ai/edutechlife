@@ -3354,6 +3354,8 @@ export type TranslationKeys = {
   "ingenia.vak_report": string;
   "ingenia.vak_techniques": string;
   "ingenia.vak_title": string;
+  "ingenia.val_desc": string;
+  "ingenia.val_title": string;
   "ingenia.valeria_ready": string;
   "ingenia.view_all": string;
   "ingenia.wa_btn": string;
@@ -5904,6 +5906,13 @@ export type TranslationKeys = {
   time_title: string;
   time_today: string;
   time_week: string;
+  "vak.informe.desc": string;
+  "vak.informe.email_label": string;
+  "vak.informe.name_label": string;
+  "vak.informe.sent_desc": string;
+  "vak.informe.sent_title": string;
+  "vak.informe.submit": string;
+  "vak.informe.title": string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_title": string;

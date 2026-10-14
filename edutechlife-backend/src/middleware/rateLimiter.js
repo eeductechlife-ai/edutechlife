@@ -191,9 +191,28 @@ const leadLimiter = rateLimit({
   skip: () => process.env.NODE_ENV !== 'production',
 });
 
+// Envío del informe VAK en PDF (POST /api/vak/informe): máximo 3 por IP al día.
+// El límite por correo (3 al día) se cuenta en la tabla leads, en la ruta.
+const vakInformeIpLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: {
+    error: 'Ya enviaste varios informes desde tu conexión hoy. Intenta mañana o escríbenos por WhatsApp.',
+    retryAfter: 86400,
+  },
+  // Solo IP: es público y userAwareKey confía en el sub de un JWT sin verificar firma,
+  // así que un token inventado cambiaría la clave y evadiría el límite.
+  keyGenerator: (req) => ipKeyGenerator(req.ip),
+  skip: () => process.env.NODE_ENV !== 'production',
+});
+
 module.exports = {
   userAwareKey,
   leadLimiter,
+  vakInformeIpLimiter,
   apiLimiter,
   deepseekLimiter,
   authLimiter,

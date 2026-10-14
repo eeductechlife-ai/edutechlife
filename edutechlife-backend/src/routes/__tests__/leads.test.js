@@ -102,6 +102,11 @@ describe('POST /api/leads', () => {
     expect(insert.mock.calls[0][0]).toMatchObject({ fuente: 'ingenia_hero', perfil: 'padre' });
   });
 
+  test('formulario de valoración de IngenIA (ingenia_valoracion) se acepta → 201', async () => {
+    await request(app).post('/api/leads').send(leadValido({ fuente: 'ingenia_valoracion' })).expect(201);
+    expect(insert.mock.calls[0][0]).toMatchObject({ fuente: 'ingenia_valoracion' });
+  });
+
   test('perfil desconocido se guarda como "otro"', async () => {
     await request(app).post('/api/leads').send(leadValido({ perfil: 'admin' })).expect(201);
     expect(insert.mock.calls[0][0].perfil).toBe('otro');
