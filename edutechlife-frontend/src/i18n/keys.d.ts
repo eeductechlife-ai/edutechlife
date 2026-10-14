@@ -198,6 +198,7 @@ export type TranslationKeys = {
   "automation.architect.components_title": string;
   "automation.architect.custom_arch": string;
   "automation.architect.datos_empresa": string;
+  "automation.architect.frameworks_label": string;
   "automation.architect.desc": string;
   "automation.architect.download": string;
   "automation.architect.empleados_label": string;
@@ -6247,6 +6248,7 @@ const translationKeySet: Record<string, true> = {
   "automation.architect.components_title": true,
   "automation.architect.custom_arch": true,
   "automation.architect.datos_empresa": true,
+  "automation.architect.frameworks_label": true,
   "automation.architect.desc": true,
   "automation.architect.download": true,
   "automation.architect.empleados_label": true,

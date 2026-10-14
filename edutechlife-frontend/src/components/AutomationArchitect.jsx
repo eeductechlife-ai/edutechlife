@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { callDeepseek } from "../utils/api";
-import { buildPlanRequest } from "../utils/automationPlan";
+import {
+  buildPlanRequest,
+  ensurePlanAviso,
+  MAX_EMPRESA,
+  MAX_OBJETIVOS,
+} from "../utils/automationPlan";
 import AutomationArchitectureViewer from "./AutomationArchitectureViewer";
 import { useTranslation } from "../i18n/I18nProvider";
 import {
@@ -63,7 +68,7 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
 
     try {
       const result = await callDeepseek(messages, options);
-      setGeneratedPlan(result);
+      setGeneratedPlan(ensurePlanAviso(result));
       setActiveStep(4);
     } catch (error) {
       console.error("Error generando plan:", error);
@@ -109,7 +114,10 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
         </div>
         <h1>{t("automation.architect.title")}</h1>
         <p>{t("automation.architect.desc")}</p>
-        <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+        <p className="mt-4 text-[11px] text-slate-500">
+          {t("automation.architect.frameworks_label")}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-petroleum/5 border border-petroleum/10 rounded-full text-[10px] font-semibold text-petroleum">
             <svg
               className="w-3 h-3"
@@ -198,6 +206,7 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
                 <input
                   type="text"
                   id="aa-empresa"
+                  maxLength={MAX_EMPRESA}
                   value={formData.empresa}
                   onChange={(e) => handleInputChange("empresa", e.target.value)}
                   placeholder={t("automation.architect.empresa_placeholder")}
@@ -270,6 +279,7 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
               </label>
               <textarea
                 id="aa-objetivos"
+                maxLength={MAX_OBJETIVOS}
                 value={formData.objetivos}
                 onChange={(e) => handleInputChange("objetivos", e.target.value)}
                 placeholder={t("automation.architect.objetivos_placeholder")}
