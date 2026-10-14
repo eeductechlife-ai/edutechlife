@@ -13,6 +13,7 @@ import ValentinaCommentarySection from "./documentSections/ValentinaCommentarySe
 import QRSection from "./documentSections/QRSection";
 import FooterSection from "./documentSections/FooterSection";
 import DocumentActions from "./documentActions";
+import VakEnviarInforme from "../VakEnviarInforme";
 
 const STYLE_THEME = {
   visual: {
@@ -263,6 +264,10 @@ const DocumentPreviewScreen = ({
         pdfLoading={pdfLoading}
         onBack={onBack}
       />
+
+      <div className="mx-auto mt-8 max-w-md px-4 pb-8">
+        <VakEnviarInforme />
+      </div>
     </motion.div>
   );
 };

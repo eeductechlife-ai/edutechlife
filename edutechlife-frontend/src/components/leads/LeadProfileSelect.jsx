@@ -20,6 +20,7 @@ export default function LeadProfileSelect({
   labelStyle,
   selectClassName = "",
   selectStyle,
+  opciones = PERFILES,
 }) {
   const { t } = useTranslation();
   return (
@@ -37,7 +38,7 @@ export default function LeadProfileSelect({
         style={selectStyle}
       >
         <option value="">{t("leadForm.profile_placeholder")}</option>
-        {PERFILES.map((p) => (
+        {opciones.map((p) => (
           <option key={p} value={p}>
             {t(`leadForm.profile_${p}`)}
           </option>
