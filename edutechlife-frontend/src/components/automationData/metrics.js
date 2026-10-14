@@ -1,20 +1,28 @@
+// Dato de mercado con fuente (no son resultados de clientes).
+// Fuente: McKinsey, "The state of AI in 2025" (encuesta jun–jul 2025, publicada nov 2025).
 export const METRICS_ES = [
-  { value: "+340%", label: "Eficiencia Operativa", color: "#4DA8C4" },
-  { value: "-60%", label: "Reducción de Costos", color: "#66CCCC" },
-  { value: "12+", label: "Sectores", color: "#004B63" },
-  { value: "4.2x", label: "ROI Promedio", color: "#4DA8C4" },
+  {
+    value: "79%",
+    label: "de las organizaciones ya usa IA generativa",
+    source: "Fuente: McKinsey, The state of AI in 2025 (nov. 2025)",
+    color: "#4DA8C4",
+  },
 ];
 
 export const METRICS_PT = [
-  { value: "+340%", label: "Eficiência Operacional", color: "#4DA8C4" },
-  { value: "-60%", label: "Redução de Custos", color: "#66CCCC" },
-  { value: "12+", label: "Setores", color: "#004B63" },
-  { value: "4.2x", label: "ROI Médio", color: "#4DA8C4" },
+  {
+    value: "79%",
+    label: "das organizações já usa IA generativa",
+    source: "Fonte: McKinsey, The state of AI in 2025 (nov. 2025)",
+    color: "#4DA8C4",
+  },
 ];
 
 export const METRICS_EN = [
-  { value: "+340%", label: "Operational Efficiency", color: "#4DA8C4" },
-  { value: "-60%", label: "Cost Reduction", color: "#66CCCC" },
-  { value: "12+", label: "Sectors", color: "#004B63" },
-  { value: "4.2x", label: "Avg ROI", color: "#4DA8C4" },
+  {
+    value: "79%",
+    label: "of organizations already use generative AI",
+    source: "Source: McKinsey, The state of AI in 2025 (Nov 2025)",
+    color: "#4DA8C4",
+  },
 ];

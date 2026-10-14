@@ -11,6 +11,15 @@ const { getPlanById } = require('../data/plans');
 
 const CHECKOUT_URL = 'https://checkout.wompi.co/p/';
 const REF_SEPARATOR = '__';
+// Fundador vence el 3-nov-2026 inclusive, en hora de Colombia (UTC-5).
+const ZONA_COLOMBIA = '-05:00';
+
+// Bandera de #105, pensada para las suscripciones con fuente de pago guardada
+// (migración 103, sin aplicar). El Web Checkout de abajo no depende de ella:
+// se enciende solo con las tres llaves WOMPI_*.
+function isPagosWompiEnabled(env = process.env) {
+  return env.PAGOS_WOMPI === 'true';
+}
 
 function getWompiConfig() {
   const publicKey = process.env.WOMPI_PUBLIC_KEY;
@@ -34,6 +43,28 @@ function integritySignature({ reference, amountInCents, currency }, integritySec
   return sha256(`${reference}${amountInCents}${currency}${integritySecret}`);
 }
 
+function firmaIntegridad({ referencia, montoEnCentavos, moneda, secretoIntegridad }) {
+  if (!secretoIntegridad) throw new Error('Falta el secreto de integridad de Wompi');
+  return integritySignature({ reference: referencia, amountInCents: montoEnCentavos, currency: moneda }, secretoIntegridad);
+}
+
+// Un plan con availableUntil deja de venderse después de esa fecha (inclusive).
+// El cupo de 50 familias del Fundador se controla quitando su variable de precio.
+function planDisponible(planId, ahora = new Date()) {
+  const plan = getPlanById(planId);
+  if (!plan) return false;
+  if (!plan.availableUntil) return true;
+  return ahora.getTime() <= Date.parse(`${plan.availableUntil}T23:59:59${ZONA_COLOMBIA}`);
+}
+
+// Monto a cobrar en centavos de COP, tomado del catálogo y nunca del cliente.
+// Solo aplica a planes IngenIA en COP con precio fijo.
+function montoPlanEnCentavos(planId) {
+  const plan = getPlanById(planId);
+  if (!plan || plan.currency !== 'cop' || plan.isCustom || !plan.price) return null;
+  return plan.price;
+}
+
 // La referencia lleva el plan y el usuario para saber qué activar al llegar
 // el evento. Los ids de plan usan "_" sencillo y los de usuario son UUID.
 function buildReference(planId, userId, now = Date.now()) {
@@ -55,13 +86,11 @@ function createWompiCheckout({ planId, userId, email, redirectUrl }) {
   if (plan.isCustom || plan.price === 0) return { url: null, error: 'Este plan no requiere pago' };
   // Wompi solo cobra en COP; los planes viejos en USD no se ofrecen por aquí.
   if (plan.currency !== 'cop') return { url: null, error: 'Plan no disponible en pesos' };
-  if (plan.availableUntil && Date.now() > Date.parse(`${plan.availableUntil}T23:59:59-05:00`)) {
-    return { url: null, error: 'Esta oferta ya no está disponible' };
-  }
+  if (!planDisponible(plan.id)) return { url: null, error: 'Esta oferta ya no está disponible' };
 
   const currency = 'COP';
   // plans.js guarda el precio en centavos de COP, la misma unidad que pide Wompi.
-  const amountInCents = plan.price;
+  const amountInCents = montoPlanEnCentavos(plan.id);
   const reference = buildReference(plan.id, userId);
   const signature = integritySignature({ reference, amountInCents, currency }, config.integritySecret);
 
@@ -88,11 +117,11 @@ function readPath(obj, path) {
 // event.data, en orden + timestamp + secreto de eventos).
 function verifyEventChecksum(event, eventsSecret) {
   const signature = event?.signature;
-  if (!signature || !Array.isArray(signature.properties) || !signature.checksum) return false;
+  if (!eventsSecret || !signature || !Array.isArray(signature.properties) || !signature.checksum) return false;
   if (event.timestamp == null || !event.data) return false;
 
   const values = signature.properties.map((p) => readPath(event.data, p));
-  if (values.some((v) => v === undefined)) return false;
+  if (values.some((v) => v === undefined || v === null)) return false;
 
   const expected = sha256(`${values.join('')}${event.timestamp}${eventsSecret}`);
   const given = String(signature.checksum).toLowerCase();
@@ -117,6 +146,11 @@ function getActivationFromEvent(event) {
 }
 
 module.exports = {
+  isPagosWompiEnabled,
+  firmaIntegridad,
+  verificarChecksumEvento: verifyEventChecksum,
+  planDisponible,
+  montoPlanEnCentavos,
   getWompiConfig,
   integritySignature,
   buildReference,

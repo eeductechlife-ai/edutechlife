@@ -145,6 +145,7 @@ const GenericSignUpRedirect = () => {
  * - Rutas de autenticación: /auth-router (redirección inteligente)
  */
 const PlanesPage = lazy(() => import("../components/pages/PlanesPage"));
+const PrivacidadPage = lazy(() => import("../components/pages/PrivacidadPage"));
 
 const AppRoutes = () => {
   const { t } = useTranslation();
@@ -505,6 +506,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader message={t("common.loading")} />}>
               <CertificateVerificationPage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="privacidad"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <PrivacidadPage />
             </Suspense>
           }
         />

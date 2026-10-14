@@ -1,7 +1,7 @@
 export const MOOD_MESSAGES = {
   happy: "¡Qué alegría verte así! Vamos a pasarlo muy bien.",
   neutral: "Gracias por compartir cómo te sientes. Estoy aquí para guiarte.",
-  sad: "Gracias por contarme. Es una actividad corta y puedes hacerla con calma, o dejarla para otro día si prefieres.",
+  sad: "Gracias por contarme. Es una actividad corta y puedes hacerla con calma, o dejarla para otro día si prefieres. Si te sientes mal, cuéntale a tu acudiente o a un adulto de confianza.",
 };
 
 export const STORAGE_KEY = "edutechlife_vak_progress";
@@ -11,7 +11,7 @@ export const PROGRESS_TTL_MS = 30 * 60 * 1000;
 
 export const VALENTINA_RESULT_DELAY_MS = 1500;
 
-export const AGE_MIN = 8;
+export const AGE_MIN = 6;
 
 export const AGE_MAX = 16;
 

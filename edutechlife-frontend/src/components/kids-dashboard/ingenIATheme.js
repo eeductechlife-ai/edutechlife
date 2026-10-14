@@ -1,7 +1,7 @@
 /**
  * IngenIA 2.0 — Design Token System
  * ------------------------------------------------------------
- * A vibrant, premium visual language crafted for students 8–16.
+ * A vibrant, premium visual language crafted for students 6–16.
  * Keeps EdutechLife's teal identity but amplifies it with rich
  * multi-stop gradients, colored glows and layered depth.
  *

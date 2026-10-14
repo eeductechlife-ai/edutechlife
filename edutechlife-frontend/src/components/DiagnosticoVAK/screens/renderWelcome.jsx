@@ -15,11 +15,12 @@ export default function renderWelcome({
   resumeProgress,
   discardProgress,
   questionsTotal,
+  skipEntrance = false,
 }) {
   return (
     <div className="flex items-start justify-center p-2 sm:p-4">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={skipEntrance ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
         className="w-full max-w-xl text-center"

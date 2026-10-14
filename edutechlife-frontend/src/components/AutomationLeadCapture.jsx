@@ -121,26 +121,6 @@ const AutomationLeadCapture = () => {
                 ))}
               </ul>
             </div>
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((a) => (
-                    <div
-                      key={a}
-                      className="w-8 h-8 rounded-full bg-white/20 border-2 border-petroleum flex items-center justify-center text-[10px] font-bold"
-                    >
-                      {["JD", "MA", "CR"][a - 1]}
-                    </div>
-                  ))}
-                </div>
-                <div className="text-xs text-white/60">
-                  <span className="font-semibold text-white">
-                    {t("automation.lead.companies_prefix")}
-                  </span>{" "}
-                  {t("automation.lead.companies")}
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="md:col-span-3 bg-white/70 backdrop-blur-xl p-8 md:p-10">

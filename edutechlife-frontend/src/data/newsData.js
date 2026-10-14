@@ -131,7 +131,7 @@ export const fallbackNews = [
     dataPoints: [
       { label: "Usuarios", value: "100M+", icon: "users" },
       { label: "Precio", value: "Gratis", icon: "coffee" },
-      { label: "Edad sugerida", value: "8-16", icon: "star" },
+      { label: "Edad sugerida", value: "6-16", icon: "star" },
     ],
     source: "scratch.mit.edu/statistics",
     date: "2026-07-07",
