@@ -14,6 +14,11 @@ import {
   optimizeLongConversation,
 } from "./nicoContext";
 import { PROMPT_NICO_SOPORTE } from "./nicoPrompts";
+import {
+  avanzarCaptura,
+  capturaInicial,
+  completarEnvio,
+} from "./nicoCapturaDatos";
 import { checkAppointmentResponse } from "./nicoIntentMatcher";
 import {
   createUserMessage,
@@ -91,6 +96,42 @@ export function useNicoSendMessage({
 }) {
   const lastStreamUpdateRef = useRef(0);
   const messagesEndRef = useRef(null);
+  // Captura de datos de contacto (nicoCapturaDatos): vive solo en el chat abierto.
+  const capturaRef = useRef(capturaInicial());
+
+  const responderCaptura = async (captura) => {
+    setIsLoading(true);
+    try {
+      capturaRef.current = captura.estado;
+      let respuesta = captura.respuesta;
+      let enlace = captura.enlace;
+      if (captura.enviar) {
+        const resultado = await completarEnvio(captura.estado.datos);
+        capturaRef.current = resultado.estado;
+        respuesta = resultado.respuesta;
+        enlace = undefined;
+      }
+      const mensaje = {
+        role: "assistant",
+        content: removeEmojis(respuesta),
+        timestamp: new Date().toISOString(),
+        isCaptura: true,
+      };
+      if (enlace) mensaje.enlace = enlace;
+      setMessages((prev) => [...prev, mensaje]);
+      if (audioEnabled) {
+        speakTextConversational(
+          removeEmojis(respuesta),
+          "nico_premium",
+          {},
+          undefined,
+          setAudioPermissionError,
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -123,6 +164,15 @@ export function useNicoSendMessage({
       const newMessages = [...prev, userMessageObj];
       return optimizeLongConversation(newMessages, 25);
     });
+
+    // Captura de datos: si el mensaje es parte de ella (o pide ser contactado),
+    // lo atiende el flujo de captura y no llega al modelo ni a la memoria.
+    const captura = avanzarCaptura(capturaRef.current, userMessage);
+    if (captura) {
+      await responderCaptura(captura);
+      return;
+    }
+
     setIsLoading(true);
 
     const detectedContext = extractUserContext(userMessage);
@@ -620,6 +670,10 @@ export function useNicoSendMessage({
     }
   };
 
+  const resetCaptura = () => {
+    capturaRef.current = capturaInicial();
+  };
+
   return {
     handleSendMessage,
     handleSaveLead,
@@ -627,5 +681,6 @@ export function useNicoSendMessage({
     scrollToBottom,
     messagesEndRef,
     lastStreamUpdateRef,
+    resetCaptura,
   };
 }

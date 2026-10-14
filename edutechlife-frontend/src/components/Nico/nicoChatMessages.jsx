@@ -99,6 +99,18 @@ function MessageBubble({ msg, onScheduleOption, onAskQuestion }) {
       )}
       <p className="whitespace-pre-wrap text-sm mb-3">{msg.content}</p>
 
+      {msg.enlace && (
+        <a
+          href={msg.enlace.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-xs font-semibold underline mb-3"
+          style={{ color: COLORS.PETROLEUM }}
+        >
+          {msg.enlace.texto}
+        </a>
+      )}
+
       {msg.hasOptions && msg.options && (
         <ChatOptionButtons
           options={msg.options}
