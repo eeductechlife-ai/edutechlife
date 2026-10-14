@@ -21,6 +21,7 @@ const ttsRoutes = require('./routes/tts');
 const ingeniaRoutes = require('./routes/ingenia');
 const scanImageRoutes = require('./routes/scanImage');
 const stripeRoutes = require('./routes/stripe');
+const wompiRoutes = require('./routes/wompi');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
@@ -186,6 +187,7 @@ app.use(
   scanImageRoutes
 );
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/payments/wompi', wompiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);

@@ -153,4 +153,4 @@ async function handleWebhookEvent(event) {
   }
 }
 
-module.exports = { createCheckoutSession, handleWebhookEvent, getStripe };
+module.exports = { createCheckoutSession, handleWebhookEvent, getStripe, updateSupabaseUserSubscription };
