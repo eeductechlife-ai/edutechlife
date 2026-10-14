@@ -150,6 +150,7 @@ const NicoModern = ({
     handleScheduleAppointment,
     scrollToBottom,
     messagesEndRef,
+    resetCaptura,
   } = useNicoSendMessage({
     message,
     messages,
@@ -368,6 +369,7 @@ const NicoModern = ({
     voice.sentenceQueueRef.current = [];
     stopSpeech();
     clearMemory();
+    resetCaptura();
     responseCache.clear();
     if (voice.speechRecognitionRef.current) {
       voice.speechRecognitionRef.current.stop();
