@@ -26,7 +26,9 @@ export function buildNicoHistory(
       content: m.content.trim().slice(0, maxChars),
     }));
 
-  const firstUser = turns.findIndex((m) => m.role === "user");
-  const fromUser = firstUser >= 0 ? turns.slice(firstUser) : [];
-  return fromUser.slice(-limit);
+  // Primero se recorta a los últimos turnos y luego se quita cualquier
+  // respuesta del asistente que quede al inicio.
+  const recent = turns.slice(-limit);
+  const firstUser = recent.findIndex((m) => m.role === "user");
+  return firstUser < 0 ? [] : recent.slice(firstUser);
 }
