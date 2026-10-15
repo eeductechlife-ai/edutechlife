@@ -13,7 +13,12 @@ const AdultoObligatorioBanner = () => {
   const { token, isLoaded, isSignedIn } = useAuthIdentity();
   const [mostrar, setMostrar] = useState(false);
   const [abierto, setAbierto] = useState(false);
-  const [form, setForm] = useState({ email: "", nombre: "", confirma: false });
+  const [form, setForm] = useState({
+    edad: "",
+    email: "",
+    nombre: "",
+    confirma: false,
+  });
   const [estado, setEstado] = useState("");
   const [error, setError] = useState("");
 
@@ -38,6 +43,18 @@ const AdultoObligatorioBanner = () => {
   const enviar = async (e) => {
     e.preventDefault();
     setError("");
+    const anios = Number(form.edad);
+    if (
+      form.edad === "" ||
+      !Number.isInteger(anios) ||
+      anios < 6 ||
+      anios > 16
+    ) {
+      setError(
+        "Escribe tu edad real: IngenIA es para estudiantes de 6 a 16 años.",
+      );
+      return;
+    }
     const correo = form.email.trim().toLowerCase();
     if (!EMAIL_RE.test(correo)) {
       setError("Escribe un correo válido del adulto.");
@@ -62,6 +79,7 @@ const AdultoObligatorioBanner = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          edad: anios,
           adulto: {
             email: correo,
             nombre: form.nombre.trim(),
@@ -107,7 +125,22 @@ const AdultoObligatorioBanner = () => {
           Registrar a mi adulto
         </button>
       ) : (
-        <form onSubmit={enviar} className="mt-3 flex flex-col gap-2 text-sm">
+        <form
+          onSubmit={enviar}
+          noValidate
+          className="mt-3 flex flex-col gap-2 text-sm"
+        >
+          <label className="flex flex-col gap-1">
+            Tu edad (de 6 a 16 años)
+            <input
+              type="number"
+              min="6"
+              max="16"
+              value={form.edad}
+              onChange={(e) => setForm({ ...form, edad: e.target.value })}
+              className="border border-gray-300 rounded-lg px-3 py-2"
+            />
+          </label>
           <label className="flex flex-col gap-1">
             Correo del padre, madre o acudiente
             <input

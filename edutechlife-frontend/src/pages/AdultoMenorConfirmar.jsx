@@ -14,6 +14,10 @@ const MENSAJES = {
  * Página a la que llega el padre, madre o acudiente desde el correo de
  * invitación. Debe tener sesión con el correo invitado; el servidor valida
  * el token, el correo y que el enlace no se haya usado ni vencido.
+ *
+ * Idioma: los textos están solo en español, sin pasar por i18n. Son texto
+ * legal pendiente de revisión por el CEO y cumplimiento; traducir a en/pt
+ * después de esa revisión.
  */
 const AdultoMenorConfirmar = () => {
   const [params] = useSearchParams();

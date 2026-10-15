@@ -74,7 +74,6 @@ const IngenIAStatsPage = lazy(
 const IngenIAConsentGate = lazy(
   () => import("../components/kids-dashboard/IngenIAConsentGate"),
 );
-const AutorizacionPadres = lazy(() => import("../pages/AutorizacionPadres"));
 const AdultoMenorConfirmar = lazy(
   () => import("../pages/AdultoMenorConfirmar"),
 );
@@ -322,17 +321,6 @@ const AppRoutes = () => {
             <SectionErrorBoundary name="IngenIAConsentGate">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>
                 <IngenIAConsentGate />
-              </Suspense>
-            </SectionErrorBoundary>
-          }
-        />
-
-        <Route
-          path="autorizacion-padres"
-          element={
-            <SectionErrorBoundary name="AutorizacionPadres">
-              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <AutorizacionPadres />
               </Suspense>
             </SectionErrorBoundary>
           }

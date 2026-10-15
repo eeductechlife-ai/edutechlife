@@ -81,10 +81,20 @@ const SupabaseSignUpForm = ({
 
   // Devuelve el primer error del bloque de edad y adulto, o null.
   const errorAdultoForm = () => {
-    if (!ADULTO_ACTIVO) return null;
-    if (esSmartboard ? formData.edad === "" : formData.rangoEdad === "")
+    // IngenIA: edad real de 6 a 16, siempre (el backend la exige igual).
+    if (esSmartboard) {
+      const anios = Number(formData.edad);
+      if (
+        formData.edad === "" ||
+        !Number.isInteger(anios) ||
+        anios < 6 ||
+        anios > 16
+      )
+        return "edad";
+    } else if (ADULTO_ACTIVO && formData.rangoEdad === "") {
       return "edad";
-    if (!esMenorForm) return null;
+    }
+    if (!ADULTO_ACTIVO || !esMenorForm) return null;
     const correo = formData.adultoEmail.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return "adultoEmail";
     if (correo === formData.email.trim().toLowerCase()) return "adultoEmail";
@@ -171,10 +181,12 @@ const SupabaseSignUpForm = ({
         newErrors.email = t("signup.error.email_required");
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
         newErrors.email = t("signup.error.invalid_email");
-      if (ADULTO_ACTIVO) {
+      {
         const errorAdulto = errorAdultoForm();
         if (errorAdulto === "edad") {
-          if (esSmartboard) newErrors.edad = "Indica tu edad";
+          if (esSmartboard)
+            newErrors.edad =
+              "Indica tu edad: IngenIA es para estudiantes de 6 a 16 años";
           else newErrors.rangoEdad = "Indica tu rango de edad";
         } else if (errorAdulto === "adultoEmail") {
           newErrors.adultoEmail =
@@ -260,7 +272,7 @@ const SupabaseSignUpForm = ({
       firstName: formData.firstName,
       lastName: formData.lastName,
       accountType,
-      ...(ADULTO_ACTIVO && esSmartboard ? { edad: Number(formData.edad) } : {}),
+      ...(esSmartboard ? { edad: Number(formData.edad) } : {}),
       ...(ADULTO_ACTIVO && !esSmartboard
         ? { rangoEdad: formData.rangoEdad }
         : {}),
@@ -724,20 +736,20 @@ const SupabaseSignUpForm = ({
                         )}
                       </div>
 
-                      {/* Edad y adulto obligatorio para menores de 18 */}
-                      {ADULTO_ACTIVO && (
+                      {/* Edad (IngenIA, siempre) y rango + adulto obligatorio (IALab, con bandera) */}
+                      {(esSmartboard || ADULTO_ACTIVO) && (
                         <div className="space-y-4">
                           <div>
                             {esSmartboard ? (
                               <>
                                 <label className="block text-sm font-medium text-[#00374A] mb-2">
-                                  Tu edad
+                                  Tu edad (de 6 a 16 años)
                                 </label>
                                 <input
                                   type="number"
                                   name="edad"
-                                  min="3"
-                                  max="120"
+                                  min="6"
+                                  max="16"
                                   value={formData.edad}
                                   onChange={handleInputChange}
                                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63]"
@@ -748,7 +760,7 @@ const SupabaseSignUpForm = ({
                                   </p>
                                 )}
                               </>
-                            ) : (
+                            ) : ADULTO_ACTIVO ? (
                               <>
                                 <label className="block text-sm font-medium text-[#00374A] mb-2">
                                   Tu rango de edad
@@ -771,10 +783,10 @@ const SupabaseSignUpForm = ({
                                   </p>
                                 )}
                               </>
-                            )}
+                            ) : null}
                           </div>
 
-                          {esMenorForm && (
+                          {ADULTO_ACTIVO && esMenorForm && (
                             <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 space-y-3">
                               <p className="text-sm font-semibold text-[#00374A]">
                                 Datos del padre, madre o acudiente
