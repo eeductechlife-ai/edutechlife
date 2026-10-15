@@ -12,6 +12,7 @@ export default function renderTest({
   handleAnswer,
   goBack,
   listenToQuestion,
+  valeriaLine = "",
 }) {
   const question = ageQuestions[currentQuestion];
   if (!question) return null;
@@ -43,8 +44,33 @@ export default function renderTest({
         />
       </div>
 
+      {valeriaLine && (
+        <motion.div
+          key={valeriaLine}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-4 flex items-start gap-2.5"
+          role="status"
+          aria-live="polite"
+        >
+          <img
+            src="/valeria.webp"
+            alt=""
+            className={`h-10 w-10 shrink-0 rounded-full border-2 object-cover ${
+              isValentinaSpeaking ? "border-[#06D6A0]" : "border-white"
+            } shadow-sm`}
+          />
+          <p className="!m-0 rounded-2xl rounded-tl-sm bg-[#072F46] px-3.5 py-2 text-sm leading-snug text-white shadow-sm">
+            <span className="sr-only">Valeria: </span>
+            {valeriaLine}
+          </p>
+        </motion.div>
+      )}
+
       <QuestionCard
         question={question}
+        showHalfway={!valeriaLine}
         currentQuestion={currentQuestion}
         totalQuestions={total}
         selectedText={answers[currentQuestion]?.text}

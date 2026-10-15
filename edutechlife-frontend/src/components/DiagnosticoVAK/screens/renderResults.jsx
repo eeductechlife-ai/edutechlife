@@ -71,10 +71,10 @@ export default function renderResults({
             <p className="!m-0 text-[11px] font-bold uppercase tracking-[0.22em] text-[#7FD3E3]">
               {t("vak.ui.result_title")}
             </p>
-            <h1 className="!m-0 mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-white">
+            <h1 className="!m-0 !mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-white">
               {t("vak.ui.result_hello", { name: diagnosis.studentName })}
             </h1>
-            <p className="!m-0 mt-2 text-base sm:text-lg text-white/80 leading-snug">
+            <p className="!m-0 !mt-2 text-base sm:text-lg text-white/80 leading-snug">
               {second
                 ? t("vak.ui.result_mix_mixed", {
                     first: main.label,
@@ -111,7 +111,7 @@ export default function renderResults({
             <Sparkles size={15} strokeWidth={2.5} aria-hidden="true" />
             {t("vak.ui.result_superpower")}
           </h2>
-          <p className="!m-0 mt-2 text-lg font-bold leading-snug text-[#072F46]">
+          <p className="!m-0 !mt-2 text-lg font-bold leading-snug text-[#072F46]">
             {main.superpower}
           </p>
         </section>
@@ -120,7 +120,7 @@ export default function renderResults({
             <Target size={15} strokeWidth={2.5} aria-hidden="true" />
             {t("vak.ui.result_challenge")}
           </h2>
-          <p className="!m-0 mt-2 text-base font-semibold leading-snug text-[#0F3B4F]">
+          <p className="!m-0 !mt-2 text-base font-semibold leading-snug text-[#0F3B4F]">
             {main.challenge}
           </p>
         </section>
@@ -131,7 +131,7 @@ export default function renderResults({
         {...rise(0.24)}
         className="rounded-3xl border border-[#E2E8F0] bg-white p-5"
       >
-        <h2 className="!m-0 mb-3 text-base font-extrabold text-[#072F46]">
+        <h2 className="!m-0 !mb-3 text-base font-extrabold text-[#072F46]">
           {t("vak.ui.result_tips")}
         </h2>
         <NumberedList items={report.tips} accent={accent} ink={ink} />
@@ -152,14 +152,14 @@ export default function renderResults({
           />
           {t("vak.ui.result_cta_practice")}
         </button>
-        <p className="!m-0 mt-2 text-center text-xs text-[#004B63]/65">
+        <p className="!m-0 !mt-2 text-center text-xs text-[#004B63]/65">
           {t("vak.ui.result_saved_note")}
         </p>
       </div>
 
       {/* ---------- para la familia ---------- */}
       <section className="rounded-3xl border border-[#E2E8F0] bg-[#F8FAFC] p-5">
-        <h2 className="!m-0 mb-3 text-base font-extrabold text-[#072F46]">
+        <h2 className="!m-0 !mb-3 text-base font-extrabold text-[#072F46]">
           {t("vak.ui.pdf_parent_tips")}
         </h2>
         <NumberedList
@@ -183,7 +183,7 @@ export default function renderResults({
               start={PARENT_TIPS_VISIBLE + 1}
               accent={accent}
               ink={ink}
-              className="mt-1"
+              className="!mt-1"
             />
           </details>
         )}
@@ -207,7 +207,7 @@ export default function renderResults({
             onChange={(e) => setParentName(e.target.value)}
             className="mt-1 w-full rounded-xl border-2 border-[#D5E3EA] bg-white px-4 py-2.5 text-base text-[#004B63] focus:outline-none focus:ring-2 focus:ring-[#199DB9]/30 focus:border-[#199DB9]"
           />
-          <p className="!m-0 mt-1.5 text-xs text-[#004B63]/70">
+          <p className="!m-0 !mt-1.5 text-xs text-[#004B63]/70">
             {t("vak.ui.result_family_name_hint")}
           </p>
           <button

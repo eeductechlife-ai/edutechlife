@@ -3,5 +3,6 @@ export {
   speakMaxSentence,
   fireConfetti,
   speakAsValentina,
+  prefetchValentina,
   getValentinaVoiceConfig,
 } from "./voiceUtils.js";

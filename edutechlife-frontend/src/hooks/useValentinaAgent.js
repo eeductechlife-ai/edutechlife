@@ -81,22 +81,21 @@ export default function useValentinaAgent(options = {}) {
     setVolume(Math.max(0, Math.min(1, v)));
   }, []);
 
+  // `ctx`: index (desde 0), total, name, age, mood y mode (ver valentinaMessages).
   const readQuestionWithOptions = useCallback(
-    async (questionText, questionOptions, currentNum, total) => {
+    async (questionText, questionOptions, ctx = {}) => {
       if (!isMountedRef.current || !valentinaMode) return;
 
       setValeriaExpression("thinking");
       await speakAsValentina(
-        VALENTINA_MESSAGES.all.readQuestion(
-          currentNum,
-          total,
-          questionText,
-          questionOptions,
-        ),
+        VALENTINA_MESSAGES.all.readQuestion(questionText, questionOptions, {
+          age: studentAge,
+          ...ctx,
+        }),
       );
       setValeriaExpression("neutral");
     },
-    [speakAsValentina, valentinaMode],
+    [speakAsValentina, valentinaMode, studentAge],
   );
 
   return {

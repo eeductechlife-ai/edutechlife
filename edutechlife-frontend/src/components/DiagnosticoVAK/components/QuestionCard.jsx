@@ -14,9 +14,12 @@ export default function QuestionCard({
   onBack,
   onListen,
   t,
+  showHalfway = true,
 }) {
   const explorer = mode === "explorer";
-  const halfway = currentQuestion === Math.floor(totalQuestions / 2);
+  // Si Valeria ya lo dice en su globo, no se repite aquí.
+  const halfway =
+    showHalfway && currentQuestion === Math.floor(totalQuestions / 2);
 
   return (
     <motion.div

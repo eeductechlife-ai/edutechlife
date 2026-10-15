@@ -1,4 +1,5 @@
 import { speakTextConversational } from "./synthesis.js";
+import { prefetchTts } from "../googleTtsClient.js";
 
 const findBestSpanishVoice = (profile = "max") => {
   if (typeof window === "undefined" || !window.speechSynthesis) return null;
@@ -146,28 +147,33 @@ const fireConfetti = (opts) =>
     m.default({ zIndex: 80, ...(opts || {}) }),
   );
 
+/** Perfil de voz de Valeria según la edad (y clave de la caché de audio). */
+const valentinaProfile = (age = 12) => {
+  if (age >= 6 && age <= 10) return "valentina_child";
+  if (age >= 15 && age <= 17) return "valentina_teen";
+  return "valentina";
+};
+
 const speakAsValentina = async (
   text,
   age = 12,
   onEndCallback,
   onPermissionError,
-) => {
-  let profile = "valentina";
-
-  if (age >= 6 && age <= 10) {
-    profile = "valentina_child";
-  } else if (age >= 15 && age <= 17) {
-    profile = "valentina_teen";
-  }
-
-  return await speakTextConversational(
+) =>
+  speakTextConversational(
     text,
-    profile,
+    valentinaProfile(age),
     {},
     onEndCallback,
     onPermissionError,
   );
-};
+
+/**
+ * Pide el audio por adelantado, para que Valeria responda sin espera cuando
+ * llegue el momento. Usa el mismo perfil que speakAsValentina.
+ */
+const prefetchValentina = (text, age = 12) =>
+  prefetchTts(text, valentinaProfile(age));
 
 const getValentinaVoiceConfig = (age = 12) => {
   if (age >= 6 && age <= 10) {
@@ -206,5 +212,6 @@ export {
   speakMaxSentence,
   fireConfetti,
   speakAsValentina,
+  prefetchValentina,
   getValentinaVoiceConfig,
 };

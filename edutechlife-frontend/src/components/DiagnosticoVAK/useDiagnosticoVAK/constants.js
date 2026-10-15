@@ -1,6 +1,7 @@
 export const MOOD_MESSAGES = {
-  happy: "¡Qué alegría verte así! Vamos a pasarlo muy bien.",
-  neutral: "Gracias por compartir cómo te sientes. Estoy aquí para guiarte.",
+  happy: "¡Qué bueno que te sientas así! Vamos a pasarlo muy bien.",
+  neutral:
+    "Gracias por contarme cómo te sientes. Vamos paso a paso, yo te acompaño.",
   sad: "Gracias por contarme. Es una actividad corta y puedes hacerla con calma, o dejarla para otro día si prefieres. Si te sientes mal, cuéntale a tu acudiente o a un adulto de confianza.",
 };
 

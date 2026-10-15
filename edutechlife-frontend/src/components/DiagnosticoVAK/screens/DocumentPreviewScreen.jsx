@@ -12,7 +12,7 @@ import DocumentActions from "./documentActions";
 import VakEnviarInforme from "../VakEnviarInforme";
 
 const SectionTitle = ({ children, accent }) => (
-  <h3 className="!m-0 mb-3 flex items-center gap-2.5 text-lg font-extrabold text-[#072F46]">
+  <h3 className="!m-0 !mb-3 flex items-center gap-2.5 text-lg font-extrabold text-[#072F46]">
     <span
       className="inline-block h-5 w-1.5 rounded-full"
       style={{ background: accent }}
@@ -86,7 +86,7 @@ const DocumentPreviewScreen = ({
               <p className="!m-0 text-[10px] font-bold uppercase tracking-[0.2em] text-[#199DB9]">
                 {t("vak.ui.pdf_cover_note")}
               </p>
-              <p className="!m-0 mt-0.5 text-xs text-[#64748B]">
+              <p className="!m-0 !mt-0.5 text-xs text-[#64748B]">
                 {report.dateLabel}
               </p>
             </div>
@@ -103,13 +103,13 @@ const DocumentPreviewScreen = ({
                 <p className="!m-0 text-[10px] font-bold uppercase tracking-[0.22em] text-[#7FD3E3]">
                   {t("vak.ui.pdf_title")}
                 </p>
-                <h2 className="!m-0 mt-2 text-3xl sm:text-4xl font-extrabold leading-tight text-white break-words">
+                <h2 className="!m-0 !mt-2 text-3xl sm:text-4xl font-extrabold leading-tight text-white break-words">
                   {report.name}
                 </h2>
-                <p className="!m-0 mt-1 text-sm text-white/60">
+                <p className="!m-0 !mt-1 text-sm text-white/60">
                   {report.age} años · {report.dateLabel}
                 </p>
-                <p className="!m-0 mt-3 text-lg font-bold text-white">
+                <p className="!m-0 !mt-3 text-lg font-bold text-white">
                   {report.headline}
                 </p>
                 <span
@@ -153,7 +153,7 @@ const DocumentPreviewScreen = ({
               <p className="!m-0 text-[15px] leading-relaxed text-[#1E293B]">
                 {report.summary}
               </p>
-              <p className="!m-0 mt-2 text-sm italic text-[#64748B]">
+              <p className="!m-0 !mt-2 text-sm italic text-[#64748B]">
                 {report.summaryNote}
               </p>
             </div>
@@ -170,7 +170,7 @@ const DocumentPreviewScreen = ({
               >
                 {t("vak.ui.result_superpower")}
               </h3>
-              <p className="!m-0 mt-2 text-base font-bold leading-snug text-[#072F46]">
+              <p className="!m-0 !mt-2 text-base font-bold leading-snug text-[#072F46]">
                 {report.superpower}
               </p>
             </section>
@@ -178,7 +178,7 @@ const DocumentPreviewScreen = ({
               <h3 className="!m-0 text-[11px] font-bold uppercase tracking-[0.18em] text-[#0E7490]">
                 {t("vak.ui.result_challenge")}
               </h3>
-              <p className="!m-0 mt-2 text-base leading-snug text-[#0F3B4F]">
+              <p className="!m-0 !mt-2 text-base leading-snug text-[#0F3B4F]">
                 {report.challenge}
               </p>
             </section>
@@ -242,7 +242,7 @@ const DocumentPreviewScreen = ({
             <h3 className="!m-0 text-[11px] font-bold uppercase tracking-[0.18em] text-[#199DB9]">
               {t("vak.ui.pdf_disclaimer_title")}
             </h3>
-            <p className="!m-0 mt-1.5 text-sm leading-relaxed text-[#64748B]">
+            <p className="!m-0 !mt-1.5 text-sm leading-relaxed text-[#64748B]">
               {t("vak.ui.pdf_disclaimer_text")}
             </p>
           </section>
