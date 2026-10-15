@@ -189,6 +189,40 @@ async function confirmarInvitacion({ token, adultoId, adultoEmail }) {
   return { valida: true, estudianteId: data.estudiante_id };
 }
 
+/** Edad registrada en IngenIA (students.age), o null si no hay registro. */
+async function edadDelEstudiante(userId) {
+  const { data, error } = await supabase
+    .from('students')
+    .select('age')
+    .eq('auth_id', userId)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.age ?? null;
+}
+
+async function tieneVinculoActivo(userId) {
+  const { data, error } = await supabase
+    .from('parent_student_links')
+    .select('parent_user_id')
+    .eq('student_user_id', userId)
+    .eq('is_active', true)
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return Boolean(data);
+}
+
+/**
+ * true si el estudiante es menor de 18, no tiene adulto vinculado y la regla
+ * está encendida. Solo lee: nunca bloquea el acceso ni envía correos.
+ */
+async function avisoPendiente(userId) {
+  if (!estaActivo()) return false;
+  const edad = await edadDelEstudiante(userId);
+  if (esMenor({ edad }) !== true) return false;
+  return !(await tieneVinculoActivo(userId));
+}
+
 module.exports = {
   TOKEN_TTL_MS,
   MAYORIA_DE_EDAD,
@@ -199,4 +233,5 @@ module.exports = {
   marcarMenorConAdulto,
   crearInvitacion,
   confirmarInvitacion,
+  avisoPendiente,
 };
