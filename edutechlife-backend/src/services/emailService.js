@@ -152,29 +152,9 @@ async function sendConsentVerificationEmail({ parentEmail, studentAge, token }) 
   );
 }
 
-/**
- * Pide al padre/madre la autorización de tratamiento de datos del menor
- * (Ley 1581 de 2012). El enlace caduca en 72 h y sirve una sola vez.
- */
-async function sendParentAuthorizationEmail({ parentEmail, url }) {
-  const html = `
-    <p>Tu hijo o hija quiere usar IngenIA de Edutechlife.</p>
-    <p>Para tratar sus datos personales necesitamos tu autorización como padre o madre. Antes de decidir, puedes leer nuestra política de datos y los términos.</p>
-    <p><a href="${url}">Revisar y autorizar</a></p>
-    <p>Este enlace caduca en 72 horas y solo sirve una vez. Si no reconoces esta solicitud, ignora este correo.</p>
-  `;
-  return sendEmail(
-    parentEmail,
-    'Autoriza el uso de IngenIA para tu hijo o hija',
-    html,
-    `Revisa y autoriza en: ${url}`
-  );
-}
-
 module.exports = {
   sendEmail,
   sendCrisisAlert,
   logCrisisIncident,
-  sendConsentVerificationEmail,
-  sendParentAuthorizationEmail
+  sendConsentVerificationEmail
 };

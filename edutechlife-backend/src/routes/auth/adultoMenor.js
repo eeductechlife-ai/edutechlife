@@ -57,23 +57,26 @@ router.get('/adulto-menor/estado', requireAuth, async (req, res) => {
 /**
  * POST /api/auth/adulto-menor/invitar
  * El estudiante menor sin adulto registra a su padre, madre o acudiente.
- * Body: { adulto: { email, nombre, confirmaMayorDeEdad } }. Solo se envía
- * correo al adulto que el propio estudiante registra; nunca a menores.
+ * Body: { edad, adulto: { email, nombre, confirmaMayorDeEdad } }. La edad es la
+ * real del estudiante (6 a 16); reemplaza el valor antiguo de students.age.
+ * Solo se envía correo al adulto que el propio estudiante registra; nunca a menores.
  */
 router.post('/adulto-menor/invitar', requireAuth, async (req, res) => {
   if (!adultoObligatorio.estaActivo()) {
     return res.status(404).json({ error: 'No disponible' });
   }
-  const { adulto } = req.body || {};
+  const { adulto, edad } = req.body || {};
   try {
     if (!(await adultoObligatorio.avisoPendiente(req.userId))) {
       return res.status(409).json({ error: 'Tu cuenta no necesita registrar un adulto' });
     }
+    const edadReal = adultoObligatorio.validarEdadIngenia(edad);
     const datos = adultoObligatorio.validarAdulto({
       menor: true,
       correoEstudiante: req.userEmail,
       adulto,
     });
+    await adultoObligatorio.actualizarEdadEstudiante(req.userId, edadReal);
     await adultoObligatorio.marcarMenorConAdulto(req.userId);
     await adultoObligatorio.crearInvitacion({
       estudianteId: req.userId,
