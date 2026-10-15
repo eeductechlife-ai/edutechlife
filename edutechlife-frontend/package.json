@@ -32,7 +32,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "prepare": "husky",
     "build:e2e": "VITE_SUPABASE_URL=https://e2e.supabase.co VITE_SUPABASE_ANON_KEY=e2e-anon-key vite build",
-    "test:e2e:visual": "E2E_VISUAL=1 playwright test e2e/visual-regression.spec.ts --project=chromium"
+    "test:e2e:visual": "E2E_VISUAL=1 playwright test e2e/visual-regression.spec.ts --project=chromium",
+    "sync:nico-agent": "node scripts/sync-nico-agent.mjs"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [

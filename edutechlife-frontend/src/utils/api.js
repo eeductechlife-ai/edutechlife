@@ -491,7 +491,7 @@ export async function callDeepseekStream(
     const chunkCb =
       typeof systemPromptOrOpts === "function" ? systemPromptOrOpts : onChunk;
     return streamFetch(
-      url,
+      opts.endpoint ? `${API_BASE_URL}${opts.endpoint}` : url,
       payload,
       chunkCb,
       opts.isJson ?? legacyIsJson,

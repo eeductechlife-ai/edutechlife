@@ -4,6 +4,7 @@ import { speakTextConversational } from "../../utils/speech";
 import { matchIntent } from "./nicoKnowledge";
 import { responseCache, CACHE_DURATION, setResponseCache } from "./nicoCache";
 import { buildNicoHistory } from "./nicoHistory";
+import { NICO_SERVER_AGENT_PATH, nicoUsesServerAgent } from "./nicoAgentMode";
 import {
   removeEmojis,
   removeGreetingMulletilla,
@@ -441,14 +442,23 @@ export function useNicoSendMessage({
         let fullResponse = "";
         // El historial va antes del mensaje actual: así "eso" o "¿y cuánto?"
         // se entienden con lo que se venía hablando.
+        // Con el agente del servidor, el prompt lo pone el backend: aquí solo
+        // va la conversación.
+        const serverAgent = nicoUsesServerAgent();
         const streamMessages = [
-          { role: "system", content: enhancedSystemPrompt },
+          ...(serverAgent
+            ? []
+            : [{ role: "system", content: enhancedSystemPrompt }]),
           ...buildNicoHistory(messages),
           { role: "user", content: userMessage },
         ];
         await callDeepseekStream(
           streamMessages,
-          { maxTokens: 500, temperature: 0.7 },
+          {
+            maxTokens: 500,
+            temperature: 0.7,
+            endpoint: serverAgent ? NICO_SERVER_AGENT_PATH : undefined,
+          },
           false,
           (chunk) => {
             fullResponse += chunk;
