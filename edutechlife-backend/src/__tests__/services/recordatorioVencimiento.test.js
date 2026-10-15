@@ -209,7 +209,7 @@ describe('enviarRecordatoriosVencimiento', () => {
     expect(html).toContain('https://edutechlife.co/planes');
   });
 
-  it('menor sin padre vinculado: el correo va al titular', async () => {
+  it('menor sin padre vinculado: no envía nada, ni a la cuenta del menor ni a nadie', async () => {
     sembrar({
       cuentas: [{ id: NIÑO, email: 'nino@ejemplo.co', plan: 'free' }],
       alumnos: [{ auth_id: NIÑO, name: 'Mateo', age: 10, subscription_tier: 'premium', premium_until: en(5 * DIA) }],
@@ -217,8 +217,31 @@ describe('enviarRecordatoriosVencimiento', () => {
     });
     const r = await enviarRecordatoriosVencimiento({ ahora: AHORA });
 
+    expect(r).toEqual({ candidatos: 1, enviados: 0, omitidos: 1, fallos: 0 });
+    expect(mockEmail.sendEmail).not.toHaveBeenCalled();
+    expect(tablas.recordatorios_plan).toHaveLength(0);
+  });
+
+  it('menor con padre inactivo cuenta como sin padre: no envía nada', async () => {
+    sembrar({
+      cuentas: [
+        { id: NIÑO, email: 'nino@ejemplo.co', plan: 'free' },
+        { id: PADRE, email: 'padre@ejemplo.co', plan: 'free' },
+      ],
+      alumnos: [{ auth_id: NIÑO, name: 'Mateo', age: 10, subscription_tier: 'premium', premium_until: en(5 * DIA) }],
+      vinculos: [{ parent_user_id: PADRE, student_user_id: NIÑO, is_active: false }],
+    });
+    const r = await enviarRecordatoriosVencimiento({ ahora: AHORA });
+
+    expect(r.enviados).toBe(0);
+    expect(mockEmail.sendEmail).not.toHaveBeenCalled();
+  });
+
+  it('adulto sin vínculo sigue recibiendo su recordatorio en su propio correo', async () => {
+    sembrar({ cuentas: [cuentaIALab(5 * DIA, CUENTA, 'adulto@ejemplo.co')] });
+    const r = await enviarRecordatoriosVencimiento({ ahora: AHORA });
     expect(r.enviados).toBe(1);
-    expect(mockEmail.sendEmail.mock.calls[0][0]).toBe('nino@ejemplo.co');
+    expect(mockEmail.sendEmail.mock.calls[0][0]).toBe('adulto@ejemplo.co');
   });
 
   it('un fallo de correo no detiene el job ni a los demás titulares, y el aviso se reintenta', async () => {

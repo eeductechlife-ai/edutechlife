@@ -9,8 +9,9 @@
  *     public.recordatorios_plan (migración 109), con clave única
  *     (titular, producto, tipo, periodo_hasta). Un periodo renovado tiene otro
  *     paidUntil y, por tanto, sus propios avisos.
- *   - Destinatario: si el titular es menor (students.age < 18) y tiene padre o
- *     acudiente activo, va al padre; si no, al titular.
+ *   - Destinatario: si el titular es menor (students.age < 18), solo se avisa a
+ *     su padre o acudiente activo; sin adulto vinculado no se envía nada (ni a
+ *     la cuenta del menor). Si el titular es adulto, va a su propio correo.
  *   - Si el envío falla para todos los destinatarios, la marca se libera para
  *     reintentar en el siguiente pase. Un fallo nunca lanza excepción.
  *   - Sin la tabla de marcas no se envía nada: sin registro no hay anti-spam.
@@ -112,7 +113,10 @@ async function cargarPadres(alumnoId) {
   return correos;
 }
 
-/** Padre o acudiente si el titular es menor con vínculo activo; si no, el titular. */
+/**
+ * Menor: solo su padre o acudiente activo (nunca la cuenta del menor). Sin
+ * adulto vinculado no se envía nada. Adulto: su propio correo.
+ */
 async function cargarDestinatarios(titularId) {
   const perfil = await cargarPerfilAlumno(titularId);
   const edad = Number(perfil?.age);
@@ -121,8 +125,8 @@ async function cargarDestinatarios(titularId) {
 
   if (esMenor) {
     const padres = await cargarPadres(titularId);
-    if (padres.length) return { idioma, pila: nombrePila(perfil.name), correos: padres };
-    logger.warn('[recordatorio-plan] menor sin padre vinculado: el aviso va al titular', { titularId });
+    if (!padres.length) logger.warn('[recordatorio-plan] menor sin adulto vinculado: no se envía', { titularId });
+    return { idioma, pila: nombrePila(perfil.name), correos: padres };
   }
 
   const correo = (await cargarCorreo(titularId)) || perfil?.email?.trim().toLowerCase() || null;
