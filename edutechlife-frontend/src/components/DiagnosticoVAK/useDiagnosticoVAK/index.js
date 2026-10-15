@@ -328,7 +328,7 @@ export default function useDiagnosticoVAK() {
     setHookVolume,
     generatePDF: async () => {
       const { generatePDF: gen } = await import("../vakPDFGenerator");
-      return gen({ diagnosis, t, setError, setPdfLoading });
+      return gen({ diagnosis, parentName, t, setError, setPdfLoading });
     },
   };
 }

@@ -2,36 +2,6 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import DocumentPreviewScreen from "../screens/DocumentPreviewScreen";
 
-// Mock all heavy sub-section components to reduce per-fork heap usage.
-// Without these mocks the module graph loads 9+ sections + vakStyles + vakIcons
-// and exhausts the 4 GB GitHub Actions heap limit.
-vi.mock("../screens/documentSections/HeaderSection", () => ({
-  default: () => <div data-testid="header-section" />,
-}));
-vi.mock("../screens/documentSections/StudentInfoSection", () => ({
-  default: () => <div data-testid="student-info-section" />,
-}));
-vi.mock("../screens/documentSections/GuardianSection", () => ({
-  default: () => <div data-testid="guardian-section" />,
-}));
-vi.mock("../screens/documentSections/ResultHeroSection", () => ({
-  default: () => <div data-testid="result-hero-section" />,
-}));
-vi.mock("../screens/documentSections/CharacteristicsSection", () => ({
-  default: () => <div data-testid="characteristics-section" />,
-}));
-vi.mock("../screens/documentSections/ParentTipsSection", () => ({
-  default: () => <div data-testid="parent-tips-section" />,
-}));
-vi.mock("../screens/documentSections/ValentinaCommentarySection", () => ({
-  default: () => <div data-testid="valentina-section" />,
-}));
-vi.mock("../screens/documentSections/QRSection", () => ({
-  default: () => <div data-testid="qr-section" />,
-}));
-vi.mock("../screens/documentSections/FooterSection", () => ({
-  default: () => <div data-testid="footer-section" />,
-}));
 vi.mock("../screens/documentActions", () => ({
   default: ({ onBack, generatePDF, pdfLoading }) => (
     <div data-testid="document-actions">
@@ -114,9 +84,11 @@ describe("DocumentPreviewScreen", () => {
     expect(screen.getByText("vak.ui.pdf_disclaimer_text")).toBeInTheDocument();
   });
 
-  it("only shows the guardian block when a guardian name was given", () => {
+  it("names the guardian only when a guardian name was given", () => {
     const { rerender } = render(<DocumentPreviewScreen {...baseProps} />);
-    expect(screen.getByTestId("guardian-section")).toBeInTheDocument();
+    expect(
+      screen.getByText("vak.ui.pdf_prepared_for_both"),
+    ).toBeInTheDocument();
 
     rerender(
       <DocumentPreviewScreen
@@ -125,7 +97,12 @@ describe("DocumentPreviewScreen", () => {
         diagnosis={{ ...baseDiagnosis, parentName: "" }}
       />,
     );
-    expect(screen.queryByTestId("guardian-section")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("vak.ui.pdf_prepared_for_both"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByText("vak.ui.pdf_prepared_for_student"),
+    ).toBeInTheDocument();
   });
 
   it("calls onBack when the back control is triggered", () => {

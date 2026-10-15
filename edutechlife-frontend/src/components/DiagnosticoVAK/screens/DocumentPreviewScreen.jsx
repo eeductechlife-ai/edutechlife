@@ -1,52 +1,45 @@
 import { motion } from "framer-motion";
+import { FileText, Lock } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { SVG_ICONS } from "../vakIcons";
-import { STYLE_INSIGHTS, getAnalysisText } from "../vakStyles";
-import * as styles from "./documentStyles";
-import HeaderSection from "./documentSections/HeaderSection";
-import StudentInfoSection from "./documentSections/StudentInfoSection";
-import GuardianSection from "./documentSections/GuardianSection";
-import ResultHeroSection from "./documentSections/ResultHeroSection";
-import CharacteristicsSection from "./documentSections/CharacteristicsSection";
-import ParentTipsSection from "./documentSections/ParentTipsSection";
-import ValentinaCommentarySection from "./documentSections/ValentinaCommentarySection";
-import QRSection from "./documentSections/QRSection";
-import FooterSection from "./documentSections/FooterSection";
+import { buildVakReport } from "../vakReport";
+import {
+  MixDonut,
+  NumberedList,
+  StyleMixCards,
+  WeekPlan,
+} from "../components/ReportBlocks";
 import DocumentActions from "./documentActions";
 import VakEnviarInforme from "../VakEnviarInforme";
 
-const STYLE_THEME = {
-  visual: {
-    color: "#4DA8C4",
-    gradient: "linear-gradient(135deg, #4DA8C4 0%, #2D8BA8 50%, #1A5A6E 100%)",
-    soft: "rgba(77,168,196,0.12)",
-  },
-  auditivo: {
-    color: "#66CCCC",
-    gradient: "linear-gradient(135deg, #66CCCC 0%, #4DA8C4 50%, #2D8BA8 100%)",
-    soft: "rgba(102,204,204,0.12)",
-  },
-  kinestesico: {
-    color: "#E8A838",
-    gradient: "linear-gradient(135deg, #E8A838 0%, #D4912A 50%, #B87A1E 100%)",
-    soft: "rgba(232,168,56,0.12)",
-  },
-};
+const SectionTitle = ({ children, accent }) => (
+  <h3 className="!m-0 mb-3 flex items-center gap-2.5 text-lg font-extrabold text-[#072F46]">
+    <span
+      className="inline-block h-5 w-1.5 rounded-full"
+      style={{ background: accent }}
+      aria-hidden="true"
+    />
+    {children}
+  </h3>
+);
 
+/**
+ * Vista previa del informe para la familia. Muestra lo mismo que el PDF
+ * (los dos leen `buildVakReport`), con el diseño adaptado a la pantalla.
+ */
 const DocumentPreviewScreen = ({
   diagnosis,
-  studentName,
-  studentAge,
-  studentMood,
   parentName,
   generatePDF,
   pdfLoading,
   onBack,
-  getIconComponent,
 }) => {
   const { t } = useTranslation();
+  const report = buildVakReport(diagnosis, {
+    parentName,
+    date: diagnosis?.date,
+  });
 
-  if (!diagnosis) {
+  if (!report) {
     return (
       <div className="p-10 text-center text-gray-500">
         {t("vak.ui.no_diagnosis_display")}
@@ -54,210 +47,207 @@ const DocumentPreviewScreen = ({
     );
   }
 
-  const genDate = new Date().toLocaleDateString("es-CO", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-  const age = parseInt(diagnosis.studentAge || studentAge) || 12;
-  const guardian = (parentName || diagnosis.parentName || "").trim();
-
-  const theme = STYLE_THEME[diagnosis.predominantStyle] || STYLE_THEME.visual;
-  const sColor = theme.color;
-  const sGradient = theme.gradient;
-  const styleIconBg = theme.soft;
-  const insight = STYLE_INSIGHTS[diagnosis.predominantStyle];
-
-  const scores = diagnosis.scores || {};
-  const scoreItems = ["visual", "auditivo", "kinestesico"].map((key) => ({
-    label: STYLE_INSIGHTS[key].label.toUpperCase(),
-    score: scores[key] || 0,
-    color: STYLE_THEME[key].color,
-    bg: `linear-gradient(180deg, ${STYLE_THEME[key].soft} 0%, rgba(255,255,255,0.02) 100%)`,
-    border: STYLE_THEME[key].soft,
-    isDominant: diagnosis.predominantStyle === key,
-  }));
-
-  const analysis = getAnalysisText(diagnosis, age);
+  const main = report.styles.find((s) => s.key === report.main);
+  const accent = main.fill;
+  const ink = main.ink;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="max-w-4xl mx-auto"
+      className="max-w-3xl mx-auto"
     >
-      <div id="document-preview-content" style={styles.docContainer}>
-        {/* ======== PORTADA ======== */}
-        <div style={styles.coverWrapper}>
-          <div style={styles.coverCircleTopRight} />
-          <div style={styles.coverCircleBottomLeft} />
-          <img
-            src="/images/logo-edutechlife.webp"
-            alt="Edutechlife"
-            style={styles.coverLogo}
-          />
-          <div style={styles.companyBadge}>{t("vak.ui.pdf_company")}</div>
-          <h1 style={styles.coverTitle}>{t("vak.ui.pdf_title")}</h1>
-          <div style={styles.coverDivider} />
-          <p style={styles.coverStudentName}>{diagnosis.studentName}</p>
-          <p style={styles.coverDateText}>{genDate}</p>
-          <div style={styles.coverFolio}>{t("vak.ui.pdf_cover_note")}</div>
-        </div>
-
-        <HeaderSection diagnosis={diagnosis} />
-
-        <div style={styles.contentPadding}>
-          {/* ======== NOTA ======== */}
-          <div style={styles.noteBox}>
-            <span dangerouslySetInnerHTML={{ __html: SVG_ICONS.lock }} />
-            <span style={styles.noteText}>
-              {guardian
-                ? t("vak.ui.pdf_prepared_for_both", {
-                    parent: guardian,
-                    student: diagnosis.studentName,
-                  })
-                : t("vak.ui.pdf_prepared_for_student", {
-                    student: diagnosis.studentName,
-                  })}
-            </span>
-          </div>
-
-          {/* ======== QUÉ MIDE Y QUÉ NO ======== */}
-          <div style={styles.adviceBox(styleIconBg, sColor)}>
-            <h4 style={styles.adviceTitle}>
-              {t("vak.ui.pdf_disclaimer_title")}
-            </h4>
-            <p style={styles.adviceText}>{t("vak.ui.pdf_disclaimer_text")}</p>
-          </div>
-
-          {/* ======== DATOS ======== */}
-          <div style={styles.infoGrid}>
-            <StudentInfoSection
-              diagnosis={diagnosis}
-              studentName={studentName}
-              studentAge={studentAge}
-              studentMood={studentMood}
-            />
-            {guardian && (
-              <GuardianSection diagnosis={diagnosis} parentName={guardian} />
-            )}
-          </div>
-
-          <div style={styles.separator} />
-
-          {/* ======== MEZCLA PRINCIPAL ======== */}
-          <ResultHeroSection
-            diagnosis={diagnosis}
-            getIconComponent={getIconComponent}
-            sGradient={sGradient}
-          />
-
-          <div style={styles.scoreRow}>
-            {scoreItems.map((item) => (
-              <div
-                key={item.label}
-                style={styles.scoreCard(
-                  item.bg,
-                  item.isDominant ? item.color : item.border,
-                )}
-              >
-                {item.isDominant && (
-                  <div style={styles.scoreCorner(item.color)}>
-                    <span style={styles.scoreCheckmark}>{"✓"}</span>
-                  </div>
-                )}
-                <div style={styles.scoreLabel(item.color)}>{item.label}</div>
-                <div style={styles.scoreValue(item.color)}>
-                  {item.score}
-                  <span style={styles.scoreMaxLabel}>%</span>
-                </div>
-                <div style={styles.scoreTrack}>
-                  <div style={styles.scoreFill(item.color, item.score)} />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ======== LECTURA ======== */}
-          <div style={styles.analysisBox(sColor)}>
-            <div style={styles.analysisQuoteMark(sColor)}>{"“"}</div>
-            <h4 style={styles.analysisTitle}>{t("vak.ui.pdf_analysis")}</h4>
-            <p style={styles.analysisText}>{analysis.main}</p>
-            <p style={styles.analysisFooter}>{analysis.footer}</p>
-          </div>
-
-          {/* ======== DOS COLUMNAS ======== */}
-          <div style={styles.twoColGrid}>
-            <div style={styles.leftCol}>
-              <CharacteristicsSection
-                diagnosis={diagnosis}
-                sColor={sColor}
-                styleIconBg={styleIconBg}
-              />
-
-              {insight && (
-                <div style={styles.strengthsBox(styleIconBg, sColor)}>
-                  <h4 style={styles.strengthsTitle}>
-                    {t("vak.ui.result_superpower")}
-                  </h4>
-                  <div style={styles.strengthsText}>{insight.superpower}</div>
-                  <h4 style={{ ...styles.strengthsTitle, marginTop: 12 }}>
-                    {t("vak.ui.result_challenge")}
-                  </h4>
-                  <div style={styles.strengthsText}>{insight.challenge}</div>
-                </div>
-              )}
-            </div>
-
-            <div style={styles.rightCol}>
-              <div style={styles.whiteCard}>
-                <h4 style={styles.sectionTitle(sColor)}>
-                  <span style={styles.sectionIcon(styleIconBg)}>{"◆"}</span>
-                  {t("vak.ui.pdf_study_strategies")}
-                </h4>
-                <ol style={styles.stratList}>
-                  {(diagnosis.styleDetails?.strategies || []).map((s, i) => (
-                    <li key={i} style={styles.stratItem}>
-                      <span style={styles.stratHighlight(sColor)}>
-                        {s.split(" ")[0]}
-                      </span>
-                      {s.slice(s.split(" ")[0].length)}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-          </div>
-
-          <div style={styles.separator2} />
-
-          <ParentTipsSection diagnosis={diagnosis} />
-
-          <ValentinaCommentarySection
-            diagnosis={diagnosis}
-            studentName={studentName}
-            studentAge={studentAge}
-            sColor={sColor}
-          />
-
-          {diagnosis.styleDetails?.tip && (
-            <div style={styles.adviceBox(styleIconBg, sColor)}>
-              <h4 style={styles.adviceTitle}>
-                {t("vak.ui.pdf_personalized_advice")}
-              </h4>
-              <p style={styles.adviceText}>{diagnosis.styleDetails?.tip}</p>
-            </div>
-          )}
-
-          <div style={styles.footerWrapper}>
-            <div style={styles.footerContent}>
-              <QRSection />
-              <FooterSection genDate={genDate} />
-            </div>
-          </div>
-        </div>
+      <div className="mb-4 flex items-center gap-3 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3">
+        <FileText
+          size={20}
+          strokeWidth={2.2}
+          className="shrink-0 text-[#199DB9]"
+          aria-hidden="true"
+        />
+        <p className="!m-0 text-sm text-[#334155]">
+          <strong className="text-[#072F46]">
+            {t("vak.ui.report_preview_title")}
+          </strong>{" "}
+          {t("vak.ui.report_preview_hint")}
+        </p>
       </div>
+
+      <article className="overflow-hidden rounded-[28px] border border-[#E2E8F0] bg-white shadow-[0_30px_80px_-40px_rgba(7,47,70,0.45)]">
+        <div className="h-1.5 bg-[#199DB9]" aria-hidden="true" />
+        <div className="space-y-7 p-5 sm:p-8">
+          <header className="flex items-start justify-between gap-4">
+            <img
+              src="/images/logo-edutechlife.webp"
+              alt="Edutechlife"
+              className="h-7 sm:h-8 w-auto"
+            />
+            <div className="text-right">
+              <p className="!m-0 text-[10px] font-bold uppercase tracking-[0.2em] text-[#199DB9]">
+                {t("vak.ui.pdf_cover_note")}
+              </p>
+              <p className="!m-0 mt-0.5 text-xs text-[#64748B]">
+                {report.dateLabel}
+              </p>
+            </div>
+          </header>
+
+          {/* ---------- portada ---------- */}
+          <section className="relative overflow-hidden rounded-3xl bg-[#072F46] p-6 sm:p-8 text-white">
+            <div
+              className="pointer-events-none absolute -right-14 -top-16 h-56 w-56 rounded-full bg-[#199DB9]/25"
+              aria-hidden="true"
+            />
+            <div className="relative flex flex-col-reverse items-center gap-6 sm:flex-row sm:justify-between">
+              <div className="text-center sm:text-left">
+                <p className="!m-0 text-[10px] font-bold uppercase tracking-[0.22em] text-[#7FD3E3]">
+                  {t("vak.ui.pdf_title")}
+                </p>
+                <h2 className="!m-0 mt-2 text-3xl sm:text-4xl font-extrabold leading-tight text-white break-words">
+                  {report.name}
+                </h2>
+                <p className="!m-0 mt-1 text-sm text-white/60">
+                  {report.age} años · {report.dateLabel}
+                </p>
+                <p className="!m-0 mt-3 text-lg font-bold text-white">
+                  {report.headline}
+                </p>
+                <span
+                  className="mt-4 inline-block rounded-full px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#072F46]"
+                  style={{ background: accent }}
+                >
+                  {report.profileLabel}
+                </span>
+              </div>
+              <MixDonut report={report} size={150} reduceMotion />
+            </div>
+          </section>
+
+          <p className="!m-0 flex items-start gap-2 text-sm text-[#475569]">
+            <Lock
+              size={16}
+              strokeWidth={2.2}
+              className="mt-0.5 shrink-0 text-[#199DB9]"
+              aria-hidden="true"
+            />
+            {report.guardian
+              ? t("vak.ui.pdf_prepared_for_both", {
+                  parent: report.guardian,
+                  student: report.name,
+                })
+              : t("vak.ui.pdf_prepared_for_student", { student: report.name })}
+          </p>
+
+          <section>
+            <SectionTitle accent={accent}>
+              {t("vak.ui.pdf_learning_profile")}
+            </SectionTitle>
+            <StyleMixCards report={report} reduceMotion t={t} />
+          </section>
+
+          <section>
+            <SectionTitle accent={accent}>
+              {t("vak.ui.pdf_analysis")}
+            </SectionTitle>
+            <div className="rounded-2xl border-l-4 border-[#199DB9] bg-[#F8FAFC] p-4">
+              <p className="!m-0 text-[15px] leading-relaxed text-[#1E293B]">
+                {report.summary}
+              </p>
+              <p className="!m-0 mt-2 text-sm italic text-[#64748B]">
+                {report.summaryNote}
+              </p>
+            </div>
+          </section>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <section
+              className="rounded-3xl p-5"
+              style={{ background: `${accent}1F` }}
+            >
+              <h3
+                className="!m-0 text-[11px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: ink }}
+              >
+                {t("vak.ui.result_superpower")}
+              </h3>
+              <p className="!m-0 mt-2 text-base font-bold leading-snug text-[#072F46]">
+                {report.superpower}
+              </p>
+            </section>
+            <section className="rounded-3xl border border-[#B6E3EC] bg-[#F0FAFC] p-5">
+              <h3 className="!m-0 text-[11px] font-bold uppercase tracking-[0.18em] text-[#0E7490]">
+                {t("vak.ui.result_challenge")}
+              </h3>
+              <p className="!m-0 mt-2 text-base leading-snug text-[#0F3B4F]">
+                {report.challenge}
+              </p>
+            </section>
+          </div>
+
+          <section>
+            <SectionTitle accent={accent}>
+              {t("vak.ui.pdf_study_strategies")}
+            </SectionTitle>
+            <NumberedList
+              items={report.strategies}
+              accent={accent}
+              ink={ink}
+              className="sm:columns-2 sm:gap-6 [&>li]:break-inside-avoid [&>li]:mb-2.5"
+            />
+          </section>
+
+          <section>
+            <SectionTitle accent={accent}>
+              {t("vak.ui.pdf_parent_tips")}
+            </SectionTitle>
+            <NumberedList items={report.parentTips} accent={accent} ink={ink} />
+          </section>
+
+          <section>
+            <SectionTitle accent={accent}>
+              {t("vak.ui.report_week_plan")}
+            </SectionTitle>
+            <WeekPlan report={report} accent={accent} ink={ink} />
+          </section>
+
+          <section className="rounded-3xl bg-[#EAF6F9] p-5 sm:p-6">
+            <div className="flex items-center gap-3">
+              <img
+                src="/valeria.webp"
+                alt=""
+                className="h-12 w-12 rounded-full border-2 border-white object-cover shadow-sm"
+              />
+              <div>
+                <p className="!m-0 text-base font-extrabold text-[#072F46]">
+                  {t("vak.ui.pdf_valeria_name")}
+                </p>
+                <p className="!m-0 text-xs text-[#64748B]">
+                  {t("vak.ui.pdf_valeria_title")}
+                </p>
+              </div>
+            </div>
+            <div className="mt-3 space-y-2 text-[15px] leading-relaxed text-[#1E293B]">
+              {report.valeriaNote
+                .split("\n\n")
+                .filter(Boolean)
+                .map((p) => (
+                  <p key={p} className="!m-0">
+                    {p}
+                  </p>
+                ))}
+            </div>
+          </section>
+
+          <section className="rounded-2xl border border-[#E2E8F0] p-4">
+            <h3 className="!m-0 text-[11px] font-bold uppercase tracking-[0.18em] text-[#199DB9]">
+              {t("vak.ui.pdf_disclaimer_title")}
+            </h3>
+            <p className="!m-0 mt-1.5 text-sm leading-relaxed text-[#64748B]">
+              {t("vak.ui.pdf_disclaimer_text")}
+            </p>
+          </section>
+        </div>
+      </article>
 
       <DocumentActions
         generatePDF={generatePDF}
@@ -269,6 +259,7 @@ const DocumentPreviewScreen = ({
         <VakEnviarInforme
           nombreInicial={parentName}
           nombreEstudiante={diagnosis.studentName}
+          diagnosis={diagnosis}
         />
       </div>
     </motion.div>

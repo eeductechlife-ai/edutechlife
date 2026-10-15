@@ -6124,5 +6124,11 @@
   "push_padres.error_prefix": "We could not turn on alerts:",
   "push_padres.no_auth": "Sign in again to turn on alerts.",
   "planes.checkout_unavailable": "This plan is not available for online payment.",
-  "planes.checkout_error": "We couldn't open the payment. Please try again or message us on WhatsApp."
+  "planes.checkout_error": "We couldn't open the payment. Please try again or message us on WhatsApp.",
+  "vak.ui.result_main_badge": "Main",
+  "vak.ui.result_also_badge": "Also",
+  "vak.ui.report_preview_title": "This is what the report looks like.",
+  "vak.ui.report_preview_hint": "It is the same one downloaded as PDF and sent by email.",
+  "vak.ui.report_week_plan": "Plan for this week",
+  "vak.ui.result_family_tips_more": "See more recommendations"
 }

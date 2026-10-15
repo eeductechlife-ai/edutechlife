@@ -300,18 +300,37 @@ export function scoreVak(answers) {
     if (style in counts) counts[style] += 1;
   });
   const total = answers.length || 1;
-  const scores = {
-    visual: Math.round((counts.visual / total) * 100),
-    auditivo: Math.round((counts.auditivo / total) * 100),
-    kinestesico: Math.round((counts.kinestesico / total) * 100),
-  };
-  const ranked = Object.entries(scores).sort(
+  // Rank on raw counts so rounding never decides who comes first.
+  const ranked = Object.keys(counts).sort(
     (a, b) =>
-      b[1] - a[1] || answers.lastIndexOf(b[0]) - answers.lastIndexOf(a[0]),
+      counts[b] - counts[a] || answers.lastIndexOf(b) - answers.lastIndexOf(a),
   );
-  const [first, second] = ranked;
+  // Largest remainder: the three percentages always add up to 100
+  // (12 answers split 4/4/4 would otherwise show 33 + 33 + 33).
+  const exact = Object.fromEntries(
+    ranked.map((s) => [s, (counts[s] / total) * 100]),
+  );
+  const scores = Object.fromEntries(
+    ranked.map((s) => [s, Math.floor(exact[s])]),
+  );
+  let missing = answers.length
+    ? 100 - Object.values(scores).reduce((sum, n) => sum + n, 0)
+    : 0;
+  [...ranked]
+    .sort((a, b) => exact[b] - scores[b] - (exact[a] - scores[a]))
+    .forEach((s) => {
+      if (missing > 0 && exact[s] > scores[s]) {
+        scores[s] += 1;
+        missing -= 1;
+      }
+    });
+  const [first, second] = ranked.map((s) => [s, scores[s]]);
   return {
-    scores,
+    scores: {
+      visual: scores.visual,
+      auditivo: scores.auditivo,
+      kinestesico: scores.kinestesico,
+    },
     predominantStyle: first[0],
     // Within 10 points the kid learns well both ways: say so.
     secondaryStyle: first[1] - second[1] <= 10 ? second[0] : null,

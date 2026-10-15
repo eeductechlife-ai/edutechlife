@@ -6124,5 +6124,11 @@
   "push_padres.error_prefix": "Não conseguimos ativar os avisos:",
   "push_padres.no_auth": "Entre na sua conta de novo para ativar os avisos.",
   "planes.checkout_unavailable": "Este plano não está disponível para pagamento online.",
-  "planes.checkout_error": "Não conseguimos abrir o pagamento. Tente novamente ou fale conosco pelo WhatsApp."
+  "planes.checkout_error": "Não conseguimos abrir o pagamento. Tente novamente ou fale conosco pelo WhatsApp.",
+  "vak.ui.result_main_badge": "Principal",
+  "vak.ui.result_also_badge": "Também",
+  "vak.ui.report_preview_title": "Assim é o relatório.",
+  "vak.ui.report_preview_hint": "É o mesmo que é baixado em PDF e enviado por e-mail.",
+  "vak.ui.report_week_plan": "Plano para esta semana",
+  "vak.ui.result_family_tips_more": "Ver mais recomendações"
 }

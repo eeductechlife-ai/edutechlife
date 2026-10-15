@@ -62,6 +62,26 @@ describe("scoreVak", () => {
     expect(r.secondaryStyle).toBeNull();
   });
 
+  it("always adds up to 100 with the 12-question kids set", () => {
+    const repeat = (style, n) => Array(n).fill(style);
+    const even = scoreVak([
+      ...repeat("visual", 4),
+      ...repeat("auditivo", 4),
+      ...repeat("kinestesico", 4),
+    ]);
+    const close = scoreVak([
+      ...repeat("visual", 5),
+      ...repeat("auditivo", 5),
+      ...repeat("kinestesico", 2),
+    ]);
+    for (const r of [even, close]) {
+      expect(Object.values(r.scores).reduce((a, b) => a + b, 0)).toBe(100);
+    }
+    // The extra point goes to the style that ranks first.
+    expect(even.scores[even.predominantStyle]).toBe(34);
+    expect(close.scores).toEqual({ visual: 42, auditivo: 42, kinestesico: 16 });
+  });
+
   it("marks a close second style as secondary", () => {
     const r = scoreVak([
       "visual",
