@@ -13,6 +13,7 @@ export {
   speakMaxSentence,
   fireConfetti,
   speakAsValentina,
+  prefetchValentina,
   getValentinaVoiceConfig,
 } from "./nativeSpeech.js";
 export { iniciarReconocimiento, stopRecognition } from "./speechRecognition.js";

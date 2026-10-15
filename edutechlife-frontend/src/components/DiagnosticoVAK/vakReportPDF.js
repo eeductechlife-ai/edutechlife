@@ -434,9 +434,9 @@ export function drawVakReport(jsPDF, report, assets = {}) {
     doc.addImage(
       assets.avatar,
       "PNG",
-      avX - 5.8,
+      avX - 5.6,
       avY - 5.6,
-      11.6,
+      11.2,
       11.2,
       undefined,
       "FAST",

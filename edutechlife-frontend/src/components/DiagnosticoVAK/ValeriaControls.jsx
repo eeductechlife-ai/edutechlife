@@ -38,7 +38,7 @@ const ValeriaControls = ({
               <img
                 src={tutorAvatars.Valeria || DEFAULT_AVATAR}
                 alt="Valeria"
-                className="w-10 h-10 rounded-full object-cover ring-2 ring-white/30"
+                className="rounded-full object-cover"
               />
             </div>
             {isSpeaking && (
