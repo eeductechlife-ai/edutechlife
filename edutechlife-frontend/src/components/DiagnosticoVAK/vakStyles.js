@@ -177,6 +177,47 @@ const STYLE_NAMES = {
   kinestesico: "kinestésico",
 };
 
+/** Forma femenina, para frases como "la forma kinestésica". */
+const STYLE_FORMS = {
+  visual: "visual",
+  auditivo: "auditiva",
+  kinestesico: "kinestésica",
+};
+
+const sentence = (text) => text.replace(/[.\s]+$/, "");
+
+/**
+ * Empate real entre dos estilos: mismo número de respuestas. Sin conteos,
+ * se compara el porcentaje (el reparto a 100 puede dejar 1 punto de diferencia).
+ */
+export const isTie = (diagnosis, a, b) => {
+  if (!a || !b) return false;
+  const counts = diagnosis?.counts;
+  if (counts && a in counts && b in counts) return counts[a] === counts[b];
+  const pct = diagnosis?.scores || {};
+  return Math.abs((pct[a] || 0) - (pct[b] || 0)) <= 1;
+};
+
+/**
+ * Segundo estilo del informe: el que ya eligió el cálculo (desempata por la
+ * respuesta más reciente) o, si no hay, el de mayor porcentaje.
+ */
+const secondEntry = (diagnosis, pct, style) => {
+  const key = diagnosis?.secondaryStyle;
+  if (key && key !== style && key in pct) return [key, pct[key]];
+  return Object.entries(pct)
+    .filter(([k]) => k !== style)
+    .sort(([, a], [, b]) => b - a)[0];
+};
+
+/** Las tres formas con el mismo número de respuestas. */
+export const isThreeWayTie = (diagnosis) => {
+  const keys = ["visual", "auditivo", "kinestesico"];
+  return (
+    isTie(diagnosis, keys[0], keys[1]) && isTie(diagnosis, keys[1], keys[2])
+  );
+};
+
 const percentagesFromCounts = (counts, total) => {
   const sum = total || counts.visual + counts.auditivo + counts.kinestesico;
   const pct = (n) => (sum ? Math.round((n / sum) * 100) : 0);
@@ -196,19 +237,25 @@ export const getAnalysisText = (diagnosis, age) => {
   const counts = diagnosis.counts || { visual: 0, auditivo: 0, kinestesico: 0 };
   const pct =
     diagnosis.scores || percentagesFromCounts(counts, diagnosis.total);
-  const second = Object.entries(pct)
-    .filter(([key]) => key !== style)
-    .sort(([, a], [, b]) => b - a)[0];
+  const second = secondEntry(diagnosis, pct, style);
   const secondInsight = second ? STYLE_INSIGHTS[second[0]] : null;
   const name = diagnosis.studentName || "El estudiante";
+  const tied = isTie(diagnosis, style, second?.[0]);
 
-  const main =
-    age <= 10
-      ? `¡Hola, ${name}! Con tus respuestas vimos que hoy aprendes más fácil ${insight.verb} (${pct[style]}%). ${secondInsight ? `Después viene aprender ${secondInsight.verb} (${second[1]}%). ` : ""}${insight.superpower}`
-      : `En esta actividad, ${name} mostró más preferencia por aprender ${insight.verb} (${pct[style]}%)${secondInsight ? `, seguida de aprender ${secondInsight.verb} (${second[1]}%)` : ""}. ${diagnosis.isMixed ? "La diferencia entre las dos es pequeña, así que se ve un perfil mixto. " : ""}${insight.superpower}`;
+  const main = isThreeWayTie(diagnosis)
+    ? age <= 10
+      ? `¡Hola, ${name}! Con tus respuestas vimos que hoy aprendes igual de bien viendo, escuchando y haciendo (${pct.visual}%, ${pct.auditivo}% y ${pct.kinestesico}%).`
+      : `En esta actividad, ${name} mostró la misma preferencia por las tres formas de aprender (visual ${pct.visual}%, auditiva ${pct.auditivo}% y kinestésica ${pct.kinestesico}%), así que se ve un perfil equilibrado.`
+    : tied
+      ? age <= 10
+        ? `¡Hola, ${name}! Con tus respuestas vimos que hoy aprendes igual de bien ${insight.verb} y ${secondInsight.verb} (${pct[style]}% y ${second[1]}%).`
+        : `En esta actividad, ${name} mostró la misma preferencia por aprender ${insight.verb} y ${secondInsight.verb} (${pct[style]}% y ${second[1]}%), así que se ve un perfil mixto.`
+      : age <= 10
+        ? `¡Hola, ${name}! Con tus respuestas vimos que hoy aprendes más fácil ${insight.verb} (${pct[style]}%). ${secondInsight ? `Después viene aprender ${secondInsight.verb} (${second[1]}%).` : ""}`
+        : `En esta actividad, ${name} mostró más preferencia por aprender ${insight.verb} (${pct[style]}%)${secondInsight ? `, seguida de aprender ${secondInsight.verb} (${second[1]}%)` : ""}. ${diagnosis.isMixed ? "La diferencia entre las dos es pequeña, así que se ve un perfil mixto." : ""}`;
 
   return {
-    main,
+    main: main.trim(),
     footer:
       "Las tres formas de aprender se complementan. Conviene usar con más frecuencia las estrategias de la forma principal, sin dejar de practicar las otras.",
   };
@@ -239,9 +286,7 @@ export const getValentinaCommentary = (diagnosis, studentName, studentAge) => {
 
   const pct =
     diagnosis.scores || percentagesFromCounts(counts, diagnosis.total);
-  const second = Object.entries(pct)
-    .filter(([key]) => key !== style)
-    .sort(([, a], [, b]) => b - a)[0];
+  const second = secondEntry(diagnosis, pct, style);
   const secondName = second ? STYLE_NAMES[second[0]] : "";
   const secondPct = second ? second[1] : 0;
   const mixed = !!diagnosis.secondaryStyle;
@@ -258,11 +303,16 @@ export const getValentinaCommentary = (diagnosis, studentName, studentAge) => {
     teen: `Tu mezcla: visual ${pct.visual}%, auditivo ${pct.auditivo}% y kinestésico ${pct.kinestesico}%.`,
   }[ageGroup];
 
-  const reading = mixed
-    ? `Aprendes bien de dos formas, ${STYLE_NAMES[style]} y ${secondName}. Hoy se te dio un poco más la ${STYLE_NAMES[style]}.`
-    : `Hoy se te dio más la forma ${STYLE_NAMES[style]}, y tu segunda forma favorita es la ${secondName} (${secondPct}%).`;
+  const tied = isTie(diagnosis, style, second?.[0]);
+  const reading = isThreeWayTie(diagnosis)
+    ? "Hoy las tres formas sumaron lo mismo: aprendes bien viendo, escuchando y haciendo."
+    : tied
+      ? `Aprendes bien de dos formas, ${STYLE_NAMES[style]} y ${secondName}, y hoy las dos sumaron lo mismo.`
+      : mixed
+        ? `Aprendes bien de dos formas, ${STYLE_NAMES[style]} y ${secondName}. Hoy la forma ${STYLE_FORMS[style]} sumó un poco más.`
+        : `Hoy se te dio más la forma ${STYLE_FORMS[style]}, y tu segunda forma favorita es la ${STYLE_FORMS[second?.[0]] || secondName} (${secondPct}%).`;
 
-  const superpower = `Tu superpoder: ${insight.superpower.charAt(0).toLowerCase()}${insight.superpower.slice(1)}`;
+  const superpower = `Tu superpoder: ${insight.superpower.charAt(0).toLowerCase()}${sentence(insight.superpower.slice(1))}`;
   const how = `Para estudiar: ${insight.tips.map((t) => t.charAt(0).toLowerCase() + t.slice(1)).join(", y ")}.`;
 
   const closing = {

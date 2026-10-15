@@ -26,11 +26,18 @@ const blobABase64 = (blob) =>
  * No pide datos del niño. Vive junto a la vista previa, donde existe el PDF.
  * `nombreInicial` es el nombre que el adulto ya escribió en la pantalla de resultado.
  * `nombreEstudiante` solo viaja en el correo; el backend no lo guarda.
+ * `diagnosis` es el resultado con el que se arma el PDF (el mismo de la descarga).
  */
-export default function VakEnviarInforme({ nombreInicial = "", nombreEstudiante = "" } = {}) {
+export default function VakEnviarInforme({
+  nombreInicial = "",
+  nombreEstudiante = "",
+  diagnosis = null,
+} = {}) {
   const { t } = useTranslation();
   const [campos, setCampos] = useState({
-    nombre: String(nombreInicial || "").trim().slice(0, 120),
+    nombre: String(nombreInicial || "")
+      .trim()
+      .slice(0, 120),
     email: "",
   });
   const [perfil, setPerfil] = useState("");
@@ -49,7 +56,10 @@ export default function VakEnviarInforme({ nombreInicial = "", nombreEstudiante 
     setEstado("sending");
     setErrorMsg("");
     try {
-      const pdf = await generarInformePDF();
+      const pdf = await generarInformePDF({
+        diagnosis,
+        parentName: nombreInicial,
+      });
       if (pdf.size > MAX_PDF_BYTES) {
         throw new Error(
           "El informe pesa más de 2 MB. Intenta de nuevo o escríbenos por WhatsApp.",
@@ -60,7 +70,9 @@ export default function VakEnviarInforme({ nombreInicial = "", nombreEstudiante 
         nombre: campos.nombre.trim(),
         email: campos.email.trim(),
         perfil,
-        nombre_estudiante: String(nombreEstudiante || "").trim().slice(0, 60),
+        nombre_estudiante: String(nombreEstudiante || "")
+          .trim()
+          .slice(0, 60),
         pdf_base64,
         autorizacion_datos: true,
         sitio_web: e.currentTarget?.elements?.sitio_web?.value || "",

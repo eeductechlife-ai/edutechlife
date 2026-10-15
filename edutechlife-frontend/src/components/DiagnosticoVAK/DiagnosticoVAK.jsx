@@ -14,7 +14,6 @@ import renderWelcome from "./screens/renderWelcome";
 import renderCalibration from "./screens/renderCalibration";
 import renderTest from "./screens/renderTest";
 import renderResults from "./screens/renderResults";
-import { getIconComponent } from "./getIconComponent";
 import "./DiagnosticoVAK.css";
 
 const DiagnosticoVAK = () => {
@@ -231,14 +230,10 @@ const DiagnosticoVAK = () => {
                 {phase === "document-preview" && (
                   <DocumentPreviewScreen
                     diagnosis={diagnosis}
-                    studentName={studentName}
-                    studentAge={studentAge}
-                    studentMood={studentMood}
                     parentName={parentName}
                     generatePDF={generatePDF}
                     pdfLoading={pdfLoading}
                     onBack={() => setPhase("result")}
-                    getIconComponent={getIconComponent}
                   />
                 )}
               </motion.div>

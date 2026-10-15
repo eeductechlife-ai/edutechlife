@@ -4,7 +4,7 @@ import VakEnviarInforme from "../DiagnosticoVAK/VakEnviarInforme";
 import IngenIAValoracion from "../ingenia/IngenIAValoracion";
 import { generarInformePDF } from "../DiagnosticoVAK/vakPDFGenerator";
 
-// El PDF lo genera el navegador (html2pdf): se simula el blob.
+// El PDF lo genera el navegador (jsPDF): se simula el blob.
 vi.mock("../DiagnosticoVAK/vakPDFGenerator", () => ({
   generarInformePDF: vi.fn(),
 }));

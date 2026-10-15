@@ -1,69 +1,51 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Download, Rocket } from "lucide-react";
+import { ArrowLeft, Download, Home } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
 const DocumentActions = ({ generatePDF, pdfLoading, onBack }) => {
   const { t } = useTranslation();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, type: "spring" }}
-      className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10"
-    >
-      <motion.button
-        whileHover={{ scale: 1.08, y: -5 }}
-        whileTap={{ scale: 0.95 }}
+    <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
+      <button
+        type="button"
         onClick={generatePDF}
         disabled={pdfLoading}
-        className="relative bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full px-8 py-4 shadow-xl flex items-center gap-3 overflow-hidden group"
-        style={{ transformStyle: "preserve-3d" }}
+        aria-busy={pdfLoading}
+        className="min-h-[56px] rounded-2xl bg-[#072F46] px-8 text-base font-bold text-white shadow-[0_14px_30px_-14px_rgba(7,47,70,0.8)] hover:bg-[#0B3A55] disabled:opacity-70 flex items-center justify-center gap-2.5 transition-colors"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
         {pdfLoading ? (
           <>
-            <div className="relative z-10 w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
-            <span className="relative z-10 text-base font-semibold">
-              {t("vak.ui.generating_pdf")}
-            </span>
+            <span
+              className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
+              aria-hidden="true"
+            />
+            {t("vak.ui.generating_pdf")}
           </>
         ) : (
           <>
-            <Download size={20} strokeWidth={2} className="relative z-10" />
-            <span className="relative z-10 text-base font-semibold">
-              {t("vak.ui.download_pdf_btn")}
-            </span>
+            <Download size={20} strokeWidth={2.4} aria-hidden="true" />
+            {t("vak.ui.download_pdf_btn")}
           </>
         )}
-        <div className="absolute -bottom-2 left-4 right-4 h-4 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
-      </motion.button>
+      </button>
 
-      <motion.button
-        whileHover={{ scale: 1.08, y: -5 }}
-        whileTap={{ scale: 0.95 }}
+      <button
+        type="button"
         onClick={onBack}
-        className="relative bg-white border-2 border-[#004B63] text-[#004B63] rounded-full px-8 py-4 flex items-center gap-3 overflow-hidden group"
-        style={{ transformStyle: "preserve-3d" }}
+        className="min-h-[56px] rounded-2xl border-2 border-[#072F46] bg-white px-8 text-base font-bold text-[#072F46] hover:bg-[#F1F5F9] flex items-center justify-center gap-2.5 transition-colors"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#004B63]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-        <ArrowRight size={20} strokeWidth={2} className="relative z-10" />
-        <span className="relative z-10 text-base font-semibold">
-          {t("vak.ui.back_to_results")}
-        </span>
-        <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#004B63]/10 blur-md rounded-full"></div>
-      </motion.button>
+        <ArrowLeft size={20} strokeWidth={2.4} aria-hidden="true" />
+        {t("vak.ui.back_to_results")}
+      </button>
 
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => (window.location.href = "/")}
-        className="text-[#004B63]/50 hover:text-[#4DA8C4] text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+      <a
+        href="/"
+        className="min-h-[44px] text-sm font-semibold text-[#004B63]/60 hover:text-[#199DB9] flex items-center justify-center gap-2 transition-colors"
       >
-        <Rocket size={16} strokeWidth={2} />
-        <span>{t("vak.ui.go_home")}</span>
-      </motion.button>
-    </motion.div>
+        <Home size={16} strokeWidth={2.2} aria-hidden="true" />
+        {t("vak.ui.go_home")}
+      </a>
+    </div>
   );
 };
 
