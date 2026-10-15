@@ -31,7 +31,8 @@ async function sendEmail(to, subject, html, text, attachments) {
     // Fallback: Log to console (development)
     console.log(`[Email Fallback] Email would be sent to: ${to}`);
     console.log(`[Email Fallback] Subject: ${subject}`);
-    console.log(`[Email Fallback] HTML:\n${html}`);
+    // No se imprime el HTML: algunos correos llevan enlaces de pago (Wompi).
+    console.log(`[Email Fallback] HTML: ${String(html || '').length} caracteres (omitido en logs)`);
 
     return {
       success: true,

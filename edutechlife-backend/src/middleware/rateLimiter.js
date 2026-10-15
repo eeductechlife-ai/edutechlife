@@ -174,6 +174,22 @@ const parentalInviteLimiter = rateLimit({
   skip: () => process.env.NODE_ENV !== 'production',
 });
 
+// Enlaces de cobro Wompi por correo (POST /api/payments/wompi/link-cobro): solo
+// admins. Cinco por hora y por administrador. Sin `skip` fuera de producción:
+// el tope protege correos y pagos reales, también en pruebas.
+const cobroLinkLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: {
+    error: 'Ya enviaste 5 enlaces de cobro en la última hora. Intenta de nuevo más tarde.',
+    retryAfter: 3600,
+  },
+  keyGenerator: (req) => `admin:${req.user?.id || 'anon'}`,
+});
+
 // Formularios públicos de leads (POST /api/leads): sin sesión, así que en la
 // práctica cuenta por IP. Diez por hora alcanza para una familia o la secretaría
 // de un colegio que reintenta, y frena a quien llena la tabla con basura.
@@ -223,4 +239,5 @@ module.exports = {
   ttsHourlyLimiter,
   visionLimiter,
   parentalInviteLimiter,
+  cobroLinkLimiter,
 };

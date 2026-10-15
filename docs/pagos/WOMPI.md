@@ -13,6 +13,11 @@ Stripe no abre cuentas a empresas colombianas y no ofrece PSE ni Nequi. Wompi
   Si la transacción queda `APPROVED` por el monto exacto del plan, activa o
   extiende el plan un mes (o un año en el plan anual) y guarda hasta cuándo
   está pagado. Un evento repetido no extiende dos veces.
+- `POST /api/payments/wompi/link-cobro` (solo admin, body `{ email, planId }`):
+  para quien ya tuvo la valoración gratuita. Genera el enlace de pago de ese
+  usuario registrado, lo devuelve al admin y se lo envía por correo (es/en/pt).
+  Planes: `smartboard_premium` (base), `ingenia_fundador`, `ingenia_acompanamiento`,
+  `ingenia_intensivo`. Máximo 5 por hora y por administrador.
 - `src/services/paidPlans.js`: cada hora apaga los planes cuyo periodo pagado
   terminó (solo corre con Wompi configurado). Los planes de Stripe y de
   colegios no tienen fecha y no se tocan.
