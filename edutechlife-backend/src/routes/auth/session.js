@@ -3,6 +3,7 @@ const supabase = require('../../db/supabase');
 const authService = require('../../services/authService');
 const { resolveEmailFromIdentifier } = require('./helpers');
 const { avisarInicioSesionMenor } = require('../../services/avisoPadreLogin');
+const adultoObligatorio = require('../../services/adultoObligatorio');
 
 const router = Router();
 
@@ -43,11 +44,26 @@ router.post('/parent-login', async (req, res) => {
  * Crear nuevo usuario con email + contraseña
  */
 router.post('/signup', async (req, res) => {
-  const { email, password, username, firstName, lastName, accountType } = req.body || {};
+  const { email, password, username, firstName, lastName, accountType, edad, rangoEdad, adulto } = req.body || {};
 
   // Solo se aceptan los dos productos; cualquier otro valor cae en 'ialab'
   // (comportamiento histórico) para no romper clientes existentes.
   const safeAccountType = accountType === 'smartboard' ? 'smartboard' : 'ialab';
+
+  // Adulto obligatorio (ADULTO_OBLIGATORIO): se valida ANTES de crear la cuenta,
+  // así un menor sin adulto válido no deja cuenta ni correo.
+  let adultoDelMenor = null;
+  if (adultoObligatorio.estaActivo()) {
+    const menor = adultoObligatorio.esMenor({ edad, rangoEdad });
+    if (menor === null) {
+      return res.status(400).json({ error: 'Indica tu edad para crear la cuenta' });
+    }
+    try {
+      adultoDelMenor = adultoObligatorio.validarAdulto({ menor, correoEstudiante: email, adulto });
+    } catch (e) {
+      return res.status(e.status || 400).json({ error: e.message });
+    }
+  }
 
   try {
     const result = await authService.signUp({
@@ -74,6 +90,24 @@ router.post('/signup', async (req, res) => {
         .maybeSingle();
       if (studentErr && !studentErr.message?.includes('duplicate')) {
         console.error('Auto-create student profile failed:', studentErr.message);
+      }
+    }
+
+    // Menor con adulto válido: se marca la cuenta y se invita al adulto.
+    // Un fallo aquí no deshace el alta (la cuenta ya existe): se registra y se
+    // informa en la respuesta para reenviar la invitación.
+    if (adultoDelMenor && result.user?.id) {
+      try {
+        await adultoObligatorio.marcarMenorConAdulto(result.user.id);
+        await adultoObligatorio.crearInvitacion({
+          estudianteId: result.user.id,
+          correo: adultoDelMenor.correo,
+          nombre: adultoDelMenor.nombre,
+        });
+        result.adultoInvitado = true;
+      } catch (invitacionError) {
+        console.error('[adulto-obligatorio] invitación fallida:', invitacionError.message);
+        result.adultoInvitado = false;
       }
     }
 
