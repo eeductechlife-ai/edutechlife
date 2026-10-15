@@ -3,6 +3,7 @@ import { callDeepseekStream } from "../../utils/api";
 import { speakTextConversational } from "../../utils/speech";
 import { matchIntent } from "./nicoKnowledge";
 import { responseCache, CACHE_DURATION, setResponseCache } from "./nicoCache";
+import { buildNicoHistory } from "./nicoHistory";
 import {
   removeEmojis,
   removeGreetingMulletilla,
@@ -438,8 +439,11 @@ export function useNicoSendMessage({
         setMessages((prev) => [...prev, placeholderObj]);
 
         let fullResponse = "";
+        // El historial va antes del mensaje actual: así "eso" o "¿y cuánto?"
+        // se entienden con lo que se venía hablando.
         const streamMessages = [
           { role: "system", content: enhancedSystemPrompt },
+          ...buildNicoHistory(messages),
           { role: "user", content: userMessage },
         ];
         await callDeepseekStream(

@@ -543,7 +543,8 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
 
       const messages = [
         { role: "system", content: systemPrompt },
-        ...conversationRef.current.map((m) => ({
+        // Solo los últimos 12 turnos para acotar el costo de cada respuesta.
+        ...conversationRef.current.slice(-12).map((m) => ({
           role: m.type === "user" ? "user" : "assistant",
           content: m.content,
         })),
