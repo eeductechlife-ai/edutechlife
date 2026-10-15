@@ -4,5 +4,6 @@ export {
   speakMaxSentence,
   fireConfetti,
   speakAsValentina,
+  prefetchValentina,
   getValentinaVoiceConfig,
 } from "./nativeSpeech/index.js";

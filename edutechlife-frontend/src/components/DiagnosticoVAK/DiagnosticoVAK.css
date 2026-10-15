@@ -1098,26 +1098,32 @@
   justify-content: center;
 }
 
+/* Retrato sobrio: aro blanco fino y sombra suave, sin brillos de neón. */
 .valeria-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
+  padding: 2px;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(7, 47, 70, 0.18);
+  transition: box-shadow 0.3s ease;
   position: relative;
   z-index: 2;
 }
 
-.valeria-avatar.speaking {
-  animation: valeria-speak-pulse 1.5s infinite ease-in-out;
-  box-shadow: 0 6px 20px rgba(77, 168, 196, 0.5);
+.valeria-avatar img {
+  width: 100%;
+  height: 100%;
 }
 
-.valeria-avatar:hover {
-  transform: scale(1.1);
+.valeria-avatar.speaking {
+  animation: valeria-speak-pulse 1.5s infinite ease-in-out;
+  box-shadow:
+    0 0 0 2px #06d6a0,
+    0 2px 8px rgba(7, 47, 70, 0.18);
 }
 
 .valeria-avatar-pulse {

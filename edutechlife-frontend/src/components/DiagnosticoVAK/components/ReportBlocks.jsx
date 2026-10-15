@@ -92,7 +92,7 @@ export function StyleMixCards({ report, reduceMotion, t }) {
             )}
           </div>
           <p
-            className="!m-0 mt-1 text-2xl sm:text-3xl font-black tabular-nums tracking-tight"
+            className="!m-0 !mt-1 text-2xl sm:text-3xl font-black tabular-nums tracking-tight"
             style={{ color: s.ink }}
           >
             {s.pct}%
@@ -110,7 +110,7 @@ export function StyleMixCards({ report, reduceMotion, t }) {
               }}
             />
           </div>
-          <p className="!m-0 mt-2 hidden sm:block text-xs leading-snug text-[#64748B]">
+          <p className="!m-0 !mt-2 hidden sm:block text-xs leading-snug text-[#64748B]">
             {s.meaning}
           </p>
         </li>
@@ -169,7 +169,7 @@ export function WeekPlan({ report, accent, ink }) {
             >
               {step.day}
             </span>
-            <p className="!m-0 mt-2 text-sm leading-snug">{step.text}</p>
+            <p className="!m-0 !mt-2 text-sm leading-snug">{step.text}</p>
           </li>
         );
       })}

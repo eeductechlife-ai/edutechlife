@@ -3,15 +3,12 @@ import { useStudent } from "../../../context/StudentContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useValentinaAgent from "../../../hooks/useValentinaAgent";
 import { getQuestionsByAge, getVakMode } from "../../../data/vakQuestions";
-import { VALENTINA_MESSAGES, warmupTts } from "../vakVoice";
+import { warmupTts } from "../vakVoice";
 import { safeStorage } from "../../../utils/storage";
 import { useSupabase } from "../../../hooks/useSupabase";
 import { useNavigationHandlers } from "./navigation";
-import {
-  STORAGE_KEY,
-  PROGRESS_TTL_MS,
-  VALENTINA_RESULT_DELAY_MS,
-} from "./constants";
+import useValeriaConversation from "./useValeriaConversation";
+import { STORAGE_KEY, PROGRESS_TTL_MS } from "./constants";
 
 const isTypingTarget = (el) =>
   !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA");
@@ -135,37 +132,6 @@ export default function useDiagnosticoVAK() {
     [],
   );
 
-  // Valeria lee la pregunta, pero nunca bloquea las respuestas.
-  useEffect(() => {
-    if (phase !== "test" || !valeriaEnabled) return undefined;
-    const q = ageQuestions[currentQuestion];
-    if (!q) return undefined;
-    readQuestionWithOptions(
-      `${q.context} ${q.text}`,
-      q.options,
-      currentQuestion + 1,
-      ageQuestions.length,
-    );
-    return () => stopSpeaking();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestion, phase, valeriaEnabled, ageQuestions]);
-
-  useEffect(() => {
-    if (phase === "result" && valeriaEnabled && diagnosis) {
-      const timer = setTimeout(async () => {
-        await speakAsValentina(
-          VALENTINA_MESSAGES.all.resultsShort(
-            diagnosis.studentName || studentName || "Estudiante",
-            diagnosis.predominantStyle || "visual",
-          ),
-        );
-      }, VALENTINA_RESULT_DELAY_MS);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, valeriaEnabled, diagnosis]);
-
   const clearProgress = () => safeStorage.removeItem(STORAGE_KEY);
 
   const toggleHighContrast = () => setHighContrast((v) => !v);
@@ -204,6 +170,31 @@ export default function useDiagnosticoVAK() {
     stopSpeaking,
   });
 
+  const {
+    valeriaLine,
+    answer,
+    selectMood,
+    listenToQuestion,
+    markResumed,
+    resetConversation,
+  } = useValeriaConversation({
+    phase,
+    currentQuestion,
+    ageQuestions,
+    valeriaEnabled,
+    setValeriaEnabled,
+    studentName,
+    studentAge,
+    studentMood,
+    diagnosis,
+    isValentinaSpeaking,
+    readQuestionWithOptions,
+    speakAsValentina,
+    stopSpeaking,
+    handleAnswer,
+    handleMoodSelect,
+  });
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.altKey && e.key === "c") {
@@ -216,7 +207,7 @@ export default function useDiagnosticoVAK() {
           ageQuestions[currentQuestion]?.options[Number(e.key) - 1];
         if (option) {
           e.preventDefault();
-          handleAnswer(option);
+          answer(option);
         }
       }
     };
@@ -225,22 +216,6 @@ export default function useDiagnosticoVAK() {
     return () => window.removeEventListener("keydown", handleKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, currentQuestion, ageQuestions, answers]);
-
-  const listenToQuestion = () => {
-    const q = ageQuestions[currentQuestion];
-    if (!q) return;
-    if (!valeriaEnabled) {
-      // Al activar la voz, el efecto de lectura dice la pregunta.
-      setValeriaEnabled(true);
-      return;
-    }
-    readQuestionWithOptions(
-      `${q.context} ${q.text}`,
-      q.options,
-      currentQuestion + 1,
-      ageQuestions.length,
-    );
-  };
 
   const resumeProgress = () => {
     if (!resumeOffer) return;
@@ -255,6 +230,7 @@ export default function useDiagnosticoVAK() {
     setStartTime(resumeOffer.startTime || Date.now());
     setHabeasDataAccepted(true);
     setResumeOffer(null);
+    markResumed();
     setPhase("test");
   };
 
@@ -265,6 +241,7 @@ export default function useDiagnosticoVAK() {
 
   const resetAll = () => {
     stopSpeaking();
+    resetConversation();
     clearProgress();
     setPhase("intro");
     setStudentName("");
@@ -317,10 +294,11 @@ export default function useDiagnosticoVAK() {
     resumeOffer,
     startTest,
     submitCalibration,
-    handleAnswer,
+    handleAnswer: answer,
     goBack,
-    handleMoodSelect,
+    handleMoodSelect: selectMood,
     listenToQuestion,
+    valeriaLine,
     resumeProgress,
     discardProgress,
     resetAll,

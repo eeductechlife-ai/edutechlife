@@ -63,6 +63,7 @@ const DiagnosticoVAK = () => {
     goBack,
     handleMoodSelect,
     listenToQuestion,
+    valeriaLine,
     resumeProgress,
     discardProgress,
     resetAll,
@@ -215,6 +216,7 @@ const DiagnosticoVAK = () => {
                     handleAnswer,
                     goBack,
                     listenToQuestion,
+                    valeriaLine,
                   })}
                 {phase === "result" &&
                   renderResults({
