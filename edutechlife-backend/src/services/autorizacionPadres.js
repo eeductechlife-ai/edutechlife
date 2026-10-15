@@ -1,4 +1,9 @@
 /**
+ * DEPRECADO (decisión del CEO, 2026-10-14): la regla de adulto obligatorio
+ * reemplaza este flujo (migración 110, users.adulto_obligatorio). No se borra
+ * todavía; no se usa para registros nuevos. Retirar cuando la regla nueva esté
+ * en producción y los 16 menores existentes tengan aviso o adulto vinculado.
+ *
  * Autorización previa de padre/madre para el tratamiento de datos de menores
  * (Ley 1581 de 2012). Detrás de CONSENTIMIENTO_PADRES (apagada por defecto).
  *
