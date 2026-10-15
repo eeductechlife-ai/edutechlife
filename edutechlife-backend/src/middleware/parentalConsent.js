@@ -11,7 +11,7 @@ const MINOR_MAX_AGE = 18;
  * y se solicita una sola vez por email (ver POST /parental-consent/request);
  * mientras se verifica, el estudiante puede seguir trabajando con normalidad
  * y el padre recibe notificación de cada sesión en tiempo real desde el
- * frontend (ParentalConsentBlocker).
+ * frontend (IngenIAConsentGate).
  *
  * Este middleware ya no responde 403/503: solo registra en logs cuando un
  * menor no tiene consentimiento verificado, para trazabilidad y auditoría,

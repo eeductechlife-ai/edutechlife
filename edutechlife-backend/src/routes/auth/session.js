@@ -50,11 +50,22 @@ router.post('/signup', async (req, res) => {
   // (comportamiento histórico) para no romper clientes existentes.
   const safeAccountType = accountType === 'smartboard' ? 'smartboard' : 'ialab';
 
+  // IngenIA: la edad es la real que escribe el estudiante (6 a 16, el mismo
+  // rango que la tabla students). Antes se guardaba un 12 fijo.
+  let edadIngenia = null;
+  if (safeAccountType === 'smartboard') {
+    try {
+      edadIngenia = adultoObligatorio.validarEdadIngenia(edad);
+    } catch (e) {
+      return res.status(e.status || 400).json({ error: e.message });
+    }
+  }
+
   // Adulto obligatorio (ADULTO_OBLIGATORIO): se valida ANTES de crear la cuenta,
   // así un menor sin adulto válido no deja cuenta ni correo.
   let adultoDelMenor = null;
   if (adultoObligatorio.estaActivo()) {
-    const menor = adultoObligatorio.esMenor({ edad, rangoEdad });
+    const menor = adultoObligatorio.esMenor({ edad: edadIngenia, rangoEdad });
     if (menor === null) {
       return res.status(400).json({ error: 'Indica tu edad para crear la cuenta' });
     }
@@ -85,7 +96,7 @@ router.post('/signup', async (req, res) => {
         String(email).split('@')[0];
       const { error: studentErr } = await supabase
         .from('students')
-        .insert([{ auth_id: result.user.id, name: studentName, age: 12, email }])
+        .insert([{ auth_id: result.user.id, name: studentName, age: edadIngenia, email }])
         .select()
         .maybeSingle();
       if (studentErr && !studentErr.message?.includes('duplicate')) {

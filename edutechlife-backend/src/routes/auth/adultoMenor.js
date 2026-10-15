@@ -40,4 +40,55 @@ router.post('/adulto-menor/confirmar', requireAuth, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/auth/adulto-menor/estado
+ * Banner para estudiantes existentes sin adulto. Solo informa: no bloquea.
+ */
+router.get('/adulto-menor/estado', requireAuth, async (req, res) => {
+  try {
+    const mostrarAviso = await adultoObligatorio.avisoPendiente(req.userId);
+    return res.json({ mostrarAviso });
+  } catch (e) {
+    console.error('[adulto-obligatorio] estado error:', e.message);
+    return res.json({ mostrarAviso: false });
+  }
+});
+
+/**
+ * POST /api/auth/adulto-menor/invitar
+ * El estudiante menor sin adulto registra a su padre, madre o acudiente.
+ * Body: { edad, adulto: { email, nombre, confirmaMayorDeEdad } }. La edad es la
+ * real del estudiante (6 a 16); reemplaza el valor antiguo de students.age.
+ * Solo se envía correo al adulto que el propio estudiante registra; nunca a menores.
+ */
+router.post('/adulto-menor/invitar', requireAuth, async (req, res) => {
+  if (!adultoObligatorio.estaActivo()) {
+    return res.status(404).json({ error: 'No disponible' });
+  }
+  const { adulto, edad } = req.body || {};
+  try {
+    if (!(await adultoObligatorio.avisoPendiente(req.userId))) {
+      return res.status(409).json({ error: 'Tu cuenta no necesita registrar un adulto' });
+    }
+    const edadReal = adultoObligatorio.validarEdadIngenia(edad);
+    const datos = adultoObligatorio.validarAdulto({
+      menor: true,
+      correoEstudiante: req.userEmail,
+      adulto,
+    });
+    await adultoObligatorio.actualizarEdadEstudiante(req.userId, edadReal);
+    await adultoObligatorio.marcarMenorConAdulto(req.userId);
+    await adultoObligatorio.crearInvitacion({
+      estudianteId: req.userId,
+      correo: datos.correo,
+      nombre: datos.nombre,
+    });
+    return res.status(201).json({ enviado: true });
+  } catch (e) {
+    if (e.status === 400) return res.status(400).json({ error: e.message });
+    console.error('[adulto-obligatorio] invitar error:', e.message);
+    return res.status(500).json({ error: 'No se pudo enviar la invitación' });
+  }
+});
+
 module.exports = router;

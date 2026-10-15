@@ -2,8 +2,9 @@
 -- 110 — Adulto obligatorio para menores de 18 años (Ley 1581 de 2012)
 --
 -- Decisión del CEO (2026-10-14, opción A): la regla de adulto obligatorio
--- REEMPLAZA CONSENTIMIENTO_PADRES (migración 107, PR #108). Esa variable queda
--- deprecada: no se borra todavía, y esta migración no toca sus tablas.
+-- REEMPLAZA CONSENTIMIENTO_PADRES (migración 107, PR #108). El código de esa
+-- regla se retira en la PR de backend (etapa 2). Esta migración no toca las
+-- tablas ni columnas de la 107: se conservan para no perder datos.
 --
 -- NO SE APLICA AUTOMÁTICAMENTE. Aplicar primero en staging.
 -- Idempotente: IF NOT EXISTS / DROP POLICY IF EXISTS.
