@@ -97,6 +97,18 @@ const chatMessageLimiter = rateLimit({
   skip: () => process.env.NODE_ENV !== 'production',
 });
 
+// Nico atiende a visitantes sin cuenta: límite por IP (o por usuario si hay sesión).
+const nicoStreamLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: { error: 'Demasiados mensajes seguidos. Espera un minuto e intenta de nuevo.', retryAfter: 60 },
+  keyGenerator: userAwareKey,
+  skip: () => process.env.NODE_ENV !== 'production',
+});
+
 const examSubmissionLimiter = rateLimit({
   windowMs: 30 * 1000,
   max: 3,
@@ -233,6 +245,7 @@ module.exports = {
   deepseekLimiter,
   authLimiter,
   chatMessageLimiter,
+  nicoStreamLimiter,
   examSubmissionLimiter,
   challengeSubmissionLimiter,
   ttsLimiter,
