@@ -1,5 +1,5 @@
 -- ============================================================================
--- Migración 103 — Suscripciones y fuentes de pago de Wompi (IngenIA)
+-- Migración 111 — Suscripciones y fuentes de pago de Wompi (IngenIA)
 --
 -- NO APLICADA. Probar primero en staging. Aplicarla en producción solo con
 -- aprobación del CEO (nivel 0 de docs/agentes/AUTONOMIA.md).
