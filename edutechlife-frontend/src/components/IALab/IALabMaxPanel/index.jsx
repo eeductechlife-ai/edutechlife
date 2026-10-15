@@ -53,6 +53,7 @@ import {
 import { useToast } from "./MaxUIEnhancements";
 import { createSpeechQueue } from "./maxSpeechQueue";
 import { buildMaxQuickActions } from "./quickActionsBuilder";
+import { fetchMaxMemorySummary, reportMaxTurns } from "./maxMemory";
 import {
   ALL_LESSONS,
   ALL_LESSONS_EN,
@@ -177,6 +178,7 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     const buildPrompt = async () => {
       try {
         const userId = user?.id || readAuthIdentity().userId;
+        const agentMemory = await fetchMaxMemorySummary();
         const prompt = await buildMaxSystemPrompt({
           locale,
           currentModule,
@@ -188,6 +190,7 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
           currentLesson,
           supabaseClient,
           userId,
+          agentMemory,
         });
         if (isMounted) setSystemPrompt(prompt);
       } catch (err) {
@@ -236,6 +239,8 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     setMessage(fullText);
     setStreamingMessage("");
     setMaxState("idle");
+    // Memoria del usuario: se reporta después de responder, sin bloquear nada.
+    reportMaxTurns([...(conversationRef.current || []), maxMessage]);
   }, []);
 
   // Cola de voz "voz primero, texto después": el texto se revela cuando cada
