@@ -15,6 +15,7 @@ const { sessionMiddleware } = require('./middleware/session');
 const redis = require('./lib/redis');
 const healthRoutes = require('./routes/health');
 const chatRoutes = require('./routes/chat');
+const agentsRoutes = require('./routes/agents');
 const ialabRoutes = require('./routes/ialab');
 const voiceRoutes = require('./routes/voice');
 const ttsRoutes = require('./routes/tts');
@@ -155,6 +156,7 @@ app.use('/api/ialab/templates', requireAuth);
 
 app.use('/api/health', healthRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/agents', agentsRoutes);
 // Guard de producto: una cuenta de IngenIA no consume la API de IALab.
 app.use('/api/ialab', requireProduct('ialab'), ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
