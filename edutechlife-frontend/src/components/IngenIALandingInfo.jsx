@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "../i18n/I18nProvider";
 import { useABExperiment, trackConversion } from "../hooks/useABExperiment";
 import { useAuthIdentity } from "../hooks/useAuthIdentity";
-import { startCheckout } from "../services/stripeClient";
+import { startCheckout } from "../services/checkoutClient";
 import {
   getVakStyles,
   getPricingPlans,

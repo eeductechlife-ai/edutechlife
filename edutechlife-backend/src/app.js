@@ -21,7 +21,6 @@ const voiceRoutes = require('./routes/voice');
 const ttsRoutes = require('./routes/tts');
 const ingeniaRoutes = require('./routes/ingenia');
 const scanImageRoutes = require('./routes/scanImage');
-const stripeRoutes = require('./routes/stripe');
 const wompiRoutes = require('./routes/wompi');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
@@ -34,7 +33,6 @@ const vakInformeRoutes = require('./routes/vakInforme');
 const recommendationRoutes = require('./routes/recommendations');
 const { ferpaAuditLog } = require('./middleware/ferpaAudit');
 const AlertListenerService = require('./services/AlertListenerService');
-const { webhookHandler } = require('./routes/stripe');
 
 const CSP_DIRECTIVES = {
   defaultSrc: ["'self'"],
@@ -55,7 +53,6 @@ const CSP_DIRECTIVES = {
     'https://edutechlife.co',
     'https://*.clerk.accounts.dev',
     'https://*.supabase.co',
-    'https://api.stripe.com',
     'https://challenges.cloudflare.com',
     'wss://*.clerk.accounts.dev',
   ],
@@ -125,8 +122,6 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customSiteTitle: 'Edutechlife API Docs',
 }));
 
-app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webhookHandler);
-
 app.use(express.json({ limit: '8mb' }));
 app.use(sanitizeMiddleware);
 app.use(sessionMiddleware);
@@ -190,7 +185,6 @@ app.use(
   requireProduct('smartboard', { allowPaths: ['/user-role'] }),
   scanImageRoutes
 );
-app.use('/api/stripe', stripeRoutes);
 app.use('/api/payments/wompi', wompiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);

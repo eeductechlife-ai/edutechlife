@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Crown, Lock, Loader2 } from "lucide-react";
 import { SB_GRADIENTS, glow } from "./ingenIATheme";
-import { startCheckout } from "../../services/stripeClient";
+import { startCheckout } from "../../services/checkoutClient";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { IS_NATIVE_APP } from "../../config/nativeApp";
 
@@ -19,8 +19,8 @@ const PremiumGate = ({
   const { t } = useTranslation();
   const [upgrading, setUpgrading] = useState(false);
 
-  // Inicia el pago (Wompi o Stripe). Si algo falla (sin sesión, sin Stripe
-  // configurado, error de red), cae con gracia a la página informativa.
+  // Inicia el pago con Wompi. Si algo falla (sin sesión, Wompi sin configurar,
+  // error de red), cae con gracia a la página informativa.
   const handleUpgrade = async () => {
     if (upgrading) return;
     setUpgrading(true);
