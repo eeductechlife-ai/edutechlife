@@ -38,6 +38,11 @@ function SignUpFormFallback() {
   );
 }
 
+// Adulto obligatorio para menores de 18 (decisión del CEO, 2026-10-14). Debe
+// coincidir con ADULTO_OBLIGATORIO del backend: si el backend la enciende y
+// esta no, el alta de menores recibe 400 porque no llega la edad.
+const ADULTO_ACTIVO = import.meta.env.VITE_ADULTO_OBLIGATORIO === "true";
+
 const SupabaseSignUpForm = ({
   onBack,
   returnTo,
@@ -61,7 +66,42 @@ const SupabaseSignUpForm = ({
     email: "",
     password: "",
     phone: "",
+    edad: "",
+    rangoEdad: "",
+    adultoEmail: "",
+    adultoNombre: "",
+    adultoConfirma: false,
   });
+
+  // Menor de 18: IngenIA pregunta la edad; IALab pregunta el rango.
+  const esSmartboard = accountType === "smartboard";
+  const esMenorForm = esSmartboard
+    ? formData.edad !== "" && Number(formData.edad) < 18
+    : formData.rangoEdad === "menor_18";
+
+  // Devuelve el primer error del bloque de edad y adulto, o null.
+  const errorAdultoForm = () => {
+    // IngenIA: edad real de 6 a 16, siempre (el backend la exige igual).
+    if (esSmartboard) {
+      const anios = Number(formData.edad);
+      if (
+        formData.edad === "" ||
+        !Number.isInteger(anios) ||
+        anios < 6 ||
+        anios > 16
+      )
+        return "edad";
+    } else if (ADULTO_ACTIVO && formData.rangoEdad === "") {
+      return "edad";
+    }
+    if (!ADULTO_ACTIVO || !esMenorForm) return null;
+    const correo = formData.adultoEmail.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return "adultoEmail";
+    if (correo === formData.email.trim().toLowerCase()) return "adultoEmail";
+    if (formData.adultoNombre.trim().length < 3) return "adultoNombre";
+    if (!formData.adultoConfirma) return "adultoConfirma";
+    return null;
+  };
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -141,6 +181,23 @@ const SupabaseSignUpForm = ({
         newErrors.email = t("signup.error.email_required");
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
         newErrors.email = t("signup.error.invalid_email");
+      {
+        const errorAdulto = errorAdultoForm();
+        if (errorAdulto === "edad") {
+          if (esSmartboard)
+            newErrors.edad =
+              "Indica tu edad: IngenIA es para estudiantes de 6 a 16 años";
+          else newErrors.rangoEdad = "Indica tu rango de edad";
+        } else if (errorAdulto === "adultoEmail") {
+          newErrors.adultoEmail =
+            "Escribe un correo válido del padre, madre o acudiente, distinto al tuyo";
+        } else if (errorAdulto === "adultoNombre") {
+          newErrors.adultoNombre = "Escribe el nombre del adulto";
+        } else if (errorAdulto === "adultoConfirma") {
+          newErrors.adultoConfirma =
+            "Confirma que eres mayor de 18 años y padre, madre o acudiente de este menor";
+        }
+      }
     } else if (step === 2) {
       if (!formData.username.trim())
         newErrors.username = t("signup.error.username_required");
@@ -215,6 +272,19 @@ const SupabaseSignUpForm = ({
       firstName: formData.firstName,
       lastName: formData.lastName,
       accountType,
+      ...(esSmartboard ? { edad: Number(formData.edad) } : {}),
+      ...(ADULTO_ACTIVO && !esSmartboard
+        ? { rangoEdad: formData.rangoEdad }
+        : {}),
+      ...(ADULTO_ACTIVO && esMenorForm
+        ? {
+            adulto: {
+              email: formData.adultoEmail.trim().toLowerCase(),
+              nombre: formData.adultoNombre.trim(),
+              confirmaMayorDeEdad: formData.adultoConfirma,
+            },
+          }
+        : {}),
     };
 
     try {
@@ -327,7 +397,8 @@ const SupabaseSignUpForm = ({
     !formData.firstName.trim() ||
     !formData.lastName.trim() ||
     !formData.email.trim() ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) ||
+    errorAdultoForm() !== null;
 
   return (
     <>
@@ -664,6 +735,127 @@ const SupabaseSignUpForm = ({
                           </p>
                         )}
                       </div>
+
+                      {/* Edad (IngenIA, siempre) y rango + adulto obligatorio (IALab, con bandera) */}
+                      {(esSmartboard || ADULTO_ACTIVO) && (
+                        <div className="space-y-4">
+                          <div>
+                            {esSmartboard ? (
+                              <>
+                                <label className="block text-sm font-medium text-[#00374A] mb-2">
+                                  Tu edad (de 6 a 16 años)
+                                </label>
+                                <input
+                                  type="number"
+                                  name="edad"
+                                  min="6"
+                                  max="16"
+                                  value={formData.edad}
+                                  onChange={handleInputChange}
+                                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63]"
+                                />
+                                {fieldErrors.edad && (
+                                  <p className="text-red-600 text-xs mt-1">
+                                    {fieldErrors.edad}
+                                  </p>
+                                )}
+                              </>
+                            ) : ADULTO_ACTIVO ? (
+                              <>
+                                <label className="block text-sm font-medium text-[#00374A] mb-2">
+                                  Tu rango de edad
+                                </label>
+                                <select
+                                  name="rangoEdad"
+                                  value={formData.rangoEdad}
+                                  onChange={handleInputChange}
+                                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63]"
+                                >
+                                  <option value="">Selecciona</option>
+                                  <option value="18+">18 años o más</option>
+                                  <option value="menor_18">
+                                    Menor de 18 años
+                                  </option>
+                                </select>
+                                {fieldErrors.rangoEdad && (
+                                  <p className="text-red-600 text-xs mt-1">
+                                    {fieldErrors.rangoEdad}
+                                  </p>
+                                )}
+                              </>
+                            ) : null}
+                          </div>
+
+                          {ADULTO_ACTIVO && esMenorForm && (
+                            <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 space-y-3">
+                              <p className="text-sm font-semibold text-[#00374A]">
+                                Datos del padre, madre o acudiente
+                              </p>
+                              <p className="text-xs text-[#00374A]">
+                                Como eres menor de 18 años, necesitamos un
+                                adulto que quede vinculado a tu cuenta. Le
+                                enviaremos una invitación para confirmarlo.
+                              </p>
+                              <div>
+                                <label className="block text-sm font-medium text-[#00374A] mb-1">
+                                  Correo del padre, madre o acudiente
+                                </label>
+                                <input
+                                  type="email"
+                                  name="adultoEmail"
+                                  value={formData.adultoEmail}
+                                  onChange={handleInputChange}
+                                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63]"
+                                />
+                                {fieldErrors.adultoEmail && (
+                                  <p className="text-red-600 text-xs mt-1">
+                                    {fieldErrors.adultoEmail}
+                                  </p>
+                                )}
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-[#00374A] mb-1">
+                                  Nombre del padre, madre o acudiente
+                                </label>
+                                <input
+                                  type="text"
+                                  name="adultoNombre"
+                                  value={formData.adultoNombre}
+                                  onChange={handleInputChange}
+                                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63]"
+                                />
+                                {fieldErrors.adultoNombre && (
+                                  <p className="text-red-600 text-xs mt-1">
+                                    {fieldErrors.adultoNombre}
+                                  </p>
+                                )}
+                              </div>
+                              <label className="flex items-start gap-2 text-sm text-[#00374A]">
+                                <input
+                                  type="checkbox"
+                                  checked={formData.adultoConfirma}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      adultoConfirma: e.target.checked,
+                                    }))
+                                  }
+                                  className="mt-1"
+                                />
+                                <span>
+                                  Soy mayor de 18 años y soy padre, madre o
+                                  acudiente de este menor.
+                                </span>
+                              </label>
+                              {fieldErrors.adultoConfirma && (
+                                <p className="text-red-600 text-xs">
+                                  {fieldErrors.adultoConfirma}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                       {/* OAuth Divider */}
                       <div className="relative my-6">

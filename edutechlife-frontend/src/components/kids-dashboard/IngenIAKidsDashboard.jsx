@@ -21,7 +21,7 @@ import MobileSubTabBar from "./components/MobileSubTabBar";
 import CinematicContent from "./components/CinematicContent";
 import { WifiOff, CloudSync } from "lucide-react";
 import IngenIALoadingSkeleton from "./IngenIALoadingSkeleton";
-import ParentalNoticeBar from "./ParentalNoticeBar";
+import AdultoObligatorioBanner from "./AdultoObligatorioBanner";
 import TopBar from "./components/TopBar";
 import { useParentalControls } from "../../hooks/useParentalControls";
 import useFunnelTracking from "../../hooks/useFunnelTracking";
@@ -220,7 +220,7 @@ const IngenIAKidsDashboard = () => {
 
   return (
     <>
-      <ParentalNoticeBar />
+      <AdultoObligatorioBanner />
       <div
         className={`relative min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip transition-colors duration-500 ${
           darkMode ? "bg-[#0F172A] text-white" : "bg-[#F8FAFC]"

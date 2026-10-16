@@ -73,8 +73,24 @@ require.cache[authServicePath] = {
 delete require.cache[avisoPath];
 require.cache[avisoPath] = { id: avisoPath, filename: avisoPath, loaded: true, exports: { avisarInicioSesionMenor: vi.fn() } };
 
+const middlewarePath = require.resolve('../../middleware/auth');
+let usuarioActual = null;
+delete require.cache[middlewarePath];
+require.cache[middlewarePath] = {
+  id: middlewarePath, filename: middlewarePath, loaded: true,
+  exports: {
+    requireAuth: (req, res, next) => {
+      if (!usuarioActual) return res.status(401).json({ error: 'no autenticado' });
+      req.userId = usuarioActual.id;
+      req.userEmail = usuarioActual.email;
+      return next();
+    },
+  },
+};
+
 const servicio = require('../../services/adultoObligatorio');
 const sessionRouter = require('../../routes/auth/session');
+const adultoMenorRouter = require('../../routes/auth/adultoMenor');
 
 const ESTUDIANTE = 'a0000000-0000-4000-8000-000000000001';
 const ADULTO = 'b0000000-0000-4000-8000-000000000002';
@@ -195,14 +211,37 @@ describe('POST /api/auth/signup con ADULTO_OBLIGATORIO', () => {
     expect(signUpMock).not.toHaveBeenCalled();
   });
 
-  it('con la bandera apagada el alta no cambia', async () => {
+  it('IngenIA sin edad válida (fuera de 6 a 16) → rechazado, con la bandera apagada también', async () => {
     process.env.ADULTO_OBLIGATORIO = 'false';
     const res = await request(app()).post('/api/auth/signup').send({
-      email: CORREO_MENOR, password: 'contraseña-larga-1', accountType: 'smartboard',
+      email: CORREO_MENOR, password: 'contraseña-larga-1', accountType: 'smartboard', edad: 17,
+    });
+    expect(res.status).toBe(400);
+    expect(signUpMock).not.toHaveBeenCalled();
+  });
+
+  it('IngenIA guarda la edad real del formulario, no un 12 fijo', async () => {
+    process.env.ADULTO_OBLIGATORIO = 'false';
+    const res = await request(app()).post('/api/auth/signup').send({
+      email: CORREO_MENOR, password: 'contraseña-larga-1', accountType: 'smartboard', edad: 9,
     });
     expect(res.status).toBe(201);
+    const fila = filasDe('students').find((s) => s.auth_id === ESTUDIANTE);
+    expect(fila?.age).toBe(9);
     expect(sendMock).not.toHaveBeenCalled();
     expect(filasDe('invitaciones_adulto_menor')).toHaveLength(0);
+  });
+});
+
+describe('validarEdadIngenia', () => {
+  it('acepta de 6 a 16 años', () => {
+    expect(servicio.validarEdadIngenia(6)).toBe(6);
+    expect(servicio.validarEdadIngenia('16')).toBe(16);
+  });
+  it('rechaza fuera de rango, vacío o no numérico', () => {
+    for (const malo of [5, 17, '', null, undefined, 'doce', 9.5]) {
+      expect(() => servicio.validarEdadIngenia(malo)).toThrow(/6 a 16/);
+    }
   });
 });
 
@@ -246,5 +285,84 @@ describe('confirmarInvitacion', () => {
   it('un token inventado se rechaza', async () => {
     const r = await servicio.confirmarInvitacion({ token: 'x'.repeat(40), adultoId: ADULTO, adultoEmail: CORREO_ADULTO });
     expect(r).toEqual({ valida: false, motivo: 'invalido' });
+  });
+});
+
+function appAdulto() {
+  const a = express();
+  a.use(express.json());
+  a.use('/api/auth', adultoMenorRouter);
+  return a;
+}
+
+describe('banner y registro de adulto para estudiantes existentes', () => {
+  beforeEach(() => {
+    filasDe('students').push({ auth_id: ESTUDIANTE, age: 13 });
+    usuarioActual = { id: ESTUDIANTE, email: CORREO_MENOR };
+  });
+  afterEach(() => {
+    usuarioActual = null;
+  });
+
+  it('estado: menor existente sin adulto ve el aviso', async () => {
+    const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
+    expect(res.body).toEqual({ mostrarAviso: true });
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it('estado: menor con adulto vinculado no ve el aviso', async () => {
+    filasDe('parent_student_links').push({ parent_user_id: ADULTO, student_user_id: ESTUDIANTE, is_active: true });
+    const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
+    expect(res.body).toEqual({ mostrarAviso: false });
+  });
+
+  it('estado: mayor de edad no ve el aviso', async () => {
+    filasDe('students').find((s) => s.auth_id === ESTUDIANTE).age = 20;
+    const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
+    expect(res.body).toEqual({ mostrarAviso: false });
+  });
+
+  it('invitar: el menor existente confirma su edad real, registra a su adulto y se envía la invitación', async () => {
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 9, adulto: adultoValido });
+    expect(res.status).toBe(201);
+    expect(filasDe('students').find((s) => s.auth_id === ESTUDIANTE).age).toBe(9);
+    expect(sendMock).toHaveBeenCalledOnce();
+    expect(sendMock.mock.calls[0][0]).toBe(CORREO_ADULTO);
+    expect(filasDe('invitaciones_adulto_menor')[0].estado).toBe('pendiente');
+  });
+
+  it('invitar: sin edad válida (fuera de 6 a 16) no cambia nada ni envía', async () => {
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 17, adulto: adultoValido });
+    expect(res.status).toBe(400);
+    expect(filasDe('students').find((s) => s.auth_id === ESTUDIANTE).age).toBe(13);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it('invitar: sin datos válidos del adulto no envía nada', async () => {
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: { ...adultoValido, confirmaMayorDeEdad: false } });
+    expect(res.status).toBe(400);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it('invitar: un mayor no necesita adulto (409)', async () => {
+    filasDe('students').find((s) => s.auth_id === ESTUDIANTE).age = 20;
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: adultoValido });
+    expect(res.status).toBe(409);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it('confirmar: adulto con sesión y correo invitado vincula al menor', async () => {
+    await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: adultoValido });
+    const token = extraerToken();
+    usuarioActual = { id: ADULTO, email: CORREO_ADULTO };
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token });
+    expect(res.status).toBe(200);
+    expect(filasDe('parent_student_links').find((l) => l.parent_user_id === ADULTO)?.is_active).toBe(true);
+  });
+
+  it('confirmar: sin sesión → 401 y no vincula', async () => {
+    usuarioActual = null;
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token: 'x'.repeat(40) });
+    expect(res.status).toBe(401);
   });
 });
