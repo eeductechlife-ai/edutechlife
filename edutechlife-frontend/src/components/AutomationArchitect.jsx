@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { callDeepseek } from "../utils/api";
 import {
-  buildPlanRequest,
-  ensurePlanAviso,
+  requestAutomationPlan,
   MAX_EMPRESA,
   MAX_OBJETIVOS,
 } from "../utils/automationPlan";
@@ -60,14 +58,9 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
   const generateAutomationPlan = async () => {
     setIsGenerating(true);
 
-    const { messages, options } = buildPlanRequest(
-      formData,
-      selectedArchitecture,
-    );
-
     try {
-      const result = await callDeepseek(messages, options);
-      setGeneratedPlan(ensurePlanAviso(result));
+      const plan = await requestAutomationPlan(formData, selectedArchitecture);
+      setGeneratedPlan(plan);
       setActiveStep(4);
     } catch (error) {
       console.error("Error generando plan:", error);
