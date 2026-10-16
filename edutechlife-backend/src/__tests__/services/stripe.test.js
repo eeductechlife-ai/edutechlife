@@ -26,10 +26,10 @@ describe('Plans data', () => {
     expect(plan).toBeNull();
   });
 
-  it('getPublicPlans hides priceId', () => {
+  it('getPublicPlans hides priceId and the retired pro plan', () => {
     const plans = getPublicPlans();
-    const pro = plans.find((p) => p.id === 'pro');
-    expect(pro.priceId).toBeUndefined();
+    expect(plans.find((p) => p.id === 'pro')).toBeUndefined();
+    expect(plans.every((p) => p.priceId === undefined)).toBe(true);
   });
 });
 
