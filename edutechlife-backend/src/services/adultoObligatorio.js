@@ -239,6 +239,48 @@ async function tieneVinculoActivo(userId) {
 }
 
 /**
+ * Correos de los adultos responsables del estudiante, para avisos urgentes
+ * (alerta de crisis de Dani). Primero los vínculos activos
+ * (parent_student_links → users.email); si no hay, el adulto de la invitación
+ * pendiente más reciente (aún sin cuenta o sin confirmar; el plazo de 72 h es
+ * del enlace, no del correo). Solo lee y no depende de ADULTO_OBLIGATORIO.
+ */
+async function correosAdultosResponsables(estudianteId) {
+  const { data: vinculos, error } = await supabase
+    .from('parent_student_links')
+    .select('parent_user_id')
+    .eq('student_user_id', estudianteId)
+    .eq('is_active', true);
+  if (error) throw error;
+
+  const correos = [];
+  const ids = [...new Set((vinculos || []).map((v) => v.parent_user_id).filter(Boolean))];
+  for (const id of ids) {
+    const { data: adulto, error: errorAdulto } = await supabase
+      .from('users')
+      .select('email')
+      .eq('id', id)
+      .maybeSingle();
+    if (errorAdulto) throw errorAdulto;
+    const correo = String(adulto?.email || '').trim().toLowerCase();
+    if (correo && !correos.includes(correo)) correos.push(correo);
+  }
+  if (correos.length) return correos;
+
+  const { data: invitacion, error: errorInvitacion } = await supabase
+    .from(TABLA)
+    .select('adulto_email')
+    .eq('estudiante_id', estudianteId)
+    .eq('estado', 'pendiente')
+    .order('id', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (errorInvitacion) throw errorInvitacion;
+  const correo = String(invitacion?.adulto_email || '').trim().toLowerCase();
+  return correo ? [correo] : [];
+}
+
+/**
  * true si el estudiante es menor de 18, no tiene adulto vinculado y la regla
  * está encendida. Solo lee: nunca bloquea el acceso ni envía correos.
  */
@@ -260,6 +302,8 @@ module.exports = {
   crearInvitacion,
   confirmarInvitacion,
   avisoPendiente,
+  correosAdultosResponsables,
+  edadDelEstudiante,
   validarEdadIngenia,
   actualizarEdadEstudiante,
 };
