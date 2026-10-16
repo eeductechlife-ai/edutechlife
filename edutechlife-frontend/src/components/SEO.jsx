@@ -48,16 +48,6 @@ const SEO = ({
         />
         <link
           rel="alternate"
-          hrefLang="en"
-          href={`${SITE_URL}/en${pathNoLocale}`}
-        />
-        <link
-          rel="alternate"
-          hrefLang="pt"
-          href={`${SITE_URL}/pt${pathNoLocale}`}
-        />
-        <link
-          rel="alternate"
           hrefLang="x-default"
           href={`${SITE_URL}${pathNoLocale}`}
         />
