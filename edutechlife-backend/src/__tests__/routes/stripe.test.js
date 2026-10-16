@@ -7,7 +7,8 @@ describe('GET /api/stripe/plans', () => {
     const res = await request(app).get('/api/stripe/plans');
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body.plans)).toBe(true);
-    expect(res.body.plans.length).toBeGreaterThanOrEqual(3);
+    // /planes muestra solo IALab (Gratis); los planes de IngenIA viven en /conoce-ingenia.
+    expect(res.body.plans.length).toBeGreaterThanOrEqual(1);
   });
 
   it('returns free plan first', async () => {
@@ -16,11 +17,10 @@ describe('GET /api/stripe/plans', () => {
     expect(res.body.plans[0].price).toBe(0);
   });
 
-  it('does not expose priceId for pro plan', async () => {
+  it('does not list the retired pro plan or expose any priceId', async () => {
     const res = await request(app).get('/api/stripe/plans');
-    const pro = res.body.plans.find((p) => p.id === 'pro');
-    expect(pro).toBeDefined();
-    expect(pro.priceId).toBeUndefined();
+    expect(res.body.plans.find((p) => p.id === 'pro')).toBeUndefined();
+    expect(res.body.plans.every((p) => p.priceId === undefined)).toBe(true);
   });
 });
 

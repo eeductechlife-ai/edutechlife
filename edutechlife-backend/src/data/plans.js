@@ -11,6 +11,8 @@ const PLANS = [
       'Acceso a contenido gratuito',
     ],
   },
+  // Plan Pro (USD 299): retirado de la venta (decisión del CEO, 2026-10-15). Queda
+  // oculto para que las suscripciones existentes sigan resolviendo su plan.
   {
     id: 'pro',
     name: 'Pro',
@@ -25,6 +27,7 @@ const PLANS = [
       'Certificados descargables',
       'Soporte prioritario',
     ],
+    unlisted: true,
   },
   // ── IngenIA: precios oficiales en COP (aprobados por el CEO el 2026-10-13) ──
   // Deben coincidir con edutechlife-frontend/src/config/preciosIngenia.js
@@ -39,6 +42,7 @@ const PLANS = [
     currency: 'cop',
     interval: 'month',
     priceEnv: 'STRIPE_PRICE_INGENIA_MENSUAL',
+    unlisted: true,
     description: 'Para que tu hijo aprenda a su manera, y tú lo veas avanzar',
     features: [
       'Tutor Dani ilimitado con IA',
@@ -102,9 +106,10 @@ const PLANS = [
     price: 0,
     currency: 'usd',
     isCustom: true,
+    unlisted: true,
     description: 'Para instituciones educativas',
     features: [
-      'Todo lo de Pro',
+      'Todo lo de IngenIA Base',
       'API dedicada',
       'Onboarding personalizado',
       'Reportes avanzados',

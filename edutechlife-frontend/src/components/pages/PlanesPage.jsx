@@ -20,14 +20,7 @@ const PlanCard = ({ plan, onSelect }) => {
       : `$${(plan.price / 100).toLocaleString("es-CO")}/mes`;
 
   return (
-    <div
-      className={`rounded-2xl border p-6 flex flex-col ${plan.id === "pro" ? "border-[#D4A017] ring-2 ring-[#D4A017]/20 bg-white" : "border-gray-200 bg-white"}`}
-    >
-      {plan.id === "pro" && (
-        <span className="text-xs font-bold text-[#D4A017] bg-[#FFD166]/10 px-3 py-1 rounded-full self-start mb-3">
-          Más popular
-        </span>
-      )}
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col">
       <h3 className="text-lg font-black text-[#004B63] mb-1">{plan.name}</h3>
       <p className="text-3xl font-black text-[#004B63] mb-4">{priceDisplay}</p>
       <ul className="space-y-2 mb-6 flex-1">
@@ -42,7 +35,7 @@ const PlanCard = ({ plan, onSelect }) => {
         onClick={onSelect}
         disabled={isFree}
         className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all ${
-          plan.id === "pro" || (!isFree && !isEnterprise && canPay(plan))
+          !isFree && !isEnterprise && canPay(plan)
             ? "bg-[#004B63] text-white hover:bg-[#003A4E]"
             : isEnterprise
               ? "bg-gray-100 text-[#004B63] hover:bg-gray-200"

@@ -48,9 +48,12 @@ describe('precios de IngenIA sincronizados con el sitio', () => {
     expect(getPlanById('smartboard_premium').priceId).toBeNull();
     process.env.STRIPE_PRICE_INGENIA_MENSUAL = 'price_cop_mensual';
     expect(getPlanById('smartboard_premium').priceId).toBe('price_cop_mensual');
-    const publico = getPublicPlans().find((p) => p.id === 'smartboard_premium');
-    expect(publico.priceId).toBeUndefined();
-    expect(publico.priceEnv).toBeUndefined();
+    // El Base ya no está en /planes: la proyección pública no debe exponer
+    // priceId ni priceEnv en ningún plan.
+    getPublicPlans().forEach((p) => {
+      expect(p.priceId).toBeUndefined();
+      expect(p.priceEnv).toBeUndefined();
+    });
     delete process.env.STRIPE_PRICE_INGENIA_MENSUAL;
   });
 });
