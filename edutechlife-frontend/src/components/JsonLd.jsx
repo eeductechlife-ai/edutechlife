@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 
-const SITE_URL = "https://edutechlife.co";
+const SITE_URL = "https://www.edutechlife.co";
 
 const JsonLd = ({ title, breadcrumbs }) => {
   const { locale } = useTranslation();

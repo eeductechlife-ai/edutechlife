@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const BASE = 'https://edutechlife.co'
+const BASE = 'https://www.edutechlife.co'
 
 const ROUTES = [
   { loc: '/', priority: 1.0, changefreq: 'weekly' },
