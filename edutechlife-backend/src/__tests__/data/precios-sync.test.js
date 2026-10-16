@@ -1,9 +1,9 @@
-// C-005: los precios de IngenIA del backend (Stripe) deben ser los mismos que
+// C-005: los precios de IngenIA del backend (Wompi) deben ser los mismos que
 // publica el sitio. La fuente única es el frontend (config/preciosIngenia.js);
 // esta prueba falla si alguien cambia un monto en un lado y no en el otro.
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { getPlanById, getPublicPlans, INGENIA_PLAN_IDS } = require('../../data/plans');
+const { getPlanById, INGENIA_PLAN_IDS } = require('../../data/plans');
 
 const CONFIG_FRONTEND = path.resolve(
   __dirname,
@@ -43,17 +43,4 @@ describe('precios de IngenIA sincronizados con el sitio', () => {
     expect(JSON.stringify(getPlanById('smartboard_premium')).toLowerCase()).not.toContain('coach');
   });
 
-  it('el ID de precio de Stripe sale de variables de entorno y no se expone', () => {
-    delete process.env.STRIPE_PRICE_INGENIA_MENSUAL;
-    expect(getPlanById('smartboard_premium').priceId).toBeNull();
-    process.env.STRIPE_PRICE_INGENIA_MENSUAL = 'price_cop_mensual';
-    expect(getPlanById('smartboard_premium').priceId).toBe('price_cop_mensual');
-    // El Base ya no está en /planes: la proyección pública no debe exponer
-    // priceId ni priceEnv en ningún plan.
-    getPublicPlans().forEach((p) => {
-      expect(p.priceId).toBeUndefined();
-      expect(p.priceEnv).toBeUndefined();
-    });
-    delete process.env.STRIPE_PRICE_INGENIA_MENSUAL;
-  });
 });

@@ -243,7 +243,7 @@ export default defineConfig({
       }
     },
     // The landing page (/) doesn't render charts, state, analytics, PDF tools,
-    // Radix UI, Supabase or Stripe — those live behind protected/lazy routes.
+    // Radix UI or Supabase — those live behind protected/lazy routes.
     // Skip the eager <link rel="modulepreload"> for those vendor chunks so
     // the initial payload stays small; they load on-demand when the router
     // lazy() reaches a route that actually imports them.
@@ -253,7 +253,6 @@ export default defineConfig({
           (d) =>
             !d.includes('charts-vendor') &&
             !d.includes('supabase-vendor') &&
-            !d.includes('stripe-vendor') &&
             !d.includes('state-vendor') &&
             !d.includes('radix-vendor') &&
             !d.includes('analytics-vendor') &&

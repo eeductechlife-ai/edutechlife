@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { startCheckout } from "../stripeClient";
+import { startCheckout } from "../checkoutClient";
 
 const json = (status, body) => ({
   ok: status >= 200 && status < 300,
@@ -30,17 +30,12 @@ describe("startCheckout", () => {
     );
   });
 
-  it("cae a Stripe si Wompi no está configurado (503)", async () => {
-    const fetchMock = vi
-      .spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(json(503, { error: "Wompi no configurado" }))
-      .mockResolvedValueOnce(
-        json(200, { url: "https://checkout.stripe.com/x" }),
-      );
-    const res = await startCheckout("smartboard_premium");
-    expect(res.url).toContain("stripe.com");
-    expect(fetchMock.mock.calls[1][0]).toContain(
-      "/api/stripe/create-checkout-session",
+  it("muestra el error del backend si Wompi no está configurado (503)", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      json(503, { error: "Wompi no configurado" }),
+    );
+    await expect(startCheckout("smartboard_premium")).rejects.toThrow(
+      "Wompi no configurado",
     );
   });
 

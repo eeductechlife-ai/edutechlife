@@ -26,7 +26,7 @@ Para compras, cancelaciones, retracto y reembolsos: soporte@edutechlife.co · Wh
 ## 4. Renovación y cobro
 4.1. Las suscripciones se renuevan automáticamente al finalizar cada periodo (mensual o anual) cobrándose al medio de pago registrado.
 4.2. Edutechlife enviará un recordatorio previo a la renovación con 15 días de anticipación indicando el monto y la fecha de cobro.
-4.3. Los pagos se procesan de manera segura a través de la pasarela Stripe en moneda COP. Edutechlife no almacena datos de tarjetas de crédito.
+4.3. Los pagos se procesan de manera segura a través de la pasarela Wompi en moneda COP. Edutechlife no almacena datos de tarjetas de crédito.
 
 ## 5. Cancelación sin permanencia
 5.1. El usuario puede cancelar su suscripción en cualquier momento desde su panel de usuario o escribiendo a soporte@edutechlife.co sin penalidades.

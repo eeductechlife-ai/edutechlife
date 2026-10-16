@@ -3,12 +3,12 @@
  *
  * ÚNICA fuente de verdad del sitio: la usan la landing (/conoce-ingenia),
  * `subscriptionTiers.js` y Nico. El backend (`edutechlife-backend/src/data/plans.js`)
- * repite los montos para Stripe y una prueba (`precios-sync.test.js`) falla si
+ * repite los montos para el checkout de Wompi y una prueba (`precios-sync.test.js`) falla si
  * se separan. Aprobado por el CEO el 2026-10-13
  * (docs/agentes/marketing/HECHOS-VERIFICADOS.md, "Precios oficiales vigentes").
  *
  * Montos en pesos enteros (49900 = $49.900). Cambiar un precio aquí exige
- * cambiarlo en HECHOS-VERIFICADOS.md, en plans.js y crear el precio en Stripe.
+ * cambiarlo en HECHOS-VERIFICADOS.md y en plans.js.
  */
 
 export const MONEDA = "COP";

@@ -147,7 +147,6 @@ const GenericSignUpRedirect = () => {
  * - Rutas protegidas: /ialab, /ingenia, /admin (requieren autenticación + rol)
  * - Rutas de autenticación: /auth-router (redirección inteligente)
  */
-const PlanesPage = lazy(() => import("../components/pages/PlanesPage"));
 const PrivacidadPage = lazy(() => import("../components/pages/PrivacidadPage"));
 const TerminosPage = lazy(() => import("../components/pages/TerminosPage"));
 
@@ -290,17 +289,15 @@ const AppRoutes = () => {
           }
         />
 
+        {/* /planes se retiró: los precios de IngenIA viven en /conoce-ingenia */}
         <Route
           path="planes"
           element={
             // Sin precios ni checkout dentro de la app nativa (config/nativeApp.js)
-            IS_NATIVE_APP ? (
-              <Navigate to={NATIVE_START_PATH} replace />
-            ) : (
-              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <PlanesPage />
-              </Suspense>
-            )
+            <Navigate
+              to={IS_NATIVE_APP ? NATIVE_START_PATH : "/conoce-ingenia"}
+              replace
+            />
           }
         />
 

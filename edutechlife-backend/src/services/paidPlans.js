@@ -81,7 +81,7 @@ async function activatePaidPeriod({ userId, planId, paymentId, now = new Date() 
 
 /**
  * Apaga los planes cuyo periodo pagado ya terminó. Las filas sin fecha
- * (Stripe, colegios) no se tocan. Devuelve cuántas filas cambió.
+ * (colegios) no se tocan. Devuelve cuántas filas cambió.
  */
 async function expirePaidPlans(now = new Date()) {
   const iso = now.toISOString();
