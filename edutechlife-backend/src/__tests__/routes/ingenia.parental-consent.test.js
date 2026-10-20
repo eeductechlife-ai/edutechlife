@@ -180,36 +180,6 @@ describe('IngenIA Parental Consent Verification', () => {
     });
   });
 
-  describe('Middleware: requireVerifiedParentalConsent (no bloqueante desde 2026-09)', () => {
-    it('should never block a minor without verified consent — always calls next()', () => {
-      // Decisión de producto: el estudiante nunca espera aprobación en vivo.
-      // El middleware siempre continúa; ver __tests__/middleware/parentalConsent.test.js
-      // para la prueba real contra la implementación.
-      const age = 12;
-      const verificationStatus = 'pending';
-      const alwaysCallsNext = true;
-
-      expect(alwaysCallsNext).toBe(true);
-      expect(age < 18 && verificationStatus !== 'verified').toBe(true); // sigue sin verificar…
-      // …pero eso ya no bloquea: solo se registra para trazabilidad.
-    });
-
-    it('should allow minors with verified consent', () => {
-      const age = 12;
-      const verificationStatus = 'verified';
-
-      const isAllowed = age >= 18 || verificationStatus === 'verified';
-      expect(isAllowed).toBe(true);
-    });
-
-    it('should allow adults (>=18) regardless of consent', () => {
-      const age = 20;
-      // No consent check needed for adults
-      const isAllowed = age >= 18;
-      expect(isAllowed).toBe(true);
-    });
-  });
-
   describe('HTML verification page rendering', () => {
     it('should render success page with correct status icon', () => {
       const statusIcons = {
