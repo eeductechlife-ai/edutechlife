@@ -2,7 +2,6 @@ const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const { createUserClient } = require('../../db/supabaseUser');
 const { requireAuth } = require('../../middleware/auth');
-const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 
 const router = Router();
 
@@ -47,7 +46,7 @@ async function createStudentProfile(res, userId, email) {
  * DELETE /api/ingenia/delete-user-data
  * Eliminar todos los datos personales del usuario autenticado (GDPR-K / COPPA / Habeas Data)
  */
-router.delete('/delete-user-data', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.delete('/delete-user-data', requireAuth, async (req, res) => {
   // La identidad SIEMPRE viene del token verificado, nunca del body (evita IDOR).
   const userId = req.userId;
 

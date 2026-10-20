@@ -184,6 +184,37 @@ describe('authService.signUpParent', () => {
     expect(linkCalls.length).toBeGreaterThan(0);
   });
 
+  it('el padre que se enlaza con el código activa la cuenta del niño (una sola vez)', async () => {
+    const activacionUpsert = vi.fn().mockResolvedValue({ data: null, error: null });
+    mockSupabase.auth.admin.updateUserById = vi.fn().mockResolvedValue({ data: {}, error: null });
+    mockSupabase.from.mockImplementation((table) => {
+      if (table === 'parent_student_links') return { upsert: vi.fn().mockResolvedValue({ data: null, error: null }) };
+      if (table === 'activaciones_adulto_menor') return { upsert: activacionUpsert };
+      if (table === 'parent_consents') {
+        return { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { verification_status: 'verified' }, error: null }) };
+      }
+      return {
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        insert: vi.fn().mockReturnThis(),
+        maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'stu-1' }, error: null }),
+      };
+    });
+    mockSupabase.auth.admin.createUser.mockResolvedValue({ data: { user: { id: 'par-1' } }, error: null });
+
+    await authService.signUpParent({
+      studentEmail: 'kid@school.co', parentPassword: 'secret12345', parentName: 'Ana', invitationToken: 'tok-verified',
+    });
+
+    expect(activacionUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ estudiante_id: 'stu-1', adulto_id: 'par-1', metodo: 'codigo_padre' }),
+      { onConflict: 'estudiante_id', ignoreDuplicates: true },
+    );
+    expect(mockSupabase.auth.admin.updateUserById).toHaveBeenCalledWith('stu-1', {
+      app_metadata: { ingenia_adulto_activado_at: expect.any(String) },
+    });
+  });
+
   it('rejects registration when the student email has no account', async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn().mockReturnThis(),

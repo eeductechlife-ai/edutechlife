@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const { requireAuth } = require('../../middleware/auth');
-const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { assertAuthIdAccess } = require('../../middleware/ownership');
 const { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary } = require('../../services/weeklyReport');
 const { sendEmail } = require('../../services/emailService');
@@ -14,7 +13,7 @@ const router = Router();
  * GET /api/ingenia/data/:userId
  * Obtener datos del IngenIA para un usuario
  */
-router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/data/:userId', requireAuth, async (req, res) => {
   const { userId } = req.params;
 
   const access = await assertAuthIdAccess(req, userId);
@@ -52,7 +51,7 @@ router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (
  * GET /api/ingenia/progress/:userId
  * Obtener progreso del estudiante en IngenIA
  */
-router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/progress/:userId', requireAuth, async (req, res) => {
   const { userId } = req.params;
 
   const access = await assertAuthIdAccess(req, userId);
@@ -99,7 +98,7 @@ router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, asy
  * POST /api/ingenia/weekly-report
  * Genera y envía por email el reporte semanal del hijo al padre
  */
-router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.post('/weekly-report', requireAuth, async (req, res) => {
   const userId = req.userId;
   const { studentName, preview = false } = req.body || {};
 
@@ -203,7 +202,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
  * GET /api/ingenia/wellbeing-status
  * Estado agregado de bienestar del hijo para el padre (no expone contenido sensible)
  */
-router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/wellbeing-status', requireAuth, async (req, res) => {
   const userId = req.userId;
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 

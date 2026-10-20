@@ -1,20 +1,29 @@
 const { Router } = require('express');
 const { requireAuth } = require('../../middleware/auth');
 const adultoObligatorio = require('../../services/adultoObligatorio');
+const activacion = require('../../services/activacionAdulto');
 
 const router = Router();
 
 /**
  * POST /api/auth/adulto-menor/confirmar
  * El adulto (sesión iniciada con el correo invitado) confirma su vínculo con
- * el menor. Body: { token }.
+ * el menor y acepta el texto de autorización (Ley 1581). La primera
+ * confirmación activa la cuenta del niño para siempre.
+ * Body: { token, aceptaAutorizacion: true, versionAutorizacion }.
  */
 router.post('/adulto-menor/confirmar', requireAuth, async (req, res) => {
   if (!adultoObligatorio.estaActivo()) {
     return res.status(404).json({ error: 'No disponible' });
   }
 
-  const { token } = req.body || {};
+  const { token, aceptaAutorizacion, versionAutorizacion } = req.body || {};
+  if (aceptaAutorizacion !== true || !activacion.versionValida(versionAutorizacion)) {
+    return res.status(400).json({
+      error: 'Para activar la cuenta debes aceptar la autorización de tratamiento de datos del menor',
+      motivo: 'falta_autorizacion',
+    });
+  }
   try {
     const resultado = await adultoObligatorio.confirmarInvitacion({
       token,
@@ -24,7 +33,7 @@ router.post('/adulto-menor/confirmar', requireAuth, async (req, res) => {
     if (!resultado.valida) {
       const mensajes = {
         invalido: 'El enlace no es válido',
-        vencida: 'El enlace venció. Pide al menor que registre de nuevo su cuenta',
+        vencida: 'El enlace venció. Pide al menor que te reenvíe la invitación desde su cuenta',
         usada: 'Este enlace ya fue usado',
         correo_no_coincide: 'Inicia sesión con el correo al que llegó la invitación',
       };
@@ -33,20 +42,45 @@ router.post('/adulto-menor/confirmar', requireAuth, async (req, res) => {
         motivo: resultado.motivo,
       });
     }
-    return res.json({ vinculado: true });
+    // Si la fila de evidencia falla, el vínculo activo ya creado hace que el
+    // middleware cuente al niño como activado y vuelva a registrarlo.
+    let activado = true;
+    try {
+      await activacion.registrarActivacion({
+        estudianteId: resultado.estudianteId,
+        adultoId: req.userId,
+        adultoEmail: resultado.adultoEmail,
+        metodo: 'invitacion',
+        versionAutorizacion,
+        invitacionId: resultado.invitacionId,
+      });
+    } catch (e) {
+      activado = false;
+      console.error('[adulto-obligatorio] no se pudo registrar la activación:', e.message);
+    }
+    return res.json({ vinculado: true, activado });
   } catch (e) {
     console.error('[adulto-obligatorio] confirmar error:', e.message);
     return res.status(500).json({ error: 'No se pudo confirmar el vínculo' });
   }
 });
 
+/** true si el estudiante aún necesita que un adulto active su cuenta. */
+async function requiereAdulto(req) {
+  if (!adultoObligatorio.estaActivo()) return false;
+  if (activacion.activadoEnSesion(req.userAppMetadata)) return false;
+  const estado = await activacion.estadoActivacion(req.userId);
+  return estado.requiereAdulto;
+}
+
 /**
  * GET /api/auth/adulto-menor/estado
- * Banner para estudiantes existentes sin adulto. Solo informa: no bloquea.
+ * ¿Mostrar el aviso de modo restringido? Mismo criterio que el middleware
+ * requireAdultoActivado (mostrarAviso = las herramientas de IA responden 403).
  */
 router.get('/adulto-menor/estado', requireAuth, async (req, res) => {
   try {
-    const mostrarAviso = await adultoObligatorio.avisoPendiente(req.userId);
+    const mostrarAviso = await requiereAdulto(req);
     return res.json({ mostrarAviso });
   } catch (e) {
     console.error('[adulto-obligatorio] estado error:', e.message);
@@ -67,7 +101,7 @@ router.post('/adulto-menor/invitar', requireAuth, async (req, res) => {
   }
   const { adulto, edad } = req.body || {};
   try {
-    if (!(await adultoObligatorio.avisoPendiente(req.userId))) {
+    if (!(await requiereAdulto(req))) {
       return res.status(409).json({ error: 'Tu cuenta no necesita registrar un adulto' });
     }
     const edadReal = adultoObligatorio.validarEdadIngenia(edad);

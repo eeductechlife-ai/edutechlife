@@ -275,7 +275,7 @@ router.post('/ai', requireAuth, requireVerifiedParentalConsent, async (req, res)
  * GET /api/ingenia/dani/history
  * Load recent Dani chat history for the authenticated student.
  */
-router.get('/dani/history', requireAuth, async (req, res) => {
+router.get('/dani/history', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   try {
     const { data: student } = await supabase
       .from('students')
