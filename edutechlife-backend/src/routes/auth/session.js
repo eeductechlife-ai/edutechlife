@@ -157,10 +157,12 @@ router.post('/login', async (req, res) => {
         try {
           const { data: profile } = await supabase
             .from('users')
-            .select('first_name, last_name, username, account_type')
+            .select('first_name, last_name, username, account_type, user_type')
             .eq('id', result.user.id)
             .maybeSingle();
-          if (profile?.account_type === 'smartboard') {
+          // Los padres de IngenIA también son account_type 'smartboard', pero
+          // no son estudiantes: no se les crea fila en students.
+          if (profile?.account_type === 'smartboard' && profile?.user_type !== 'parent') {
             const { data: existing } = await supabase
               .from('students')
               .select('id')

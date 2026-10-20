@@ -50,6 +50,7 @@ function constructorConsulta(nombre) {
     eq(columna, valor) { estado.filtros.push((r) => r[columna] === valor); return consulta; },
     gt(columna, valor) { estado.filtros.push((r) => r[columna] > valor); return consulta; },
     limit(n) { estado.limite = n; return consulta; },
+    order() { return consulta; },
     maybeSingle() { estado.single = true; return consulta; },
     insert(valores) { estado.op = 'insert'; estado.valores = valores; return consulta; },
     update(cambios) { estado.op = 'update'; estado.cambios = cambios; return consulta; },
@@ -311,7 +312,7 @@ describe('banner y registro de adulto para estudiantes existentes', () => {
 
   it('estado: menor existente sin adulto ve el aviso', async () => {
     const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
-    expect(res.body).toEqual({ mostrarAviso: true });
+    expect(res.body).toMatchObject({ mostrarAviso: true });
     expect(sendMock).not.toHaveBeenCalled();
   });
 
@@ -459,7 +460,7 @@ describe('estado del aviso con la activación única', () => {
     tablas.students = [];
     filasDe('users').find((u) => u.id === ESTUDIANTE).account_type = 'smartboard';
     const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
-    expect(res.body).toEqual({ mostrarAviso: true });
+    expect(res.body).toMatchObject({ mostrarAviso: true });
   });
 
   it('con la bandera apagada nunca hay aviso', async () => {

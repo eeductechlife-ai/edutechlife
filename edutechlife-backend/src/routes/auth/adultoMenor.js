@@ -2,6 +2,8 @@ const { Router } = require('express');
 const { requireAuth } = require('../../middleware/auth');
 const adultoObligatorio = require('../../services/adultoObligatorio');
 const activacion = require('../../services/activacionAdulto');
+const registroAdulto = require('../../services/registroAdulto');
+const { authLimiter } = require('../../middleware/rateLimiter');
 
 const router = Router();
 
@@ -81,7 +83,12 @@ async function requiereAdulto(req) {
 router.get('/adulto-menor/estado', requireAuth, async (req, res) => {
   try {
     const mostrarAviso = await requiereAdulto(req);
-    return res.json({ mostrarAviso });
+    if (!mostrarAviso) return res.json({ mostrarAviso });
+    // Si el resumen falla se muestra igual el aviso (con el formulario).
+    const resumen = await registroAdulto
+      .resumenInvitacion(req.userId)
+      .catch(() => ({ invitacionPendiente: false, correoAdulto: null }));
+    return res.json({ mostrarAviso, ...resumen });
   } catch (e) {
     console.error('[adulto-obligatorio] estado error:', e.message);
     return res.json({ mostrarAviso: false });
@@ -122,6 +129,76 @@ router.post('/adulto-menor/invitar', requireAuth, async (req, res) => {
     if (e.status === 400) return res.status(400).json({ error: e.message });
     console.error('[adulto-obligatorio] invitar error:', e.message);
     return res.status(500).json({ error: 'No se pudo enviar la invitación' });
+  }
+});
+
+/** Respuesta para errores con código de registroAdulto. */
+function responderError(res, e, mensaje500) {
+  if (e.status && e.status < 500) {
+    const cuerpo = { error: e.message, code: e.code };
+    if (e.motivo) cuerpo.motivo = e.motivo;
+    return res.status(e.status).json(cuerpo);
+  }
+  console.error(`[adulto-obligatorio] ${mensaje500}:`, e.message);
+  return res.status(500).json({ error: mensaje500 });
+}
+
+/**
+ * POST /api/auth/adulto-menor/reenviar
+ * El niño en modo restringido reenvía la invitación al mismo adulto de antes
+ * (nuevo enlace de 72 h; el anterior deja de servir). Máximo uno cada 2 min.
+ */
+router.post('/adulto-menor/reenviar', requireAuth, async (req, res) => {
+  if (!adultoObligatorio.estaActivo()) {
+    return res.status(404).json({ error: 'No disponible' });
+  }
+  try {
+    if (!(await requiereAdulto(req))) {
+      return res.status(409).json({ error: 'Tu cuenta ya está activada' });
+    }
+    const resultado = await registroAdulto.reenviarInvitacion(req.userId);
+    return res.status(201).json({ enviado: true, ...resultado });
+  } catch (e) {
+    return responderError(res, e, 'No se pudo reenviar la invitación');
+  }
+});
+
+/**
+ * GET /api/auth/adulto-menor/invitacion?token=
+ * Datos para la página del adulto (sin consumir el enlace).
+ */
+router.get('/adulto-menor/invitacion', async (req, res) => {
+  if (!adultoObligatorio.estaActivo()) {
+    return res.status(404).json({ error: 'No disponible' });
+  }
+  try {
+    const lectura = await registroAdulto.leerInvitacion(req.query.token);
+    if (!lectura.valida) return res.json({ valida: false, motivo: lectura.motivo });
+    return res.json({
+      valida: true,
+      correoAdulto: registroAdulto.enmascararCorreo(lectura.invitacion.adulto_email),
+      nombreAdulto: lectura.invitacion.adulto_nombre,
+    });
+  } catch (e) {
+    return responderError(res, e, 'No se pudo leer la invitación');
+  }
+});
+
+/**
+ * POST /api/auth/adulto-menor/registrar
+ * El adulto SIN cuenta crea su cuenta de padre con el correo invitado, acepta
+ * la autorización y activa la cuenta del niño. Devuelve la sesión del padre.
+ * Body: { token, nombre, password, aceptaAutorizacion, versionAutorizacion }.
+ */
+router.post('/adulto-menor/registrar', authLimiter, async (req, res) => {
+  if (!adultoObligatorio.estaActivo()) {
+    return res.status(404).json({ error: 'No disponible' });
+  }
+  try {
+    const resultado = await registroAdulto.registrarPadreDesdeInvitacion(req.body || {});
+    return res.status(201).json(resultado);
+  } catch (e) {
+    return responderError(res, e, 'No se pudo crear la cuenta');
   }
 });
 
