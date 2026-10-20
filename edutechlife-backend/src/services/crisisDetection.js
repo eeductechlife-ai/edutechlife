@@ -4,6 +4,8 @@
  * Language: Spanish + English
  */
 
+const { escapeHtml } = require('./emailTemplates');
+
 const CRISIS_KEYWORDS = {
   // Spanish keywords
   es: {
@@ -145,6 +147,10 @@ function detectCrisis(text, language = 'es') {
  */
 function formatCrisisAlertEmail(studentName, studentAge, detectedContent, parentEmail) {
   const timestamp = new Date().toLocaleString('es-CO');
+  // El nombre y el contenido los escribe el estudiante: van escapados al HTML.
+  const nombreHtml = escapeHtml(studentName);
+  const edadHtml = escapeHtml(studentAge);
+  const contenidoHtml = escapeHtml(detectedContent.substring(0, 150));
 
   return {
     subject: `⚠️ ALERTA: Apoyo emocional requerido para ${studentName}`,
@@ -159,7 +165,7 @@ function formatCrisisAlertEmail(studentName, studentAge, detectedContent, parent
           <h2 style="color: #004B63; font-size: 18px; margin-top: 0;">Acción Requerida</h2>
           <p style="color: #374151; line-height: 1.6;">
             Hemos detectado indicadores de posible angustia emocional o ideación suicida en
-            <strong>${studentName} (${studentAge} años)</strong> durante una sesión en IngenIA.
+            <strong>${nombreHtml} (${edadHtml} años)</strong> durante una sesión en IngenIA.
           </p>
           <p style="color: #374151; line-height: 1.6;">
             <strong>Este mensaje requiere tu atención inmediata.</strong>
@@ -169,7 +175,7 @@ function formatCrisisAlertEmail(studentName, studentAge, detectedContent, parent
         <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px;">
           <h3 style="color: #92400e; margin-top: 0;">Indicadores Detectados</h3>
           <p style="color: #7c2d12; margin: 5px 0;">
-            <strong>Contenido:</strong> "${detectedContent.substring(0, 150)}..."
+            <strong>Contenido:</strong> "${contenidoHtml}..."
           </p>
         </div>
 
@@ -188,7 +194,7 @@ function formatCrisisAlertEmail(studentName, studentAge, detectedContent, parent
         <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 15px; margin-bottom: 20px;">
           <h3 style="color: #166534; margin-top: 0;">Pasos Recomendados</h3>
           <ol style="color: #166534; margin: 10px 0; padding-left: 20px;">
-            <li>Contacta a ${studentName} directamente y pregunta cómo se siente</li>
+            <li>Contacta a ${nombreHtml} directamente y pregunta cómo se siente</li>
             <li>Considera una evaluación profesional de salud mental</li>
             <li>Mantén monitoreado el acceso a sustancias y métodos de daño</li>
             <li>Contacta a un profesional de salud mental certificado</li>
