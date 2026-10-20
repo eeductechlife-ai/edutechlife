@@ -10,7 +10,8 @@ const {
   getActivationFromEvent,
 } = require('../services/wompi');
 const { activatePaidPeriod } = require('../services/paidPlans');
-const { getPlanById } = require('../data/plans');
+const { getPlanById, INGENIA_PLAN_IDS } = require('../data/plans');
+const { resolverBeneficiarioIngenia } = require('../services/beneficiarioPlan');
 const { findAuthUserByEmail } = require('./auth/helpers');
 const { sendEmail } = require('../services/emailService');
 const { buildCobroEmail } = require('../services/wompiCobroEmail');
@@ -32,21 +33,34 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * POST /api/payments/wompi/checkout
  * Devuelve la URL del Web Checkout de Wompi para un plan en COP.
+ * Body: { planId, studentId? }. En planes IngenIA el plan es del niño: si paga
+ * el padre, la referencia lleva el id del hijo vinculado (studentId si tiene
+ * varios), y el evento de Wompi activa esa cuenta.
  * Responde 503 mientras no estén las llaves de Wompi.
  */
-router.post('/checkout', requireAuth, (req, res) => {
+router.post('/checkout', requireAuth, async (req, res) => {
   if (!getWompiConfig()) {
     return res.status(503).json({ error: 'Wompi no configurado' });
   }
 
-  const { planId, redirectUrl } = req.body || {};
+  const { planId, redirectUrl, studentId } = req.body || {};
   if (!planId || typeof planId !== 'string') {
     return res.status(400).json({ error: 'Plan requerido' });
   }
 
+  let titularId = req.userId;
+  if (INGENIA_PLAN_IDS.has(planId)) {
+    const destino = await resolverBeneficiarioIngenia({
+      pagadorId: req.userId,
+      estudianteId: typeof studentId === 'string' && studentId ? studentId : undefined,
+    });
+    if (destino.error) return res.status(destino.status).json({ error: destino.error });
+    titularId = destino.beneficiarioId;
+  }
+
   const result = createWompiCheckout({
     planId,
-    userId: req.userId,
+    userId: titularId,
     email: req.body.email,
     redirectUrl,
   });
@@ -120,7 +134,15 @@ router.post('/link-cobro', requireAdmin, cobroLinkLimiter, async (req, res) => {
   }
   if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-  const checkout = createWompiCheckout({ planId, userId: usuario.id, email: usuario.email });
+  // Si el correo es del padre, el plan va al hijo vinculado (como en /checkout).
+  let titularId = usuario.id;
+  if (INGENIA_PLAN_IDS.has(planId)) {
+    const destino = await resolverBeneficiarioIngenia({ pagadorId: usuario.id });
+    if (destino.error) return res.status(destino.status).json({ error: destino.error });
+    titularId = destino.beneficiarioId;
+  }
+
+  const checkout = createWompiCheckout({ planId, userId: titularId, email: usuario.email });
   if (checkout.error) return res.status(400).json({ error: checkout.error });
 
   const correo = buildCobroEmail(checkout.url);
