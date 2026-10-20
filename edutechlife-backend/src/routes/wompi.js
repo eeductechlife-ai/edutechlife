@@ -29,6 +29,19 @@ const ALIAS_PLAN_COBRO = new Map([
 ]);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Los planes Personalizado llevan valoración gratis antes de cualquier cobro
+// (términos aprobados): no se compran desde el checkout del usuario, solo con
+// el enlace que manda el admin (/link-cobro). Va antes del handler de /checkout.
+router.post('/checkout', (req, res, next) => {
+  const plan = getPlanById(req.body?.planId);
+  if (plan?.requiereValoracion) {
+    return res.status(400).json({
+      error: 'Este plan empieza con una valoración gratis; agéndala y te enviamos el enlace de pago',
+    });
+  }
+  next();
+});
+
 /**
  * POST /api/payments/wompi/checkout
  * Devuelve la URL del Web Checkout de Wompi para un plan en COP.
