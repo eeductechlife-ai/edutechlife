@@ -49,7 +49,44 @@ const CONTENT_EN = {
         },
       ],
     },
-    lessons: [],
+    lessons: [
+      {
+        id: 1,
+        title: "The Artisan's Foundations: What is Generative AI?",
+        description: "Understand the tool before you use it",
+        detailedDescription:
+          "Before you ask AI for anything, it helps to know how it works. You will see what generative AI is, why it answers confidently even when it is wrong, what it does well and where its limits are. With that foundation you can use it with judgment from day one, even if you have never used it before.",
+        duration: "20 min",
+        format: "Video",
+        icon: "fa-brain",
+        badgeColor: "bg-cyan-100 text-cyan-800",
+        themeColor: "#4DA8C4",
+      },
+      {
+        id: 2,
+        title: "The Artisan's Chisel: What is a Prompt?",
+        description: "Ask for exactly what you need",
+        detailedDescription:
+          "A prompt is the instruction you give the AI. You will learn the RTF formula (Role + Task + Format), how to add the context the AI does not have, and how to improve an answer by asking for adjustments instead of starting over. You will practice with study, work and everyday cases until you get useful results on the first try.",
+        duration: "20 min",
+        format: "Lab",
+        icon: "fa-comments",
+        badgeColor: "bg-sky-100 text-sky-800",
+        themeColor: "#199DB9",
+      },
+      {
+        id: 3,
+        title: "The Guardian's Oath: Responsible Use of AI",
+        description: "Verify, protect and disclose",
+        detailedDescription:
+          "Using AI well also means knowing when not to trust it. You will learn to spot bias, check quotes and figures before using them, decide which personal data you never share, and disclose when you used AI. These habits separate people who use AI from people who use it responsibly.",
+        duration: "30 min",
+        format: "Reading",
+        icon: "fa-shield-halved",
+        badgeColor: "bg-emerald-100 text-emerald-800",
+        themeColor: "#0E7490",
+      },
+    ],
     accordionContent: {
       1: {
         objective: "🎯 The Artisan's Foundations",

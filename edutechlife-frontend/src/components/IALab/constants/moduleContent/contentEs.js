@@ -49,7 +49,44 @@ const CONTENT_ES = {
         },
       ],
     },
-    lessons: [],
+    lessons: [
+      {
+        id: 1,
+        title: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
+        description: "Entiende la herramienta antes de usarla",
+        detailedDescription:
+          "Antes de pedirle algo a la IA, conviene saber cómo funciona. Verás qué es la IA generativa, por qué responde con seguridad aunque a veces se equivoque, qué hace bien y cuáles son sus límites. Con esa base podrás usarla con criterio desde el primer día, aunque nunca la hayas usado.",
+        duration: "20 min",
+        format: "Video",
+        icon: "fa-brain",
+        badgeColor: "bg-cyan-100 text-cyan-800",
+        themeColor: "#4DA8C4",
+      },
+      {
+        id: 2,
+        title: "El Cincel del Artesano: ¿Qué es un Prompt?",
+        description: "Pide exactamente lo que necesitas",
+        detailedDescription:
+          "Un prompt es la instrucción que le das a la IA. Aprenderás la fórmula RTF (Rol + Tarea + Formato), a sumar el contexto que la IA no conoce y a mejorar una respuesta pidiendo ajustes en lugar de empezar de cero. Practicarás con casos de estudio, trabajo y vida diaria hasta obtener resultados útiles a la primera.",
+        duration: "20 min",
+        format: "Lab",
+        icon: "fa-comments",
+        badgeColor: "bg-sky-100 text-sky-800",
+        themeColor: "#199DB9",
+      },
+      {
+        id: 3,
+        title: "El Juramento del Guardián: Uso Responsable de la IA",
+        description: "Verifica, protege y declara",
+        detailedDescription:
+          "Usar bien la IA también es saber cuándo no confiar en ella. Aprenderás a detectar sesgos, a comprobar citas y cifras antes de usarlas, a decidir qué datos personales nunca compartes y a declarar cuándo usaste IA. Son los hábitos que distinguen a quien usa la IA de quien la usa con responsabilidad.",
+        duration: "30 min",
+        format: "Reading",
+        icon: "fa-shield-halved",
+        badgeColor: "bg-emerald-100 text-emerald-800",
+        themeColor: "#0E7490",
+      },
+    ],
     accordionContent: {
       1: {
         objective: "🎯 Los Fundamentos del Artesano",
