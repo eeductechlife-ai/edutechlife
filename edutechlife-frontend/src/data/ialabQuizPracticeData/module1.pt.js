@@ -1,203 +1,100 @@
 export const MODULE_1_PT = [
   {
     id: "pp-m1-1",
-    question: "Qual é a função principal de um prompt na interação com um LLM?",
+    question: "Na fórmula RTF, qual elemento define quem deve responder?",
     options: [
-      {
-        id: "pp-m1-1_a",
-        label: "Limitar a capacidade do modelo para evitar erros",
-      },
-      {
-        id: "pp-m1-1_b",
-        label: "Instruir o modelo sobre qual tarefa realizar e como responder",
-      },
-      {
-        id: "pp-m1-1_c",
-        label: "Treinar o modelo com novos dados em tempo real",
-      },
-      {
-        id: "pp-m1-1_d",
-        label: "Aumentar automaticamente a temperatura do modelo",
-      },
+      { id: "pp-m1-1_a", label: "Formato do resultado" },
+      { id: "pp-m1-1_b", label: "Tarefa que deve executar" },
+      { id: "pp-m1-1_c", label: "Papel que a IA assume" },
+      { id: "pp-m1-1_d", label: "Data da resposta" },
     ],
-    correctAnswer: "pp-m1-1_b",
-    topic: "Fundamentos de Prompts",
+    correctAnswer: "pp-m1-1_c",
+    topic: "RTF",
     difficulty: "easy",
-    feedback:
-      "Um prompt é uma instrução que define a tarefa, o papel e o formato esperado da resposta do modelo. Sem um prompt claro, o modelo não consegue gerar uma saída útil.",
-    relatedFlashcardId: "m1-f1",
+    feedback: "RTF são Papel, Tarefa e Formato. O papel indica de qual perspectiva a IA deve responder.",
   },
   {
     id: "pp-m1-2",
-    question: "Em que o fine-tuning difere do prompt engineering?",
+    question: "Por que vale a pena dar contexto em um prompt?",
     options: [
-      {
-        id: "pp-m1-2_a",
-        label:
-          "O fine-tuning modifica os pesos do modelo com dados específicos; o prompt engineering apenas projeta a entrada",
-      },
-      {
-        id: "pp-m1-2_b",
-        label:
-          "O fine-tuning é mais rápido e econômico que o prompt engineering",
-      },
-      {
-        id: "pp-m1-2_c",
-        label:
-          "O prompt engineering exige acesso aos pesos do modelo; o fine-tuning não",
-      },
-      {
-        id: "pp-m1-2_d",
-        label: "Não há diferença: ambos os termos significam a mesma coisa",
-      },
+      { id: "pp-m1-2_a", label: "Para que a resposta fique mais longa" },
+      { id: "pp-m1-2_b", label: "Para que a IA adivinhe menos o público e o objetivo" },
+      { id: "pp-m1-2_c", label: "Para gastar mais tokens" },
+      { id: "pp-m1-2_d", label: "Porque a IA não consegue responder sem contexto" },
     ],
-    correctAnswer: "pp-m1-2_a",
-    topic: "Fine-Tuning vs Prompt Engineering",
-    difficulty: "medium",
-    feedback:
-      "O fine-tuning ajusta os parâmetros do modelo com dados específicos para uma tarefa, enquanto o prompt engineering otimiza as instruções de entrada sem modificar o modelo.",
-    relatedFlashcardId: "m1-f2",
+    correctAnswer: "pp-m1-2_b",
+    topic: "Contexto",
+    difficulty: "easy",
+    feedback: "O contexto reduz suposições: o modelo sabe para quem é e para que serve o resultado.",
   },
   {
     id: "pp-m1-3",
-    question:
-      "Se você precisa que um LLM gere respostas muito precisas e factuais, qual valor de temperatura você deve usar?",
+    question: "Você recebeu uma resposta fraca. Qual é a melhor forma de melhorá-la?",
     options: [
-      {
-        id: "pp-m1-3_a",
-        label: "Temperatura alta (próxima de 1.0) para máxima criatividade",
-      },
-      {
-        id: "pp-m1-3_b",
-        label:
-          "Temperatura baixa (próxima de 0.0) para respostas determinísticas e precisas",
-      },
-      {
-        id: "pp-m1-3_c",
-        label: "Temperatura média (0.5) para um equilíbrio justo",
-      },
-      {
-        id: "pp-m1-3_d",
-        label: "A temperatura não afeta a precisão das respostas",
-      },
+      { id: "pp-m1-3_a", label: "Refazer o prompt do zero sem mudar nada" },
+      { id: "pp-m1-3_b", label: "Acrescentar o elemento que faltou e comparar com a versão anterior" },
+      { id: "pp-m1-3_c", label: "Pedir à IA que seja mais inteligente" },
+      { id: "pp-m1-3_d", label: "Aceitar a resposta se ela for curta" },
     ],
     correctAnswer: "pp-m1-3_b",
-    topic: "Temperatura em LLMs",
-    difficulty: "easy",
-    feedback:
-      "Uma temperatura baixa (0.0-0.3) reduz a aleatoriedade, fazendo com que o modelo selecione as palavras mais prováveis. Isso é ideal para tarefas que exigem precisão e fatos concretos.",
-    relatedFlashcardId: "m1-f3",
+    topic: "Iteração",
+    difficulty: "medium",
+    feedback: "Mudar uma coisa por vez mostra o que de fato melhorou o resultado.",
   },
   {
     id: "pp-m1-4",
-    question:
-      "Um sistema RAG (Retrieval-Augmented Generation) é útil principalmente porque:",
+    question: "Qual dado NÃO convém colar em uma ferramenta de IA?",
     options: [
-      {
-        id: "pp-m1-4_a",
-        label: "Substitui completamente o treinamento do modelo",
-      },
-      {
-        id: "pp-m1-4_b",
-        label:
-          "Permite que o modelo acesse informações atualizadas sem necessidade de re-treinamento",
-      },
-      {
-        id: "pp-m1-4_c",
-        label: "Aumenta automaticamente o número de parâmetros do modelo",
-      },
-      { id: "pp-m1-4_d", label: "Elimina a necessidade de escrever prompts" },
+      { id: "pp-m1-4_a", label: "Um texto de exemplo sem dados pessoais" },
+      { id: "pp-m1-4_b", label: "Um rascunho seu" },
+      { id: "pp-m1-4_c", label: "Um CPF, uma senha ou um número de conta bancária" },
+      { id: "pp-m1-4_d", label: "Uma lista de temas de estudo" },
     ],
-    correctAnswer: "pp-m1-4_b",
-    topic: "RAG (Recuperação Aumentada)",
-    difficulty: "medium",
-    feedback:
-      "O RAG combina a recuperação de documentos relevantes com a geração de texto, permitindo que o modelo acesse informações externas atualizadas sem modificar seus pesos. É ideal para dados dinâmicos ou conhecimento especializado.",
-    relatedFlashcardId: "m1-f4",
+    correctAnswer: "pp-m1-4_c",
+    topic: "Privacidade",
+    difficulty: "easy",
+    feedback: "Documentos de identidade, senhas e dados financeiros nunca devem ser compartilhados com uma ferramenta de IA.",
   },
   {
     id: "pp-m1-5",
-    question:
-      "Qual dos seguintes NÃO é um componente do método RTF (Papel, Tarefa, Formato)?",
+    question: "Antes de usar um dado gerado pela IA em um trabalho, o que você deve fazer?",
     options: [
-      { id: "pp-m1-5_a", label: "Papel: definir qual perfil a IA adota" },
-      { id: "pp-m1-5_b", label: "Tarefa: especificar o que a IA deve fazer" },
-      {
-        id: "pp-m1-5_c",
-        label: "Formato: indicar como a resposta deve ser estruturada",
-      },
-      {
-        id: "pp-m1-5_d",
-        label: "Temperatura: ajustar a criatividade da resposta",
-      },
+      { id: "pp-m1-5_a", label: "Compartilhá-lo como está" },
+      { id: "pp-m1-5_b", label: "Verificá-lo em uma fonte original" },
+      { id: "pp-m1-5_c", label: "Pedir que a mesma IA o confirme" },
+      { id: "pp-m1-5_d", label: "Esperar que ninguém perceba" },
     ],
-    correctAnswer: "pp-m1-5_d",
-    topic: "Método RTF",
+    correctAnswer: "pp-m1-5_b",
+    topic: "Verificação",
     difficulty: "easy",
-    feedback:
-      "O método RTF é composto por três partes: Papel (quem é a IA), Tarefa (o que deve fazer) e Formato (como deve responder). A temperatura é um parâmetro técnico do modelo, não um componente do método RTF.",
+    feedback: "A IA pode errar com segurança: a checagem é feita na fonte original.",
   },
   {
     id: "pp-m1-6",
-    question:
-      "O que são os parâmetros em um modelo de linguagem e como eles se relacionam com a capacidade dele?",
+    question: "O que significa declarar o uso da IA?",
     options: [
-      {
-        id: "pp-m1-6_a",
-        label: "São instruções escritas pelo usuário para guiar o modelo",
-      },
-      {
-        id: "pp-m1-6_b",
-        label:
-          "São valores numéricos que o modelo ajusta durante o treinamento; mais parâmetros geralmente significam maior capacidade",
-      },
-      {
-        id: "pp-m1-6_c",
-        label: "São arquivos de entrada carregados no início de cada sessão",
-      },
-      {
-        id: "pp-m1-6_d",
-        label: "São métricas de desempenho que medem a velocidade do modelo",
-      },
+      { id: "pp-m1-6_a", label: "Esconder que você a usou" },
+      { id: "pp-m1-6_b", label: "Dizer quando e como foi usada, e o que você revisou" },
+      { id: "pp-m1-6_c", label: "Pagar uma licença especial" },
+      { id: "pp-m1-6_d", label: "Usá-la apenas em inglês" },
     ],
     correctAnswer: "pp-m1-6_b",
-    topic: "Parâmetros e Capacidade",
-    difficulty: "medium",
-    feedback:
-      "Os parâmetros são os pesos e vieses que o modelo aprende durante o treinamento. Modelos com mais parâmetros (como o GPT-4, com trilhões) podem capturar padrões mais complexos, mas exigem mais dados e computação.",
-    relatedFlashcardId: "m1-f7",
+    topic: "Transparência",
+    difficulty: "easy",
+    feedback: "A transparência gera confiança: explica-se o uso e a parte que a pessoa revisou.",
   },
   {
     id: "pp-m1-7",
-    question:
-      'No contexto dos LLMs, o que significa um modelo ser "pré-treinado" e como isso difere do treinamento tradicional?',
+    question: "Um estudante entrega uma redação escrita quase toda pela IA. Qual é o problema principal?",
     options: [
-      {
-        id: "pp-m1-7_a",
-        label:
-          "O pré-treinamento usa dados não rotulados para aprender padrões da linguagem; o treinamento tradicional usa dados rotulados para tarefas específicas",
-      },
-      {
-        id: "pp-m1-7_b",
-        label:
-          "O pré-treinamento é opcional; os modelos podem funcionar sem ele",
-      },
-      {
-        id: "pp-m1-7_c",
-        label:
-          "O pré-treinamento só é usado para modelos pequenos; os grandes usam treinamento direto",
-      },
-      {
-        id: "pp-m1-7_d",
-        label:
-          "Ambos os termos são sinônimos e são usados de forma intercambiável",
-      },
+      { id: "pp-m1-7_a", label: "A IA escreve mal" },
+      { id: "pp-m1-7_b", label: "A redação é muito curta" },
+      { id: "pp-m1-7_c", label: "Não há aprendizado próprio nem honestidade acadêmica" },
+      { id: "pp-m1-7_d", label: "Não foi usado um editor de texto" },
     ],
-    correctAnswer: "pp-m1-7_a",
-    topic: "Pré-treinamento",
-    difficulty: "hard",
-    feedback:
-      "O pré-treinamento é uma fase em que o modelo aprende padrões linguísticos a partir de enormes quantidades de texto não rotulado (auto-supervisionado). Em seguida, o fine-tuning o adapta a tarefas específicas com dados rotulados.",
-    relatedFlashcardId: "m1-f6",
+    correctAnswer: "pp-m1-7_c",
+    topic: "Honestidade acadêmica",
+    difficulty: "medium",
+    feedback: "O problema central é que o estudante não aprende nem representa o próprio trabalho.",
   },
 ];

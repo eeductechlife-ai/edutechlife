@@ -1,1037 +1,874 @@
+// Banco del módulo 5 (Claude). Opciones equilibradas: la correcta no se distingue por longitud.
 export const MODULE_5_PT = [
   {
     id: "m5q1",
     question:
-      "Um sistema de contratação foi treinado com dados de uma empresa com maioria masculina e penalizava currículos com certos termos. Qual viés aparece e onde ele começa?",
+      "Você quer que o Claude ajude a preparar uma proposta para um cliente. Que informação você dá primeiro para obter um bom resultado?",
     options: [
       {
         id: "m5q1_a",
-        label: "Viés de amostragem, originado nos dados de treino",
+        label: "Só a palavra 'proposta', para que tenha liberdade criativa",
       },
       {
         id: "m5q1_b",
-        label: "Viés de automação, por falta de supervisão humana",
+        label: "O objetivo, o cliente, o tom e o resultado que você espera",
       },
-      { id: "m5q1_c", label: "Viés de confirmação, por ideias do recrutador" },
-      { id: "m5q1_d", label: "Viés de rotulagem, por anotadores errados" },
+      {
+        id: "m5q1_c",
+        label: "Um parágrafo copiado da internet, sem contexto",
+      },
+      {
+        id: "m5q1_d",
+        label: "Deixar que decida tudo sem perguntar nada a você",
+      },
     ],
-    correctAnswer: "m5q1_a",
-    topic: "Vieses em IA",
-    difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
+    correctAnswer: "m5q1_b",
+    topic: "Conhecer o Claude",
+    difficulty: "fácil",
+    source: "Lição 1: Conheça o Claude",
     feedback:
-      "Os dados históricos não representavam a população, então o viés nasceu na coleta. Reveja o laboratório.",
+      "O Claude responde melhor quando conhece o objetivo, o público e o formato. Sem contexto, ele adivinha.",
   },
   {
     id: "m5q2",
-    question:
-      "O ChatGPT cita um estudo de saúde que não existe em nenhum buscador. O que você faz?",
+    question: "O que um Artifact permite fazer no Claude?",
     options: [
       {
         id: "m5q2_a",
-        label: "Não uso o dado e confiro a fonte por conta própria",
+        label: "Guardar sua senha com segurança",
       },
-      { id: "m5q2_b", label: "Uso o dado porque a IA quase nunca erra" },
-      { id: "m5q2_c", label: "Pergunto de novo à IA e confio na resposta" },
-      { id: "m5q2_d", label: "Ignoro porque alucinações não são comuns" },
+      {
+        id: "m5q2_b",
+        label: "Criar e editar documentos ou peças dentro da conversa",
+      },
+      {
+        id: "m5q2_c",
+        label: "Conectar o Claude à conta bancária da empresa",
+      },
+      {
+        id: "m5q2_d",
+        label: "Apagar o histórico de todas as suas conversas",
+      },
     ],
-    correctAnswer: "m5q2_a",
-    topic: "Alucinações",
-    difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
+    correctAnswer: "m5q2_b",
+    topic: "Criar com o Claude",
+    difficulty: "fácil",
+    source: "Lição 2: Crie com o Claude",
     feedback:
-      "Uma alucinação é uma informação falsa que parece real. Sempre confira dados críticos como saúde.",
+      "Os Artifacts são peças que você vê e edita ao lado da conversa: documentos, gráficos ou pequenos aplicativos.",
   },
   {
     id: "m5q3",
     question:
-      "Uma IA dá um diagnóstico que contradiz seu julgamento profissional. Como você age?",
+      "O Claude entrega uma tabela com números de vendas. O que você deve fazer antes de apresentá-la à equipe?",
     options: [
-      { id: "m5q3_a", label: "Questiono a IA e consulto outros especialistas" },
-      { id: "m5q3_b", label: "Aceito a IA porque ela é mais inteligente" },
-      { id: "m5q3_c", label: "Deixo a IA decidir o tratamento" },
-      { id: "m5q3_d", label: "Reinicio o sistema e pergunto de novo" },
+      {
+        id: "m5q3_a",
+        label: "Apresentar como está, porque o Claude nunca erra com números",
+      },
+      {
+        id: "m5q3_b",
+        label: "Conferir os números na fonte original e revisar os cálculos",
+      },
+      {
+        id: "m5q3_c",
+        label: "Pedir que mude os números para que batam com a meta",
+      },
+      {
+        id: "m5q3_d",
+        label: "Esconder que a tabela foi feita por uma IA",
+      },
     ],
-    correctAnswer: "m5q3_a",
-    topic: "Responsabilidade",
+    correctAnswer: "m5q3_b",
+    topic: "Supervisão",
     difficulty: "médio",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Não caia no viés de automação: seu julgamento profissional é insubstituível.",
+      "O Claude pode errar em números e cálculos. O critério humano verifica o dado antes de usá-lo.",
   },
   {
     id: "m5q4",
-    question: "Qual destas NÃO é uma boa prática de privacidade com IA?",
+    question: "Qual é a melhor forma de usar um Projeto no Claude?",
     options: [
-      { id: "m5q4_a", label: "Enviar dados de clientes a um chatbot público" },
-      { id: "m5q4_b", label: "Ler as políticas de privacidade da ferramenta" },
+      {
+        id: "m5q4_a",
+        label: "Misturar temas sem relação no mesmo Projeto",
+      },
+      {
+        id: "m5q4_b",
+        label:
+          "Criar um Projeto por tema e guardar nele instruções e arquivos de referência",
+      },
       {
         id: "m5q4_c",
-        label: "Evitar compartilhar dados confidenciais com a IA",
+        label: "Não usar Projetos, porque começar do zero é sempre melhor",
       },
       {
         id: "m5q4_d",
-        label: "Usar versões empresariais com proteção de dados",
+        label: "Subir todos os seus arquivos pessoais em cada Projeto",
       },
     ],
-    correctAnswer: "m5q4_a",
-    topic: "Privacidade",
+    correctAnswer: "m5q4_b",
+    topic: "Projetos e memória",
     difficulty: "fácil",
-    source: "PDF: Manual de Privacidade em IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Nunca envie dados sensíveis a ferramentas públicas. Reveja o manual de privacidade.",
+      "Um Projeto reúne o contexto de um trabalho: instruções e documentos de referência. Assim você não repete tudo em cada conversa.",
   },
   {
     id: "m5q5",
     question:
-      "Um banco rejeita um empréstimo com IA e não explica o motivo. Qual princípio é violado?",
+      "Você quer que o Claude revise seu Gmail antes de responder a um cliente. O que deve considerar?",
     options: [
-      { id: "m5q5_a", label: "A transparência e a explicabilidade da decisão" },
-      { id: "m5q5_b", label: "A privacidade por esconder o uso da IA" },
-      { id: "m5q5_c", label: "A velocidade do processo de decisão" },
-      { id: "m5q5_d", label: "A eficiência ao usar analistas humanos" },
+      {
+        id: "m5q5_a",
+        label:
+          "Conectar o Gmail sem verificar as permissões pedidas, porque é automático",
+      },
+      {
+        id: "m5q5_b",
+        label:
+          "Conectar a conta por meio de um conector, revisar as permissões concedidas e decidir o que compartilhar",
+      },
+      {
+        id: "m5q5_c",
+        label: "Dar sua senha no chat para que o Claude entre por você",
+      },
+      {
+        id: "m5q5_d",
+        label: "Pedir que envie a resposta sem que você a revise",
+      },
     ],
-    correctAnswer: "m5q5_a",
-    topic: "Transparência",
+    correctAnswer: "m5q5_b",
+    topic: "Conectores e Skills",
     difficulty: "médio",
-    source: "PDF: Código de Ética para Uso de IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "As pessoas têm o direito de entender decisões automáticas que as afetam. Reveja o código de ética.",
+      "Os conectores dão acesso aos seus apps com permissões que você aprova. Nunca dê senhas no chat e revise sempre antes de enviar.",
   },
   {
     id: "m5q6",
-    question:
-      "Seu chefe pede para gerar avaliações falsas de um produto com IA. Qual é a postura ética?",
+    question: "O que é uma Skill no Claude?",
     options: [
       {
         id: "m5q6_a",
-        label: "Recusar e propor alternativas honestas de divulgação",
+        label: "Um tipo de senha para proteger seus arquivos",
       },
-      { id: "m5q6_b", label: "Fazer porque faz parte do seu trabalho" },
+      {
+        id: "m5q6_b",
+        label:
+          "Um pacote de instruções, modelos e referências que o Claude reutiliza em uma tarefa",
+      },
       {
         id: "m5q6_c",
-        label: "Fazer mudando detalhes para não parecerem falsas",
+        label: "Um modelo de IA diferente do Opus, Sonnet ou Haiku",
       },
-      { id: "m5q6_d", label: "Pedir demissão sem explicação" },
+      {
+        id: "m5q6_d",
+        label: "Uma função que desliga a memória do chat",
+      },
     ],
-    correctAnswer: "m5q6_a",
-    topic: "Uso Responsável",
+    correctAnswer: "m5q6_b",
+    topic: "Conectores e Skills",
     difficulty: "médio",
-    source: "OVA: Laboratório: Dilemas Éticos",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Avaliações falsas enganam e podem ser ilegais. Proponha alternativas éticas. Reveja o laboratório.",
+      "Uma Skill transforma um procedimento que você repete em algo reutilizável: instruções, modelos e exemplos.",
   },
   {
     id: "m5q7",
     question:
-      "Um motorista distraído confia no piloto automático e sofre um acidente. Qual viés isso descreve?",
+      "Você quer um resumo semanal das suas pendências. Qual modo do Claude serve melhor?",
     options: [
       {
         id: "m5q7_a",
-        label: "Viés de automação: confiou sem supervisão crítica",
+        label: "Pedir à mão toda segunda-feira, sem nenhuma automação",
       },
-      { id: "m5q7_b", label: "Viés de amostragem nos dados de treino" },
-      { id: "m5q7_c", label: "Viés algorítmico contra certos objetos" },
-      { id: "m5q7_d", label: "Um erro humano normal, sem viés" },
+      {
+        id: "m5q7_b",
+        label:
+          "Programar uma tarefa recorrente no Cowork, com as fontes de que ela precisa",
+      },
+      {
+        id: "m5q7_c",
+        label: "Colar todo o seu histórico de e-mails em cada conversa",
+      },
+      {
+        id: "m5q7_d",
+        label: "Criar uma conta nova a cada semana",
+      },
     ],
-    correctAnswer: "m5q7_a",
-    topic: "Viés de Automação",
+    correctAnswer: "m5q7_b",
+    topic: "Delegar com o Claude",
     difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "O viés de automação é confiar demais na máquina. Mantenha a supervisão ativa.",
+      "As tarefas programadas no Cowork executam trabalhos recorrentes. Você define quais fontes ela usa e revisa o resultado.",
   },
   {
     id: "m5q8",
-    question:
-      "Qual é a estratégia mais responsável para proteger dados ao usar IA?",
+    question: "O que significa 'delegar com critério' ao Claude?",
     options: [
       {
         id: "m5q8_a",
-        label: "Usar ferramentas seguras e anonimizar dados sensíveis",
+        label: "Deixar que decida e execute tudo sem revisão humana",
       },
-      { id: "m5q8_b", label: "Evitar por completo usar IA com qualquer dado" },
+      {
+        id: "m5q8_b",
+        label: "Definir objetivo e limites, revisar e assumir a decisão final",
+      },
       {
         id: "m5q8_c",
-        label: "Publicar os dados nas redes para a comunidade ajudar",
+        label: "Pedir qualquer coisa sem especificar nada",
       },
-      { id: "m5q8_d", label: "Confiar que a IA protege tudo automaticamente" },
+      {
+        id: "m5q8_d",
+        label: "Usá-lo só para tarefas que não importam",
+      },
     ],
-    correctAnswer: "m5q8_a",
-    topic: "Proteção de Dados",
-    difficulty: "médio",
-    source: "PDF: Manual de Privacidade em IA",
+    correctAnswer: "m5q8_b",
+    topic: "Delegar com o Claude",
+    difficulty: "fácil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Proteger os dados é sua responsabilidade: ferramentas seguras e dados anonimizados.",
+      "Delegar não é se desentender: você define o objetivo, os limites e a revisão. A responsabilidade final continua sendo sua.",
   },
   {
     id: "m5q9",
     question:
-      "Um sistema de IA de alto risco (por exemplo, aprovar uma hipoteca) na UE deve cumprir:",
+      "O Claude parece lembrar detalhes de conversas anteriores. O que fazer se quiser controlar essa informação?",
     options: [
-      { id: "m5q9_a", label: "Avaliação de conformidade e supervisão humana" },
-      { id: "m5q9_b", label: "Proibição total de usar IA nesse caso" },
-      { id: "m5q9_c", label: "Registro voluntário sem obrigações" },
-      { id: "m5q9_d", label: "Pagar uma taxa anual para usá-lo" },
+      {
+        id: "m5q9_a",
+        label: "Nada: a memória não pode ser revisada",
+      },
+      {
+        id: "m5q9_b",
+        label: "Revisar o que o Claude lembra, e editar ou apagar",
+      },
+      {
+        id: "m5q9_c",
+        label: "Compartilhar sua senha para que o Claude a guarde",
+      },
+      {
+        id: "m5q9_d",
+        label: "Pedir que guarde os dados dos clientes para sempre",
+      },
     ],
-    correctAnswer: "m5q9_a",
-    topic: "Marco Regulatório",
-    difficulty: "difícil",
-    source: "PDF: Código de Ética para Uso de IA",
+    correctAnswer: "m5q9_b",
+    topic: "Privacidade e dados",
+    difficulty: "médio",
+    source: "Lição 1: Conheça o Claude",
     feedback:
-      "Sistemas de alto risco exigem transparência, documentação e supervisão humana. Reveja o marco regulatório.",
+      "A memória é um recurso que você pode revisar e ajustar. Decida o que vale a pena lembrar e o que não.",
   },
   {
     id: "m5q10",
     question:
-      "Seu app educacional coleta dados de desempenho dos alunos. Qual prática de minimização é correta?",
+      "Você vai subir ao Claude um contrato com dados pessoais de clientes. Qual é o cuidado mais prudente?",
     options: [
       {
         id: "m5q10_a",
-        label: "Guardar só o necessário com consentimento informado",
+        label: "Subir completo, porque o Claude nunca guarda nada",
       },
-      { id: "m5q10_b", label: "Coletar todos os dados por precaução" },
+      {
+        id: "m5q10_b",
+        label: "Anonimizar dados pessoais e compartilhar só o necessário",
+      },
       {
         id: "m5q10_c",
-        label: "Compartilhar os dados com terceiros sem avisar",
+        label: "Publicar em um blog para que outros revisem",
       },
-      { id: "m5q10_d", label: "Armazenar os dados sem plano de exclusão" },
+      {
+        id: "m5q10_d",
+        label: "Enviar por WhatsApp a um desconhecido para traduzir",
+      },
     ],
-    correctAnswer: "m5q10_a",
-    topic: "Privacidade por Design",
+    correctAnswer: "m5q10_b",
+    topic: "Privacidade e dados",
     difficulty: "médio",
-    source: "PDF: Manual de Privacidade em IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Minimize os dados: só o necessário, com consentimento e um plano claro de exclusão.",
+      "Minimize os dados que compartilha e siga a política da sua organização e a lei de proteção de dados aplicável (na Colômbia, Lei 1581 de 2012).",
   },
   {
     id: "m5q11",
-    question:
-      "Quais são os 4 princípios éticos-chave que guiam o uso responsável da IA?",
+    question: "Qual é a diferença entre um Projeto e a memória do Claude?",
     options: [
       {
         id: "m5q11_a",
-        label: "Transparência, equidade, responsabilidade e privacidade",
+        label: "Não há nenhuma diferença entre os dois",
       },
-      { id: "m5q11_b", label: "Velocidade, economia, automação e eficiência" },
-      { id: "m5q11_c", label: "Popularidade, lucro, escala e competição" },
-      { id: "m5q11_d", label: "Inovação, investimento, patente e propriedade" },
+      {
+        id: "m5q11_b",
+        label: "O Projeto guarda instruções de um tema; a memória, dados úteis",
+      },
+      {
+        id: "m5q11_c",
+        label: "A memória serve para subir arquivos de 10 GB",
+      },
+      {
+        id: "m5q11_d",
+        label: "O Projeto é um tipo de senha",
+      },
     ],
-    correctAnswer: "m5q11_a",
-    topic: "Princípios Éticos",
-    difficulty: "fácil",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    correctAnswer: "m5q11_b",
+    topic: "Projetos e memória",
+    difficulty: "médio",
+    source: "Lição 1: Conheça o Claude",
     feedback:
-      "Transparência, equidade, responsabilidade e privacidade são os pilares. Revise o vídeo.",
+      "O Projeto é o contexto de um trabalho concreto. A memória lembra preferências e dados úteis entre conversas.",
   },
   {
     id: "m5q12",
-    question: "O que significa o princípio de transparência num sistema de IA?",
+    question:
+      "O Claude te dá um dado com citação de um estudo. Qual é o passo correto?",
     options: [
       {
         id: "m5q12_a",
-        label: "Que as pessoas possam entender como e por que a IA decide",
+        label: "Citar como está, sem buscar o estudo",
       },
       {
         id: "m5q12_b",
-        label: "Que o sistema funcione sem que ninguém saiba como faz",
+        label:
+          "Buscar o estudo original e confirmar que diz o que o Claude afirma",
       },
       {
         id: "m5q12_c",
-        label: "Que use só dados públicos sem nenhum tipo de controle",
+        label: "Trocar o ano da citação para parecer mais recente",
       },
       {
         id: "m5q12_d",
-        label: "Que seu código seja secreto para proteger o negócio",
+        label: "Supor que está certo porque soa profissional",
       },
     ],
-    correctAnswer: "m5q12_a",
-    topic: "Transparência",
+    correctAnswer: "m5q12_b",
+    topic: "Limites e erros",
     difficulty: "fácil",
-    source: "PDF: Código de Ética para Uso de IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "A transparência permite entender e auditar as decisões. Revise o código de ética.",
+      "Uma citação pode parecer real e não existir, ou dizer outra coisa. Sempre verifique na fonte primária.",
   },
   {
     id: "m5q13",
-    question: "O que é o viés de amostragem num modelo de IA?",
+    question:
+      "Qual tarefa é mais adequada para delegar ao Claude com revisão mínima?",
     options: [
       {
         id: "m5q13_a",
-        label: "Os dados de treinamento não representam toda a população",
+        label: "Assinar um contrato em nome da sua empresa",
       },
       {
         id: "m5q13_b",
-        label: "O sistema funciona devagar com bases de dados grandes",
+        label: "Formatar um rascunho que você revisa depois",
       },
-      { id: "m5q13_c", label: "O modelo muda de idioma sem que você peça" },
+      {
+        id: "m5q13_c",
+        label: "Decidir sobre a demissão de uma pessoa",
+      },
       {
         id: "m5q13_d",
-        label: "O modelo se treina de novo sozinho a cada consulta do usuário",
+        label: "Fazer um diagnóstico médico de um paciente",
       },
     ],
-    correctAnswer: "m5q13_a",
-    topic: "Viés em IA",
-    difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
+    correctAnswer: "m5q13_b",
+    topic: "Delegar com o Claude",
+    difficulty: "fácil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "O viés de amostragem nasce de dados não representativos. Pratique no laboratório.",
+      "Tarefas de rascunho e formatação são ideais para delegar. Decisões legais, médicas ou sobre pessoas exigem critério humano.",
   },
   {
     id: "m5q14",
-    question: "O que é o viés de confirmação aplicado à IA?",
+    question:
+      "Você quer que o Claude gere uma apresentação para o conselho de administração. O que entrega primeiro?",
     options: [
       {
         id: "m5q14_a",
-        label: "O sistema reforça padrões existentes sem questioná-los",
+        label: "Nada: o Claude pode deduzir a mensagem sozinho",
       },
       {
         id: "m5q14_b",
-        label: "A IA confirma sempre que os dados dela estão completos",
+        label: "A ideia central, o público, os números verificados e os slides",
       },
       {
         id: "m5q14_c",
-        label: "O modelo pede confirmação antes de cada resposta",
+        label: "Apenas a palavra 'apresentação', sem mais detalhes",
       },
       {
         id: "m5q14_d",
-        label: "O usuário confirma a senha dele para usar a IA",
+        label: "Um vídeo de outra empresa para copiar literalmente",
       },
     ],
-    correctAnswer: "m5q14_a",
-    topic: "Viés em IA",
+    correctAnswer: "m5q14_b",
+    topic: "Criar com o Claude",
     difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
+    source: "Lição 2: Crie com o Claude",
     feedback:
-      "O viés de confirmação reforça o que já está nos dados. Revise o laboratório de viés.",
+      "Uma boa apresentação começa pela mensagem e pelo público. Os números precisam estar verificados antes de entrar no slide.",
   },
   {
     id: "m5q15",
-    question: "O que é o viés de rotulagem?",
+    question:
+      "O Claude fez uma mudança em um documento que você já tinha editado. O que convém fazer?",
     options: [
       {
         id: "m5q15_a",
-        label:
-          "Os rótulos de treinamento carregam preconceitos de quem os cria",
+        label: "Aceitar tudo sem ler, para economizar tempo",
       },
       {
         id: "m5q15_b",
-        label: "O sistema classifica os dados de forma automática e neutra",
+        label: "Comparar a mudança, aceitar o que melhora e reverter o resto",
       },
       {
         id: "m5q15_c",
-        label: "A IA coloca um rótulo visível em cada resposta gerada",
+        label: "Apagar o documento e começar do zero, sem revisar",
       },
       {
         id: "m5q15_d",
-        label: "O modelo desativa os rótulos quando há muitos dados",
+        label: "Pedir que mude também a versão do seu colega",
       },
     ],
-    correctAnswer: "m5q15_a",
-    topic: "Viés em IA",
+    correctAnswer: "m5q15_b",
+    topic: "Criar com o Claude",
     difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
-    feedback:
-      "Se quem rotula tem vieses, o modelo os aprende. Revise o laboratório de viés.",
+    source: "Lição 2: Crie com o Claude",
+    feedback: "Editar em conjunto exige revisão. Você decide qual versão fica.",
   },
   {
     id: "m5q16",
-    question: "O que é o viés de automação?",
+    question:
+      "Qual modelo do Claude serve para uma tarefa simples e repetitiva, como classificar e-mails?",
     options: [
       {
         id: "m5q16_a",
-        label: "Confiar na máquina sem supervisão humana suficiente",
+        label: "Sempre o maior modelo, mesmo quando a tarefa é simples",
       },
       {
         id: "m5q16_b",
-        label: "Automatizar uma tarefa sem documentar o processo interno",
+        label: "Um modelo rápido para o simples e outro capaz para o complexo",
       },
       {
         id: "m5q16_c",
-        label: "A IA automatizar todos os vieses presentes nos dados",
+        label: "Nenhum: deve ser sempre feito à mão",
       },
-      { id: "m5q16_d", label: "Usar muitas ferramentas de IA ao mesmo tempo" },
+      {
+        id: "m5q16_d",
+        label: "O de nome mais longo, sem nenhum outro critério",
+      },
     ],
-    correctAnswer: "m5q16_a",
-    topic: "Viés de Automação",
+    correctAnswer: "m5q16_b",
+    topic: "Limites e erros",
     difficulty: "médio",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    source: "Lição 1: Conheça o Claude",
     feedback:
-      "O viés de automação é confiar em excesso na máquina. Mantenha a supervisão ativa.",
+      "Escolha o modelo pela tarefa: rápido e econômico para o simples, mais capaz para o complexo. Assim você economiza tempo e custo.",
   },
   {
     id: "m5q17",
-    question:
-      "Uma IA penaliza sistematicamente certo grupo na contratação. O que faz?",
+    question: "Qual é a melhor prática ao escrever instruções para um Projeto?",
     options: [
       {
         id: "m5q17_a",
-        label: "Parar o sistema, documentar o viés e corrigir os dados",
+        label: "Escrever uma frase genérica sobre o tema",
       },
       {
         id: "m5q17_b",
-        label: "Ignorar porque o modelo funciona rápido e barato",
+        label: "Descrever papel, objetivo, regras, tom e exemplos",
       },
       {
         id: "m5q17_c",
-        label: "Ocultar os resultados para evitar reclamações legais",
+        label: "Colar o manual completo da empresa sem resumir",
       },
       {
         id: "m5q17_d",
-        label: "Enviar mais dados históricos iguais ao sistema afetado",
+        label: "Pedir que 'faça o que quiser' sobre o tema",
       },
     ],
-    correctAnswer: "m5q17_a",
-    topic: "Mitigação de Viés",
-    difficulty: "difícil",
-    source: "OVA: Laboratório: Detecte o Viés",
+    correctAnswer: "m5q17_b",
+    topic: "Projetos e memória",
+    difficulty: "médio",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Diante de um viés detectado, pare, documente e corrija. Pratique no laboratório.",
+      "Boas instruções combinam papel, objetivo, regras e exemplos. Elas são a base para que cada conversa do Projeto seja consistente.",
   },
   {
     id: "m5q18",
-    question: "O que é a equidade (fairness) num sistema de IA?",
+    question:
+      "Um colega pede que você compartilhe um relatório gerado com o Claude que contém dados confidenciais da empresa. O que você faz?",
     options: [
       {
         id: "m5q18_a",
-        label:
-          "Tratar os grupos de forma justa e evitar impactos desproporcionais",
+        label: "Envio completo, porque é meu colega",
       },
       {
         id: "m5q18_b",
-        label: "Dar sempre a mesma resposta a qualquer tipo de usuário",
+        label: "Verifico a classificação e compartilho só o permitido",
       },
       {
         id: "m5q18_c",
-        label: "Atribuir os recursos ao usuário com mais antiguidade",
+        label: "Publico nas redes para que todos vejam",
       },
       {
         id: "m5q18_d",
-        label: "Otimizar só a velocidade do sistema informático",
+        label: "Dou minha senha para que abra a pasta",
       },
     ],
-    correctAnswer: "m5q18_a",
-    topic: "Equidade",
+    correctAnswer: "m5q18_b",
+    topic: "Privacidade e dados",
     difficulty: "médio",
-    source: "PDF: Código de Ética para Uso de IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "A equidade busca evitar impactos injustos entre grupos. Revise o código de ética.",
+      "Uma ferramenta gerar um documento não muda o nível de confidencialidade. Compartilhe só o que a política permite.",
   },
   {
     id: "m5q19",
-    question: "O que busca a explicabilidade de um modelo de IA?",
+    question:
+      "Que papel tem o 'agente' em uma tarefa de várias etapas, como organizar arquivos e redigir um resumo?",
     options: [
       {
         id: "m5q19_a",
-        label: "Que as decisões automáticas possam ser justificadas às pessoas",
+        label:
+          "Executa etapas rumo ao objetivo que você definiu, sob supervisão",
       },
       {
         id: "m5q19_b",
-        label: "Que o modelo explique por que consome tantos recursos",
+        label: "Age sem que ninguém saiba ou revise",
       },
       {
         id: "m5q19_c",
-        label: "Que o sistema resuma as respostas em menos palavras",
+        label: "Substitui sua conta de e-mail",
       },
       {
         id: "m5q19_d",
-        label: "Que se possam traduzir as respostas para outros idiomas",
+        label: "Não existe no Claude; é só uma ideia",
       },
     ],
     correctAnswer: "m5q19_a",
-    topic: "Explicabilidade",
-    difficulty: "médio",
-    source: "PDF: Código de Ética para Uso de IA",
+    topic: "Delegar com o Claude",
+    difficulty: "difícil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "A explicabilidade permite justificar decisões às pessoas afetadas. Revise o código.",
+      "Um agente executa etapas rumo a um objetivo. A boa prática é definir o alcance, pedir confirmação em ações importantes e revisar o resultado.",
   },
   {
     id: "m5q20",
-    question: "O que implica o princípio de responsabilidade (accountability)?",
+    question:
+      "Por que é útil que o Claude explique seus passos antes de executar uma ação importante?",
     options: [
       {
         id: "m5q20_a",
-        label:
-          "Que haja pessoas e processos claros que respondam pelos resultados",
+        label: "Para aumentar o tempo de espera sem motivo",
       },
       {
         id: "m5q20_b",
-        label: "Que a IA seja a única responsável por qualquer falha possível",
+        label:
+          "Para detectar erros de interpretação antes de terem consequências",
       },
       {
         id: "m5q20_c",
-        label: "Que os usuários aceitem os termos e condições ao usar a IA",
+        label: "Porque o Claude não pode executar nada",
       },
       {
         id: "m5q20_d",
-        label: "Que a responsabilidade se dilua entre todos os usuários",
+        label: "Para impedir que o usuário leia a resposta",
       },
     ],
-    correctAnswer: "m5q20_a",
-    topic: "Responsabilidade",
+    correctAnswer: "m5q20_b",
+    topic: "Supervisão",
     difficulty: "médio",
-    source: "PDF: Código de Ética para Uso de IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Sempre deve haver pessoas responsáveis pelos resultados. Revise o código de ética.",
+      "Revisar o plano antes da ação evita erros caros. Faz parte de delegar com critério.",
   },
   {
     id: "m5q21",
     question:
-      "Uma IA médica sugere um tratamento. Qual é a melhor prática de supervisão?",
+      "Que tipo de informação é mais arriscado compartilhar com qualquer ferramenta de IA?",
     options: [
       {
         id: "m5q21_a",
-        label:
-          "Um profissional valida a sugestão antes de aplicá-la ao paciente",
+        label: "Uma lista de temas para um blog",
       },
       {
         id: "m5q21_b",
-        label: "Aplicar o tratamento recomendado sem nenhuma revisão",
+        label: "Senhas, dados bancários e identidades de outras pessoas",
       },
       {
         id: "m5q21_c",
-        label: "Descartar a IA porque nunca pode ser útil na saúde",
+        label: "Um texto de exemplo sem dados reais",
       },
       {
         id: "m5q21_d",
-        label: "Deixar o paciente decidir sem consultar ninguém",
+        label: "Um esquema de aula com temas gerais",
       },
     ],
-    correctAnswer: "m5q21_a",
-    topic: "Supervisão Humana",
-    difficulty: "médio",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    correctAnswer: "m5q21_b",
+    topic: "Privacidade e dados",
+    difficulty: "fácil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Em áreas críticas, a decisão final é validada por um profissional. Revise o vídeo.",
+      "Nunca compartilhe senhas nem dados sensíveis de terceiros. Use dados fictícios sempre que puder.",
   },
   {
     id: "m5q22",
     question:
-      "Qual é um exemplo de dado sensível que você NÃO deveria enviar a uma IA pública?",
+      "O Claude dá uma resposta correta sobre um tema que mudou depois da sua última atualização. O que fazer?",
     options: [
       {
         id: "m5q22_a",
-        label: "Histórico médico ou documentos de identidade de clientes reais",
+        label: "Confiar sempre no que diz a IA",
       },
       {
         id: "m5q22_b",
-        label: "Um texto público da Wikipédia sobre história antiga",
+        label: "Pedir informação atual ou verificar em uma fonte recente",
       },
-      { id: "m5q22_c", label: "Uma ideia geral para uma manchete de jornal" },
-      { id: "m5q22_d", label: "Uma pergunta sobre qualquer tema acadêmico" },
+      {
+        id: "m5q22_c",
+        label: "Ignorar qualquer dado recente por completo",
+      },
+      {
+        id: "m5q22_d",
+        label: "Trocar a data do documento para parecer recente",
+      },
     ],
-    correctAnswer: "m5q22_a",
-    topic: "Privacidade",
-    difficulty: "fácil",
-    source: "PDF: Manual de Privacidade em IA",
+    correctAnswer: "m5q22_b",
+    topic: "Limites e erros",
+    difficulty: "médio",
+    source: "Lição 1: Conheça o Claude",
     feedback:
-      "Dados de saúde ou identidade são sensíveis: nunca os envie a ferramentas públicas.",
+      "Os modelos nem sempre conhecem o mais recente. Para dados que mudam, use busca ou uma fonte atual.",
   },
   {
     id: "m5q23",
-    question: "O que é privacidade por design?",
+    question: "Qual destas é uma boa forma de criar um Artifact interativo?",
     options: [
       {
         id: "m5q23_a",
-        label: "Incorporar a proteção de dados desde o início do sistema",
+        label: "Pedir 'algo bonito' sem descrever o que deve fazer",
       },
       {
         id: "m5q23_b",
-        label: "Adicionar a privacidade só se houver reclamação dos usuários",
+        label: "Descrever uso, dados de entrada e resultado esperado, e iterar",
       },
       {
         id: "m5q23_c",
-        label: "Ocultar o uso de dados nas letras miúdas do contrato",
+        label: "Copiar o código do app de outra empresa",
       },
       {
         id: "m5q23_d",
-        label: "Coletar tudo e decidir a privacidade no fim do projeto",
+        label: "Nunca testar antes de compartilhar com a equipe",
       },
     ],
-    correctAnswer: "m5q23_a",
-    topic: "Privacidade por Design",
+    correctAnswer: "m5q23_b",
+    topic: "Criar com o Claude",
     difficulty: "médio",
-    source: "PDF: Manual de Privacidade em IA",
+    source: "Lição 2: Crie com o Claude",
     feedback:
-      "A privacidade se projeta desde o início, não se acrescenta no fim. Revise o manual.",
+      "Descreva o uso e o resultado, peça ajustes pequenos e teste a peça antes de compartilhá-la.",
   },
   {
     id: "m5q24",
-    question: "O que é o princípio de minimização de dados?",
+    question:
+      "Qual é uma boa prática ao revisar um documento que o Claude escreveu para o seu cliente?",
     options: [
       {
         id: "m5q24_a",
-        label: "Coletar e guardar só os dados estritamente necessários",
+        label: "Ler por cima, porque já está bem escrito",
       },
       {
         id: "m5q24_b",
-        label: "Coletar todos os dados possíveis por precaução",
+        label: "Revisar dados, tom, nomes, datas e o sentido",
       },
-      { id: "m5q24_c", label: "Comprimir os dados para ocuparem menos espaço" },
+      {
+        id: "m5q24_c",
+        label: "Enviar sem trocar o nome do cliente anterior",
+      },
       {
         id: "m5q24_d",
-        label: "Eliminar os dados de forma aleatória de tempos em tempos",
+        label: "Remover a assinatura para parecer neutro",
       },
     ],
-    correctAnswer: "m5q24_a",
-    topic: "Proteção de Dados",
-    difficulty: "médio",
-    source: "PDF: Manual de Privacidade em IA",
+    correctAnswer: "m5q24_b",
+    topic: "Supervisão",
+    difficulty: "fácil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Minimizar é pedir e guardar só o necessário. Revise o manual de privacidade.",
+      "Um texto bem escrito pode ter dados errados ou um nome trocado. A revisão humana é obrigatória.",
   },
   {
     id: "m5q25",
     question:
-      "Como se classificam os sistemas de IA segundo o nível de risco (UE)?",
+      "Você quer reutilizar em vários projetos o mesmo procedimento para redigir atas de reunião. O que criar?",
     options: [
       {
         id: "m5q25_a",
-        label: "Risco inaceitável, alto, limitado e mínimo",
+        label: "Uma Skill com instruções, modelo e um exemplo de ata",
       },
-      { id: "m5q25_b", label: "Risco pequeno, médio, grande e gigante" },
-      { id: "m5q25_c", label: "Risco técnico, humano e financeiro somente" },
-      { id: "m5q25_d", label: "Risco público, privado e confidencial apenas" },
+      {
+        id: "m5q25_b",
+        label: "Um chat novo cada vez, pedindo tudo de novo",
+      },
+      {
+        id: "m5q25_c",
+        label: "Uma senha para proteger o documento",
+      },
+      {
+        id: "m5q25_d",
+        label: "Um e-mail para o Claude com o procedimento completo",
+      },
     ],
     correctAnswer: "m5q25_a",
-    topic: "Marco Regulatório",
-    difficulty: "difícil",
-    source: "PDF: Código de Ética para Uso de IA",
+    topic: "Conectores e Skills",
+    difficulty: "médio",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "A UE distingue risco inaceitável, alto, limitado e mínimo. Revise o código de ética.",
+      "O que você repete vira Skill: o procedimento fica igual a cada vez e você economiza tempo.",
   },
   {
     id: "m5q26",
-    question:
-      "Que tipo de sistemas de IA são proibidos por seu risco inaceitável?",
+    question: "Qual afirmação sobre IA e trabalho é a mais responsável?",
     options: [
       {
         id: "m5q26_a",
-        label: "Os que manipulam ou discriminam gravemente as pessoas",
+        label: "A IA substitui por completo a revisão humana",
       },
       {
         id: "m5q26_b",
-        label: "Os que resumem documentos internos de empresas",
+        label: "A IA acelera o trabalho, mas a decisão é humana",
       },
       {
         id: "m5q26_c",
-        label: "Os que traduzem textos para outros idiomas comuns",
+        label: "Usar IA é sempre uma forma de trapaça",
       },
       {
         id: "m5q26_d",
-        label: "Os que sugerem ideias para uma campanha de marketing",
+        label: "Nunca se deve dizer que a IA foi usada",
       },
     ],
-    correctAnswer: "m5q26_a",
-    topic: "Marco Regulatório",
-    difficulty: "difícil",
-    source: "PDF: Código de Ética para Uso de IA",
+    correctAnswer: "m5q26_b",
+    topic: "Delegar com o Claude",
+    difficulty: "fácil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Os usos que manipulam ou discriminam gravemente são proibidos. Revise o código.",
+      "A IA acelera o trabalho. A decisão e suas consequências continuam sendo da pessoa.",
   },
   {
     id: "m5q27",
-    question: "Um sistema de IA de alto risco deve, entre outras coisas…",
+    question:
+      "Você quer que o Claude analise um arquivo grande de dados. O que faz para obter um resultado confiável?",
     options: [
       {
         id: "m5q27_a",
-        label: "Ser documentado, avaliado e contar com supervisão humana",
+        label: "Pedir uma conclusão sem verificar o método",
       },
       {
         id: "m5q27_b",
-        label: "Funcionar sem registro nem avaliação de nenhum tipo",
+        label: "Pedir os passos e validar uma amostra com seu próprio cálculo",
       },
-      { id: "m5q27_c", label: "Operar só à noite para consumir menos energia" },
+      {
+        id: "m5q27_c",
+        label: "Usar só o primeiro resultado que aparecer",
+      },
       {
         id: "m5q27_d",
-        label: "Publicar todo o seu código em aberto de forma obrigatória",
+        label: "Mudar os dados para que deem um resultado bonito",
       },
     ],
-    correctAnswer: "m5q27_a",
-    topic: "Marco Regulatório",
+    correctAnswer: "m5q27_b",
+    topic: "Limites e erros",
     difficulty: "difícil",
-    source: "PDF: Código de Ética para Uso de IA",
+    source: "Lição 2: Crie com o Claude",
     feedback:
-      "O alto risco exige documentação, avaliação e supervisão humana. Revise o marco.",
+      "Peça o método e valide uma amostra com um cálculo independente. Assim você detecta erros antes de decidir.",
   },
   {
     id: "m5q28",
     question:
-      "Um app de IA toma decisões sobre bolsas de estudantes. O que você deve garantir?",
+      "O que convém definir primeiro antes de dar uma tarefa complexa ao Claude?",
     options: [
       {
         id: "m5q28_a",
-        label:
-          "Critérios justos, revisão humana e possibilidade de apelar a decisão",
+        label: "A cor e a tipografia do documento",
       },
       {
         id: "m5q28_b",
-        label: "Que decida sem explicar nunca os seus critérios de seleção",
+        label: "O resultado, o critério de sucesso e os limites",
       },
       {
         id: "m5q28_c",
-        label: "Que conceda bolsas só a quem mais interage no app",
+        label: "A quantidade de emojis no texto",
       },
       {
         id: "m5q28_d",
-        label:
-          "Que a decisão seja final e sem nenhuma possibilidade de recurso",
+        label: "Nada: quanto menos se disser, melhor",
       },
     ],
-    correctAnswer: "m5q28_a",
-    topic: "Governança",
-    difficulty: "difícil",
-    source: "OVA: Laboratório: Dilemas Éticos",
+    correctAnswer: "m5q28_b",
+    topic: "Delegar com o Claude",
+    difficulty: "médio",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Decisões que afetam pessoas exigem justiça, revisão e direito de apelar.",
+      "Definir o resultado, o critério de sucesso e os limites é o passo que mais agrega qualidade.",
   },
   {
     id: "m5q29",
-    question: "O que é uma auditoria de viés num sistema de IA?",
+    question:
+      "Você recebe um e-mail de 'suporte do Claude' pedindo sua senha para 'verificar sua conta'. O que faz?",
     options: [
       {
         id: "m5q29_a",
-        label:
-          "Revisar sistematicamente se o modelo trata injustamente algum grupo",
+        label: "Respondo com minha senha para não perder a conta",
       },
       {
         id: "m5q29_b",
-        label: "Medir só a velocidade de resposta do sistema completo",
+        label:
+          "Não respondo: verifico diretamente no app oficial e denuncio o e-mail",
       },
       {
         id: "m5q29_c",
-        label: "Comprovar quantos usuários registrados a plataforma tem",
+        label: "Encaminho o e-mail para todos os meus contatos",
       },
       {
         id: "m5q29_d",
-        label: "Verificar unicamente o custo mensal da ferramenta",
+        label: "Clico no link do e-mail e digito minha senha ali",
       },
     ],
-    correctAnswer: "m5q29_a",
-    topic: "Auditoria",
-    difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
+    correctAnswer: "m5q29_b",
+    topic: "Privacidade e dados",
+    difficulty: "fácil",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Auditar o viés é revisar se algum grupo sai prejudicado. Pratique no laboratório.",
+      "Nenhuma empresa séria pede sua senha por e-mail. Acesse sempre pelo app ou site oficial.",
   },
   {
     id: "m5q30",
     question:
-      "Um modelo discrimina mesmo após remover o campo 'gênero'. O que faz?",
+      "Ao terminar um projeto com o Claude, qual prática deixa a melhor base para o próximo?",
     options: [
       {
         id: "m5q30_a",
-        label: "Buscar variáveis substitutas e corrigir o viés indireto",
+        label: "Apagar tudo e não deixar registro",
       },
       {
         id: "m5q30_b",
-        label: "Dar por resolvido o problema só por remover esse campo",
+        label:
+          "Guardar instruções, modelos e aprendizados em um Projeto ou Skill",
       },
       {
         id: "m5q30_c",
-        label: "Acrescentar mais dados e confiar que se corrija sozinho",
+        label: "Compartilhar o histórico completo com qualquer pessoa",
       },
       {
         id: "m5q30_d",
-        label: "Ocultar os resultados até ninguém voltar a notar",
+        label: "Esquecer o que funcionou para não repetir erros",
       },
     ],
-    correctAnswer: "m5q30_a",
-    topic: "Mitigação de Viés",
-    difficulty: "difícil",
-    source: "OVA: Laboratório: Detecte o Viés",
-    feedback:
-      "Há variáveis que substituem o atributo removido (viés indireto). Revise o laboratório.",
-  },
-  {
-    id: "m5q31",
-    question: "Qual é um uso NÃO ético da IA?",
-    options: [
-      {
-        id: "m5q31_a",
-        label: "Suplantar a identidade de uma pessoa com voz ou imagem geradas",
-      },
-      {
-        id: "m5q31_b",
-        label: "Resumir um relatório próprio para uma reunião de trabalho",
-      },
-      {
-        id: "m5q31_c",
-        label: "Revisar a ortografia de um texto antes de publicá-lo",
-      },
-      {
-        id: "m5q31_d",
-        label: "Gerar ideias para um projeto pessoal de aprendizagem",
-      },
-    ],
-    correctAnswer: "m5q31_a",
-    topic: "Uso Responsável",
-    difficulty: "fácil",
-    source: "Vídeo: IA Ética: Princípios e Prática",
-    feedback:
-      "Suplantar identidades com IA é um uso não ético e pode ser ilegal. Revise o vídeo.",
-  },
-  {
-    id: "m5q32",
-    question:
-      "Você deve explicar a um usuário por que a IA rejeitou o pedido dele. O que aplica?",
-    options: [
-      {
-        id: "m5q32_a",
-        label: "Explicabilidade: dar motivos compreensíveis e opção de revisão",
-      },
-      {
-        id: "m5q32_b",
-        label: "Opacidade: responder só que 'o sistema decidiu assim'",
-      },
-      {
-        id: "m5q32_c",
-        label: "Velocidade: encerrar o caso quanto antes sem explicar nada",
-      },
-      {
-        id: "m5q32_d",
-        label: "Automação: deixar que ninguém mais intervenha no caso",
-      },
-    ],
-    correctAnswer: "m5q32_a",
-    topic: "Explicabilidade",
+    correctAnswer: "m5q30_b",
+    topic: "Projetos e memória",
     difficulty: "médio",
-    source: "PDF: Código de Ética para Uso de IA",
+    source: "Lição 3: Delegue com o Claude",
     feedback:
-      "Explique os motivos em linguagem clara e permita revisão. Revise o código de ética.",
-  },
-  {
-    id: "m5q33",
-    question:
-      "Um chatbot educacional começa a dar respostas inapropriadas a menores. O que faz?",
-    options: [
-      {
-        id: "m5q33_a",
-        label:
-          "Pausar o sistema, investigar e acrescentar salvaguardas de conteúdo",
-      },
-      {
-        id: "m5q33_b",
-        label: "Deixar que siga funcionando e avisar só se alguém reclamar",
-      },
-      {
-        id: "m5q33_c",
-        label: "Eliminar a moderação para ele responder com mais liberdade",
-      },
-      {
-        id: "m5q33_d",
-        label: "Culpar os menores pelo uso que eles dão ao sistema",
-      },
-    ],
-    correctAnswer: "m5q33_a",
-    topic: "Salvaguardas",
-    difficulty: "difícil",
-    source: "OVA: Laboratório: Dilemas Éticos",
-    feedback:
-      "Com menores, pause, investigue e reforce as salvaguardas de conteúdo. Revise o laboratório.",
-  },
-  {
-    id: "m5q34",
-    question: "O que implica que um sistema de IA seja 'auditável'?",
-    options: [
-      {
-        id: "m5q34_a",
-        label:
-          "Que se possa revisar o funcionamento e as decisões por terceiros",
-      },
-      {
-        id: "m5q34_b",
-        label: "Que o seu código permaneça oculto até para o criador",
-      },
-      {
-        id: "m5q34_c",
-        label: "Que não precise de manutenção técnica durante a vida útil",
-      },
-      {
-        id: "m5q34_d",
-        label: "Que funcione igual ainda que os dados base mudem por completo",
-      },
-    ],
-    correctAnswer: "m5q34_a",
-    topic: "Auditoria",
-    difficulty: "médio",
-    source: "PDF: Código de Ética para Uso de IA",
-    feedback:
-      "Auditável significa que se pode revisar por terceiros. Revise o código de ética.",
-  },
-  {
-    id: "m5q35",
-    question:
-      "A IA sugere uma decisão que afeta muitas pessoas. Que princípio exige revisá-la?",
-    options: [
-      {
-        id: "m5q35_a",
-        label: "Responsabilidade e transparência com supervisão humana",
-      },
-      {
-        id: "m5q35_b",
-        label: "Eficiência, para resolver o caso no menor tempo possível",
-      },
-      {
-        id: "m5q35_c",
-        label: "Escalabilidade, para a IA decidir o maior volume possível",
-      },
-      {
-        id: "m5q35_d",
-        label: "Automação, para eliminar a intervenção das pessoas",
-      },
-    ],
-    correctAnswer: "m5q35_a",
-    topic: "Responsabilidade",
-    difficulty: "médio",
-    source: "Vídeo: IA Ética: Princípios e Prática",
-    feedback:
-      "Decisões com impacto exigem transparência e supervisão humana. Revise o vídeo.",
-  },
-  {
-    id: "m5q36",
-    question: "Como se mitiga um viés detectado num modelo?",
-    options: [
-      {
-        id: "m5q36_a",
-        label:
-          "Melhorando os dados e acrescentando testes e monitoramento contínuo",
-      },
-      {
-        id: "m5q36_b",
-        label: "Ignorando, porque os vieses costumam se corrigir sozinhos",
-      },
-      {
-        id: "m5q36_c",
-        label: "Ocultando os resultados negativos do sistema novo",
-      },
-      {
-        id: "m5q36_d",
-        label: "Aumentando a velocidade do modelo para que não se note",
-      },
-    ],
-    correctAnswer: "m5q36_a",
-    topic: "Mitigação de Viés",
-    difficulty: "médio",
-    source: "OVA: Laboratório: Detecte o Viés",
-    feedback:
-      "A mitigação combina melhores dados, testes e monitoramento. Pratique no laboratório.",
-  },
-  {
-    id: "m5q37",
-    question: "O que caracteriza os sistemas de IA de risco limitado (UE)?",
-    options: [
-      {
-        id: "m5q37_a",
-        label: "Obrigações de transparência, sem serem de alto risco",
-      },
-      {
-        id: "m5q37_b",
-        label: "Proibição total do seu uso em qualquer contexto possível",
-      },
-      {
-        id: "m5q37_c",
-        label: "Exigência de licença especial para poder desenvolvê-los",
-      },
-      {
-        id: "m5q37_d",
-        label: "Proibição de publicar que se está usando IA neles",
-      },
-    ],
-    correctAnswer: "m5q37_a",
-    topic: "Marco Regulatório",
-    difficulty: "difícil",
-    source: "PDF: Código de Ética para Uso de IA",
-    feedback:
-      "O risco limitado exige transparência, não proibição. Revise o código de ética.",
-  },
-  {
-    id: "m5q38",
-    question:
-      "Você vai implantar um sistema de IA no trabalho. Qual prática de governança ajuda mais?",
-    options: [
-      {
-        id: "m5q38_a",
-        label:
-          "Definir responsáveis, métricas de equidade e um plano de monitoramento",
-      },
-      {
-        id: "m5q38_b",
-        label: "Publicá-lo sem responsáveis nem métricas de acompanhamento",
-      },
-      {
-        id: "m5q38_c",
-        label: "Medir só quanto dinheiro o sistema economiza a cada mês",
-      },
-      {
-        id: "m5q38_d",
-        label: "Evitar registrar qualquer incidente que ocorra depois",
-      },
-    ],
-    correctAnswer: "m5q38_a",
-    topic: "Governança",
-    difficulty: "difícil",
-    source: "PDF: Código de Ética para Uso de IA",
-    feedback:
-      "Responsáveis, métricas e monitoramento são a base da governança. Revise o código.",
-  },
-  {
-    id: "m5q39",
-    question:
-      "Um funcionário usa IA para decidir sobre pessoas sem deixar rastro. O que se descumpre?",
-    options: [
-      {
-        id: "m5q39_a",
-        label: "A rastreabilidade e a prestação de contas das decisões",
-      },
-      {
-        id: "m5q39_b",
-        label: "A velocidade do processo para resolver o caso pontual",
-      },
-      {
-        id: "m5q39_c",
-        label: "A popularidade do sistema entre os usuários internos",
-      },
-      {
-        id: "m5q39_d",
-        label: "O custo operacional de manter essa ferramenta ativa",
-      },
-    ],
-    correctAnswer: "m5q39_a",
-    topic: "Responsabilidade",
-    difficulty: "difícil",
-    source: "OVA: Laboratório: Dilemas Éticos",
-    feedback:
-      "Sem rastreabilidade não há prestação de contas possível. Revise o laboratório.",
-  },
-  {
-    id: "m5q40",
-    question:
-      "Caso: IA que decide sobre créditos deve ser justa, explicável e regulada. Qual plano é o mais completo?",
-    options: [
-      {
-        id: "m5q40_a",
-        label:
-          "Auditar vieses, explicar decisões, supervisionar humanos e cumprir a norma",
-      },
-      {
-        id: "m5q40_b",
-        label: "Automatizar tudo para eliminar qualquer intervenção humana",
-      },
-      {
-        id: "m5q40_c",
-        label: "Ocultar os critérios para evitar perguntas dos solicitantes",
-      },
-      {
-        id: "m5q40_d",
-        label: "Otimizar só a velocidade de aprovação de cada solicitação",
-      },
-    ],
-    correctAnswer: "m5q40_a",
-    topic: "Governança",
-    difficulty: "difícil",
-    source: "OVA: Laboratório: Dilemas Éticos",
-    feedback:
-      "O plano completo combina auditoria, explicabilidade, supervisão e conformidade normativa.",
+      "O que funciona deve ficar guardado em um Projeto ou em uma Skill. Assim cada novo trabalho parte do que você aprendeu.",
   },
 ];

@@ -17,7 +17,7 @@ export const STEP_EXERCISE_KEYS = {
   2: ["casoUso", "gptConfig", "functionCallSpec"],
   3: ["temaInvestigacion", "fuentes", "afirmaciones", "informeTemplate"],
   4: ["conceptos", "preguntasSintesis", "guionTemplate"],
-  5: ["casoEtico", "tiposSesgo", "protocoloPlantilla"],
+  5: ["tareas", "casoBrief", "casoProtocolo"],
 };
 
 export const resolveStepExercise = (exercises, moduleId, step) => {

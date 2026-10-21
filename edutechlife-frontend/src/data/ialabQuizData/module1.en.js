@@ -11,7 +11,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q1_b",
     topic: "Prompt Engineering",
     difficulty: "easy",
-    source: "Video: How to Create Effective Prompts",
+    source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
       "A good prompt is a clear instruction. Review the video and the Prompt Anatomy guide.",
   },
@@ -37,7 +37,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q2_a",
     topic: "RTF Method",
     difficulty: "medium",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       'That prompt asks to "write a text" (Task) but does not say the AI role or the delivery format. Review the Prompt Anatomy guide.',
   },
@@ -56,7 +56,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q3_b",
     topic: "RTF Method",
     difficulty: "easy",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "RTF orders the request into Role, Task and Format. Practice in the OVA.",
   },
@@ -86,7 +86,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q4_a",
     topic: "Prompt Structure",
     difficulty: "medium",
-    source: "Video: How to Create Effective Prompts",
+    source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
       "Option A defines role, task and format. The others are vague or mix topics.",
   },
@@ -109,7 +109,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q5_a",
     topic: "RTF in Practice",
     difficulty: "medium",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "A generic prompt does not state audience or format. Add role, audience and length.",
   },
@@ -131,7 +131,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q6_a",
     topic: "Generative AI",
     difficulty: "easy",
-    source: "Video: What is AI and how it is changing the world",
+    source: "What is AI and how it is changing the world",
     feedback:
       "Generative AI produces new text, images or other content. Watch the video.",
   },
@@ -147,7 +147,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q7_a",
     topic: "Prompt Basics",
     difficulty: "easy",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "A prompt is what you ask the AI. The Prompt Anatomy guide explains how to build one.",
   },
@@ -167,7 +167,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q8_a",
     topic: "RTF Method",
     difficulty: "easy",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "The role gives the AI a focus and tone, so the answer fits your goal.",
   },
@@ -193,7 +193,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q9_a",
     topic: "Prompt Refinement",
     difficulty: "easy",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "Refine the prompt by adding context. Practice in the Live Prompt Lab.",
   },
@@ -219,7 +219,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q10_a",
     topic: "Prompt Clarity",
     difficulty: "medium",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "Asking for examples and simple language helps make the explanation clearer and more useful.",
   },
@@ -242,7 +242,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q11_a",
     topic: "Generative AI",
     difficulty: "easy",
-    source: "Video: What is AI and how it is changing the world",
+    source: "What is AI and how it is changing the world",
     feedback:
       "Generative AI produces new content (text, image, audio) based on learned patterns. Watch the topic video.",
   },
@@ -273,7 +273,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q12_a",
     topic: "Generative AI",
     difficulty: "easy",
-    source: "Video: What is AI and how it is changing the world",
+    source: "What is AI and how it is changing the world",
     feedback:
       "It learns from data and generates new content; it does not retrieve stored answers. Review the topic video.",
   },
@@ -303,7 +303,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q13_a",
     topic: "AI History",
     difficulty: "medium",
-    source: "Video: Beginnings of Artificial Intelligence",
+    source: "What is AI and how it is changing the world",
     feedback:
       "History explains why AI came to generate content and where its limits are. Review 'Beginnings of Artificial Intelligence'.",
   },
@@ -332,7 +332,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q14_a",
     topic: "Generative AI",
     difficulty: "medium",
-    source: "Video: What is AI and how it is changing the world",
+    source: "What is AI and how it is changing the world",
     feedback:
       "It generates and transforms text, but it does not guarantee truth or replace your judgment. Review topic 1.",
   },
@@ -364,7 +364,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q15_a",
     topic: "AI Limits",
     difficulty: "medium",
-    source: "Video: What is AI and how it is changing the world",
+    source: "What is AI and how it is changing the world",
     feedback:
       "Hallucinations are plausible but incorrect answers. Always verify critical data.",
   },
@@ -390,7 +390,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q16_a",
     topic: "Responsible Use",
     difficulty: "easy",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "You are responsible for the result: verify important data in reliable sources.",
   },
@@ -410,7 +410,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q17_a",
     topic: "Prompt Fundamentals",
     difficulty: "easy",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Role (who the AI is), task (what you want) and format (how you want it). Review the Prompt Anatomy guide.",
   },
@@ -432,7 +432,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q18_a",
     topic: "Prompt Structure",
     difficulty: "medium",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Context (goal, audience, situation) steers the answer toward what you need.",
   },
@@ -464,7 +464,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q19_a",
     topic: "Prompt Clarity",
     difficulty: "easy",
-    source: "Video: How to Create Effective Prompts",
+    source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
       "A defines topic, format and audience; the others are vague. Review 'How to Create Effective Prompts'.",
   },
@@ -484,7 +484,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q20_a",
     topic: "Output Format",
     difficulty: "medium",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Stating the format (table, bullets, length) makes the AI deliver exactly what you need.",
   },
@@ -504,7 +504,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q21_a",
     topic: "Audience",
     difficulty: "medium",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "Stating the audience (children) and language level adjusts tone and complexity.",
   },
@@ -524,7 +524,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q22_a",
     topic: "Prompt Refinement",
     difficulty: "easy",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "Iterating the prompt is part of the work. Practice in the Live Prompt Lab.",
   },
@@ -541,7 +541,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q23_a",
     topic: "Constraints",
     difficulty: "medium",
-    source: "Video: How to Create Effective Prompts",
+    source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
       "Constraints (length, tone, audience) narrow the answer to the desired result.",
   },
@@ -570,7 +570,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q24_a",
     topic: "Examples in Prompts",
     difficulty: "hard",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "Giving an example (few-shot) helps the AI copy the expected style/format without guessing.",
   },
@@ -587,7 +587,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q25_a",
     topic: "Prompt Tone",
     difficulty: "easy",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Tone (formal/informal, technical/close) adjusts the register of the answer.",
   },
@@ -616,7 +616,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q26_a",
     topic: "Avoiding Ambiguity",
     difficulty: "medium",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "Without task, format or goal, the AI guesses. Be specific and narrow the result.",
   },
@@ -646,7 +646,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q27_a",
     topic: "RTF Method",
     difficulty: "medium",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "The role ('act as…') gives focus; the task says what to do. Together they improve the result.",
   },
@@ -678,7 +678,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q28_a",
     topic: "RTF Application",
     difficulty: "medium",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "A defines format (bullets), length (5) and audience (management). It is the most useful and clear.",
   },
@@ -709,7 +709,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q29_a",
     topic: "Prompt Application",
     difficulty: "easy",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "A specifies amount, context, tone and format: that focuses the ideas on what you need.",
   },
@@ -739,7 +739,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q30_a",
     topic: "Prompt Application",
     difficulty: "medium",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "Asking for steps, examples and simple language produces a clearer, more applicable explanation.",
   },
@@ -768,7 +768,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q31_a",
     topic: "Common Mistakes",
     difficulty: "medium",
-    source: "Video: How to Create Effective Prompts",
+    source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
       "Vagueness is the most common mistake: without goal, audience or format the AI guesses.",
   },
@@ -797,7 +797,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q32_a",
     topic: "Prompt Structure",
     difficulty: "hard",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Less is more: include only what is relevant (task, context, format) to keep the goal clear.",
   },
@@ -816,7 +816,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q33_a",
     topic: "Reuse",
     difficulty: "medium",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "Reusable templates save time and make results consistent; adjust them for each case.",
   },
@@ -836,7 +836,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q34_a",
     topic: "Critical Evaluation",
     difficulty: "hard",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "When answers diverge, validate the data and use your judgment. Not every answer is equally reliable.",
   },
@@ -856,7 +856,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q35_a",
     topic: "Responsible Use",
     difficulty: "medium",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Do not share confidential data: anonymize or avoid sensitive information before asking the AI for help.",
   },
@@ -886,7 +886,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q36_a",
     topic: "Critical Thinking",
     difficulty: "hard",
-    source: "Video: What is AI and how it is changing the world",
+    source: "What is AI and how it is changing the world",
     feedback:
       "AI can be biased: contrast, ask for other perspectives and validate. You bring the judgment.",
   },
@@ -908,7 +908,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q37_a",
     topic: "Ethics and Responsible Use",
     difficulty: "easy",
-    source: "PDF Guide: Prompt Anatomy",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "AI is support: review it, add your own value and be transparent about its use.",
   },
@@ -938,7 +938,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q38_a",
     topic: "Responsible Use",
     difficulty: "medium",
-    source: "OVA: How to Talk to AI (prompts)",
+    source: "The Chisel",
     feedback:
       "AI speeds up the work, but the review and the final decision are yours.",
   },
@@ -965,7 +965,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q39_a",
     topic: "Prompt Refinement",
     difficulty: "medium",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "Iterating is normal and effective: each prompt adjustment brings the answer closer to what you need.",
   },
@@ -998,8 +998,584 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q40_a",
     topic: "RTF Application",
     difficulty: "hard",
-    source: "OVA: Live Prompt Lab",
+    source: "The Hammer",
     feedback:
       "A gathers role, task, context (date/time), tone, format/length and subject: a complete, professional prompt.",
+  },
+
+  {
+    id: "m1e01",
+    question:
+      "A hiring system was trained on data from a mostly male company and penalized CVs with certain terms. What bias appears and where does it start?",
+    options: [
+      {
+        id: "m1e01_a",
+        label: "Sampling bias, starting in the training data",
+      },
+      {
+        id: "m1e01_b",
+        label: "Automation bias, due to a lack of human review",
+      },
+      {
+        id: "m1e01_c",
+        label: "Confirmation bias, from the recruiter's prior ideas",
+      },
+      {
+        id: "m1e01_d",
+        label: "Labeling bias, from wrong annotators",
+      },
+    ],
+    correctAnswer: "m1e01_a",
+    topic: "AI Bias",
+    difficulty: "medium",
+    source: "OVA: Lab: Detect the Bias",
+    feedback:
+      "The historical data did not represent the population, so the bias began in collection. Review the bias lab.",
+  },
+  {
+    id: "m1e02",
+    question:
+      "An AI gives a diagnosis that contradicts your professional judgment. How do you act?",
+    options: [
+      {
+        id: "m1e02_a",
+        label: "I question the AI and consult other experts",
+      },
+      {
+        id: "m1e02_b",
+        label: "I accept the AI because it is smarter",
+      },
+      {
+        id: "m1e02_c",
+        label: "I let the AI decide the treatment",
+      },
+      {
+        id: "m1e02_d",
+        label: "I restart the system and ask again",
+      },
+    ],
+    correctAnswer: "m1e02_a",
+    topic: "Responsibility",
+    difficulty: "medium",
+    source: "Video: Ethical AI: Principles and Practice",
+    feedback:
+      "Do not fall for automation bias: your professional judgment is irreplaceable.",
+  },
+  {
+    id: "m1e03",
+    question:
+      "A bank rejects a loan with AI and does not explain why. Which principle is violated?",
+    options: [
+      {
+        id: "m1e03_a",
+        label: "Transparency and explainability of the decision",
+      },
+      {
+        id: "m1e03_b",
+        label: "Privacy, by hiding the use of the AI",
+      },
+      {
+        id: "m1e03_c",
+        label: "The speed of the decision process",
+      },
+      {
+        id: "m1e03_d",
+        label: "Efficiency, by using human analysts",
+      },
+    ],
+    correctAnswer: "m1e03_a",
+    topic: "Transparency",
+    difficulty: "medium",
+    source: "PDF: Code of Ethics for AI Use",
+    feedback:
+      "People have the right to understand automatic decisions that affect them. Review the code of ethics.",
+  },
+  {
+    id: "m1e04",
+    question:
+      "A distracted driver trusts the autopilot and has an accident. What bias does this describe?",
+    options: [
+      {
+        id: "m1e04_a",
+        label: "Automation bias: they trusted without critical review",
+      },
+      {
+        id: "m1e04_b",
+        label: "Sampling bias in the training data",
+      },
+      {
+        id: "m1e04_c",
+        label: "Algorithmic bias against certain objects",
+      },
+      {
+        id: "m1e04_d",
+        label: "A normal human error with no bias",
+      },
+    ],
+    correctAnswer: "m1e04_a",
+    topic: "Automation Bias",
+    difficulty: "medium",
+    source: "OVA: Lab: Detect the Bias",
+    feedback:
+      "Automation bias is trusting the machine too much. Keep active supervision.",
+  },
+  {
+    id: "m1e05",
+    question:
+      "A high-risk AI system (for example, approving a mortgage) under the EU must comply with:",
+    options: [
+      {
+        id: "m1e05_a",
+        label: "Conformity assessment and human supervision",
+      },
+      {
+        id: "m1e05_b",
+        label: "A total ban on using AI in that case",
+      },
+      {
+        id: "m1e05_c",
+        label: "Voluntary registration with no obligations",
+      },
+      {
+        id: "m1e05_d",
+        label: "Paying an annual fee to use it",
+      },
+    ],
+    correctAnswer: "m1e05_a",
+    topic: "Regulatory Framework",
+    difficulty: "hard",
+    source: "PDF: Code of Ethics for AI Use",
+    feedback:
+      "High-risk systems require transparency, documentation and human supervision. Review the regulatory framework.",
+  },
+  {
+    id: "m1e06",
+    question:
+      "What are the 4 key ethical principles that guide the responsible use of AI?",
+    options: [
+      {
+        id: "m1e06_a",
+        label: "Transparency, fairness, accountability and privacy",
+      },
+      {
+        id: "m1e06_b",
+        label: "Speed, savings, automation and efficiency",
+      },
+      {
+        id: "m1e06_c",
+        label: "Popularity, profit, scale and competition",
+      },
+      {
+        id: "m1e06_d",
+        label: "Innovation, investment, patent and ownership",
+      },
+    ],
+    correctAnswer: "m1e06_a",
+    topic: "Ethical Principles",
+    difficulty: "easy",
+    source: "Video: Ethical AI: Principles and Practice",
+    feedback:
+      "Transparency, fairness, accountability and privacy are the pillars. Review the principles video.",
+  },
+  {
+    id: "m1e07",
+    question: "What is sampling bias in an AI model?",
+    options: [
+      {
+        id: "m1e07_a",
+        label: "The training data does not represent the whole population",
+      },
+      {
+        id: "m1e07_b",
+        label: "The system runs slowly with very large databases",
+      },
+      {
+        id: "m1e07_c",
+        label: "The model switches language without you asking it to",
+      },
+      {
+        id: "m1e07_d",
+        label: "The model retrains itself with every user query",
+      },
+    ],
+    correctAnswer: "m1e07_a",
+    topic: "Bias in AI",
+    difficulty: "medium",
+    source: "OVA: Lab: Detect the Bias",
+    feedback:
+      "Sampling bias comes from unrepresentative data. Practice in the bias lab.",
+  },
+  {
+    id: "m1e08",
+    question: "What is labeling bias?",
+    options: [
+      {
+        id: "m1e08_a",
+        label:
+          "Training labels carry the prejudices of the people who create them",
+      },
+      {
+        id: "m1e08_b",
+        label: "The system classifies the data automatically and neutrally",
+      },
+      {
+        id: "m1e08_c",
+        label: "The AI puts a visible label on each generated answer",
+      },
+      {
+        id: "m1e08_d",
+        label: "The model disables the labels when there is a lot of data",
+      },
+    ],
+    correctAnswer: "m1e08_a",
+    topic: "Bias in AI",
+    difficulty: "medium",
+    source: "OVA: Lab: Detect the Bias",
+    feedback:
+      "If the labeler has biases, the model learns them. Review the bias lab.",
+  },
+  {
+    id: "m1e09",
+    question:
+      "An AI systematically penalizes a certain group in hiring. What do you do?",
+    options: [
+      {
+        id: "m1e09_a",
+        label: "Stop the system, document the bias and correct the data",
+      },
+      {
+        id: "m1e09_b",
+        label: "Ignore it because the model works fast and cheap",
+      },
+      {
+        id: "m1e09_c",
+        label: "Hide the results in order to avoid legal complaints",
+      },
+      {
+        id: "m1e09_d",
+        label: "Upload more of the same historical data to the affected system",
+      },
+    ],
+    correctAnswer: "m1e09_a",
+    topic: "Bias Mitigation",
+    difficulty: "hard",
+    source: "OVA: Lab: Detect the Bias",
+    feedback:
+      "When bias is detected, stop, document and correct. Practice in the bias lab.",
+  },
+  {
+    id: "m1e10",
+    question: "What does the explainability of an AI model aim for?",
+    options: [
+      {
+        id: "m1e10_a",
+        label: "That automatic decisions can be justified to people",
+      },
+      {
+        id: "m1e10_b",
+        label: "That the model explains why it consumes so many resources",
+      },
+      {
+        id: "m1e10_c",
+        label: "That the system summarizes its answers in fewer words",
+      },
+      {
+        id: "m1e10_d",
+        label: "That its answers can be translated into other languages",
+      },
+    ],
+    correctAnswer: "m1e10_a",
+    topic: "Explainability",
+    difficulty: "medium",
+    source: "PDF: Code of Ethics for AI Use",
+    feedback:
+      "Explainability lets you justify decisions to the people affected. Review the code of ethics.",
+  },
+  {
+    id: "m1e11",
+    question:
+      "A medical AI suggests a treatment. What is the best supervision practice?",
+    options: [
+      {
+        id: "m1e11_a",
+        label:
+          "A professional validates the suggestion before applying it to the patient",
+      },
+      {
+        id: "m1e11_b",
+        label: "Applying the recommended treatment without any review at all",
+      },
+      {
+        id: "m1e11_c",
+        label: "Discarding the AI because it can never be useful in health",
+      },
+      {
+        id: "m1e11_d",
+        label: "Letting the patient decide without consulting anyone",
+      },
+    ],
+    correctAnswer: "m1e11_a",
+    topic: "Human Supervision",
+    difficulty: "medium",
+    source: "Video: Ethical AI: Principles and Practice",
+    feedback:
+      "In critical areas, a professional validates the final decision. Review the principles video.",
+  },
+  {
+    id: "m1e12",
+    question: "What is privacy by design?",
+    options: [
+      {
+        id: "m1e12_a",
+        label: "Building data protection in from the very start of the system",
+      },
+      {
+        id: "m1e12_b",
+        label: "Adding privacy only if there is a user complaint",
+      },
+      {
+        id: "m1e12_c",
+        label: "Hiding the data use in the small print of the contract",
+      },
+      {
+        id: "m1e12_d",
+        label: "Collecting everything and deciding privacy at the end",
+      },
+    ],
+    correctAnswer: "m1e12_a",
+    topic: "Privacy by Design",
+    difficulty: "medium",
+    source: "PDF: AI Privacy Manual",
+    feedback:
+      "Privacy is designed in from the start, not added at the end. Review the privacy manual.",
+  },
+  {
+    id: "m1e13",
+    question: "How are AI systems classified by risk level (EU)?",
+    options: [
+      {
+        id: "m1e13_a",
+        label: "Unacceptable, high, limited and minimal risk",
+      },
+      {
+        id: "m1e13_b",
+        label: "Small, medium, large and gigantic risk",
+      },
+      {
+        id: "m1e13_c",
+        label: "Technical, human and financial risk only",
+      },
+      {
+        id: "m1e13_d",
+        label: "Public, private and confidential risk only",
+      },
+    ],
+    correctAnswer: "m1e13_a",
+    topic: "Regulatory Framework",
+    difficulty: "hard",
+    source: "PDF: Code of Ethics for AI Use",
+    feedback:
+      "The EU distinguishes unacceptable, high, limited and minimal risk. Review the code of ethics.",
+  },
+  {
+    id: "m1e14",
+    question: "A high-risk AI system must, among other things…",
+    options: [
+      {
+        id: "m1e14_a",
+        label: "Be documented, evaluated and have human supervision",
+      },
+      {
+        id: "m1e14_b",
+        label: "Work with no registration or evaluation of any kind",
+      },
+      {
+        id: "m1e14_c",
+        label: "Operate only at night to consume less energy",
+      },
+      {
+        id: "m1e14_d",
+        label: "Publish all of its code openly as a mandatory rule",
+      },
+    ],
+    correctAnswer: "m1e14_a",
+    topic: "Regulatory Framework",
+    difficulty: "hard",
+    source: "PDF: Code of Ethics for AI Use",
+    feedback:
+      "High risk requires documentation, evaluation and human supervision. Review the framework.",
+  },
+  {
+    id: "m1e15",
+    question: "What is a bias audit in an AI system?",
+    options: [
+      {
+        id: "m1e15_a",
+        label:
+          "Systematically checking whether the model treats any group unfairly",
+      },
+      {
+        id: "m1e15_b",
+        label: "Measuring only the response speed of the whole system",
+      },
+      {
+        id: "m1e15_c",
+        label: "Checking how many registered users the platform has",
+      },
+      {
+        id: "m1e15_d",
+        label: "Verifying only the monthly cost of the tool",
+      },
+    ],
+    correctAnswer: "m1e15_a",
+    topic: "Audit",
+    difficulty: "medium",
+    source: "OVA: Lab: Detect the Bias",
+    feedback:
+      "Auditing bias means checking whether any group ends up harmed. Practice in the bias lab.",
+  },
+  {
+    id: "m1e16",
+    question: "Which is an UNETHICAL use of AI?",
+    options: [
+      {
+        id: "m1e16_a",
+        label:
+          "Impersonating a person's identity with generated voice or image",
+      },
+      {
+        id: "m1e16_b",
+        label: "Summarizing your own report for a work meeting",
+      },
+      {
+        id: "m1e16_c",
+        label: "Checking the spelling of a text before publishing it",
+      },
+      {
+        id: "m1e16_d",
+        label: "Generating ideas for a personal learning project",
+      },
+    ],
+    correctAnswer: "m1e16_a",
+    topic: "Responsible Use",
+    difficulty: "easy",
+    source: "Video: Ethical AI: Principles and Practice",
+    feedback:
+      "Impersonating identities with AI is unethical and can be illegal. Review the principles video.",
+  },
+  {
+    id: "m1e17",
+    question:
+      "An educational chatbot starts giving inappropriate answers to minors. What do you do?",
+    options: [
+      {
+        id: "m1e17_a",
+        label: "Pause the system, investigate and add content safeguards",
+      },
+      {
+        id: "m1e17_b",
+        label: "Let it keep running and warn only if someone complains",
+      },
+      {
+        id: "m1e17_c",
+        label: "Remove moderation so that it answers with more freedom",
+      },
+      {
+        id: "m1e17_d",
+        label: "Blame the minors for the way they use the system",
+      },
+    ],
+    correctAnswer: "m1e17_a",
+    topic: "Safeguards",
+    difficulty: "hard",
+    source: "OVA: Lab: Ethical Dilemmas",
+    feedback:
+      "With minors, pause, investigate and strengthen content safeguards. Review the dilemmas lab.",
+  },
+  {
+    id: "m1e18",
+    question:
+      "The AI suggests a decision that affects many people. Which principle requires reviewing it?",
+    options: [
+      {
+        id: "m1e18_a",
+        label: "Accountability and transparency with human supervision",
+      },
+      {
+        id: "m1e18_b",
+        label: "Efficiency, to settle the case in the shortest possible time",
+      },
+      {
+        id: "m1e18_c",
+        label: "Scalability, so the AI decides the largest possible volume",
+      },
+      {
+        id: "m1e18_d",
+        label: "Automation, to eliminate the intervention of people",
+      },
+    ],
+    correctAnswer: "m1e18_a",
+    topic: "Accountability",
+    difficulty: "medium",
+    source: "Video: Ethical AI: Principles and Practice",
+    feedback:
+      "High-impact decisions require transparency and human supervision. Review the principles video.",
+  },
+  {
+    id: "m1e19",
+    question: "What characterizes limited-risk AI systems (EU)?",
+    options: [
+      {
+        id: "m1e19_a",
+        label: "Transparency obligations, without being high risk",
+      },
+      {
+        id: "m1e19_b",
+        label: "A total ban on their use in any possible context",
+      },
+      {
+        id: "m1e19_c",
+        label: "A special license requirement in order to develop them",
+      },
+      {
+        id: "m1e19_d",
+        label: "A ban on publishing that AI is being used in them",
+      },
+    ],
+    correctAnswer: "m1e19_a",
+    topic: "Regulatory Framework",
+    difficulty: "hard",
+    source: "PDF: Code of Ethics for AI Use",
+    feedback:
+      "Limited risk requires transparency, not prohibition. Review the code of ethics.",
+  },
+  {
+    id: "m1e20",
+    question:
+      "An employee uses AI to decide about people without leaving a trace. What is breached?",
+    options: [
+      {
+        id: "m1e20_a",
+        label: "The traceability and the accountability of the decisions",
+      },
+      {
+        id: "m1e20_b",
+        label: "The speed of the process for settling that single case",
+      },
+      {
+        id: "m1e20_c",
+        label: "The popularity of the system among the internal users",
+      },
+      {
+        id: "m1e20_d",
+        label: "The operating cost of keeping that tool active",
+      },
+    ],
+    correctAnswer: "m1e20_a",
+    topic: "Accountability",
+    difficulty: "hard",
+    source: "OVA: Lab: Ethical Dilemmas",
+    feedback:
+      "Without traceability there is no possible accountability. Review the ethical dilemmas lab.",
   },
 ];

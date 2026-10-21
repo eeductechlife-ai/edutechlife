@@ -2,7 +2,7 @@ export const MODULE_4 = [
   {
     id: "m4q1",
     question:
-      "Debes analizar 15 papers de tu investigación. ¿Por qué conviene NotebookLM sobre un chat general?",
+      "Debes analizar 15 papers de tu investigación. ¿Por qué conviene Gemini Notebook sobre un chat general?",
     options: [
       {
         id: "m4q1_a",
@@ -13,11 +13,11 @@ export const MODULE_4 = [
       { id: "m4q1_d", label: "Procesa únicamente textos en inglés" },
     ],
     correctAnswer: "m4q1_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "NotebookLM responde a partir de tus documentos y cita la fuente. Revisa el video de primeros pasos.",
+      "Gemini Notebook responde a partir de tus documentos y cita la fuente. Revisa el video de primeros pasos.",
   },
   {
     id: "m4q2",
@@ -33,16 +33,16 @@ export const MODULE_4 = [
       { id: "m4q2_d", label: "Solo las noticias por ser lo más reciente" },
     ],
     correctAnswer: "m4q2_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
       "La calidad de las fuentes define la calidad de las respuestas. Selecciona fuentes confiables y relevantes.",
   },
   {
     id: "m4q3",
     question:
-      "Tienes un viaje en bus y quieres repasar 3 PDFs. ¿Cuál es la mejor opción con NotebookLM?",
+      "Tienes un viaje en bus y quieres repasar 3 PDFs. ¿Cuál es la mejor opción con Gemini Notebook?",
     options: [
       {
         id: "m4q3_a",
@@ -55,14 +55,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
       "Audio Overview convierte tus documentos en un podcast para repasar sin leer. Revisa el video del módulo.",
   },
   {
     id: "m4q4",
     question:
-      "NotebookLM cita tu PDF y tú lees el texto original. ¿Qué conviene hacer?",
+      "Gemini Notebook cita tu PDF y tú lees el texto original. ¿Qué conviene hacer?",
     options: [
       {
         id: "m4q4_a",
@@ -78,14 +78,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q4_a",
     topic: "Precisión",
     difficulty: "difícil",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
       "Verifica siempre las citas con la fuente original: la IA te da velocidad y tú le das precisión.",
   },
   {
     id: "m4q5",
     question:
-      "¿Cómo organizas mejor tus fuentes en NotebookLM para investigar?",
+      "¿Cómo organizas mejor tus fuentes en Gemini Notebook para investigar?",
     options: [
       { id: "m4q5_a", label: "Subir todas las fuentes sin ordenarlas" },
       {
@@ -104,7 +104,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q5_b",
     topic: "Curaduría",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
       "Fuentes bien elegidas y organizadas dan mejores respuestas. Revisa el tema de curaduría.",
   },
@@ -120,13 +120,13 @@ export const MODULE_4 = [
     correctAnswer: "m4q6_a",
     topic: "Análisis Crítico",
     difficulty: "difícil",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
       "Las contradicciones fortalecen tu investigación si las analizas. Repasa el simulador de análisis.",
   },
   {
     id: "m4q7",
-    question: "¿Qué debes hacer siempre que NotebookLM responde con citas?",
+    question: "¿Qué debes hacer siempre que Gemini Notebook responde con citas?",
     options: [
       { id: "m4q7_a", label: "Verificar las citas en la fuente original" },
       { id: "m4q7_b", label: "Copiar la respuesta sin revisarla" },
@@ -136,14 +136,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q7_a",
     topic: "Verificación",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
       "La IA es tu asistente, pero el responsable final eres tú. Revisa el OVA del módulo.",
   },
   {
     id: "m4q8",
     question:
-      "Un equipo quiere trabajar con NotebookLM sobre el mismo proyecto. ¿Cuál es el mejor flujo?",
+      "Un equipo quiere trabajar con Gemini Notebook sobre el mismo proyecto. ¿Cuál es el mejor flujo?",
     options: [
       { id: "m4q8_a", label: "Cada uno crea su notebook y comparte el enlace" },
       { id: "m4q8_b", label: "Uno solo pregunta por todo el equipo" },
@@ -153,9 +153,9 @@ export const MODULE_4 = [
     correctAnswer: "m4q8_a",
     topic: "Colaboración",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "NotebookLM permite compartir notebooks como Google Docs. Repasa el laboratorio del módulo.",
+      "Gemini Notebook permite compartir notebooks como Google Docs. Repasa el laboratorio del módulo.",
   },
   {
     id: "m4q9",
@@ -171,9 +171,9 @@ export const MODULE_4 = [
       { id: "m4q9_d", label: "Copiar la guía de estudio sin filtrar" },
     ],
     correctAnswer: "m4q9_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
       "Preguntas específicas con citas te ahorran leer todo. Revisa el video de primeros pasos.",
   },
@@ -193,14 +193,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q10_a",
     topic: "Audio Overview",
     difficulty: "fácil",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
       "El Audio Overview es conversacional y se puede regenerar u orientar. Revisa el video del módulo.",
   },
   {
     id: "m4q11",
     question:
-      "¿Cuál es la diferencia clave de NotebookLM frente a un chat general?",
+      "¿Cuál es la diferencia clave de Gemini Notebook frente a un chat general?",
     options: [
       {
         id: "m4q11_a",
@@ -221,15 +221,15 @@ export const MODULE_4 = [
       },
     ],
     correctAnswer: "m4q11_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "fácil",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "NotebookLM se basa en tus fuentes: si no está en tus documentos, no lo responde. Revisa el video de primeros pasos.",
+      "Gemini Notebook se basa en tus fuentes: si no está en tus documentos, no lo responde. Revisa el video de primeros pasos.",
   },
   {
     id: "m4q12",
-    question: "¿Qué necesita NotebookLM para responder de forma útil?",
+    question: "¿Qué necesita Gemini Notebook para responder de forma útil?",
     options: [
       {
         id: "m4q12_a",
@@ -249,11 +249,11 @@ export const MODULE_4 = [
       },
     ],
     correctAnswer: "m4q12_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "fácil",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "La calidad de tus fuentes determina la calidad de las respuestas. Repasa la guía de NotebookLM.",
+      "La calidad de tus fuentes determina la calidad de las respuestas. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q13",
@@ -277,7 +277,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q13_a",
     topic: "Curaduría",
     difficulty: "fácil",
-    source: "OVA: Laboratorio: Crea tu Notebook",
+    source: "El Grimorio",
     feedback:
       "Prioriza fuentes confiables y verificables. Practica en el laboratorio de creación de notebooks.",
   },
@@ -307,14 +307,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q14_a",
     topic: "Curaduría",
     difficulty: "medio",
-    source: "Imagen: Resúmenes Inteligentes con NotebookLM",
+    source: "Resúmenes Inteligentes con Gemini Notebook",
     feedback:
       "Menos ruido, mejores respuestas: prioriza relevancia y confiabilidad. Repasa la infografía de resúmenes.",
   },
   {
     id: "m4q15",
     question:
-      "NotebookLM solo responde con base en tus documentos. ¿Qué implica esto?",
+      "Gemini Notebook solo responde con base en tus documentos. ¿Qué implica esto?",
     options: [
       {
         id: "m4q15_a",
@@ -337,13 +337,13 @@ export const MODULE_4 = [
     correctAnswer: "m4q15_a",
     topic: "Alcance",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "NotebookLM es fiel a tus fuentes: por eso importa la curaduría. Revisa el video de primeros pasos.",
+      "Gemini Notebook es fiel a tus fuentes: por eso importa la curaduría. Revisa el video de primeros pasos.",
   },
   {
     id: "m4q16",
-    question: "¿Para qué sirve pedirle a NotebookLM un resumen?",
+    question: "¿Para qué sirve pedirle a Gemini Notebook un resumen?",
     options: [
       {
         id: "m4q16_a",
@@ -366,7 +366,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q16_a",
     topic: "Resúmenes",
     difficulty: "fácil",
-    source: "PDF: Notebook LM cuaderno del futuro",
+    source: "Gemini Notebook: el cuaderno del futuro",
     feedback:
       "Los resúmenes orientan la lectura; no sustituyen la fuente original. Repasa el cuaderno del futuro.",
   },
@@ -395,14 +395,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q17_a",
     topic: "Síntesis",
     difficulty: "medio",
-    source: "OVA: Simulador: Análisis de Documentos",
+    source: "El Crisol",
     feedback:
       "La síntesis conecta fuentes y las cita. Practica en el simulador de análisis de documentos.",
   },
   {
     id: "m4q18",
     question:
-      "¿Qué aporta el grounding/citas de NotebookLM a tu investigación?",
+      "¿Qué aporta el grounding/citas de Gemini Notebook a tu investigación?",
     options: [
       {
         id: "m4q18_a",
@@ -425,14 +425,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q18_a",
     topic: "Verificación",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "Las citas permiten ir al documento original y comprobar. Repasa la guía de NotebookLM.",
+      "Las citas permiten ir al documento original y comprobar. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q19",
     question:
-      "NotebookLM cita una fuente, pero el matiz no coincide con el original. ¿Qué haces?",
+      "Gemini Notebook cita una fuente, pero el matiz no coincide con el original. ¿Qué haces?",
     options: [
       {
         id: "m4q19_a",
@@ -455,7 +455,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q19_a",
     topic: "Precisión",
     difficulty: "difícil",
-    source: "OVA: Laboratorio: Crea tu Notebook",
+    source: "El Grimorio",
     feedback:
       "La fuente manda: corrige el matiz y ajusta la conclusión. Practica en el laboratorio de notebooks.",
   },
@@ -485,13 +485,13 @@ export const MODULE_4 = [
     correctAnswer: "m4q20_a",
     topic: "Análisis Crítico",
     difficulty: "difícil",
-    source: "OVA: Simulador: Análisis de Documentos",
+    source: "El Crisol",
     feedback:
       "Documenta la contradicción y busca evidencia adicional. Practica en el simulador de análisis.",
   },
   {
     id: "m4q21",
-    question: "¿Qué es un Audio Overview en NotebookLM?",
+    question: "¿Qué es un Audio Overview en Gemini Notebook?",
     options: [
       {
         id: "m4q21_a",
@@ -513,7 +513,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q21_a",
     topic: "Audio Overview",
     difficulty: "fácil",
-    source: "Video: Crea tu propio podcast",
+    source: "Crea tu propio podcast",
     feedback:
       "El Audio Overview es una conversación de audio generada desde tus fuentes. Repasa el video del podcast.",
   },
@@ -541,7 +541,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q22_a",
     topic: "Audio Overview",
     difficulty: "fácil",
-    source: "OVA: Laboratorio: Crea tu Podcast IA",
+    source: "El Estudio Alquímico",
     feedback:
       "El audio sirve para aprender en movimiento; no reemplaza el análisis. Practica en el laboratorio de podcast.",
   },
@@ -570,7 +570,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q23_a",
     topic: "Audio Overview",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Crea tu Podcast IA",
+    source: "El Estudio Alquímico",
     feedback:
       "Puedes orientar el enfoque y regenerar. Practica en el laboratorio de creación de podcast IA.",
   },
@@ -599,7 +599,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q24_a",
     topic: "Audio Overview",
     difficulty: "medio",
-    source: "OVA: Dominio del Documento: Del Papel al Podcast",
+    source: "La Transmutación",
     feedback:
       "Mejores fuentes y organización, mejor audio. Repasa el dominio del documento al podcast.",
   },
@@ -629,7 +629,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q25_a",
     topic: "Verificación",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Crea tu Podcast IA",
+    source: "El Estudio Alquímico",
     feedback:
       "Escucha y verifica antes de compartir: la responsabilidad del contenido es tuya.",
   },
@@ -648,7 +648,7 @@ export const MODULE_4 = [
       },
       {
         id: "m4q26_c",
-        label: "Todos los usuarios de NotebookLM de forma automática",
+        label: "Todos los usuarios de Gemini Notebook de forma automática",
       },
       {
         id: "m4q26_d",
@@ -658,14 +658,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q26_a",
     topic: "Colaboración",
     difficulty: "fácil",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "Compartes con quien decidas, como en un documento colaborativo. Repasa la guía de NotebookLM.",
+      "Compartes con quien decidas, como en un documento colaborativo. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q27",
     question:
-      "Quieres formular una pregunta precisa a NotebookLM. ¿Cuál funciona mejor?",
+      "Quieres formular una pregunta precisa a Gemini Notebook. ¿Cuál funciona mejor?",
     options: [
       {
         id: "m4q27_a",
@@ -685,9 +685,9 @@ export const MODULE_4 = [
       },
     ],
     correctAnswer: "m4q27_a",
-    topic: "Prompting en NotebookLM",
+    topic: "Prompting en Gemini Notebook",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
       "Preguntas concretas con citas dan mejores resultados. Revisa el video de primeros pasos.",
   },
@@ -716,7 +716,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q28_a",
     topic: "Análisis Crítico",
     difficulty: "difícil",
-    source: "OVA: Simulador: Análisis de Documentos",
+    source: "El Crisol",
     feedback:
       "La evidencia manda: ajusta tu conclusión si la fuente lo amerita. Practica en el simulador.",
   },
@@ -746,7 +746,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q29_a",
     topic: "Alcance",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
       "El cuaderno está anclado a tus fuentes; el chat general usa su conocimiento previo. Repasa la guía.",
   },
@@ -775,7 +775,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q30_a",
     topic: "Curaduría",
     difficulty: "fácil",
-    source: "Imagen: Resúmenes Inteligentes con NotebookLM",
+    source: "Resúmenes Inteligentes con Gemini Notebook",
     feedback:
       "Curar es elegir bien: mejores fuentes, mejores respuestas. Repasa la infografía de resúmenes.",
   },
@@ -805,13 +805,13 @@ export const MODULE_4 = [
     correctAnswer: "m4q31_a",
     topic: "Síntesis",
     difficulty: "medio",
-    source: "OVA: Simulador: Análisis de Documentos",
+    source: "El Crisol",
     feedback:
       "Un análisis comparativo con citas revela coincidencias y tensiones entre fuentes.",
   },
   {
     id: "m4q32",
-    question: "¿Cuál es un flujo completo bien planteado en NotebookLM?",
+    question: "¿Cuál es un flujo completo bien planteado en Gemini Notebook?",
     options: [
       {
         id: "m4q32_a",
@@ -834,7 +834,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q32_a",
     topic: "Flujo Documento-Podcast",
     difficulty: "difícil",
-    source: "OVA: Dominio del Documento: Del Papel al Podcast",
+    source: "La Transmutación",
     feedback:
       "El flujo ideal: curar → analizar/sintetizar → audio para repasar. Repasa el dominio del documento al podcast.",
   },
@@ -864,9 +864,9 @@ export const MODULE_4 = [
     correctAnswer: "m4q33_a",
     topic: "Privacidad",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "Antes de compartir, protege datos sensibles y limita el acceso. Repasa la guía de NotebookLM.",
+      "Antes de compartir, protege datos sensibles y limita el acceso. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q34",
@@ -893,14 +893,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q34_a",
     topic: "Curaduría",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Crea tu Notebook",
+    source: "El Grimorio",
     feedback:
       "Un cuaderno enfocado responde mejor: remueve lo que no aporta. Practica en el laboratorio.",
   },
   {
     id: "m4q35",
     question:
-      "NotebookLM no encuentra en tus fuentes algo que preguntas. ¿Qué significa?",
+      "Gemini Notebook no encuentra en tus fuentes algo que preguntas. ¿Qué significa?",
     options: [
       {
         id: "m4q35_a",
@@ -909,7 +909,7 @@ export const MODULE_4 = [
       },
       {
         id: "m4q35_b",
-        label: "Que el documento tiene un formato que NotebookLM no puede leer",
+        label: "Que el documento tiene un formato que Gemini Notebook no puede leer",
       },
       {
         id: "m4q35_c",
@@ -923,14 +923,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q35_a",
     topic: "Alcance",
     difficulty: "medio",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
       "Si no está en tus fuentes, no lo responde: agrega la fuente o busca en otro lugar.",
   },
   {
     id: "m4q36",
     question:
-      "¿Qué gana un estudiante al usar NotebookLM para estudiar sus apuntes?",
+      "¿Qué gana un estudiante al usar Gemini Notebook para estudiar sus apuntes?",
     options: [
       {
         id: "m4q36_a",
@@ -953,14 +953,14 @@ export const MODULE_4 = [
     correctAnswer: "m4q36_a",
     topic: "Aprendizaje",
     difficulty: "fácil",
-    source: "Video: Primeros Pasos con NotebookLM",
+    source: "Primeros Pasos con Gemini Notebook",
     feedback:
       "Estudia desde tus propios materiales y con citas para verificar. Revisa el video de primeros pasos.",
   },
   {
     id: "m4q37",
     question:
-      "Vas a basar una decisión en una síntesis de NotebookLM. ¿Qué haces antes?",
+      "Vas a basar una decisión en una síntesis de Gemini Notebook. ¿Qué haces antes?",
     options: [
       {
         id: "m4q37_a",
@@ -982,13 +982,13 @@ export const MODULE_4 = [
     correctAnswer: "m4q37_a",
     topic: "Verificación",
     difficulty: "medio",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "Antes de decidir, verifica los puntos clave en las fuentes citadas. Repasa la guía de NotebookLM.",
+      "Antes de decidir, verifica los puntos clave en las fuentes citadas. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q38",
-    question: "¿Qué característica define un buen cuaderno de NotebookLM?",
+    question: "¿Qué característica define un buen cuaderno de Gemini Notebook?",
     options: [
       {
         id: "m4q38_a",
@@ -1011,9 +1011,9 @@ export const MODULE_4 = [
     correctAnswer: "m4q38_a",
     topic: "Curaduría",
     difficulty: "fácil",
-    source: "Guía de NotebookLM",
+    source: "Guía de Gemini Notebook",
     feedback:
-      "Un cuaderno enfocado y confiable responde mejor. Repasa la guía de NotebookLM.",
+      "Un cuaderno enfocado y confiable responde mejor. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q39",
@@ -1040,7 +1040,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q39_a",
     topic: "Flujo Documento-Podcast",
     difficulty: "difícil",
-    source: "OVA: Dominio del Documento: Del Papel al Podcast",
+    source: "La Transmutación",
     feedback:
       "El audio convierte tus conclusiones en un repaso escuchable. Repasa el dominio del documento al podcast.",
   },
@@ -1072,7 +1072,7 @@ export const MODULE_4 = [
     correctAnswer: "m4q40_a",
     topic: "Flujo Documento-Podcast",
     difficulty: "difícil",
-    source: "OVA: Dominio del Documento: Del Papel al Podcast",
+    source: "La Transmutación",
     feedback:
       "Curar → sintetizar con citas → verificar → audio: el flujo completo y verificable. Repasa el OVA.",
   },

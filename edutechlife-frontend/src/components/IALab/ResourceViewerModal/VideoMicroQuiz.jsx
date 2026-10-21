@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { getVideoQuiz } from "../../../data/ialabVideoQuizzes";
+import { awardQuestionXp } from "../quizQuestionXp";
+import { withShuffledOptions } from "../../../utils/stableShuffle";
 
 const PASS_COUNT = 2; // de 3
 
@@ -20,7 +22,8 @@ export default function VideoMicroQuiz({ videoId, onPassed }) {
   const [finished, setFinished] = useState(false);
 
   const total = questions.length;
-  const q = questions[current];
+  // Reubica la respuesta correcta según la pregunta: evita que siempre caiga en la misma letra.
+  const q = withShuffledOptions(questions[current], current);
   const correctCount = answers.filter((a) => a).length;
   const passed = finished && correctCount >= Math.min(PASS_COUNT, total);
 
@@ -31,6 +34,7 @@ export default function VideoMicroQuiz({ videoId, onPassed }) {
 
   const handleNext = () => {
     const isCorrect = selected === q.correct;
+    if (isCorrect) awardQuestionXp(`video:${videoId}:${current}`);
     const nextAnswers = [...answers, isCorrect];
     setAnswers(nextAnswers);
     if (current >= total - 1) {

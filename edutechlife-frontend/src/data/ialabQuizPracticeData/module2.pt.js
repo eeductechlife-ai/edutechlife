@@ -118,7 +118,7 @@ export const MODULE_2_PT = [
     topic: "Context Window",
     difficulty: "medium",
     feedback:
-      "O context window é o máximo de tokens (entrada + saída) que o modelo consegue processar em uma única interação. Modelos como o GPT-3.5 têm 4K-16K; o GPT-4 chega a 32K-128K tokens.",
+      "O context window é o máximo de tokens (entrada + saída) que o modelo consegue processar em uma única interação. Cada modelo tem seu próprio limite; confira a ficha do seu plano para saber qual é o seu.",
     relatedFlashcardId: "m2-f3",
   },
   {
@@ -155,30 +155,30 @@ export const MODULE_2_PT = [
   {
     id: "pp-m2-7",
     question:
-      "Qual é a diferença principal entre um modelo GPT-3.5 e um GPT-4 em termos de capacidades?",
+      "Como você escolhe o modelo adequado para uma tarefa?",
     options: [
       {
         id: "pp-m2-7_a",
         label:
-          "O GPT-4 tem um context window maior e melhor raciocínio, mas é mais lento e mais caro",
+          "Pela complexidade e pelo custo: um rápido para rascunhos e um mais potente para análises exigentes",
       },
       {
         id: "pp-m2-7_b",
-        label: "O GPT-4 é gratuito, enquanto o GPT-3.5 é pago",
+        label: "Sempre o mais potente, mesmo que seja mais lento e mais caro",
       },
       {
         id: "pp-m2-7_c",
-        label: "O GPT-4 só funciona com imagens, não com texto",
+        label: "Sempre o mais barato, porque a qualidade é igual em todas as tarefas",
       },
       {
         id: "pp-m2-7_d",
-        label: "Não há diferenças significativas entre os dois modelos",
+        label: "Ao acaso: a escolha do modelo não influencia o resultado",
       },
     ],
     correctAnswer: "pp-m2-7_a",
-    topic: "Modelos GPT",
+    topic: "Escolha de modelo",
     difficulty: "medium",
     feedback:
-      "O GPT-4 oferece melhor raciocínio, maior context window (32K vs 4-16K) e respostas mais precisas, porém a um custo maior e velocidade mais lenta que o GPT-3.5.",
+      "Cada modelo equilibra velocidade, custo e capacidade. Um rápido serve para rascunhos e resumos; um mais potente, para análises que exigem raciocínio. Os nomes dos modelos mudam com frequência: confira o que o seu plano oferece.",
   },
 ];

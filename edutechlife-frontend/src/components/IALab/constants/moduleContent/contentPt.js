@@ -1,54 +1,38 @@
-/**
- * CONSTANTES: contentPt.js
- *
- * Dados de conteúdo educacional em português (Brasil) para os módulos 2-5 do IALab
- * O Módulo 1 permanece intacto com seus dados originais embutidos
- *
- * Estrutura por módulo:
- * - objective: Objetivo central do módulo
- * - learningPoints: 4 pontos de aprendizagem { text, icon }
- * - overviewData: { title, description, mission, topics[] }
- * - lessons: 3 lições { id, title, description, detailedDescription, duration, format, icon, badgeColor, themeColor }
- * - accordionContent: { 1: {...}, 2: {...}, 3: {...} }
- */
-
+// Contenido del curso IALab (generado desde el parche del rediseño 2026-10).
 const CONTENT_PT = {
-  // ============================================================================
-  // MÓDULO 1: O ARTESÃO DIGITAL — ENGENHARIA DE PROMPTS
-  // ============================================================================
   1: {
     objective:
       "Ao final deste módulo você poderá redigir prompts com a fórmula RTF (Papel + Tarefa + Formato) e o contexto necessário, obtendo respostas úteis de qualquer modelo de IA já na primeira tentativa.",
     learningPoints: [
       {
-        text: "Identificar o papel, o contexto, a tarefa e o formato em um prompt",
-        icon: "fa-bullseye",
+        text: "Explicar o que é a IA generativa e por que às vezes erra",
+        icon: "fa-brain",
       },
       {
-        text: "Reescrever um prompt vago para que seja claro, específico e acionável",
+        text: "Escrever prompts com a fórmula RTF e melhorá-los iterando",
         icon: "fa-wand-magic-sparkles",
       },
       {
-        text: "Detectar erros comuns em um prompt e corrigi-los iterando",
-        icon: "fa-exclamation-triangle",
+        text: "Detectar vieses, riscos de privacidade e citações falsas antes de usar um resultado",
+        icon: "fa-shield-halved",
       },
       {
-        text: "Aplicar a fórmula RTF a um caso real de estudo ou trabalho",
-        icon: "fa-rocket",
+        text: "Usar a IA com transparência e dentro da lei",
+        icon: "fa-scale-balanced",
       },
     ],
     overviewData: {
       title:
-        "O Artesão Digital: Engenharia de Prompts — A Base de Toda Interação com IA",
+        "O Artesão Digital: Prompts e Ética — Os Fundamentos de Toda Interação com IA",
       description:
-        "Todo artesão começa com as ferramentas básicas e, com prática, torna-se mestre. Aqui você aprenderá a esculpir instruções que a IA entende perfeitamente. Dos fundamentos até técnicas avançadas que transformarão sua forma de trabalhar com inteligência artificial.",
+        "Todo artesão começa com as ferramentas básicas e, com prática, torna-se mestre. Aqui você aprenderá a esculpir instruções que a IA entende perfeitamente. Dos fundamentos até técnicas avançadas que transformarão sua forma de trabalhar com inteligência artificial. Um artesão responsável também sabe quando não usar a ferramenta: aqui você aprenderá a verificar, proteger dados e usar a IA dentro da lei.",
       mission:
-        "Sua missão como artesão: complete cada lição e recurso multimídia (vídeos, guias e laboratórios). Cada ferramenta que você dominar o aproxima 20% mais da sua certificação. Instruções precisas são o seu selo de qualidade!",
+        "Sua missão como artesão: complete cada lição e recurso multimídia (vídeos, guias e laboratórios). Cada ferramenta que você dominar o aproxima 20% mais da sua certificação. Instruções precisas são o seu selo de qualidade! Este módulo inclui o juramento do guardião: sem verificar, proteger dados e declarar seu uso de IA, nenhum prompt está concluído.",
       topics: [
         {
           title: "Os Fundamentos do Artesão: O que é IA Generativa?",
           icon: "fa-brain",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
         },
         {
@@ -56,6 +40,12 @@ const CONTENT_PT = {
           icon: "fa-comments",
           resources: 4,
           duration: "20 min",
+        },
+        {
+          title: "O Juramento do Guardião: Uso Responsável da IA",
+          icon: "fa-shield-halved",
+          resources: 9,
+          duration: "30 min",
         },
       ],
     },
@@ -71,12 +61,47 @@ const CONTENT_PT = {
         objectiveDesc:
           "Um prompt bem forjado é sua ferramenta mais poderosa: aprenda a escrever instruções que a IA entende de primeira.",
       },
+      3: {
+        objective: "🛡️ O Juramento do Guardião",
+        objectiveDesc:
+          "Antes de confiar em um resultado, verifique-o: revise vieses, proteja os dados e declare como usou a IA.",
+        achievements: [
+          {
+            icon: "fa-check",
+            text: "Verificar cada citação, número ou nome antes de usá-lo",
+          },
+          {
+            icon: "fa-check",
+            text: "Identificar dados pessoais e decidir o que nunca entra em uma ferramenta de IA",
+          },
+          {
+            icon: "fa-check",
+            text: "Declarar quando e como usou IA em um trabalho ou entrega",
+          },
+        ],
+        warnings: [
+          {
+            icon: "fa-times",
+            text: "Copiar uma citação que ninguém verificou: a IA pode inventar fontes com total segurança",
+          },
+          {
+            icon: "fa-times",
+            text: "Subir dados pessoais de terceiros em qualquer ferramenta",
+          },
+          {
+            icon: "fa-times",
+            text: "Apresentar como seu um trabalho gerado por IA sem revisá-lo nem declará-lo",
+          },
+        ],
+        example: {
+          label: "O Guardião vs. O Imprudente",
+          weak: "❌ O imprudente: Um estudante entregou um ensaio gerado por IA com citações inventadas. O professor descobriu e ele perdeu a credibilidade.",
+          strong:
+            "✅ O guardião: Usou a IA como assistente, verificou cada fonte na biblioteca, declarou o uso e entregou um trabalho sólido e honesto.",
+        },
+      },
     },
   },
-
-  // ============================================================================
-  // MÓDULO 2: O ARQUITETO DE AUTOMAÇÃO — POTÊNCIA DO CHATGPT
-  // ============================================================================
   2: {
     objective:
       "Projete e construa sistemas inteligentes com o ChatGPT: dos alicerces até a automação completa do seu trabalho diário como um verdadeiro arquiteto digital.",
@@ -85,18 +110,24 @@ const CONTENT_PT = {
         text: "Projetar plantas-mestre com System Prompts avançados",
         icon: "fa-sliders",
       },
-      { text: "Conectar estruturas com APIs externas", icon: "fa-code" },
+      {
+        text: "Criar GPTs e Projetos que trabalham com o seu contexto",
+        icon: "fa-code",
+      },
       {
         text: "Construir seu próprio GPT como um módulo arquitetônico",
         icon: "fa-robot",
       },
-      { text: "Automatizar fluxos de obra completos", icon: "fa-cog" },
+      {
+        text: "Automatizar fluxos de obra completos",
+        icon: "fa-cog",
+      },
     ],
     overviewData: {
       title:
         "O Arquiteto Digital: ChatGPT e Automação — Construa seu Próprio Ecossistema de Trabalho",
       description:
-        "Bem-vindo à obra-prima da automação. Aqui você não apenas usará o ChatGPT — você construirá com ele. Aprenderá a projetar system prompts como se traçasse plantas, a usar ferramentas integradas como andaimes, a criar GPTs como módulos de construção e a conectar tudo com APIs externas para erguer estruturas digitais que trabalham sozinhas.",
+        "Bem-vindo à obra-prima da automação. Aqui você não apenas usará o ChatGPT — você construirá com ele. Aprenderá a projetar system prompts como se traçasse plantas, a usar ferramentas integradas como andaimes, a criar GPTs como módulos de construção, a organizar Projetos e a delegar tarefas de várias etapas ao agente do ChatGPT, sempre com a sua supervisão.",
       mission:
         "Sua missão como arquiteto: complete cada lição e domine a arte de construir com o ChatGPT. Cada estrutura que você projetar o aproxima da sua certificação como arquiteto de automação. Construa sua obra-prima digital!",
       topics: [
@@ -110,12 +141,12 @@ const CONTENT_PT = {
           title: "O Andaime do Arquiteto: Ferramentas Integradas",
           icon: "fa-layer-group",
           resources: 3,
-          duration: "42 min",
+          duration: "30 min",
         },
         {
-          title: "A Fachada do Edifício: GPTs e Function Calling",
+          title: "A Fachada do Edifício: GPTs, Projetos e Agentes",
           icon: "fa-code",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
         },
       ],
@@ -138,7 +169,7 @@ const CONTENT_PT = {
         title: "O Andaime do Arquiteto: Ferramentas Integradas",
         description: "As ferramentas que erguem sua construção digital",
         detailedDescription:
-          "Um arquiteto não constrói só com as mãos — usa guindastes, andaimes e ferramentas especializadas. Descubra o arsenal do ChatGPT: Pesquisa na Web, Análise de Dados com Python, DALL-E 3, Canvas e Projetos. Aprenda a combiná-los para erguer automações poderosas que multiplicam sua produtividade.",
+          "Um arquiteto não constrói só com as mãos — usa guindastes, andaimes e ferramentas especializadas. Descubra o arsenal do ChatGPT: Pesquisa na Web, Análise de Dados com Python, geração de imagens, Canvas e Projetos. Aprenda a combiná-los para erguer automações poderosas que multiplicam sua produtividade.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -147,10 +178,10 @@ const CONTENT_PT = {
       },
       {
         id: 3,
-        title: "A Fachada do Edifício: GPTs e Function Calling",
+        title: "A Fachada do Edifício: GPTs, Projetos e Agentes",
         description: "Conecte sua obra ao mundo real",
         detailedDescription:
-          "A fachada é o que o mundo vê, mas por trás há uma estrutura complexa que a sustenta. Leve suas construções ao próximo nível: conecte GPTs personalizados com APIs, bancos de dados e serviços externos. Crie fluxos automatizados que resolvem problemas reais enquanto você projeta o próximo projeto.",
+          "A fachada é o que o mundo vê. Aqui você constrói assistentes sob medida: GPTs com suas instruções e seu conhecimento, Projetos que organizam cada trabalho e o agente do ChatGPT para tarefas de várias etapas. Aprenda a projetá-los, testá-los e usá-los sem perder o controle de cada decisão. A OpenAI anunciou a descontinuação dos GPTs personalizados em datas provisórias: verifique na sua conta se o seu GPT ainda está disponível e considere migrar as instruções para um Projeto.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -193,15 +224,15 @@ const CONTENT_PT = {
         ],
         example: {
           label: "Exemplo prático",
-          weak: "❌ Aficionado: Usar GPT-4 para tudo, até para tarefas que o GPT-3.5 resolve em segundos",
+          weak: "❌ Amador: Usar o modelo mais potente para tudo, até para tarefas que o modelo rápido resolve em segundos",
           strong:
-            "✅ Arquiteto: GPT-3.5 para rascunhos rápidos e resumos, GPT-4 para análises estruturais complexas e raciocínio profundo — o material certo para cada camada da construção",
+            "✅ Arquiteto: GPT-6 Luna para rascunhos rápidos e resumos, GPT-6 Sol para análises estruturais complexas — o material correto para cada camada da construção, conforme seu plano",
         },
       },
       2: {
         objective: "🏗️ O Andaime do Arquiteto",
         objectiveDesc:
-          "Domine o ecossistema de ferramentas do ChatGPT: Pesquisa na Web, Código, DALL-E 3, Canvas e Projetos.",
+          "Domine o ecossistema de ferramentas do ChatGPT: Pesquisa na Web, Código, geração de imagens, Canvas e Projetos.",
         achievements: [
           {
             icon: "fa-check",
@@ -219,7 +250,7 @@ const CONTENT_PT = {
         warnings: [
           {
             icon: "fa-times",
-            text: "Usar DALL-E 3 para texto longo ou logotipos — como usar um cinzel para martelar",
+            text: "Pedir à geração de imagens um texto longo ou um logotipo sem revisar — o texto dentro das imagens sai com erros; escreva-o no Canvas",
           },
           {
             icon: "fa-times",
@@ -234,54 +265,50 @@ const CONTENT_PT = {
           label: "Exemplo de fluxo integrado",
           weak: "❌ Isolado: Pedir dados atualizados sem ativar Pesquisa na Web → resultado desatualizado como um edifício sem alicerces",
           strong:
-            "✅ Integrado: Buscar dados atuais (Browse) → analisá-los com Python (Code Interpreter) → gerar infográfico (DALL-E 3) → editar no Canvas — uma construção em 4 fases perfeitamente orquestradas",
+            "✅ Integrado: Buscar dados atuais (Browse) → analisá-los com Python (Code Interpreter) → gerar infográfico (imagem) → editar no Canvas — uma construção em 4 fases perfeitamente orquestradas",
         },
       },
       3: {
-        objective: "⚡ O Fluxo do Arquiteto",
+        objective: "🧱 A Fachada do Arquiteto",
         objectiveDesc:
-          "Conecte suas construções ao mundo exterior via APIs: dados, ações e automação total.",
+          "Crie GPTs e Projetos sob medida e use-os para que o ChatGPT trabalhe com o seu contexto em cada tarefa.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Configurar Function Calling com a API da OpenAI como sistemas de encanamento digital",
+            text: "Criar um GPT personalizado com instruções claras, conhecimento próprio e um objetivo definido",
           },
           {
             icon: "fa-check",
-            text: "Definir funções com esquemas JSON claros — as plantas das suas conexões",
+            text: "Organizar um Projeto com arquivos, instruções e conversas de um mesmo trabalho",
           },
           {
             icon: "fa-check",
-            text: "Criar fluxos automatizados de múltiplas etapas que funcionam 24/7",
+            text: "Usar o agente do ChatGPT em tarefas de várias etapas, revisando cada passo antes de aprovar",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Não validar as respostas da API antes de usá-las — como não inspecionar os materiais de construção",
+            text: "Carregar dados sensíveis ou de menores em um GPT sem revisar quem pode vê-los — como deixar plantas confidenciais na rua",
           },
           {
             icon: "fa-times",
-            text: "Enviar dados sensíveis sem autenticação — como deixar as portas abertas na sua obra",
+            text: "Delegar ao agente decisões que exigem o seu critério — o agente executa, você aprova",
           },
           {
             icon: "fa-times",
-            text: "Não gerenciar erros de conexão adequadamente — como não ter plano de contingência para terremotos",
+            text: "Publicar um GPT sem testá-lo com casos reais — como entregar uma fachada sem inspeção",
           },
         ],
         example: {
           label: "Exemplo prático",
-          weak: "❌ Prompt básico: Qual é o clima hoje? — como perguntar o clima olhando pela janela",
+          weak: "❌ Genérico: Começar cada conversa do zero, sem instruções nem arquivos, e repetir o mesmo contexto",
           strong:
-            "✅ Function Calling: O ChatGPT detecta a intenção, chama a API do clima, recebe dados JSON e gera: O clima atual em Bogotá é 18°C com 65% de umidade. Recomendamos levar guarda-chuva pela probabilidade de 80% de chuva à tarde. Uma fachada elegante que se conecta a dados vivos do mundo real.",
+            "✅ Fachada: Um GPT «Assessor de propostas» com o seu tom, os seus modelos e os seus preços, dentro de um Projeto que guarda os documentos de cada cliente. Cada resposta já sai com o seu contexto carregado.",
         },
       },
     },
   },
-
-  // ============================================================================
-  // MÓDULO 3: RASTREIO PROFUNDO COM GEMINI
-  // ============================================================================
   3: {
     objective:
       "Ajuste sua lupa digital: investigue a fundo, verifique cada pista e analise informações com a precisão de um detetive profissional.",
@@ -290,7 +317,10 @@ const CONTENT_PT = {
         text: "Analisar texto, imagem e código como um único corpo de evidências",
         icon: "fa-cubes",
       },
-      { text: "Obter pistas frescas do mundo real na hora", icon: "fa-signal" },
+      {
+        text: "Obter pistas frescas do mundo real na hora",
+        icon: "fa-signal",
+      },
       {
         text: "Cavar até a verdade: investigações que nenhum outro detetive faz",
         icon: "fa-search",
@@ -310,7 +340,7 @@ const CONTENT_PT = {
         {
           title: "O Despertar do Detetive Multimodal",
           icon: "fa-google",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
         },
         {
@@ -322,7 +352,7 @@ const CONTENT_PT = {
         {
           title: "Deep Research: A Caixa de Ferramentas Forenses",
           icon: "fa-search",
-          resources: 4,
+          resources: 5,
           duration: "20 min",
         },
       ],
@@ -360,7 +390,7 @@ const CONTENT_PT = {
         description:
           "Cave até encontrar a verdade com ferramentas de pesquisa profunda",
         detailedDescription:
-          "Os casos mais complexos exigem as ferramentas mais poderosas. Domine a pesquisa profunda com IA: Deep Research para explorar temas em sua totalidade, fact-checking automático para verificar cada fonte e geração de relatórios técnicos que qualquer especialista assinaria.",
+          "Os casos mais complexos exigem as ferramentas mais poderosas. Domine a pesquisa profunda com IA: Deep Research para explorar temas em sua totalidade, verificação de fontes para verificar cada fonte e geração de relatórios técnicos que qualquer especialista assinaria.",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -450,7 +480,7 @@ const CONTENT_PT = {
       3: {
         objective: "🔍 Deep Research",
         objectiveDesc:
-          "Para casos complexos: investigações profundas com fontes verificáveis e fact-checking automático.",
+          "Para casos complexos: investigações profundas com fontes verificáveis e verificação de fontes.",
         achievements: [
           {
             icon: "fa-check",
@@ -488,10 +518,6 @@ const CONTENT_PT = {
       },
     },
   },
-
-  // ============================================================================
-  // MÓDULO 4: O ALQUIMISTA DO CONHECIMENTO — NOTEBOOKLM
-  // ============================================================================
   4: {
     objective:
       "Converta documentos em ouro: podcasts que soam como rádio profissional, resumos diretos ao ponto e respostas que citam cada fonte sem inventar nada.",
@@ -515,7 +541,7 @@ const CONTENT_PT = {
     ],
     overviewData: {
       title:
-        "O Alquimista Digital: NotebookLM — Onde seus Documentos se Transformam em Conhecimento",
+        "O Alquimista Digital: Gemini Notebook — Onde seus Documentos se Transformam em Conhecimento",
       description:
         "Neste módulo, você se tornará um alquimista digital: seus PDFs, artigos e anotações têm um potencial oculto que você nem imagina. Aprenda a extraí-lo, transformá-lo e compartilhá-lo em formatos que cativam, educam e transformam.",
       mission:
@@ -523,7 +549,7 @@ const CONTENT_PT = {
       topics: [
         {
           title:
-            "O Alquimista de Documentos: Seu Primeiro Feitiço com o NotebookLM",
+            "O Alquimista de Documentos: Seu Primeiro Feitiço com o Gemini Notebook",
           icon: "fa-microphone",
           resources: 3,
           duration: "20 min",
@@ -537,8 +563,8 @@ const CONTENT_PT = {
         {
           title: "A Fórmula Secreta: Audio Overviews e Gestão Documental",
           icon: "fa-podcast",
-          resources: 4,
-          duration: "44 min",
+          resources: 5,
+          duration: "30 min",
         },
       ],
     },
@@ -546,10 +572,10 @@ const CONTENT_PT = {
       {
         id: 1,
         title:
-          "O Alquimista de Documentos: Seu Primeiro Feitiço com o NotebookLM",
+          "O Alquimista de Documentos: Seu Primeiro Feitiço com o Gemini Notebook",
         description: "Onde os PDFs ganham vida",
         detailedDescription:
-          "Conheça o NotebookLM, a ferramenta do Google que transforma seus PDFs, artigos e anotações em um assistente pessoal que responde com citações exatas. Ele não alucina. Não inventa. É o seu bibliotecário com superpoderes.",
+          "Conheça o Gemini Notebook, a ferramenta do Google que transforma seus PDFs, artigos e anotações em um assistente pessoal que responde com citações exatas. Ele não alucina. Não inventa. É o seu bibliotecário com superpoderes.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -585,7 +611,7 @@ const CONTENT_PT = {
       1: {
         objective: "🎯 O Feitiço Inicial",
         objectiveDesc:
-          "O NotebookLM só fala do que sabe: suas fontes. A IA que revoluciona a gestão do conhecimento.",
+          "O Gemini Notebook só fala do que sabe: suas fontes. A IA que revoluciona a gestão do conhecimento.",
         achievements: [
           {
             icon: "fa-check",
@@ -597,7 +623,7 @@ const CONTENT_PT = {
           },
           {
             icon: "fa-check",
-            text: "Distinguir um bibliotecário especialista (NotebookLM) de um chatbot genérico",
+            text: "Distinguir um bibliotecário especialista (Gemini Notebook) de um chatbot genérico",
           },
         ],
         warnings: [
@@ -701,212 +727,209 @@ const CONTENT_PT = {
       },
     },
   },
-
-  // ============================================================================
-  // MÓDULO 5: ÉTICA APLICADA À IA GENERATIVA
-  // ============================================================================
   5: {
     objective:
-      "Domine os 4 pilares éticos que as empresas buscam hoje e torne-se o guardião que garante que a IA sirva à humanidade.",
+      "Dirija o Claude como um maestro: delegue trabalho real, crie documentos e peças e supervisione cada resultado com critério humano.",
     learningPoints: [
       {
-        text: "Detectar vieses algorítmicos como um guardião",
-        icon: "fa-shield-check",
+        text: "Escrever instruções que o Claude entende de primeira",
+        icon: "fa-comments",
       },
       {
-        text: "Conhecer a regulamentação de IA que protege milhões",
-        icon: "fa-briefcase",
+        text: "Criar documentos, apresentações e peças interativas com Artifacts",
+        icon: "fa-pen-nib",
       },
-      { text: "Blindar dados e privacidade contra ameaças", icon: "fa-lock" },
       {
-        text: "Criar protocolos éticos que salvam reputações",
-        icon: "fa-clipboard-check",
+        text: "Delegar trabalho recorrente com Projetos, conectores e Skills",
+        icon: "fa-diagram-project",
+      },
+      {
+        text: "Supervisionar cada resultado: verificar dados e proteger informações",
+        icon: "fa-shield-halved",
       },
     ],
     overviewData: {
-      title:
-        "O Guardião Digital: Ética e Governança de IA — O Selo do Profissional Responsável",
+      title: "O Maestro: Claude — Delegue com Critério",
       description:
-        "Cada vez que você usa IA, está tomando decisões éticas — mesmo sem saber. Os dados que você envia estão protegidos? O resultado é justo para todos? Você sabe quem é responsável se algo der errado? Este módulo não é só teoria: é o seu treinamento para se tornar um guardião da IA.",
+        "O Claude já não é só um chat: cria documentos e apresentações, conecta-se às suas ferramentas de trabalho, lembra contexto e pode executar tarefas de várias etapas. Este módulo ensina a dirigi-lo: o que pedir, como revisar o que ele entrega e o que você nunca deve delegar.",
       mission:
-        "Tornar-se o guardião que a IA precisa. Este módulo encerra sua certificação com as competências éticas que separam os profissionais responsáveis dos que colocam sua carreira em risco.",
+        "Sua missão como maestro: complete cada lição e delegue uma tarefa real do seu trabalho. Um bom maestro não toca todos os instrumentos; define a partitura, escuta e corrige. Dirija com critério!",
       topics: [
         {
-          title: "O Voto do Guardião: Os 4 Princípios Sagrados",
-          icon: "fa-balance-scale",
+          title: "Conheça o Claude: a IA que trabalha com você",
+          icon: "fa-comments",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "O Espelho da Verdade: Sua IA é Justa?",
-          icon: "fa-exclamation-triangle",
-          resources: 3,
-          duration: "20 min",
+          title: "Crie com o Claude: Artifacts, documentos e apresentações",
+          icon: "fa-pen-nib",
+          resources: 1,
+          duration: "25 min",
         },
         {
-          title: "O Legado do Guardião: Navegando pela Lei",
-          icon: "fa-shield-alt",
+          title: "Delegue com o Claude: Projetos, conectores e Skills",
+          icon: "fa-diagram-project",
           resources: 3,
-          duration: "20 min",
+          duration: "30 min",
         },
       ],
     },
     lessons: [
       {
         id: 1,
-        title: "O Voto do Guardião: Os 4 Princípios Sagrados",
-        description:
-          "Os fundamentos éticos que todo guardião de IA deve conhecer",
+        title: "Conheça o Claude: a IA que trabalha com você",
+        description: "Como pensar e pedir como um maestro",
         detailedDescription:
-          "Bem-vindo ao treinamento de guardiões. Antes de usar qualquer ferramenta de IA, há 4 princípios que você deve gravar no seu DNA profissional: transparência, equidade, responsabilidade e privacidade. Não são teoria abstrata — são o escudo que protege seus usuários, sua organização e sua reputação.",
+          "Antes de dar instruções, conheça o instrumento. O que é o Claude, em que se diferencia de um buscador, como escrever um pedido com objetivo, público e formato, como funciona a memória e quando escolher um modelo mais rápido ou um mais capaz.",
         duration: "20 min",
         format: "Reading",
-        icon: "fa-balance-scale",
-        badgeColor: "bg-red-100 text-red-800",
-        themeColor: "#EF4444",
+        icon: "fa-comments",
+        badgeColor: "bg-orange-100 text-orange-800",
+        themeColor: "#D97757",
       },
       {
         id: 2,
-        title: "O Espelho da Verdade: Sua IA é Justa?",
-        description: "Detecte e destrua os vieses ocultos nos algoritmos",
+        title: "Crie com o Claude: Artifacts, documentos e apresentações",
+        description:
+          "De uma ideia a um documento ou peça pronta para compartilhar",
         detailedDescription:
-          "Cada algoritmo herda os preconceitos de seus criadores e de seus dados. Nesta lição, você se tornará um caçador de vieses: aprenderá a detectar discriminação algorítmica, entender suas causas profundas e aplicar estratégias de justiça que tornem seus sistemas verdadeiramente inclusivos.",
-        duration: "20 min",
+          "Os Artifacts são peças que você vê e edita ao lado da conversa: documentos, gráficos, apresentações e pequenos aplicativos. Aprenda a descrever o resultado, iterar com ajustes pequenos, comparar versões e revisar antes de compartilhar.",
+        duration: "25 min",
         format: "Lab",
-        icon: "fa-exclamation-triangle",
-        badgeColor: "bg-orange-100 text-orange-800",
-        themeColor: "#F97316",
+        icon: "fa-pen-nib",
+        badgeColor: "bg-amber-100 text-amber-800",
+        themeColor: "#E8A33D",
       },
       {
         id: 3,
-        title: "O Legado do Guardião: Navegando pela Lei",
-        description:
-          "O marco legal e as melhores práticas que todo guardião deve dominar",
+        title: "Delegue com o Claude: Projetos, conectores e Skills",
+        description: "Trabalho recorrente sem perder o controle",
         detailedDescription:
-          "Não basta querer fazer o certo — é preciso conhecer a lei. Do AI Act da UE às regulamentações locais, passando por proteção de dados e governança corporativa. Esta lição lhe dá o mapa legal para navegar a IA sem colocar ninguém em risco.",
-        duration: "20 min",
+          "Um Projeto guarda o contexto de um trabalho; os conectores dão acesso às suas ferramentas com permissões que você aprova; uma Skill reutiliza um procedimento; as tarefas programadas automatizam o recorrente. Delegar é definir objetivo, limites e revisão: a decisão final continua sendo sua.",
+        duration: "30 min",
         format: "Video",
-        icon: "fa-shield-alt",
-        badgeColor: "bg-slate-100 text-slate-800",
-        themeColor: "#64748B",
+        icon: "fa-diagram-project",
+        badgeColor: "bg-teal-100 text-teal-800",
+        themeColor: "#0097A7",
       },
     ],
     accordionContent: {
       1: {
-        objective: "🛡️ O Juramento do Guardião Ético",
+        objective: "🎼 Conheça seu instrumento",
         objectiveDesc:
-          "Construa um marco ético blindado para a IA generativa: proteja usuários, organizações e sociedade.",
+          "Entenda o que é o Claude, como ele mantém o contexto e como pedir o que você precisa de primeira.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Internalizar os 4 pilares sagrados do guardião de IA",
+            text: "Escrever um pedido com objetivo, público, formato e tom",
           },
           {
             icon: "fa-check",
-            text: "Detectar dilemas éticos em casos reais antes que causem dano",
+            text: "Controlar o que o Claude lembra entre conversas",
           },
           {
             icon: "fa-check",
-            text: "Aplicar um checklist ético infalível antes de cada uso de IA",
+            text: "Escolher o modelo certo para cada tipo de tarefa",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Usar IA como uma arma sem escudo: ignorar o impacto nas pessoas",
+            text: "Pedir sem contexto e esperar que ele adivinhe o resultado",
           },
           {
             icon: "fa-times",
-            text: "Acreditar que a IA é neutra — tecnologia sem vigilância é perigosa",
+            text: "Usar o modelo mais potente para tarefas simples: gasta sem ganhar",
           },
           {
             icon: "fa-times",
-            text: "Ignorar as consequências não intencionais até que seja tarde demais",
+            text: "Dar por certo dados recentes sem verificar em uma fonte atual",
           },
         ],
         example: {
-          label: "O Guardião vs. O Imprudente",
-          weak: "❌ O imprudente: Um estudante usou IA para gerar uma redação completa sem verificar nada. A IA inventou dados, citações falsas e referências inexistentes. O professor descobriu tudo e o estudante perdeu toda a credibilidade acadêmica.",
+          label: "Exemplo prático",
+          weak: "❌ Vago: 'Escreva uma proposta para um cliente'. Resultado genérico, sem público nem tom.",
           strong:
-            "✅ O guardião: Um estudante usou IA como assistente, verificou cada fonte com dados reais, informou o uso da IA ao professor e entregou um trabalho impecável. O resultado: aprendizado profundo + confiança do professor + nota perfeita.",
+            "✅ Claro: 'Proposta de 2 páginas para a reitoria de um colégio em Manizales, tom formal e cordial, com objetivo, plano de 3 meses e preço em pesos'. Útil de primeira.",
         },
       },
       2: {
-        objective: "🔍 O Caçador de Vieses",
+        objective: "🖋️ Crie com Artifacts",
         objectiveDesc:
-          "Detecte e elimine os vieses que a IA herda de seus dados antes que causem dano.",
+          "Transforme uma ideia em documento, apresentação ou peça interativa, e revise antes de compartilhar.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Identificar 7 tipos de vieses algorítmicos como um especialista forense",
+            text: "Descrever o resultado final antes de pedir o conteúdo",
           },
           {
             icon: "fa-check",
-            text: "Analisar casos reais em que a IA discriminou — e entender por quê",
+            text: "Iterar com ajustes pequenos em vez de refazer tudo",
           },
           {
             icon: "fa-check",
-            text: "Aplicar técnicas cirúrgicas de mitigação de vieses",
+            text: "Verificar números, nomes e datas antes de apresentar",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Confiar cegamente nos resultados de IA sem verificar equidade",
+            text: "Aceitar uma mudança sem comparar com a sua versão",
           },
           {
             icon: "fa-times",
-            text: "Alimentar a IA com dados de treinamento que excluem grupos inteiros",
+            text: "Apresentar um número sem revisar a origem",
           },
           {
             icon: "fa-times",
-            text: "Nunca auditar os resultados de IA — o silêncio não é segurança",
+            text: "Compartilhar uma peça interativa sem testá-la",
           },
         ],
         example: {
-          label: "A IA que Discriminava sem Saber",
-          weak: "❌ Viesada: Uma IA de recrutamento aprendeu com 10 anos de dados históricos em que apenas homens ocupavam certos cargos. Automaticamente começou a filtrar mulheres — não por malícia, mas por dados corrompidos.",
+          label: "Exemplo de iteração",
+          weak: "❌ Um pedido só: 'Faça uma apresentação da empresa'. Dez slides genéricos.",
           strong:
-            "✅ Equitativa: A equipe de auditoria detectou o viés na fase de testes, re-treinou o modelo com dados balanceados, incluiu variáveis de equidade e estabeleceu auditorias trimestrais. A IA agora seleciona sem preconceitos.",
+            "✅ Iterando: primeiro o roteiro de 6 slides, depois a mensagem de cada um, depois os gráficos com números verificados. Três passos, um resultado pronto para o conselho.",
         },
       },
       3: {
-        objective: "📜 O Código do Guardião",
+        objective: "🎛️ Delegue com critério",
         objectiveDesc:
-          "Conheça as leis que regem a IA e projete protocolos que blindem sua organização.",
+          "Use Projetos, conectores e Skills para que o trabalho recorrente avance sem perder o controle das decisões.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Dominar o AI Act da União Europeia como um especialista em conformidade",
+            text: "Criar um Projeto com instruções e arquivos de referência",
           },
           {
             icon: "fa-check",
-            text: "Entender as obrigações legais de privacidade e transparência",
+            text: "Conectar uma ferramenta revisando as permissões que concede",
           },
           {
             icon: "fa-check",
-            text: "Projetar um protocolo ético de IA digno de um guardião",
+            text: "Transformar um procedimento repetido em uma Skill reutilizável",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Ignorar a regulamentação vigente — a ignorância não isenta de multas",
+            text: "Dar senhas no chat ou aceitar permissões sem lê-las",
           },
           {
             icon: "fa-times",
-            text: "Processar dados pessoais com IA sem proteção legal",
+            text: "Deixar uma tarefa de várias etapas agir sem confirmar ações importantes",
           },
           {
             icon: "fa-times",
-            text: "Implementar IA na sua organização sem políticas de governança",
+            text: "Subir dados pessoais de terceiros sem critério nem política clara",
           },
         ],
         example: {
-          label: "Dois Mundos, um Único Algoritmo",
-          weak: "❌ Sem protocolo: Uma startup implementou chatbots de atendimento ao cliente sem supervisão ética. Em 48 horas, o chatbot insultou clientes em 3 idiomas, violou normas de privacidade e gerou uma crise de relações públicas.",
+          label: "O maestro vs. o espectador",
+          weak: "❌ Espectador: Conectou o e-mail, pediu 'responda a tudo' e enviou respostas sem ler. Um cliente recebeu um número errado.",
           strong:
-            "✅ Com protocolo: Um comitê de ética de IA aprovou cada implementação, auditorias trimestrais detectaram problemas antes que chegassem ao público, checklist de privacidade obrigatório antes de cada implantação e divulgação transparente ao usuário final. Resultado: confiança do cliente, zero incidentes.",
+            "✅ Maestro: Definiu o que responder, revisou cada rascunho e usou uma tarefa programada para o resumo semanal. Ele decide o que é enviado.",
         },
       },
     },

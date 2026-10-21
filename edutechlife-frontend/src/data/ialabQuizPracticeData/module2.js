@@ -71,7 +71,7 @@ export const MODULE_2 = [
     correctAnswer: 'pp-m2-5_b',
     topic: 'Context Window',
     difficulty: 'medium',
-    feedback: 'El context window es el máximo de tokens (entrada + salida) que el modelo puede procesar en una sola interacción. Modelos como GPT-3.5 tienen 4K-16K, GPT-4 llega a 32K-128K tokens.',
+    feedback: 'El context window es el máximo de tokens (entrada + salida) que el modelo puede procesar en una sola interacción. Cada modelo tiene su propio límite: revisa la ficha de tu plan para saber cuál es el tuyo.',
     relatedFlashcardId: 'm2-f3',
   },
   {
@@ -91,16 +91,16 @@ export const MODULE_2 = [
   },
   {
     id: 'pp-m2-7',
-    question: '¿Cuál es la diferencia clave entre un modelo GPT-3.5 y GPT-4 en términos de capacidades?',
+    question: '¿Cómo eliges el modelo adecuado para una tarea?',
     options: [
-      { id: 'pp-m2-7_a', label: 'GPT-4 tiene un context window mayor y mejor razonamiento, pero es más lento y costoso' },
-      { id: 'pp-m2-7_b', label: 'GPT-4 es gratuito mientras que GPT-3.5 es de pago' },
-      { id: 'pp-m2-7_c', label: 'GPT-4 solo funciona con imágenes, no con texto' },
-      { id: 'pp-m2-7_d', label: 'No hay diferencias significativas entre ambos modelos' },
+      { id: 'pp-m2-7_a', label: 'Según la complejidad y el costo: uno rápido para borradores y uno más potente para análisis exigentes' },
+      { id: 'pp-m2-7_b', label: 'Siempre el más potente, aunque tarde más y cueste más' },
+      { id: 'pp-m2-7_c', label: 'Siempre el más barato, porque la calidad es igual en todas las tareas' },
+      { id: 'pp-m2-7_d', label: 'Al azar: la elección del modelo no influye en el resultado' },
     ],
     correctAnswer: 'pp-m2-7_a',
-    topic: 'Modelos GPT',
+    topic: 'Elección de modelo',
     difficulty: 'medium',
-    feedback: 'GPT-4 ofrece mejor razonamiento, mayor context window (32K vs 4-16K) y respuestas más precisas, pero a un costo mayor y velocidad más lenta que GPT-3.5.',
+    feedback: 'Cada modelo equilibra velocidad, costo y capacidad. Uno rápido sirve para borradores y resúmenes; uno más potente, para análisis que exigen razonamiento. Los nombres de los modelos cambian con frecuencia: revisa qué ofrece tu plan.',
   },
 ];

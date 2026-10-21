@@ -19,6 +19,9 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     css: true,
     pool: 'threads',
+    // La máquina tiene 8 GB y swap al límite: con todos los núcleos, un test se congela.
+    // Dos workers evitan el cuelgue (ver diagnóstico de directAuth y ModuleFlow).
+    maxWorkers: 2,
     testTimeout: 30000,
     hookTimeout: 20000,
     coverage: {

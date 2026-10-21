@@ -71,7 +71,7 @@ export const MODULE_2_EN = [
     correctAnswer: 'pp-m2-5_b',
     topic: 'Context Window',
     difficulty: 'medium',
-    feedback: 'The context window is the maximum number of tokens (input + output) the model can process in a single interaction. Models like GPT-3.5 have 4K-16K, GPT-4 reaches 32K-128K tokens.',
+    feedback: 'The context window is the maximum number of tokens (input + output) the model can process in a single interaction. Each model has its own limit: check your plan's details to know yours.',
     relatedFlashcardId: 'm2-f3',
   },
   {
@@ -91,16 +91,16 @@ export const MODULE_2_EN = [
   },
   {
     id: 'pp-m2-7',
-    question: 'What is the key difference between GPT-3.5 and GPT-4 in terms of capabilities?',
+    question: 'How do you choose the right model for a task?',
     options: [
-      { id: 'pp-m2-7_a', label: 'GPT-4 has a larger context window and better reasoning, but is slower and more expensive' },
-      { id: 'pp-m2-7_b', label: 'GPT-4 is free while GPT-3.5 is paid' },
-      { id: 'pp-m2-7_c', label: 'GPT-4 only works with images, not text' },
-      { id: 'pp-m2-7_d', label: 'There are no significant differences between the two models' },
+      { id: 'pp-m2-7_a', label: 'By complexity and cost: a fast one for drafts and a more powerful one for demanding analysis' },
+      { id: 'pp-m2-7_b', label: 'Always the most powerful, even if it is slower and more expensive' },
+      { id: 'pp-m2-7_c', label: 'Always the cheapest, because quality is the same for every task' },
+      { id: 'pp-m2-7_d', label: 'At random: the choice of model does not affect the result' },
     ],
     correctAnswer: 'pp-m2-7_a',
-    topic: 'GPT Models',
+    topic: 'Model choice',
     difficulty: 'medium',
-    feedback: 'GPT-4 offers better reasoning, a larger context window (32K vs 4-16K), and more accurate responses, but at a higher cost and slower speed than GPT-3.5.',
+    feedback: 'Each model balances speed, cost and capability. A fast one works for drafts and summaries; a more powerful one for analysis that requires reasoning. Model names change often: check what your plan includes.',
   },
 ];

@@ -17,7 +17,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q1_b",
     topic: "Engenharia de Prompts",
     difficulty: "fácil",
-    source: "Vídeo: Como Criar Prompts Eficazes",
+    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
       "Um bom prompt é uma instrução clara. Reveja o vídeo e o guia de anatomia do prompt.",
   },
@@ -34,7 +34,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q2_a",
     topic: "Método RTF",
     difficulty: "médio",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       'Esse prompt pede para "escrever um texto" (Tarefa), mas não define o papel da IA nem o formato. Reveja a anatomia do prompt.',
   },
@@ -56,7 +56,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q3_b",
     topic: "Método RTF",
     difficulty: "fácil",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "O RTF organiza o pedido em Papel, Tarefa e Formato. Pratique na OVA.",
   },
@@ -87,7 +87,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q4_a",
     topic: "Estrutura de Prompts",
     difficulty: "médio",
-    source: "Vídeo: Como Criar Prompts Eficazes",
+    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
       "A opção A define papel, tarefa e formato. As demais são vagas ou misturam temas.",
   },
@@ -107,7 +107,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q5_a",
     topic: "Aplicação RTF",
     difficulty: "médio",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Um prompt genérico não indica público nem formato. Acrescente papel, público e extensão.",
   },
@@ -129,7 +129,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q6_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "A IA generativa produz texto, imagens ou outro conteúdo novo. Assista ao vídeo.",
   },
@@ -148,7 +148,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q7_a",
     topic: "Fundamentos de Prompts",
     difficulty: "fácil",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Um prompt é o que você pede à IA. O guia de anatomia explica como montá-lo.",
   },
@@ -165,7 +165,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q8_a",
     topic: "Método RTF",
     difficulty: "fácil",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "O papel dá foco e tom à IA, deixando a resposta mais adequada ao objetivo.",
   },
@@ -185,7 +185,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q9_a",
     topic: "Refinamento de Prompts",
     difficulty: "fácil",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "Refine o prompt acrescentando contexto. Pratique no laboratório ao vivo.",
   },
@@ -211,7 +211,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q10_a",
     topic: "Clareza em Prompts",
     difficulty: "médio",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Pedir exemplos e linguagem simples ajuda a tornar a explicação mais clara e útil.",
   },
@@ -234,7 +234,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q11_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "A IA generativa produz conteúdo novo (texto, imagem, áudio) com base em padrões aprendidos.",
   },
@@ -264,7 +264,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q12_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "Aprende com dados e gera conteúdo novo; não recupera respostas guardadas.",
   },
@@ -287,7 +287,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q13_a",
     topic: "História da IA",
     difficulty: "médio",
-    source: "Vídeo: Primórdios da Inteligência Artificial",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "A história explica por que a IA chegou a gerar conteúdo e onde estão seus limites.",
   },
@@ -316,7 +316,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q14_a",
     topic: "IA Generativa",
     difficulty: "médio",
-    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "Gera e transforma texto, mas não garante veracidade nem substitui seu critério.",
   },
@@ -346,7 +346,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q15_a",
     topic: "Limites da IA",
     difficulty: "médio",
-    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "As alucinações são respostas plausíveis mas incorretas. Verifique sempre dados críticos.",
   },
@@ -369,7 +369,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q16_a",
     topic: "Uso Responsável",
     difficulty: "fácil",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Você é responsável pelo resultado: verifique dados importantes em fontes confiáveis.",
   },
@@ -389,7 +389,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q17_a",
     topic: "Fundamentos de Prompts",
     difficulty: "fácil",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "Papel (quem é a IA), tarefa (o que você quer) e formato (como você quer).",
   },
@@ -408,7 +408,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q18_a",
     topic: "Estrutura de Prompts",
     difficulty: "médio",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "O contexto (objetivo, público, situação) direciona a resposta ao que você precisa.",
   },
@@ -439,7 +439,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q19_a",
     topic: "Clareza em Prompts",
     difficulty: "fácil",
-    source: "Vídeo: Como Criar Prompts Eficazes",
+    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback: "A define tema, formato e público; as demais são vagas.",
   },
   {
@@ -458,7 +458,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q20_a",
     topic: "Formato de Saída",
     difficulty: "médio",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "Indicar o formato (tabela, tópicos, extensão) faz a IA entregar exatamente o que você precisa.",
   },
@@ -478,7 +478,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q21_a",
     topic: "Público",
     difficulty: "médio",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Indicar o público (crianças) e o nível de linguagem ajusta o tom e a complexidade.",
   },
@@ -498,7 +498,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q22_a",
     topic: "Refinamento de Prompts",
     difficulty: "fácil",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "Iterar o prompt faz parte do trabalho. Pratique no Laboratório de Prompts ao Vivo.",
   },
@@ -515,7 +515,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q23_a",
     topic: "Restrições",
     difficulty: "médio",
-    source: "Vídeo: Como Criar Prompts Eficazes",
+    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
       "As restrições (comprimento, tom, público) delimitam a resposta ao resultado desejado.",
   },
@@ -544,7 +544,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q24_a",
     topic: "Exemplos no Prompt",
     difficulty: "difícil",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "Dar um exemplo (poucos disparos) ajuda a IA a copiar o estilo/formato esperado.",
   },
@@ -561,7 +561,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q25_a",
     topic: "Tom do Prompt",
     difficulty: "fácil",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "O tom (formal/informal, técnico/próximo) ajusta o registro da resposta.",
   },
@@ -587,7 +587,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q26_a",
     topic: "Evitar Ambiguidade",
     difficulty: "médio",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Sem tarefa, formato nem objetivo, a IA adivinha. Seja específico e delimite o resultado.",
   },
@@ -616,7 +616,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q27_a",
     topic: "Método RTF",
     difficulty: "médio",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "O papel ('aja como…') dá enfoque; a tarefa diz o que fazer. Juntos melhoram o resultado.",
   },
@@ -647,7 +647,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q28_a",
     topic: "Aplicação RTF",
     difficulty: "médio",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "A define formato (tópicos), extensão (5) e público (diretoria). É a mais útil e clara.",
   },
@@ -679,7 +679,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q29_a",
     topic: "Aplicação de Prompts",
     difficulty: "fácil",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "A especifica quantidade, contexto, tom e formato: isso foca as ideias no que você precisa.",
   },
@@ -709,7 +709,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q30_a",
     topic: "Aplicação de Prompts",
     difficulty: "médio",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "Pedir passos, exemplos e linguagem simples produz uma explicação mais clara.",
   },
@@ -738,7 +738,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q31_a",
     topic: "Erros Comuns",
     difficulty: "médio",
-    source: "Vídeo: Como Criar Prompts Eficazes",
+    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
       "A vagueza é o erro mais frequente: sem objetivo, público nem formato a IA adivinha.",
   },
@@ -767,7 +767,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q32_a",
     topic: "Estrutura de Prompts",
     difficulty: "difícil",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "Menos é mais: inclua só o relevante (tarefa, contexto, formato) para não diluir o objetivo.",
   },
@@ -792,7 +792,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q33_a",
     topic: "Reutilização",
     difficulty: "médio",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "Modelos reutilizáveis economizam tempo e tornam os resultados consistentes.",
   },
@@ -815,7 +815,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q34_a",
     topic: "Avaliação Crítica",
     difficulty: "difícil",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "Diante de respostas divergentes, valide os dados e use seu critério.",
   },
@@ -844,7 +844,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q35_a",
     topic: "Uso Responsável",
     difficulty: "médio",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "Não compartilhe dados confidenciais: anonimize ou evite informação sensível.",
   },
@@ -873,7 +873,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q36_a",
     topic: "Pensamento Crítico",
     difficulty: "difícil",
-    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    source: "O que é a IA e como ela está mudando o mundo",
     feedback:
       "A IA pode ter viés: contraste, peça outras perspectivas e valide. Você traz o critério.",
   },
@@ -898,7 +898,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q37_a",
     topic: "Ética e Uso Responsável",
     difficulty: "fácil",
-    source: "Guia PDF: Anatomia de um Prompt",
+    source: "Guia: Anatomia de um Prompt",
     feedback:
       "A IA é apoio: revise, acrescente valor próprio e seja transparente sobre o uso.",
   },
@@ -927,7 +927,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q38_a",
     topic: "Uso Responsável",
     difficulty: "médio",
-    source: "OVA: Como conversar com a IA (prompts)",
+    source: "O Cinzel",
     feedback:
       "A IA acelera o trabalho, mas a revisão e a decisão final são suas.",
   },
@@ -950,7 +950,7 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q39_a",
     topic: "Refinamento de Prompts",
     difficulty: "médio",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "Iterar é normal e eficaz: cada ajuste aproxima a resposta do que você precisa.",
   },
@@ -983,8 +983,585 @@ export const MODULE_1_PT = [
     correctAnswer: "m1q40_a",
     topic: "Aplicação RTF",
     difficulty: "difícil",
-    source: "OVA: Laboratório de Prompts ao Vivo",
+    source: "O Martelo",
     feedback:
       "A reúne papel, tarefa, contexto (data/hora), tom, formato/extensão e assunto: um prompt completo.",
+  },
+
+  {
+    id: "m1e01",
+    question:
+      "Um sistema de contratação foi treinado com dados de uma empresa com maioria masculina e penalizava currículos com certos termos. Qual viés aparece e onde ele começa?",
+    options: [
+      {
+        id: "m1e01_a",
+        label: "Viés de amostragem, originado nos dados de treino",
+      },
+      {
+        id: "m1e01_b",
+        label: "Viés de automação, por falta de supervisão humana",
+      },
+      {
+        id: "m1e01_c",
+        label: "Viés de confirmação, por ideias do recrutador",
+      },
+      {
+        id: "m1e01_d",
+        label: "Viés de rotulagem, por anotadores errados",
+      },
+    ],
+    correctAnswer: "m1e01_a",
+    topic: "Vieses em IA",
+    difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
+    feedback:
+      "Os dados históricos não representavam a população, então o viés nasceu na coleta. Reveja o laboratório.",
+  },
+  {
+    id: "m1e02",
+    question:
+      "Uma IA dá um diagnóstico que contradiz seu julgamento profissional. Como você age?",
+    options: [
+      {
+        id: "m1e02_a",
+        label: "Questiono a IA e consulto outros especialistas",
+      },
+      {
+        id: "m1e02_b",
+        label: "Aceito a IA porque ela é mais inteligente",
+      },
+      {
+        id: "m1e02_c",
+        label: "Deixo a IA decidir o tratamento",
+      },
+      {
+        id: "m1e02_d",
+        label: "Reinicio o sistema e pergunto de novo",
+      },
+    ],
+    correctAnswer: "m1e02_a",
+    topic: "Responsabilidade",
+    difficulty: "médio",
+    source: "Vídeo: IA Ética: Princípios e Prática",
+    feedback:
+      "Não caia no viés de automação: seu julgamento profissional é insubstituível.",
+  },
+  {
+    id: "m1e03",
+    question:
+      "Um banco rejeita um empréstimo com IA e não explica o motivo. Qual princípio é violado?",
+    options: [
+      {
+        id: "m1e03_a",
+        label: "A transparência e a explicabilidade da decisão",
+      },
+      {
+        id: "m1e03_b",
+        label: "A privacidade por esconder o uso da IA",
+      },
+      {
+        id: "m1e03_c",
+        label: "A velocidade do processo de decisão",
+      },
+      {
+        id: "m1e03_d",
+        label: "A eficiência ao usar analistas humanos",
+      },
+    ],
+    correctAnswer: "m1e03_a",
+    topic: "Transparência",
+    difficulty: "médio",
+    source: "PDF: Código de Ética para Uso de IA",
+    feedback:
+      "As pessoas têm o direito de entender decisões automáticas que as afetam. Reveja o código de ética.",
+  },
+  {
+    id: "m1e04",
+    question:
+      "Um motorista distraído confia no piloto automático e sofre um acidente. Qual viés isso descreve?",
+    options: [
+      {
+        id: "m1e04_a",
+        label: "Viés de automação: confiou sem supervisão crítica",
+      },
+      {
+        id: "m1e04_b",
+        label: "Viés de amostragem nos dados de treino",
+      },
+      {
+        id: "m1e04_c",
+        label: "Viés algorítmico contra certos objetos",
+      },
+      {
+        id: "m1e04_d",
+        label: "Um erro humano normal, sem viés",
+      },
+    ],
+    correctAnswer: "m1e04_a",
+    topic: "Viés de Automação",
+    difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
+    feedback:
+      "O viés de automação é confiar demais na máquina. Mantenha a supervisão ativa.",
+  },
+  {
+    id: "m1e05",
+    question:
+      "Um sistema de IA de alto risco (por exemplo, aprovar uma hipoteca) na UE deve cumprir:",
+    options: [
+      {
+        id: "m1e05_a",
+        label: "Avaliação de conformidade e supervisão humana",
+      },
+      {
+        id: "m1e05_b",
+        label: "Proibição total de usar IA nesse caso",
+      },
+      {
+        id: "m1e05_c",
+        label: "Registro voluntário sem obrigações",
+      },
+      {
+        id: "m1e05_d",
+        label: "Pagar uma taxa anual para usá-lo",
+      },
+    ],
+    correctAnswer: "m1e05_a",
+    topic: "Marco Regulatório",
+    difficulty: "difícil",
+    source: "PDF: Código de Ética para Uso de IA",
+    feedback:
+      "Sistemas de alto risco exigem transparência, documentação e supervisão humana. Reveja o marco regulatório.",
+  },
+  {
+    id: "m1e06",
+    question:
+      "Quais são os 4 princípios éticos-chave que guiam o uso responsável da IA?",
+    options: [
+      {
+        id: "m1e06_a",
+        label: "Transparência, equidade, responsabilidade e privacidade",
+      },
+      {
+        id: "m1e06_b",
+        label: "Velocidade, economia, automação e eficiência",
+      },
+      {
+        id: "m1e06_c",
+        label: "Popularidade, lucro, escala e competição",
+      },
+      {
+        id: "m1e06_d",
+        label: "Inovação, investimento, patente e propriedade",
+      },
+    ],
+    correctAnswer: "m1e06_a",
+    topic: "Princípios Éticos",
+    difficulty: "fácil",
+    source: "Vídeo: IA Ética: Princípios e Prática",
+    feedback:
+      "Transparência, equidade, responsabilidade e privacidade são os pilares. Revise o vídeo.",
+  },
+  {
+    id: "m1e07",
+    question: "O que é o viés de amostragem num modelo de IA?",
+    options: [
+      {
+        id: "m1e07_a",
+        label: "Os dados de treinamento não representam toda a população",
+      },
+      {
+        id: "m1e07_b",
+        label: "O sistema funciona devagar com bases de dados grandes",
+      },
+      {
+        id: "m1e07_c",
+        label: "O modelo muda de idioma sem que você peça",
+      },
+      {
+        id: "m1e07_d",
+        label: "O modelo se treina de novo sozinho a cada consulta do usuário",
+      },
+    ],
+    correctAnswer: "m1e07_a",
+    topic: "Viés em IA",
+    difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
+    feedback:
+      "O viés de amostragem nasce de dados não representativos. Pratique no laboratório.",
+  },
+  {
+    id: "m1e08",
+    question: "O que é o viés de rotulagem?",
+    options: [
+      {
+        id: "m1e08_a",
+        label:
+          "Os rótulos de treinamento carregam preconceitos de quem os cria",
+      },
+      {
+        id: "m1e08_b",
+        label: "O sistema classifica os dados de forma automática e neutra",
+      },
+      {
+        id: "m1e08_c",
+        label: "A IA coloca um rótulo visível em cada resposta gerada",
+      },
+      {
+        id: "m1e08_d",
+        label: "O modelo desativa os rótulos quando há muitos dados",
+      },
+    ],
+    correctAnswer: "m1e08_a",
+    topic: "Viés em IA",
+    difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
+    feedback:
+      "Se quem rotula tem vieses, o modelo os aprende. Revise o laboratório de viés.",
+  },
+  {
+    id: "m1e09",
+    question:
+      "Uma IA penaliza sistematicamente certo grupo na contratação. O que faz?",
+    options: [
+      {
+        id: "m1e09_a",
+        label: "Parar o sistema, documentar o viés e corrigir os dados",
+      },
+      {
+        id: "m1e09_b",
+        label: "Ignorar porque o modelo funciona rápido e barato",
+      },
+      {
+        id: "m1e09_c",
+        label: "Ocultar os resultados para evitar reclamações legais",
+      },
+      {
+        id: "m1e09_d",
+        label: "Enviar mais dados históricos iguais ao sistema afetado",
+      },
+    ],
+    correctAnswer: "m1e09_a",
+    topic: "Mitigação de Viés",
+    difficulty: "difícil",
+    source: "OVA: Laboratório: Detecte o Viés",
+    feedback:
+      "Diante de um viés detectado, pare, documente e corrija. Pratique no laboratório.",
+  },
+  {
+    id: "m1e10",
+    question: "O que busca a explicabilidade de um modelo de IA?",
+    options: [
+      {
+        id: "m1e10_a",
+        label: "Que as decisões automáticas possam ser justificadas às pessoas",
+      },
+      {
+        id: "m1e10_b",
+        label: "Que o modelo explique por que consome tantos recursos",
+      },
+      {
+        id: "m1e10_c",
+        label: "Que o sistema resuma as respostas em menos palavras",
+      },
+      {
+        id: "m1e10_d",
+        label: "Que se possam traduzir as respostas para outros idiomas",
+      },
+    ],
+    correctAnswer: "m1e10_a",
+    topic: "Explicabilidade",
+    difficulty: "médio",
+    source: "PDF: Código de Ética para Uso de IA",
+    feedback:
+      "A explicabilidade permite justificar decisões às pessoas afetadas. Revise o código.",
+  },
+  {
+    id: "m1e11",
+    question:
+      "Uma IA médica sugere um tratamento. Qual é a melhor prática de supervisão?",
+    options: [
+      {
+        id: "m1e11_a",
+        label:
+          "Um profissional valida a sugestão antes de aplicá-la ao paciente",
+      },
+      {
+        id: "m1e11_b",
+        label: "Aplicar o tratamento recomendado sem nenhuma revisão",
+      },
+      {
+        id: "m1e11_c",
+        label: "Descartar a IA porque nunca pode ser útil na saúde",
+      },
+      {
+        id: "m1e11_d",
+        label: "Deixar o paciente decidir sem consultar ninguém",
+      },
+    ],
+    correctAnswer: "m1e11_a",
+    topic: "Supervisão Humana",
+    difficulty: "médio",
+    source: "Vídeo: IA Ética: Princípios e Prática",
+    feedback:
+      "Em áreas críticas, a decisão final é validada por um profissional. Revise o vídeo.",
+  },
+  {
+    id: "m1e12",
+    question: "O que é privacidade por design?",
+    options: [
+      {
+        id: "m1e12_a",
+        label: "Incorporar a proteção de dados desde o início do sistema",
+      },
+      {
+        id: "m1e12_b",
+        label: "Adicionar a privacidade só se houver reclamação dos usuários",
+      },
+      {
+        id: "m1e12_c",
+        label: "Ocultar o uso de dados nas letras miúdas do contrato",
+      },
+      {
+        id: "m1e12_d",
+        label: "Coletar tudo e decidir a privacidade no fim do projeto",
+      },
+    ],
+    correctAnswer: "m1e12_a",
+    topic: "Privacidade por Design",
+    difficulty: "médio",
+    source: "PDF: Manual de Privacidade em IA",
+    feedback:
+      "A privacidade se projeta desde o início, não se acrescenta no fim. Revise o manual.",
+  },
+  {
+    id: "m1e13",
+    question:
+      "Como se classificam os sistemas de IA segundo o nível de risco (UE)?",
+    options: [
+      {
+        id: "m1e13_a",
+        label: "Risco inaceitável, alto, limitado e mínimo",
+      },
+      {
+        id: "m1e13_b",
+        label: "Risco pequeno, médio, grande e gigante",
+      },
+      {
+        id: "m1e13_c",
+        label: "Risco técnico, humano e financeiro somente",
+      },
+      {
+        id: "m1e13_d",
+        label: "Risco público, privado e confidencial apenas",
+      },
+    ],
+    correctAnswer: "m1e13_a",
+    topic: "Marco Regulatório",
+    difficulty: "difícil",
+    source: "PDF: Código de Ética para Uso de IA",
+    feedback:
+      "A UE distingue risco inaceitável, alto, limitado e mínimo. Revise o código de ética.",
+  },
+  {
+    id: "m1e14",
+    question: "Um sistema de IA de alto risco deve, entre outras coisas…",
+    options: [
+      {
+        id: "m1e14_a",
+        label: "Ser documentado, avaliado e contar com supervisão humana",
+      },
+      {
+        id: "m1e14_b",
+        label: "Funcionar sem registro nem avaliação de nenhum tipo",
+      },
+      {
+        id: "m1e14_c",
+        label: "Operar só à noite para consumir menos energia",
+      },
+      {
+        id: "m1e14_d",
+        label: "Publicar todo o seu código em aberto de forma obrigatória",
+      },
+    ],
+    correctAnswer: "m1e14_a",
+    topic: "Marco Regulatório",
+    difficulty: "difícil",
+    source: "PDF: Código de Ética para Uso de IA",
+    feedback:
+      "O alto risco exige documentação, avaliação e supervisão humana. Revise o marco.",
+  },
+  {
+    id: "m1e15",
+    question: "O que é uma auditoria de viés num sistema de IA?",
+    options: [
+      {
+        id: "m1e15_a",
+        label:
+          "Revisar sistematicamente se o modelo trata injustamente algum grupo",
+      },
+      {
+        id: "m1e15_b",
+        label: "Medir só a velocidade de resposta do sistema completo",
+      },
+      {
+        id: "m1e15_c",
+        label: "Comprovar quantos usuários registrados a plataforma tem",
+      },
+      {
+        id: "m1e15_d",
+        label: "Verificar unicamente o custo mensal da ferramenta",
+      },
+    ],
+    correctAnswer: "m1e15_a",
+    topic: "Auditoria",
+    difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
+    feedback:
+      "Auditar o viés é revisar se algum grupo sai prejudicado. Pratique no laboratório.",
+  },
+  {
+    id: "m1e16",
+    question: "Qual é um uso NÃO ético da IA?",
+    options: [
+      {
+        id: "m1e16_a",
+        label: "Suplantar a identidade de uma pessoa com voz ou imagem geradas",
+      },
+      {
+        id: "m1e16_b",
+        label: "Resumir um relatório próprio para uma reunião de trabalho",
+      },
+      {
+        id: "m1e16_c",
+        label: "Revisar a ortografia de um texto antes de publicá-lo",
+      },
+      {
+        id: "m1e16_d",
+        label: "Gerar ideias para um projeto pessoal de aprendizagem",
+      },
+    ],
+    correctAnswer: "m1e16_a",
+    topic: "Uso Responsável",
+    difficulty: "fácil",
+    source: "Vídeo: IA Ética: Princípios e Prática",
+    feedback:
+      "Suplantar identidades com IA é um uso não ético e pode ser ilegal. Revise o vídeo.",
+  },
+  {
+    id: "m1e17",
+    question:
+      "Um chatbot educacional começa a dar respostas inapropriadas a menores. O que faz?",
+    options: [
+      {
+        id: "m1e17_a",
+        label:
+          "Pausar o sistema, investigar e acrescentar salvaguardas de conteúdo",
+      },
+      {
+        id: "m1e17_b",
+        label: "Deixar que siga funcionando e avisar só se alguém reclamar",
+      },
+      {
+        id: "m1e17_c",
+        label: "Eliminar a moderação para ele responder com mais liberdade",
+      },
+      {
+        id: "m1e17_d",
+        label: "Culpar os menores pelo uso que eles dão ao sistema",
+      },
+    ],
+    correctAnswer: "m1e17_a",
+    topic: "Salvaguardas",
+    difficulty: "difícil",
+    source: "OVA: Laboratório: Dilemas Éticos",
+    feedback:
+      "Com menores, pause, investigue e reforce as salvaguardas de conteúdo. Revise o laboratório.",
+  },
+  {
+    id: "m1e18",
+    question:
+      "A IA sugere uma decisão que afeta muitas pessoas. Que princípio exige revisá-la?",
+    options: [
+      {
+        id: "m1e18_a",
+        label: "Responsabilidade e transparência com supervisão humana",
+      },
+      {
+        id: "m1e18_b",
+        label: "Eficiência, para resolver o caso no menor tempo possível",
+      },
+      {
+        id: "m1e18_c",
+        label: "Escalabilidade, para a IA decidir o maior volume possível",
+      },
+      {
+        id: "m1e18_d",
+        label: "Automação, para eliminar a intervenção das pessoas",
+      },
+    ],
+    correctAnswer: "m1e18_a",
+    topic: "Responsabilidade",
+    difficulty: "médio",
+    source: "Vídeo: IA Ética: Princípios e Prática",
+    feedback:
+      "Decisões com impacto exigem transparência e supervisão humana. Revise o vídeo.",
+  },
+  {
+    id: "m1e19",
+    question: "O que caracteriza os sistemas de IA de risco limitado (UE)?",
+    options: [
+      {
+        id: "m1e19_a",
+        label: "Obrigações de transparência, sem serem de alto risco",
+      },
+      {
+        id: "m1e19_b",
+        label: "Proibição total do seu uso em qualquer contexto possível",
+      },
+      {
+        id: "m1e19_c",
+        label: "Exigência de licença especial para poder desenvolvê-los",
+      },
+      {
+        id: "m1e19_d",
+        label: "Proibição de publicar que se está usando IA neles",
+      },
+    ],
+    correctAnswer: "m1e19_a",
+    topic: "Marco Regulatório",
+    difficulty: "difícil",
+    source: "PDF: Código de Ética para Uso de IA",
+    feedback:
+      "O risco limitado exige transparência, não proibição. Revise o código de ética.",
+  },
+  {
+    id: "m1e20",
+    question:
+      "Um funcionário usa IA para decidir sobre pessoas sem deixar rastro. O que se descumpre?",
+    options: [
+      {
+        id: "m1e20_a",
+        label: "A rastreabilidade e a prestação de contas das decisões",
+      },
+      {
+        id: "m1e20_b",
+        label: "A velocidade do processo para resolver o caso pontual",
+      },
+      {
+        id: "m1e20_c",
+        label: "A popularidade do sistema entre os usuários internos",
+      },
+      {
+        id: "m1e20_d",
+        label: "O custo operacional de manter essa ferramenta ativa",
+      },
+    ],
+    correctAnswer: "m1e20_a",
+    topic: "Responsabilidade",
+    difficulty: "difícil",
+    source: "OVA: Laboratório: Dilemas Éticos",
+    feedback:
+      "Sem rastreabilidade não há prestação de contas possível. Revise o laboratório.",
   },
 ];

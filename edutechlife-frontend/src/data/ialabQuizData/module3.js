@@ -17,7 +17,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "fácil",
-    source: "Video: Casos Reales: Detectives Digitales en Acción",
+    source: "Casos Reales: Detectives Digitales en Acción",
     feedback:
       "Deep Research investiga en varias fuentes y entrega un informe con citas. Míralo en el video de casos reales.",
   },
@@ -36,7 +36,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q2_a",
     topic: "Verificación de Fuentes",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Verifica siempre: la IA puede equivocarse. Practica en el laboratorio de resolución de casos.",
   },
@@ -59,7 +59,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q3_a",
     topic: "Grounding",
     difficulty: "medio",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "El grounding ancla las respuestas a datos en vivo. Revisa los ejercicios de campo de Gemini.",
   },
@@ -78,7 +78,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q4_a",
     topic: "Multimodalidad",
     difficulty: "fácil",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "Puedes mostrarle una imagen, un PDF o un video en la misma conversación. Mira el mapa del ecosistema Gemini.",
   },
@@ -97,7 +97,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q5_a",
     topic: "Google Workspace",
     difficulty: "medio",
-    source: "OVA: Misión Interactiva: Domina el Ecosistema Gemini",
+    source: "La Lupa Multimodal",
     feedback:
       "Gemini ayuda en Gmail, Docs y Sheets desde cada aplicación. Practica en el OVA del ecosistema.",
   },
@@ -120,7 +120,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q6_a",
     topic: "Gemini Live",
     difficulty: "medio",
-    source: "OVA: Misión Interactiva: Domina el Ecosistema Gemini",
+    source: "La Lupa Multimodal",
     feedback:
       "Gemini Live permite compartir pantalla y preguntar sobre lo que ves. Repasa el OVA del ecosistema.",
   },
@@ -143,7 +143,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q7_a",
     topic: "Investigación Profesional",
     difficulty: "medio",
-    source: "Video: Casos Reales: Detectives Digitales en Acción",
+    source: "Casos Reales: Detectives Digitales en Acción",
     feedback:
       "Combina Deep Research con verificación de fuentes. Míralo en el video de casos reales.",
   },
@@ -163,7 +163,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q8_a",
     topic: "Deep Research",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Deep Research encuentra y analiza fuentes; tú verificas y redactas. Practica con el laboratorio de casos.",
   },
@@ -186,7 +186,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q9_a",
     topic: "Aprendizaje Guiado",
     difficulty: "fácil",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Úsalo como tutor para aprender activamente. Revisa el manual de introducción a Gemini.",
   },
@@ -209,7 +209,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q10_a",
     topic: "Extensiones Gemini",
     difficulty: "medio",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "Las extensiones traen información en vivo de los servicios de Google. Repasa el mapa del ecosistema.",
   },
@@ -239,7 +239,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q11_a",
     topic: "Multimodalidad",
     difficulty: "medio",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Gemini procesa contenido digital (texto, imagen, audio, video, PDF), no objetos físicos sin digitalizar.",
   },
@@ -267,7 +267,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q12_a",
     topic: "Gemini Básico",
     difficulty: "fácil",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Gemini elabora respuestas a partir de tu pregunta, mientras un buscador lista enlaces. Repasa el manual de campo.",
   },
@@ -296,7 +296,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q13_a",
     topic: "Grounding",
     difficulty: "medio",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "El grounding conecta la respuesta con datos vivos y sus fuentes. Revisa los ejercicios de campo.",
   },
@@ -325,7 +325,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q14_a",
     topic: "Verificación de Fuentes",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Verifica abriendo la fuente: una cita con formato no garantiza que el dato sea correcto.",
   },
@@ -354,7 +354,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q15_a",
     topic: "Deep Research",
     difficulty: "fácil",
-    source: "Video: Casos Reales: Detectives Digitales en Acción",
+    source: "Casos Reales: Detectives Digitales en Acción",
     feedback:
       "Deep Research recorre varias fuentes y entrega un informe citado. Repasa el video de casos reales.",
   },
@@ -383,7 +383,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Delimitar tema, enfoque y fuentes mejora el informe. Practica en el laboratorio de casos.",
   },
@@ -408,7 +408,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q17_a",
     topic: "Verificación de Fuentes",
     difficulty: "medio",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "Triangular es contrastar con fuentes independientes para reducir el riesgo de error.",
   },
@@ -437,7 +437,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q18_a",
     topic: "Contexto Largo",
     difficulty: "medio",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "El contexto largo permite trabajar con documentos grandes sin dividirlos. Repasa el mapa del ecosistema.",
   },
@@ -465,7 +465,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q19_a",
     topic: "Gemini Live",
     difficulty: "medio",
-    source: "OVA: Misión Interactiva: Domina el Ecosistema Gemini",
+    source: "La Lupa Multimodal",
     feedback:
       "Gemini Live analiza en tiempo real lo que compartes en pantalla. Repasa el OVA del ecosistema.",
   },
@@ -494,7 +494,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q20_a",
     topic: "Verificación",
     difficulty: "difícil",
-    source: "Video: Casos Reales: Detectives Digitales en Acción",
+    source: "Casos Reales: Detectives Digitales en Acción",
     feedback:
       "Sin fuente verificable, el dato no se usa. Pide respaldo o descártalo. Repasa el video de casos reales.",
   },
@@ -522,7 +522,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q21_a",
     topic: "Google Workspace",
     difficulty: "fácil",
-    source: "OVA: Misión Interactiva: Domina el Ecosistema Gemini",
+    source: "La Lupa Multimodal",
     feedback:
       "Gemini asiste en Gmail, Docs y Sheets integrado en cada app. Repasa el OVA del ecosistema.",
   },
@@ -551,7 +551,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q22_a",
     topic: "Google Workspace",
     difficulty: "medio",
-    source: "OVA: Misión Interactiva: Domina el Ecosistema Gemini",
+    source: "La Lupa Multimodal",
     feedback:
       "Trabajar dentro de la app evita copiar datos y reduce errores. Repasa el OVA del ecosistema.",
   },
@@ -581,7 +581,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q23_a",
     topic: "Extensiones Gemini",
     difficulty: "medio",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "Las extensiones añaden datos en vivo de servicios de Google al chat. Repasa el mapa del ecosistema.",
   },
@@ -611,7 +611,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q24_a",
     topic: "Investigación Profesional",
     difficulty: "medio",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Una buena pregunta es específica y verificable. Revisa el manual de campo.",
   },
@@ -640,7 +640,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q25_a",
     topic: "Verificación de Fuentes",
     difficulty: "difícil",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Si no puedes verificar la fuente, el dato no se sostiene. Practica en el laboratorio de casos.",
   },
@@ -668,7 +668,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q26_a",
     topic: "Uso Responsable",
     difficulty: "fácil",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Úsalo como tutor: comprende, practica y verifica. Revisa el manual de campo.",
   },
@@ -698,7 +698,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q27_a",
     topic: "Contexto Largo",
     difficulty: "difícil",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "Pide respuestas ancladas a secciones concretas para poder verificar. Revisa los ejercicios de campo.",
   },
@@ -724,7 +724,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q28_a",
     topic: "Multimodalidad",
     difficulty: "medio",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "Gemini comprende imágenes: describe, lee texto y responde sobre ellas. Repasa el mapa del ecosistema.",
   },
@@ -753,7 +753,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q29_a",
     topic: "Deep Research",
     difficulty: "medio",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Un informe extenso no garantiza acierto: verifica los hallazgos clave en sus fuentes.",
   },
@@ -782,7 +782,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q30_a",
     topic: "Análisis con Gemini",
     difficulty: "medio",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "Precisa datos, objetivo y formato para un análisis realmente útil. Revisa los ejercicios de campo.",
   },
@@ -808,7 +808,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q31_a",
     topic: "Pensamiento Crítico",
     difficulty: "difícil",
-    source: "Video: Casos Reales: Detectives Digitales en Acción",
+    source: "Casos Reales: Detectives Digitales en Acción",
     feedback:
       "Ante respuestas distintas, vuelve a las fuentes. Repasa el video de casos reales.",
   },
@@ -837,7 +837,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q32_a",
     topic: "Privacidad",
     difficulty: "medio",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Revisa la política y anonimiza antes de subir datos internos. Repasa el manual de campo.",
   },
@@ -866,7 +866,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q33_a",
     topic: "Deep Research",
     difficulty: "medio",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "Deep Research es más profundo y entrega un informe con fuentes. Repasa el mapa del ecosistema.",
   },
@@ -895,7 +895,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q34_a",
     topic: "Google Workspace",
     difficulty: "fácil",
-    source: "OVA: Misión Interactiva: Domina el Ecosistema Gemini",
+    source: "La Lupa Multimodal",
     feedback:
       "Revisa siempre antes de enviar: tú eres responsable del mensaje final.",
   },
@@ -925,7 +925,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q35_a",
     topic: "Uso Responsable",
     difficulty: "fácil",
-    source: "PDF: Manual de Campo: Introducción a Gemini",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
       "Úsalo como apoyo y respeta las normas de integridad de tu institución. Revisa el manual de campo.",
   },
@@ -953,7 +953,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q36_a",
     topic: "Grounding",
     difficulty: "medio",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "El grounding brilla con información actual que cambia rápido. Revisa los ejercicios de campo.",
   },
@@ -979,7 +979,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q37_a",
     topic: "Contexto Largo",
     difficulty: "difícil",
-    source: "PDF: Gemini a la Práctica: Ejercicios de Campo",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "Enfoca por secciones y pide citas para avanzar más rápido y verificar. Revisa los ejercicios de campo.",
   },
@@ -1008,7 +1008,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q38_a",
     topic: "Extensiones Gemini",
     difficulty: "fácil",
-    source: "Guía visual: Mapa del Ecosistema Gemini",
+    source: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
     feedback:
       "Las extensiones aportan datos actuales para decidir mejor. Repasa el mapa del ecosistema.",
   },
@@ -1037,7 +1037,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q39_a",
     topic: "Verificación de Fuentes",
     difficulty: "difícil",
-    source: "OVA: Laboratorio: Resuelve el Caso — 6 Desafíos",
+    source: "Casos del Guardián",
     feedback:
       "Una fuente sin autor no es suficiente: busca respaldo confiable o descarta el dato.",
   },
@@ -1067,7 +1067,7 @@ export const MODULE_3 = [
     correctAnswer: "m3q40_a",
     topic: "Investigación Profesional",
     difficulty: "difícil",
-    source: "Video: Casos Reales: Detectives Digitales en Acción",
+    source: "Casos Reales: Detectives Digitales en Acción",
     feedback:
       "El flujo ideal: Deep Research con fuentes y verificación posterior. Repasa el video de casos reales.",
   },

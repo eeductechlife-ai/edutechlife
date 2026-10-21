@@ -11,7 +11,7 @@ const WELCOME_CONFIG = {
     subtitle:
       "Módulo 1 · Artesano Digital — construye tus primeras instrucciones con precisión artesanal",
     intro:
-      "Todo artesano comienza con las herramientas básicas y, con práctica, se convierte en maestro. Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar con inteligencia artificial.",
+      "Claude ya no es solo un chat: crea documentos y presentaciones, se conecta a tus herramientas y ejecuta tareas de varios pasos. Este módulo te enseña a dirigirlo: qué pedirle, cómo revisar lo que entrega y qué nunca debes delegar.",
     cards: [
       {
         icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
@@ -44,9 +44,9 @@ const WELCOME_CONFIG = {
     accentRing: "focus-visible:ring-[#1e40af]/40",
     iconPath: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
     iconBg: "linear-gradient(135deg,#1e3a5f,#1e40af,#3b82f6)",
-    heading: "¿Qué protegemos hoy?",
+    heading: "¿Qué dirigimos hoy?",
     subtitle:
-      "Módulo 5 · Guardián Digital — explora el uso ético e inteligente de la IA",
+      "Módulo 5 · Claude, el director de orquesta — delega trabajo real con criterio",
     intro:
       "Cada vez que usas IA, estás tomando decisiones éticas — aunque no lo sepas. ¿Los datos que subes están protegidos? ¿El resultado es justo para todos? ¿Sabes quién es responsable si algo sale mal? Este módulo no es solo teoría: es tu entrenamiento para convertirte en un guardián de la IA.",
     cards: [
@@ -64,14 +64,14 @@ const WELCOME_CONFIG = {
       },
       {
         icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4",
-        label: "Principios éticos",
-        desc: "Guías de uso responsable de la IA",
+        label: "Cómo delegar",
+        desc: "Qué delegar, qué revisar y qué nunca delegar",
         action: "actividades",
       },
       {
         icon: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
         label: "Práctica guiada",
-        desc: "Casos prácticos de ética en IA",
+        desc: "Pedidos, Artifacts y protocolos con Claude",
         action: "practica",
       },
     ],

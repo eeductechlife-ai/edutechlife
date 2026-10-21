@@ -32,15 +32,21 @@ const OvaEdutechlife = lazyWithRetry(() => import('../OvaEdutechlife.jsx'));
 const OVAPracticalCases = lazyWithRetry(() => import('../OVAPracticalCases.jsx'));
 const OVAPromptLab = lazyWithRetry(() => import('../OVAPromptLab.jsx'));
 const OVAEthicsCases = lazyWithRetry(() => import('../OVAEthicsCases.jsx'));
+const OVAClaudeArtifacts = lazyWithRetry(() => import('../OVAClaudeArtifacts.jsx'));
+const OVAClaudeDelegation = lazyWithRetry(() => import('../OVAClaudeDelegation.jsx'));
 const OVAAutomationFlows = lazyWithRetry(() => import('../OVAAutomationFlows.jsx'));
 const OVADocumentMastery = lazyWithRetry(() => import('../OVADocumentMastery.jsx'));
 const OVAGeminiDeepResearch = lazyWithRetry(() => import('../OVAGeminiDeepResearch.jsx'));
+const OVAMultimodalLab = lazyWithRetry(() => import('../OVAMultimodalLab.jsx'));
+const OVAClaudeFirstRequest = lazyWithRetry(() => import('../OVAClaudeFirstRequest.jsx'));
 
 export const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,
   'workspace-ova-1': OvaEdutechlife,
   'gemini-cases-ova-1': OVAPracticalCases,
   'gemini-deep-research-ova-1': OVAGeminiDeepResearch,
+  'gemini-multimodal-ova-1': OVAMultimodalLab,
+  'claude-first-request-ova-1': OVAClaudeFirstRequest,
   'ethics-ova-1': OVAEthicalDilemmas,
   'gpts-ova-1': OVABuildGPT,
   'chatgpt-ova-ecosystem': OVAEcosystemGuide,
@@ -54,6 +60,8 @@ export const OVA_COMPONENTS = {
   'privacy-ova-1': OVARiskSimulator,
   'prompt-lab-ova-1': OVAPromptLab,
   'ethics-cases-ova-1': OVAEthicsCases,
+  'claude-artifacts-ova-1': OVAClaudeArtifacts,
+  'claude-delegation-ova-1': OVAClaudeDelegation,
   'automation-flows-ova-1': OVAAutomationFlows,
   'document-mastery-ova-1': OVADocumentMastery,
 };

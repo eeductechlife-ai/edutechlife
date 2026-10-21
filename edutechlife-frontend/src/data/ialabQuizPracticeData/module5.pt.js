@@ -1,196 +1,100 @@
 export const MODULE_5_PT = [
   {
     id: "pp-m5-1",
-    question: 'O que o princípio de "IA responsável" busca garantir?',
+    question: "O que é um Artifact no Claude?",
     options: [
-      {
-        id: "pp-m5-1_a",
-        label: "Que a IA seja mais rápida que os humanos em todas as tarefas",
-      },
-      {
-        id: "pp-m5-1_b",
-        label:
-          "Que o desenvolvimento de IA priorize equidade, transparência, privacidade e prestação de contas",
-      },
-      {
-        id: "pp-m5-1_c",
-        label: "Que todos os modelos tenham a mesma quantidade de parâmetros",
-      },
-      {
-        id: "pp-m5-1_d",
-        label: "Que a IA substitua completamente a tomada de decisão humana",
-      },
+      { id: "pp-m5-1_a", label: "Um arquivo de configuração do sistema" },
+      { id: "pp-m5-1_b", label: "Uma conta de usuário" },
+      { id: "pp-m5-1_c", label: "Um documento ou peça que você edita ao lado da conversa" },
+      { id: "pp-m5-1_d", label: "Um tipo de conector" },
     ],
-    correctAnswer: "pp-m5-1_b",
-    topic: "IA Responsável",
+    correctAnswer: "pp-m5-1_c",
+    topic: "Artifacts",
     difficulty: "easy",
-    feedback:
-      "A IA responsável é um framework ético que garante que os sistemas de IA sejam desenvolvidos e usados de forma justa, transparente, respeitosa com a privacidade e com mecanismos claros de prestação de contas.",
-    relatedFlashcardId: "m5-f1",
+    feedback: "Os Artifacts são peças que você vê e edita ao lado da conversa: documentos, gráficos ou pequenos aplicativos.",
   },
   {
     id: "pp-m5-2",
-    question:
-      "Como o viés (bias) é introduzido em um modelo de IA durante o treinamento?",
+    question: "Para que serve um Projeto no Claude?",
     options: [
-      {
-        id: "pp-m5-2_a",
-        label:
-          "O viés é inerente à arquitetura do transformer e não pode ser evitado",
-      },
-      {
-        id: "pp-m5-2_b",
-        label:
-          "Por dados de treinamento desbalanceados, rotulagem incorreta ou preconceitos históricos nos dados",
-      },
-      {
-        id: "pp-m5-2_c",
-        label:
-          "O viés só aparece quando o modelo é usado em produção, não durante o treinamento",
-      },
-      {
-        id: "pp-m5-2_d",
-        label: "O viés é um parâmetro ajustável como a temperatura",
-      },
+      { id: "pp-m5-2_a", label: "Para mudar o idioma da interface" },
+      { id: "pp-m5-2_b", label: "Para agrupar instruções e arquivos de um mesmo trabalho" },
+      { id: "pp-m5-2_c", label: "Para pagar menos por cada mensagem" },
+      { id: "pp-m5-2_d", label: "Para compartilhar a conta com outras pessoas" },
     ],
     correctAnswer: "pp-m5-2_b",
-    topic: "Viés em IA",
+    topic: "Projetos",
     difficulty: "easy",
-    feedback:
-      "O viés algorítmico surge principalmente de dados de treinamento que refletem desequilíbrios históricos ou sociais. Se os dados super-representam certos grupos, o modelo aprenderá e amplificará esses vieses.",
-    relatedFlashcardId: "m5-f2",
+    feedback: "Um Projeto reúne o contexto de um trabalho: instruções e arquivos de referência.",
   },
   {
     id: "pp-m5-3",
-    question:
-      "Qual técnica permite proteger a privacidade individual enquanto padrões úteis são extraídos de um dataset?",
+    question: "Antes de conectar um aplicativo (e-mail ou agenda), o que você deve revisar?",
     options: [
-      { id: "pp-m5-3_a", label: "Eliminar todos os dados pessoais do dataset" },
-      {
-        id: "pp-m5-3_b",
-        label:
-          "Privacidade diferencial: adicionar ruído controlado aos dados para impossibilitar a identificação individual",
-      },
-      {
-        id: "pp-m5-3_c",
-        label: "Criptografar o modelo inteiro para que ninguém possa usá-lo",
-      },
-      {
-        id: "pp-m5-3_d",
-        label: "Reduzir o tamanho do dataset a apenas dados anônimos",
-      },
+      { id: "pp-m5-3_a", label: "Apenas o logotipo do aplicativo" },
+      { id: "pp-m5-3_b", label: "As permissões que ele pede e se você realmente vai usá-lo" },
+      { id: "pp-m5-3_c", label: "A quantidade de estrelas do aplicativo" },
+      { id: "pp-m5-3_d", label: "Se existe versão em inglês" },
     ],
     correctAnswer: "pp-m5-3_b",
-    topic: "Privacidade Diferencial",
-    difficulty: "hard",
-    feedback:
-      "A privacidade diferencial adiciona ruído matematicamente calibrado aos dados ou gradientes de treinamento, de modo que os padrões agregados sejam úteis, mas seja impossível inferir informações de indivíduos específicos.",
-    relatedFlashcardId: "m5-f3",
+    topic: "Conectores",
+    difficulty: "medium",
+    feedback: "Um conector dá acesso aos seus dados: leia as permissões e conecte apenas o necessário.",
   },
   {
     id: "pp-m5-4",
-    question: "Qual é o objetivo principal da IA explicável (XAI)?",
+    question: "O que é uma Skill?",
     options: [
-      {
-        id: "pp-m5-4_a",
-        label: "Tornar os modelos mais rápidos em suas previsões",
-      },
-      {
-        id: "pp-m5-4_b",
-        label:
-          "Tornar as decisões dos modelos de IA interpretáveis e compreensíveis para os humanos",
-      },
-      { id: "pp-m5-4_c", label: "Reduzir o número de parâmetros do modelo" },
-      {
-        id: "pp-m5-4_d",
-        label: "Eliminar a necessidade de dados de treinamento",
-      },
+      { id: "pp-m5-4_a", label: "Um relatório de erros do sistema" },
+      { id: "pp-m5-4_b", label: "Um tipo de assinatura" },
+      { id: "pp-m5-4_c", label: "Uma tarefa executada toda semana" },
+      { id: "pp-m5-4_d", label: "Um procedimento repetido com instruções, modelos e exemplos" },
     ],
-    correctAnswer: "pp-m5-4_b",
-    topic: "IA Explicável",
+    correctAnswer: "pp-m5-4_d",
+    topic: "Skills",
     difficulty: "medium",
-    feedback:
-      'A XAI (eXplainable AI) busca abrir a "caixa-preta" dos modelos complexos, fornecendo explicações compreensíveis sobre por que um modelo tomou uma determinada decisão. É crucial para aplicações em saúde, justiça e finanças.',
-    relatedFlashcardId: "m5-f4",
+    feedback: "Uma Skill guarda um procedimento que você repete, para não precisar explicá-lo toda vez.",
   },
   {
     id: "pp-m5-5",
-    question:
-      "Um sistema de IA para seleção de pessoal rejeita candidatas mulheres em maior proporção do que homens para cargos técnicos. Qual princípio de IA responsável está sendo violado?",
+    question: "Qual decisão você nunca deve delegar totalmente ao Claude?",
     options: [
-      { id: "pp-m5-5_a", label: "Privacidade diferencial" },
-      { id: "pp-m5-5_b", label: "Equidade (fairness)" },
-      { id: "pp-m5-5_c", label: "Prestação de contas" },
-      { id: "pp-m5-5_d", label: "Eficiência computacional" },
+      { id: "pp-m5-5_a", label: "Dar formato a um documento" },
+      { id: "pp-m5-5_b", label: "Resumir um relatório seu" },
+      { id: "pp-m5-5_c", label: "A decisão final sobre pessoas, como contratar ou avaliar" },
+      { id: "pp-m5-5_d", label: "Traduzir um texto que você vai revisar" },
     ],
-    correctAnswer: "pp-m5-5_b",
-    topic: "Equidade em IA",
+    correctAnswer: "pp-m5-5_c",
+    topic: "O que não delegar",
     difficulty: "medium",
-    feedback:
-      "A equidade em IA exige que os sistemas não discriminem por características protegidas, como gênero, raça, idade ou religião. Este caso mostra um viés de gênero que viola o princípio de equidade.",
-    relatedFlashcardId: "m5-f5",
+    feedback: "Decisões sobre pessoas exigem julgamento humano, explicação e revisão.",
   },
   {
     id: "pp-m5-6",
-    question: 'O que significa "transparência" no contexto de sistemas de IA?',
+    question: "Como iterar um Artifact de forma eficiente?",
     options: [
-      {
-        id: "pp-m5-6_a",
-        label: "Que o código do modelo seja open source e gratuito",
-      },
-      {
-        id: "pp-m5-6_b",
-        label:
-          "Tornar visível como o modelo funciona, quais dados usa, como toma decisões e quem é o responsável",
-      },
-      {
-        id: "pp-m5-6_c",
-        label:
-          "Que o modelo possa explicar suas decisões em menos de 100 caracteres",
-      },
-      {
-        id: "pp-m5-6_d",
-        label:
-          "Que os dados de treinamento sejam acessíveis ao público em geral",
-      },
+      { id: "pp-m5-6_a", label: "Pedir sempre que ele refaça tudo" },
+      { id: "pp-m5-6_b", label: "Pedir mudanças pequenas e comparar as versões" },
+      { id: "pp-m5-6_c", label: "Aceitar a primeira versão sem revisar" },
+      { id: "pp-m5-6_d", label: "Copiá-lo sem ler em outro programa" },
     ],
     correctAnswer: "pp-m5-6_b",
-    topic: "Transparência",
-    difficulty: "medium",
-    feedback:
-      "Transparência implica revelar o propósito do sistema, os dados utilizados, as limitações conhecidas e o processo de tomada de decisão. Permite auditoria externa e gera confiança nos usuários.",
-    relatedFlashcardId: "m5-f6",
+    topic: "Iteração",
+    difficulty: "easy",
+    feedback: "Mudanças pequenas permitem comparar versões e decidir qual funciona melhor.",
   },
   {
     id: "pp-m5-7",
-    question:
-      "Qual é a diferença entre vieses algorítmicos e vieses nos dados de treinamento?",
+    question: "O que é uma tarefa programada?",
     options: [
-      {
-        id: "pp-m5-7_a",
-        label: "Não há diferença; ambos os termos são sinônimos",
-      },
-      {
-        id: "pp-m5-7_b",
-        label:
-          "Os vieses nos dados vêm de amostras não representativas; os algorítmicos incluem também erros no design do modelo ou na métrica de otimização",
-      },
-      {
-        id: "pp-m5-7_c",
-        label:
-          "Os vieses algorítmicos só afetam modelos pequenos; os de dados afetam todos",
-      },
-      {
-        id: "pp-m5-7_d",
-        label:
-          "Os vieses nos dados são intencionais; os algorítmicos são acidentais",
-      },
+      { id: "pp-m5-7_a", label: "Um trabalho recorrente executado com fontes que você define, com revisão humana" },
+      { id: "pp-m5-7_b", label: "Uma mensagem que chega sem que ninguém peça" },
+      { id: "pp-m5-7_c", label: "Uma cópia de segurança automática da conta" },
+      { id: "pp-m5-7_d", label: "Uma resposta que nunca precisa de revisão" },
     ],
-    correctAnswer: "pp-m5-7_b",
-    topic: "Vieses Algorítmicos",
-    difficulty: "hard",
-    feedback:
-      "Os vieses nos dados vêm de amostras não representativas ou rotulagem incorreta. Os vieses algorítmicos são mais amplos: incluem os vieses de dados mais erros introduzidos pela arquitetura do modelo, pela função de perda ou pela métrica de avaliação.",
-    relatedFlashcardId: "m5-f7",
+    correctAnswer: "pp-m5-7_a",
+    topic: "Tarefas programadas",
+    difficulty: "medium",
+    feedback: "As tarefas programadas repetem trabalho, mas você define as fontes e revisa o resultado.",
   },
 ];

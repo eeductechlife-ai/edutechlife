@@ -67,7 +67,7 @@ describe("TopicChatThread — secuencia y auto-avance", () => {
   test("al completar el tema auto-avanza al siguiente tema", async () => {
     localStorage.setItem(
       "ialab_viewed_resources::anon",
-      JSON.stringify(["intro-video-1"]),
+      JSON.stringify(["intro-video-1", "fundamentals-guide-1"]),
     );
 
     const onAdvanceTopic = vi.fn();
@@ -93,28 +93,39 @@ describe("TopicChatThread — secuencia y auto-avance", () => {
       JSON.stringify([
         "intro-video-1",
         "intro-ova-1",
+        "fundamentals-guide-1",
         "prompt-video-1",
         "prompt-guide-1",
         "prompt-ova-html-1",
+        "prompt-lab-ova-1",
+        "bias-video-1",
+        "bias-guide-1",
+        "bias-ova-1",
+        "privacy-video-1",
+        "privacy-guide-1",
+        "privacy-ova-1",
+        "ethics-video-1",
+        "ethics-ova-1",
       ]),
     );
 
     const onAdvanceTopic = vi.fn();
     const onGoToActivities = vi.fn();
+    // Último tema del módulo 1: "El Juramento del Guardián" (topicIndex 2).
     render(
       <TopicChatThread
-        topicIndex={1}
+        topicIndex={2}
         activeMod={1}
         onAdvanceTopic={onAdvanceTopic}
         onGoToActivities={onGoToActivities}
       />,
     );
 
-    fireEvent.click(screen.getByTestId("resource-btn-prompt-lab-ova-1"));
+    fireEvent.click(screen.getByTestId("resource-btn-ethics-cases-ova-1"));
     fireEvent.click(await screen.findByTestId("mock-mark"));
     // El modal real también persiste el recurso visto (markResourceInContext).
     act(() => {
-      useIALabStore.getState().addViewedResource("prompt-lab-ova-1");
+      useIALabStore.getState().addViewedResource("ethics-cases-ova-1");
     });
     fireEvent.click(
       await screen.findByText("ialab.continue_to_activities"),

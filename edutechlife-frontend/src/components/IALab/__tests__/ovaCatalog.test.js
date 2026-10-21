@@ -15,7 +15,7 @@ describe("Catálogo de OVA y módulos", () => {
 
   it("M3 y M5 declaran su rol narrativo", () => {
     expect(MODULE_NAMES[3].es).toContain("Detective");
-    expect(MODULE_NAMES[5].es).toContain("Guardián");
+    expect(MODULE_NAMES[5].es).toContain("Director");
   });
 
   it("cada módulo del catálogo usa su nombre de rol", () => {

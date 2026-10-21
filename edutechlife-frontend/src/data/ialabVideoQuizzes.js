@@ -172,7 +172,7 @@ const ES = {
   ],
   "notebooklm-video-1": [
     {
-      q: "¿En qué se basa NotebookLM para responder?",
+      q: "¿En qué se basa Gemini Notebook para responder?",
       options: [
         "En todo el internet",
         "En las fuentes que tú cargas",
@@ -180,7 +180,7 @@ const ES = {
       ],
       correct: 1,
       feedback:
-        "NotebookLM responde estrictamente sobre los documentos que tú subes.",
+        "Gemini Notebook responde estrictamente sobre los documentos que tú subes.",
     },
     {
       q: "¿Qué hace especial a sus respuestas?",
@@ -201,12 +201,12 @@ const ES = {
       ],
       correct: 0,
       feedback:
-        "NotebookLM no inventa: si no está en tus fuentes, no puede responderlo.",
+        "Gemini Notebook no inventa: si no está en tus fuentes, no puede responderlo.",
     },
   ],
   "notebook-audio-video-1": [
     {
-      q: "¿Qué es un Audio Overview en NotebookLM?",
+      q: "¿Qué es un Audio Overview en Gemini Notebook?",
       options: [
         "Un resumen en formato de conversación de audio",
         "Un documento PDF",
@@ -337,6 +337,75 @@ const ES = {
       correct: 0,
       feedback:
         "Explicabilidad = poder entender y justificar las decisiones ante las personas.",
+    },
+  ],
+  "claude-video-intro-1": [
+    {
+      q: "¿Qué es Claude en el día a día?",
+      options: [
+        "Un buscador que solo devuelve enlaces",
+        "Un asistente que escribe, analiza y crea piezas de trabajo a partir de tus instrucciones",
+        "Un programa que reemplaza la revisión humana",
+      ],
+      correct: 1,
+      feedback:
+        "Claude crea y analiza a partir de tus instrucciones; la revisión sigue siendo tuya.",
+    },
+    {
+      q: "¿Qué mejora más el resultado de un pedido?",
+      options: [
+        "Escribir todo en mayúsculas",
+        "Dar contexto: objetivo, audiencia y formato",
+        "Pedirlo más rápido",
+      ],
+      correct: 1,
+      feedback:
+        "Sin contexto, Claude tiene que adivinar. Con objetivo, audiencia y formato acierta mejor.",
+    },
+    {
+      q: "¿Cuándo conviene revisar con más cuidado lo que entrega Claude?",
+      options: [
+        "Cuando es un borrador de estilo",
+        "Cuando contiene cifras, nombres o decisiones importantes",
+        "Nunca hace falta revisarlo",
+      ],
+      correct: 1,
+      feedback:
+        "Las cifras, los nombres y las decisiones deben verificarse siempre contra la fuente.",
+    },
+  ],
+  "claude-video-proyectos-1": [
+    {
+      q: "¿Para qué sirve un Proyecto?",
+      options: [
+        "Para guardar instrucciones y archivos de un mismo trabajo",
+        "Para subir archivos sin ningún límite",
+        "Para reemplazar la memoria de Claude",
+      ],
+      correct: 0,
+      feedback: "Un Proyecto reúne el contexto de un trabajo concreto.",
+    },
+    {
+      q: "¿Qué debes revisar antes de conectar una herramienta?",
+      options: [
+        "Solo que tenga un logo bonito",
+        "Qué permisos pide",
+        "Nada: siempre es seguro",
+      ],
+      correct: 1,
+      feedback:
+        "Los conectores funcionan con permisos que tú apruebas. Revísalos antes.",
+    },
+    {
+      q: "¿Qué puede ser una Skill?",
+      options: [
+        "Un procedimiento repetido guardado con instrucciones y plantillas",
+        "Una contraseña de respaldo",
+        "Un modelo distinto de Claude",
+      ],
+      correct: 0,
+      feedback:
+        "Una Skill convierte un procedimiento repetido en algo reutilizable.",
     },
   ],
 };
@@ -509,14 +578,14 @@ const EN = {
   ],
   "notebooklm-video-1": [
     {
-      q: "What does NotebookLM base its answers on?",
+      q: "What does Gemini Notebook base its answers on?",
       options: [
         "The whole internet",
         "The sources you upload",
         "Random chance",
       ],
       correct: 1,
-      feedback: "NotebookLM answers strictly from the documents you upload.",
+      feedback: "Gemini Notebook answers strictly from the documents you upload.",
     },
     {
       q: "What makes its answers special?",
@@ -537,12 +606,12 @@ const EN = {
       ],
       correct: 0,
       feedback:
-        "NotebookLM does not invent: if it's not in your sources, it can't answer.",
+        "Gemini Notebook does not invent: if it's not in your sources, it can't answer.",
     },
   ],
   "notebook-audio-video-1": [
     {
-      q: "What is an Audio Overview in NotebookLM?",
+      q: "What is an Audio Overview in Gemini Notebook?",
       options: [
         "A summary in audio conversation format",
         "A PDF document",
@@ -671,6 +740,74 @@ const EN = {
       correct: 0,
       feedback:
         "Explainability = being able to understand and justify decisions.",
+    },
+  ],
+  "claude-video-intro-1": [
+    {
+      q: "What is Claude in everyday use?",
+      options: [
+        "A search engine that only returns links",
+        "An assistant that writes, analyzes and creates work pieces from your instructions",
+        "A program that replaces human review",
+      ],
+      correct: 1,
+      feedback:
+        "Claude creates and analyzes from your instructions; the review stays yours.",
+    },
+    {
+      q: "What improves a request's result the most?",
+      options: [
+        "Writing everything in capitals",
+        "Giving context: goal, audience and format",
+        "Asking faster",
+      ],
+      correct: 1,
+      feedback:
+        "Without context Claude has to guess. With goal, audience and format it gets closer.",
+    },
+    {
+      q: "When should you review what Claude delivers most carefully?",
+      options: [
+        "When it is a style draft",
+        "When it contains figures, names or important decisions",
+        "Never; review is not needed",
+      ],
+      correct: 1,
+      feedback:
+        "Figures, names and decisions must always be checked against the source.",
+    },
+  ],
+  "claude-video-proyectos-1": [
+    {
+      q: "What is a Project for?",
+      options: [
+        "Keeping instructions and files for one piece of work",
+        "Uploading files with no limit",
+        "Replacing Claude's memory",
+      ],
+      correct: 0,
+      feedback: "A Project gathers the context of one specific piece of work.",
+    },
+    {
+      q: "What should you check before connecting a tool?",
+      options: [
+        "Only that it has a nice logo",
+        "What permissions it asks for",
+        "Nothing: it is always safe",
+      ],
+      correct: 1,
+      feedback:
+        "Connectors work with permissions you approve. Check them first.",
+    },
+    {
+      q: "What can a Skill be?",
+      options: [
+        "A repeated procedure saved with instructions and templates",
+        "A backup password",
+        "A model other than Claude",
+      ],
+      correct: 0,
+      feedback: "A Skill turns a repeated procedure into something reusable.",
     },
   ],
 };
@@ -834,7 +971,7 @@ const PT = {
   ],
   "notebooklm-video-1": [
     {
-      q: "Em que o NotebookLM baseia suas respostas?",
+      q: "Em que o Gemini Notebook baseia suas respostas?",
       options: ["Em toda a internet", "Nas fontes que você envia", "No acaso"],
       correct: 1,
       feedback: "Responde estritamente sobre os documentos que você envia.",
@@ -858,12 +995,12 @@ const PT = {
       ],
       correct: 0,
       feedback:
-        "O NotebookLM não inventa: se não está nas fontes, não responde.",
+        "O Gemini Notebook não inventa: se não está nas fontes, não responde.",
     },
   ],
   "notebook-audio-video-1": [
     {
-      q: "O que é um Audio Overview no NotebookLM?",
+      q: "O que é um Audio Overview no Gemini Notebook?",
       options: [
         "Um resumo em formato de conversa em áudio",
         "Um documento PDF",
@@ -988,6 +1125,75 @@ const PT = {
       ],
       correct: 0,
       feedback: "Explicabilidade = entender e justificar as decisões.",
+    },
+  ],
+  "claude-video-intro-1": [
+    {
+      q: "O que é o Claude no dia a dia?",
+      options: [
+        "Um buscador que só devolve links",
+        "Um assistente que escreve, analisa e cria peças de trabalho a partir das suas instruções",
+        "Um programa que substitui a revisão humana",
+      ],
+      correct: 1,
+      feedback:
+        "O Claude cria e analisa a partir das suas instruções; a revisão continua sendo sua.",
+    },
+    {
+      q: "O que mais melhora o resultado de um pedido?",
+      options: [
+        "Escrever tudo em maiúsculas",
+        "Dar contexto: objetivo, público e formato",
+        "Pedir mais rápido",
+      ],
+      correct: 1,
+      feedback:
+        "Sem contexto ele precisa adivinhar. Com objetivo, público e formato acerta mais.",
+    },
+    {
+      q: "Quando convém revisar com mais cuidado o que o Claude entrega?",
+      options: [
+        "Quando é um rascunho de estilo",
+        "Quando traz números, nomes ou decisões importantes",
+        "Nunca precisa revisar",
+      ],
+      correct: 1,
+      feedback:
+        "Números, nomes e decisões devem ser sempre conferidos na fonte.",
+    },
+  ],
+  "claude-video-proyectos-1": [
+    {
+      q: "Para que serve um Projeto?",
+      options: [
+        "Para guardar instruções e arquivos de um mesmo trabalho",
+        "Para subir arquivos sem nenhum limite",
+        "Para substituir a memória do Claude",
+      ],
+      correct: 0,
+      feedback: "Um Projeto reúne o contexto de um trabalho específico.",
+    },
+    {
+      q: "O que revisar antes de conectar uma ferramenta?",
+      options: [
+        "Só se tem um logo bonito",
+        "Quais permissões ela pede",
+        "Nada: é sempre seguro",
+      ],
+      correct: 1,
+      feedback:
+        "Os conectores funcionam com permissões que você aprova. Revise-as antes.",
+    },
+    {
+      q: "O que pode ser uma Skill?",
+      options: [
+        "Um procedimento repetido guardado com instruções e modelos",
+        "Uma senha de backup",
+        "Um modelo diferente do Claude",
+      ],
+      correct: 0,
+      feedback:
+        "Uma Skill transforma um procedimento repetido em algo reutilizável.",
     },
   ],
 };

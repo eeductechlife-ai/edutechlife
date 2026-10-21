@@ -23,7 +23,7 @@ const toolRules = [
     tool: { id: "dalle", title: "DALL-E 3", icon: "fa-image", color: "purple" },
     reason:
       "DALL-E 3 es ideal para generar imágenes y contenido visual original a partir de descripciones textuales.",
-    model: "GPT-4o (multimodal)",
+    model: "ChatGPT (multimodal)",
     mode: "Fast",
     prompt:
       "Crea una imagen de [descripción detallada] con estilo [realista/ilustración/arte] en formato [horizontal/vertical/cuadrado]. Incluye [elementos específicos].",
@@ -57,7 +57,7 @@ const toolRules = [
     },
     reason:
       "El Intérprete de Código ejecuta Python real para analizar datos, crear visualizaciones y realizar cálculos complejos.",
-    model: "GPT-4o",
+    model: "ChatGPT",
     mode: "Thinking",
     prompt:
       "Tengo este archivo de datos [describe los datos]. Necesito que: 1. Limpies los datos 2. Calcules [métrica específica] 3. Generes una visualización de [tipo de gráfico]. Los resultados deben mostrarse como tabla y gráfico.",
@@ -89,7 +89,7 @@ const toolRules = [
     },
     reason:
       "El Intérprete de Código puede escribir, ejecutar y depurar código Python en tiempo real dentro del chat.",
-    model: "GPT-5",
+    model: "ChatGPT",
     mode: "Thinking",
     prompt:
       "Necesito desarrollar [descripción del código]. Requisitos: [lista de requisitos]. El lenguaje debe ser [lenguaje]. Incluye: 1. Código completo 2. Comentarios explicativos 3. Ejemplo de uso 4. Manejo de errores.",
@@ -122,7 +122,7 @@ const toolRules = [
     },
     reason:
       "Canvas permite editar documentos largos de forma colaborativa, ajustando secciones específicas sin regenerar todo el texto.",
-    model: "GPT-4o",
+    model: "ChatGPT",
     mode: "Fast",
     prompt:
       "Ayúdame a [escribir/mejorar/editar] un [tipo de documento] sobre [tema]. El tono debe ser [formal/informal/técnico]. La extensión aproximada es [número] páginas. Enfócate en: [puntos clave].",
@@ -154,7 +154,7 @@ const toolRules = [
     },
     reason:
       "La Búsqueda Web permite a ChatGPT acceder a internet en tiempo real para obtener información actualizada.",
-    model: "GPT-5",
+    model: "ChatGPT",
     mode: "Fast",
     prompt:
       "Busca información actualizada sobre [tema]. Necesito: 1. Datos recientes (últimos [período]) 2. Fuentes confiables 3. Estadísticas clave 4. Tendencias principales. Verifica la información con múltiples fuentes.",
@@ -187,7 +187,7 @@ const toolRules = [
     },
     reason:
       "Combinar Búsqueda Web con Canvas te permite investigar y luego organizar la información en un documento estructurado.",
-    model: "GPT-5",
+    model: "ChatGPT",
     mode: "Thinking",
     prompt:
       "Necesito aprender sobre [tema]. Crea una guía de estudio que incluya: 1. Resumen ejecutivo 2. Conceptos clave con explicaciones simples 3. Ejemplos prácticos 4. Preguntas de autoevaluación. El nivel de profundidad debe ser [básico/intermedio/avanzado].",
@@ -218,7 +218,7 @@ const toolRules = [
     },
     reason:
       "Los GPTs personalizados con Acciones pueden automatizar flujos completos conectándose con APIs externas como Slack, Gmail o Sheets.",
-    model: "GPT-5.5",
+    model: "ChatGPT",
     mode: "Thinking",
     prompt:
       "Quiero automatizar [descripción del proceso]. El flujo actual es: [pasos actuales]. El resultado deseado es: [objetivo]. Las herramientas disponibles son: [herramientas]. Diseña una automatización que incluya: 1. Trigger (evento que inicia) 2. Acción de IA 3. Destino del resultado.",
@@ -251,7 +251,7 @@ const toolRules = [
     },
     reason:
       "La Memoria permite a ChatGPT recordar tus preferencias, y los Proyectos organizan conversaciones y archivos bajo un mismo contexto.",
-    model: "GPT-5",
+    model: "ChatGPT",
     mode: "Fast",
     prompt:
       "Configura un Proyecto para [tema/proyecto] con las siguientes instrucciones: [instrucciones específicas]. Los archivos base son: [archivos]. El tono de comunicación debe ser: [tono]. Las preferencias a recordar son: [preferencias].",

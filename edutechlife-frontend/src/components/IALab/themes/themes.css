@@ -767,3 +767,71 @@
   background: #f8f9fd !important;
   border-color: #dce3f5 !important;
 }
+
+/* --------------------------------------------------------------------------
+   Tema CLAUDE — Módulo 5 (Director de orquesta)
+   Entorno cálido y sobrio: fondo crema, acento terracota, tipografía limpia.
+   -------------------------------------------------------------------------- */
+[data-theme="claude"] {
+  --theme-icon-stroke: 1.5;
+  --theme-primary: #c96442;
+  --theme-primary-hover: #b5573a;
+  --theme-emphasis: #141413;
+  --theme-emphasis-hover: #000000;
+  --theme-on-emphasis: #faf9f5;
+  --theme-bg: #f5f4ee;
+  --theme-surface: #ffffff;
+  --theme-surface-2: #efeee7;
+  --theme-text: #141413;
+  --theme-text-muted: #6b6a65;
+  --theme-border: #e8e6dc;
+  --theme-accent: #c96442;
+  --theme-radius: 14px;
+  --theme-radius-lg: 18px;
+  --theme-radius-pill: 9999px;
+  --theme-font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --theme-font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --theme-font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --theme-shadow-sm: 0 1px 2px rgba(20, 20, 19, 0.05);
+  --theme-shadow-md: 0 2px 10px rgba(20, 20, 19, 0.07);
+  --theme-shadow-lg: 0 8px 24px rgba(20, 20, 19, 0.1);
+  --theme-header-bg: linear-gradient(135deg, #3d3929 0%, #c96442 100%);
+  --theme-tool-label: "Claude";
+  --theme-tool-badge-bg: rgba(255, 255, 255, 0.14);
+  --theme-tool-badge-color: #f5e6dc;
+  --theme-tool-badge-border: rgba(255, 255, 255, 0.35);
+  --theme-rail-bg: #efeee7;
+  --theme-rail-hover: #e6e4d9;
+  --theme-rail-active: #e6e4d9;
+  --theme-rail-text: #141413;
+  --theme-rail-muted: #6b6a65;
+  --theme-rail-border: #e8e6dc;
+}
+
+[data-theme="claude"].dark,
+.dark [data-theme="claude"] {
+  --theme-bg: #262624;
+  --theme-surface: #30302e;
+  --theme-surface-2: #3a3936;
+  --theme-text: #faf9f5;
+  --theme-text-muted: #b5b3a8;
+  --theme-border: #4a4945;
+  --theme-emphasis: #faf9f5;
+  --theme-on-emphasis: #1f1e1d;
+  --theme-rail-bg: #262624;
+  --theme-rail-hover: #3a3936;
+  --theme-rail-active: #3a3936;
+  --theme-rail-text: #faf9f5;
+  --theme-rail-muted: #b5b3a8;
+  --theme-rail-border: #4a4945;
+}
+
+/* Tipografía Claude: encabezados con serif editorial. Más específica que la
+   regla global de h2 (styles/utilities-extras.css), por eso también usa !important. */
+[data-theme="claude"] h1,
+[data-theme="claude"] h2,
+[data-theme="claude"] h3 {
+  font-family: var(--theme-font-display) !important;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}

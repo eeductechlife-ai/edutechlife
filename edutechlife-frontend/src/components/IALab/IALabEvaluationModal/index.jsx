@@ -22,9 +22,9 @@ import GeminiStep4 from "../challenges/module3/GeminiStep4";
 import NotebookStep1 from "../challenges/module4/NotebookStep1";
 import NotebookStep2 from "../challenges/module4/NotebookStep2";
 import NotebookStep3 from "../challenges/module4/NotebookStep3";
-import EthicsStep1 from "../challenges/module5/EthicsStep1";
-import EthicsStep2 from "../challenges/module5/EthicsStep2";
-import EthicsStep3 from "../challenges/module5/EthicsStep3";
+import ClaudeStep1 from "../challenges/module5/ClaudeStep1";
+import ClaudeStep2 from "../challenges/module5/ClaudeStep2";
+import ClaudeStep3 from "../challenges/module5/ClaudeStep3";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { useEvaluationSecurity } from "./hooks/useEvaluationSecurity";
@@ -53,7 +53,7 @@ const STEP_COMPONENTS = {
   2: [ChatGPTStep1, ChatGPTStep2, ChatGPTStep3],
   3: [GeminiStep1, GeminiStep2, GeminiStep3, GeminiStep4],
   4: [NotebookStep1, NotebookStep2, NotebookStep3],
-  5: [EthicsStep1, EthicsStep2, EthicsStep3],
+  5: [ClaudeStep1, ClaudeStep2, ClaudeStep3],
 };
 
 const STEP_TITLE_KEYS = {

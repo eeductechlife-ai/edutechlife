@@ -6,18 +6,18 @@ export const MODULE_2_EN = [
     options: [
       {
         id: "m2q1_a",
-        label: "Code Interpreter for the CSV and Web Search for trends",
+        label: "data analysis for the CSV and Web Search for trends",
       },
-      { id: "m2q1_b", label: "Canvas to paste data and DALL-E for the charts" },
+      { id: "m2q1_b", label: "Canvas to paste data and the image generator for the charts" },
       { id: "m2q1_c", label: "Only Web Search to read market articles" },
-      { id: "m2q1_d", label: "DALL-E 3 to analyze the file automatically" },
+      { id: "m2q1_d", label: "The image generator to analyze the file automatically" },
     ],
     correctAnswer: "m2q1_a",
     topic: "ChatGPT Tools",
     difficulty: "medium",
-    source: "OVA: ChatGPT Tools Lab",
+    source: "The Toolbox",
     feedback:
-      "Code Interpreter analyzes the CSV and Web Search brings market data. Practice in the tools lab.",
+      "data analysis analyzes the CSV and Web Search brings market data. Practice in the tools lab.",
   },
   {
     id: "m2q2",
@@ -26,7 +26,7 @@ export const MODULE_2_EN = [
     options: [
       {
         id: "m2q2_a",
-        label: "Legal system prompt + knowledge base + function calling",
+        label: "Legal system prompt + knowledge base with templates + human review",
       },
       {
         id: "m2q2_b",
@@ -34,58 +34,55 @@ export const MODULE_2_EN = [
       },
       {
         id: "m2q2_c",
-        label: "Enable Web Search and DALL-E to look for contracts",
+        label: "Enable Web Search and the image generator to look for contracts",
       },
       { id: "m2q2_d", label: "A GPT without instructions, only data analysis" },
     ],
     correctAnswer: "m2q2_a",
     topic: "Custom GPTs",
     difficulty: "medium",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
-      "A useful GPT combines a specialized prompt, knowledge base and function calling.",
+      "A useful GPT combines specialized instructions, its own knowledge base and human review of the sources. Review the GPTs guide.",
   },
   {
     id: "m2q3",
     question:
-      'A GPT uses function calling to read orders. The user writes "Where is order #789 going, email ana@example.com?" What happens internally?',
+      "Inside a Project you upload a client's base contract and templates. What advantage does it have over starting a new chat?",
     options: [
       {
         id: "m2q3_a",
-        label: "It extracts #789 and the email, and runs the order function",
+        label: "Every conversation in the Project uses those files and instructions",
       },
-      { id: "m2q3_b", label: "It asks the user to fill a separate form" },
-      { id: "m2q3_c", label: "It searches for the order number on the web" },
-      {
-        id: "m2q3_d",
-        label: "It sends the full message to the API without parsing",
-      },
+      { id: "m2q3_b", label: "The files are published automatically in the GPT Store" },
+      { id: "m2q3_c", label: "ChatGPT edits your files without telling you" },
+      { id: "m2q3_d", label: "The files are deleted when the conversation closes" },
     ],
     correctAnswer: "m2q3_a",
-    topic: "Function Calling",
-    difficulty: "hard",
-    source: "OVA: ChatGPT Tools Lab",
+    topic: "Projects",
+    difficulty: "medium",
+    source: "ChatGPT apps and connectors guide",
     feedback:
-      "Function calling extracts parameters and runs the function. Review the topic in the module.",
+      "A Project keeps files and instructions for one piece of work, so you don't paste them into every chat. Review the Projects topic.",
   },
   {
     id: "m2q4",
-    question: "What does function calling allow with the ChatGPT API?",
+    question: "What are a GPT's instructions for?",
     options: [
       {
         id: "m2q4_a",
-        label: "Connect ChatGPT with APIs, databases and external services",
+        label: "Defining its role, tone, scope and what it must not do",
       },
-      { id: "m2q4_b", label: "Call the user technical support by phone" },
-      { id: "m2q4_c", label: "Create faster math functions in the chat" },
-      { id: "m2q4_d", label: "Automatically download all available plugins" },
+      { id: "m2q4_b", label: "Lowering the price of each message in the chat" },
+      { id: "m2q4_c", label: "Connecting it to the internet automatically, with no limits" },
+      { id: "m2q4_d", label: "Saving every conversation as a PDF file" },
     ],
     correctAnswer: "m2q4_a",
-    topic: "Function Calling",
+    topic: "Custom GPTs",
     difficulty: "easy",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
-      "Function calling connects ChatGPT to the real world. Review the GPTs guide.",
+      "Instructions give the GPT a clear role, tone and limits. Review the GPTs guide.",
   },
   {
     id: "m2q5",
@@ -106,7 +103,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q5_a",
     topic: "Automation",
     difficulty: "medium",
-    source: "OVA: Build a GPT",
+    source: "The Assistant Factory",
     feedback:
       "A GPT with instructions, knowledge base and API automates replies. Practice in the build a GPT lab.",
   },
@@ -151,13 +148,13 @@ export const MODULE_2_EN = [
     options: [
       { id: "m2q8_a", label: "Knowledge base and Actions (API) for live data" },
       { id: "m2q8_b", label: "Ask the user to paste the catalog each time" },
-      { id: "m2q8_c", label: "Generate catalog images with DALL-E" },
+      { id: "m2q8_c", label: "Generate catalog images with the image generator" },
       { id: "m2q8_d", label: "Live data cannot be consulted in a GPT" },
     ],
     correctAnswer: "m2q8_a",
     topic: "Custom GPTs",
     difficulty: "medium",
-    source: "OVA: Build a GPT",
+    source: "The Assistant Factory",
     feedback:
       "The knowledge base keeps static info and Actions bring changing data. Review the GPT lab.",
   },
@@ -174,7 +171,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q9_a",
     topic: "GPT Privacy",
     difficulty: "easy",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "Before publishing, check that it does not contain confidential data. Review the privacy topic.",
   },
@@ -188,7 +185,7 @@ export const MODULE_2_EN = [
         label: "A GPT with Actions (API) connected to a webhook",
       },
       { id: "m2q10_b", label: "Standard ChatGPT with Web Search enabled" },
-      { id: "m2q10_c", label: "DALL-E to reply to comments with images" },
+      { id: "m2q10_c", label: "The image generator to reply to comments with images" },
       {
         id: "m2q10_d",
         label: "Canvas to review and edit each comment by hand",
@@ -197,7 +194,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q10_a",
     topic: "Automation",
     difficulty: "hard",
-    source: "OVA: Real-World Automation Flows",
+    source: "The Assembly Line",
     feedback:
       "A GPT with Actions and a webhook automates the alert. Review the automation OVA.",
   },
@@ -216,7 +213,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q11_a",
     topic: "ChatGPT Basics",
     difficulty: "easy",
-    source: "Video: ChatGPT from Scratch in 6 Minutes",
+    source: "ChatGPT from Scratch in 6 Minutes",
     feedback:
       "ChatGPT is a conversational model: you give instructions and it generates text. Watch the video.",
   },
@@ -255,7 +252,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q13_a",
     topic: "Web Search",
     difficulty: "medium",
-    source: "OVA: Explore the ChatGPT Ecosystem",
+    source: "The Master Blueprint",
     feedback:
       "Web Search brings updated information from the internet. Explore the ecosystem OVA.",
   },
@@ -265,18 +262,18 @@ export const MODULE_2_EN = [
     options: [
       {
         id: "m2q14_a",
-        label: "Code Interpreter, which runs the analysis directly on the file",
+        label: "data analysis, which runs the analysis directly on the file",
       },
       { id: "m2q14_b", label: "Web Search to read articles about the industry sector" },
-      { id: "m2q14_c", label: "DALL-E 3 to turn the CSV into a nice bar chart image" },
+      { id: "m2q14_c", label: "The image generator to turn the CSV into a nice bar chart image" },
       { id: "m2q14_d", label: "Canvas to rewrite every row of the file by hand carefully" },
     ],
     correctAnswer: "m2q14_a",
-    topic: "Code Interpreter",
+    topic: "data analysis",
     difficulty: "medium",
-    source: "OVA: ChatGPT Tools Lab",
+    source: "The Toolbox",
     feedback:
-      "Code Interpreter runs the calculation on the file. Practice in the ChatGPT tools lab.",
+      "data analysis runs the calculation on the file. Practice in the ChatGPT tools lab.",
   },
   {
     id: "m2q15",
@@ -284,18 +281,18 @@ export const MODULE_2_EN = [
     options: [
       {
         id: "m2q15_a",
-        label: "DALL-E 3, describing the scene you want to generate in detail",
+        label: "The image generator, describing the scene you want to generate in detail",
       },
-      { id: "m2q15_b", label: "Code Interpreter, writing a brand-new formula in the chat" },
+      { id: "m2q15_b", label: "data analysis, writing a brand-new formula in the chat" },
       { id: "m2q15_c", label: "Web Search, to copy any image you find on the portal" },
       { id: "m2q15_d", label: "A Project, grouping together the files of the team area" },
     ],
     correctAnswer: "m2q15_a",
-    topic: "DALL-E",
+    topic: "Image generation",
     difficulty: "medium",
-    source: "OVA: ChatGPT Tools Lab",
+    source: "The Toolbox",
     feedback:
-      "DALL-E 3 generates images from a detailed description. Review the tools lab.",
+      "The image generator creates images from a detailed description. Review the tools lab.",
   },
   {
     id: "m2q16",
@@ -306,9 +303,9 @@ export const MODULE_2_EN = [
         id: "m2q16_a",
         label: "Canvas, which lets you edit and rewrite on a working document",
       },
-      { id: "m2q16_b", label: "DALL-E 3, to turn the text into a complete detailed image" },
+      { id: "m2q16_b", label: "The image generator, to turn the text into a complete detailed image" },
       { id: "m2q16_c", label: "Web Search, to find the same text already published online" },
-      { id: "m2q16_d", label: "Code Interpreter, to delete the original paragraph entirely" },
+      { id: "m2q16_d", label: "data analysis, to delete the original paragraph entirely" },
     ],
     correctAnswer: "m2q16_a",
     topic: "Canvas",
@@ -346,19 +343,19 @@ export const MODULE_2_EN = [
       },
       { id: "m2q18_b", label: "You transcribe the whole PDF by hand inside your message" },
       { id: "m2q18_c", label: "You ask it to search for the file online and summarize it alone" },
-      { id: "m2q18_d", label: "You ask it to draw the PDF with the image tool DALL-E" },
+      { id: "m2q18_d", label: "You ask it to draw the PDF with the image generator" },
     ],
     correctAnswer: "m2q18_a",
     topic: "Files",
     difficulty: "easy",
-    source: "Video: ChatGPT from Scratch in 6 Minutes",
+    source: "ChatGPT from Scratch in 6 Minutes",
     feedback:
       "You can attach files and work on them. Review the ChatGPT intro video.",
   },
   {
     id: "m2q19",
     question:
-      "Code Interpreter gives you a sales chart. What is the most responsible step?",
+      "data analysis gives you a sales chart. What is the most responsible step?",
     options: [
       {
         id: "m2q19_a",
@@ -371,7 +368,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q19_a",
     topic: "Data Analysis",
     difficulty: "hard",
-    source: "OVA: ChatGPT Tools Lab",
+    source: "The Toolbox",
     feedback:
       "Verify inputs, assumptions and results before deciding with them. Review the tools lab.",
   },
@@ -382,18 +379,18 @@ export const MODULE_2_EN = [
     options: [
       {
         id: "m2q20_a",
-        label: "Code Interpreter for the CSV and Web Search for the current trends",
+        label: "data analysis for the CSV and Web Search for the current trends",
       },
-      { id: "m2q20_b", label: "DALL-E 3 to plot the chart and Canvas to browse the internet" },
+      { id: "m2q20_b", label: "The image generator to plot the chart and Canvas to browse the internet" },
       { id: "m2q20_c", label: "An empty Project, with no files and no concrete instructions" },
       { id: "m2q20_d", label: "Only Web Search, ignoring your own local data completely" },
     ],
     correctAnswer: "m2q20_a",
     topic: "ChatGPT Tools",
     difficulty: "medium",
-    source: "OVA: Real-World Automation Flows",
+    source: "The Assembly Line",
     feedback:
-      "Combine tools: local data with Code Interpreter and current context with Web Search.",
+      "Combine tools: local data with data analysis and current context with Web Search.",
   },
   {
     id: "m2q21",
@@ -410,7 +407,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q21_a",
     topic: "Custom GPTs",
     difficulty: "easy",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "A custom GPT defines its role, its knowledge and its capabilities. Review the GPTs guide.",
   },
@@ -429,7 +426,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q22_a",
     topic: "GPT Instructions",
     difficulty: "medium",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "The instructions (role, tone and rules) define how the GPT responds. Review the guide.",
   },
@@ -442,13 +439,13 @@ export const MODULE_2_EN = [
         label: "A knowledge base with those internal documents and rules",
       },
       { id: "m2q23_b", label: "Only a friendly tone, with no source of information at all" },
-      { id: "m2q23_c", label: "DALL-E 3 enabled to illustrate each possible answer" },
+      { id: "m2q23_c", label: "The image generator enabled to illustrate each possible answer" },
       { id: "m2q23_d", label: "Web Search, even though the policies are not published online" },
     ],
     correctAnswer: "m2q23_a",
     topic: "Knowledge Base",
     difficulty: "medium",
-    source: "OVA: Build a GPT",
+    source: "The Assistant Factory",
     feedback:
       "The knowledge base is where the GPT's own information lives. Practice in the GPT lab.",
   },
@@ -462,33 +459,34 @@ export const MODULE_2_EN = [
       },
       { id: "m2q24_b", label: "A knowledge base, even though it becomes outdated quickly" },
       { id: "m2q24_c", label: "New instructions, writing the whole catalog by hand in the role" },
-      { id: "m2q24_d", label: "DALL-E 3, to generate images of every product in the catalog" },
+      { id: "m2q24_d", label: "The image generator, to generate images of every product in the catalog" },
     ],
     correctAnswer: "m2q24_a",
     topic: "Actions / APIs",
     difficulty: "hard",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "For data that changes, Actions (API) bring live information. Review the GPTs guide.",
   },
   {
     id: "m2q25",
-    question: "What does Function Calling do when the user asks for something concrete?",
+    question:
+      "You delegate to ChatGPT's agent the task of finding 10 suppliers and building a table. What do you do before using the result?",
     options: [
       {
         id: "m2q25_a",
-        label: "It extracts the needed parameters and runs the defined function",
+        label: "I check each source and each figure in the table before using it",
       },
-      { id: "m2q25_b", label: "It generates an image that explains the user's request" },
-      { id: "m2q25_c", label: "It asks the user to rewrite their message more slowly" },
-      { id: "m2q25_d", label: "It always answers with generic text without using any data" },
+      { id: "m2q25_b", label: "I publish it as is, since the agent already verified it" },
+      { id: "m2q25_c", label: "I ask it to repeat the task without showing the sources" },
+      { id: "m2q25_d", label: "I send it to every supplier without reading it" },
     ],
     correctAnswer: "m2q25_a",
-    topic: "Function Calling",
+    topic: "Agent",
     difficulty: "hard",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
-      "The model detects the intent, extracts parameters and calls the function. Review the guide.",
+      "The agent runs the steps, but you approve the result. Check sources and data before using them.",
   },
   {
     id: "m2q26",
@@ -505,7 +503,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q26_a",
     topic: "GPT Store",
     difficulty: "medium",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "Before sharing, decide the scope and protect sensitive data. Review the GPTs guide.",
   },
@@ -525,7 +523,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q27_a",
     topic: "GPT Privacy",
     difficulty: "medium",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "The first thing is not to leak confidential data. Review the GPT privacy topic.",
   },
@@ -545,7 +543,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q28_a",
     topic: "GPT Scope",
     difficulty: "easy",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "Limiting the scope and allowing 'I don't know' reduces hallucinations. Review the guide.",
   },
@@ -558,7 +556,7 @@ export const MODULE_2_EN = [
         label: "Tone and style instructions, with examples of brand answers",
       },
       { id: "m2q29_b", label: "Only Web Search, to copy the tone used by other sites" },
-      { id: "m2q29_c", label: "DALL-E 3, so that answers always include useful images" },
+      { id: "m2q29_c", label: "The image generator, so that answers always include useful images" },
       { id: "m2q29_d", label: "Nothing: the tone adjusts itself based on the first message" },
     ],
     correctAnswer: "m2q29_a",
@@ -583,7 +581,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q30_a",
     topic: "GPT Iteration",
     difficulty: "medium",
-    source: "OVA: Build a GPT",
+    source: "The Assistant Factory",
     feedback:
       "Iterating with real cases improves the GPT. Practice in the GPT building lab.",
   },
@@ -622,7 +620,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q32_a",
     topic: "GPT Privacy",
     difficulty: "medium",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "Minimize and anonymize the data and control access. Review the GPT privacy topic.",
   },
@@ -642,7 +640,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q33_a",
     topic: "Automation",
     difficulty: "hard",
-    source: "OVA: Real-World Automation Flows",
+    source: "The Assembly Line",
     feedback:
       "Automate detection and alerting and leave the key decision to a person. Review the OVA.",
   },
@@ -662,7 +660,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q34_a",
     topic: "Automation",
     difficulty: "medium",
-    source: "OVA: Build a GPT",
+    source: "The Assistant Factory",
     feedback:
       "A GPT with instructions, knowledge and API automates the repetitive work. Practice in the lab.",
   },
@@ -681,7 +679,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q35_a",
     topic: "ChatGPT Basics",
     difficulty: "easy",
-    source: "Video: ChatGPT from Scratch in 6 Minutes",
+    source: "ChatGPT from Scratch in 6 Minutes",
     feedback:
       "Task, context and format: a clear instruction works best. Review the intro video.",
   },
@@ -701,7 +699,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q36_a",
     topic: "ChatGPT Ecosystem",
     difficulty: "medium",
-    source: "OVA: Explore the ChatGPT Ecosystem",
+    source: "The Master Blueprint",
     feedback:
       "Tools cover one-off tasks; a GPT packages role, knowledge and actions. Explore the ecosystem.",
   },
@@ -716,12 +714,12 @@ export const MODULE_2_EN = [
       },
       { id: "m2q37_b", label: "Writing all the information inside the role instructions" },
       { id: "m2q37_c", label: "Only Web Search, ignoring your own internal documents" },
-      { id: "m2q37_d", label: "Generating images of the documents with the DALL-E tool" },
+      { id: "m2q37_d", label: "Generating images of the documents with the image generator" },
     ],
     correctAnswer: "m2q37_a",
     topic: "GPT Architecture",
     difficulty: "hard",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "Stable information goes in the knowledge base; live data goes in Actions. Review the guide.",
   },
@@ -761,7 +759,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q39_a",
     topic: "GPT Hallucinations",
     difficulty: "hard",
-    source: "Guide: GPTs and Actions",
+    source: "ChatGPT apps and connectors guide",
     feedback:
       "Anchor answers to sources and require citations to reduce invented content. Review the guide.",
   },
@@ -776,12 +774,12 @@ export const MODULE_2_EN = [
       },
       { id: "m2q40_b", label: "Only a system prompt that says you are a support agent" },
       { id: "m2q40_c", label: "Web Search enabled and no source of the company's own" },
-      { id: "m2q40_d", label: "DALL-E 3 to answer with images instead of solutions" },
+      { id: "m2q40_d", label: "The image generator to answer with images instead of solutions" },
     ],
     correctAnswer: "m2q40_a",
     topic: "GPT Architecture",
     difficulty: "hard",
-    source: "OVA: Real-World Automation Flows",
+    source: "The Assembly Line",
     feedback:
       "The ideal flow combines role, knowledge, live data via API and human supervision. Review the OVA.",
   },

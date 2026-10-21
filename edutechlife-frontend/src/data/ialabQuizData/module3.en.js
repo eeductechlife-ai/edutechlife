@@ -14,7 +14,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "easy",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Deep Research works across sources and returns a cited report. Watch the cases video.",
   },
@@ -33,7 +33,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q2_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Always verify: the AI can be wrong. Practice in the case-solving lab.",
   },
@@ -58,7 +58,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q3_a",
     topic: "Grounding",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Grounding anchors answers to live data. Review the field exercises.",
   },
@@ -77,7 +77,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q4_a",
     topic: "Multimodality",
     difficulty: "easy",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "You can show it an image, PDF or video in the same chat. See the ecosystem map.",
   },
@@ -96,7 +96,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q5_a",
     topic: "Google Workspace",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini helps in Gmail, Docs and Sheets from each app. Practice in the ecosystem OVA.",
   },
@@ -116,7 +116,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q6_a",
     topic: "Gemini Live",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini Live lets you share the screen and ask about what you see. Review the ecosystem OVA.",
   },
@@ -136,7 +136,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q7_a",
     topic: "Professional Research",
     difficulty: "medium",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Combine Deep Research with source verification. Watch the cases video.",
   },
@@ -156,7 +156,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q8_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Deep Research finds sources and you verify and write. Practice in the case lab.",
   },
@@ -175,7 +175,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q9_a",
     topic: "Guided Learning",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Use it as a tutor to learn actively. Review the introduction manual.",
   },
@@ -198,7 +198,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q10_a",
     topic: "Gemini Extensions",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Extensions bring live information from Google services. Review the ecosystem map.",
   },
@@ -224,7 +224,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q11_a",
     topic: "Multimodality",
     difficulty: "medium",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Gemini processes digital content (text, image, audio, video, PDF), not physical objects.",
   },
@@ -254,7 +254,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q12_a",
     topic: "Gemini Basics",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Gemini drafts answers from your question, while a search engine lists links. Review the manual.",
   },
@@ -284,7 +284,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q13_a",
     topic: "Grounding",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Grounding connects the answer to live data and its sources. Review the field exercises.",
   },
@@ -313,7 +313,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q14_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Verify by opening the source: a formatted citation does not guarantee the data is correct.",
   },
@@ -342,7 +342,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q15_a",
     topic: "Deep Research",
     difficulty: "easy",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Deep Research goes through many sources and delivers a cited report. Review the real cases video.",
   },
@@ -371,7 +371,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Defining topic, angle and sources improves the report. Practice in the case lab.",
   },
@@ -400,7 +400,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q17_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Triangulating means checking against independent sources to reduce the risk of error.",
   },
@@ -431,7 +431,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q18_a",
     topic: "Long Context",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Long context lets you work with big documents without splitting them. Review the ecosystem map.",
   },
@@ -459,7 +459,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q19_a",
     topic: "Gemini Live",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini Live analyzes in real time what you share on screen. Review the ecosystem OVA.",
   },
@@ -488,7 +488,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q20_a",
     topic: "Verification",
     difficulty: "hard",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Without a verifiable source, the data is not used. Ask for support or discard it.",
   },
@@ -516,7 +516,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q21_a",
     topic: "Google Workspace",
     difficulty: "easy",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini assists in Gmail, Docs and Sheets, integrated into each app. Review the ecosystem OVA.",
   },
@@ -545,7 +545,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q22_a",
     topic: "Google Workspace",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Working inside the app avoids copying data and reduces errors. Review the ecosystem OVA.",
   },
@@ -571,7 +571,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q23_a",
     topic: "Gemini Extensions",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Extensions add live data from Google services into the chat. Review the ecosystem map.",
   },
@@ -600,7 +600,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q24_a",
     topic: "Professional Research",
     difficulty: "medium",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "A good question is specific and verifiable. Review the field manual.",
   },
@@ -626,7 +626,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q25_a",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "If you cannot verify the source, the data does not hold. Practice in the case lab.",
   },
@@ -654,7 +654,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q26_a",
     topic: "Responsible Use",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Use it as a tutor: understand, practice and verify. Review the field manual.",
   },
@@ -683,7 +683,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q27_a",
     topic: "Long Context",
     difficulty: "hard",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Ask for answers anchored to specific sections so you can verify. Review the field exercises.",
   },
@@ -708,7 +708,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q28_a",
     topic: "Multimodality",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Gemini understands images: it describes, reads text and answers about them. Review the map.",
   },
@@ -736,7 +736,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q29_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "A long report does not guarantee accuracy: verify key findings in its sources.",
   },
@@ -764,7 +764,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q30_a",
     topic: "Analysis with Gemini",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Specify data, goal and format for a truly useful analysis. Review the field exercises.",
   },
@@ -793,7 +793,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q31_a",
     topic: "Critical Thinking",
     difficulty: "hard",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "When answers differ, go back to the sources. Review the real cases video.",
   },
@@ -822,7 +822,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q32_a",
     topic: "Privacy",
     difficulty: "medium",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Review the policy and anonymize before uploading internal data. Review the manual.",
   },
@@ -851,7 +851,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q33_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Deep Research goes deeper and delivers a report with sources. Review the ecosystem map.",
   },
@@ -879,7 +879,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q34_a",
     topic: "Google Workspace",
     difficulty: "easy",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Always review before sending: you are responsible for the final message.",
   },
@@ -908,7 +908,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q35_a",
     topic: "Responsible Use",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Use it as support and respect your institution's integrity rules. Review the manual.",
   },
@@ -933,7 +933,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q36_a",
     topic: "Grounding",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Grounding shines with current information that changes fast. Review the field exercises.",
   },
@@ -959,7 +959,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q37_a",
     topic: "Long Context",
     difficulty: "hard",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Focus by sections and ask for citations to move faster and verify. Review the field exercises.",
   },
@@ -987,7 +987,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q38_a",
     topic: "Gemini Extensions",
     difficulty: "easy",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Extensions add current data to help you decide better. Review the ecosystem map.",
   },
@@ -1016,7 +1016,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q39_a",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "A source with no author is not enough: find reliable backup or discard the data.",
   },
@@ -1046,7 +1046,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q40_a",
     topic: "Professional Research",
     difficulty: "hard",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "The ideal flow: Deep Research with sources and verification afterward. Review the video.",
   },

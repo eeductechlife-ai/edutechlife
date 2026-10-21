@@ -13,7 +13,7 @@ const modules = [
   MODULE_5_PT,
 ];
 // Tamanho do banco por módulo (amplia-se para 40 conforme se traduz cada um).
-const EXPECTED_COUNTS = [40, 40, 40, 40, 40];
+const EXPECTED_COUNTS = [60, 40, 40, 40, 30];
 const words = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
 
 describe("Exámenes PT (checkpoints) módulos 1-5", () => {

@@ -16,7 +16,7 @@ const THEME_DEFAULT = {
 };
 
 /* Temas que siempre muestran la vista herramientas, sin opción de cambiar */
-const FORCE_CHROME_ON = new Set(["gemini", "default", "notebooklm", "chatgpt"]);
+const FORCE_CHROME_ON = new Set(["gemini", "default", "notebooklm", "chatgpt", "claude"]);
 
 function readStored() {
   try {

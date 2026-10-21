@@ -24,14 +24,14 @@ const SCENARIOS_ES = [
       { name: "Capacidades", importance: "MEDIA", reason: "Preguntas rutinarias" },
     ],
     options: [
-      { model: "ChatGPT (API)", cost: "$0.50/1M tokens", latency: "~800ms", privacy: "Cloud", note: "Más caro pero confiable" },
-      { model: "Gemini", cost: "$0.075/1M tokens", latency: "~600ms", privacy: "Cloud", note: "Más barato, latencia mejor" },
-      { model: "NotebookLM", cost: "$0.008/min", latency: "~5s", privacy: "Cloud", note: "Lento, no apto para tiempo real" },
-      { model: "Llama 3.1 (self-hosted)", cost: "GPU rental ~$1/h", latency: "~300ms", privacy: "On-premises", note: "Privacidad total, setup complejo" },
+      { model: "ChatGPT (API)", cost: "Según plan", latency: "~800ms", privacy: "Cloud", note: "Más caro pero confiable" },
+      { model: "Gemini", cost: "Según plan", latency: "~600ms", privacy: "Cloud", note: "Más barato, latencia mejor" },
+      { model: "Gemini Notebook", cost: "Según plan", latency: "~5s", privacy: "Cloud", note: "Lento, no apto para tiempo real" },
+      { model: "Llama 3.1 (self-hosted)", cost: "Según proveedor", latency: "~300ms", privacy: "On-premises", note: "Privacidad total, setup complejo" },
     ],
     expert: [
-      "Latencia es lo primero: NotebookLM queda descartado (5s mínimo).",
-      "Entre ChatGPT, Gemini y Llama self-hosted: Gemini gana en latencia (600ms) y costo bajo ($0.075/1M). ChatGPT es más confiable pero caro.",
+      "Latencia es lo primero: Gemini Notebook queda descartado (5s mínimo).",
+      "Entre ChatGPT, Gemini y Llama self-hosted: Gemini gana en latencia (600ms) y costo bajo (costo bajo). ChatGPT es más confiable pero caro.",
       "Si privacidad es exigencia legal: Llama self-hosted en tu propia infraestructura, aunque requiere managing GPUs.",
       "Recomendación: Gemini como opción por defecto (costo-latencia), con ruta a Llama self-hosted si regulación lo exige.",
     ],
@@ -49,16 +49,16 @@ const SCENARIOS_ES = [
       { name: "Capacidades", importance: "CRÍTICA", reason: "Análisis profundo, extracción precisa" },
     ],
     options: [
-      { model: "ChatGPT (GPT-4)", cost: "$0.03/1K input", latency: "2-5s", privacy: "Cloud", note: "Mejor razonamiento, preciso" },
-      { model: "Gemini Advanced", cost: "$0.075/1M", latency: "1-2s", privacy: "Cloud", note: "Rápido, pero menos profundo" },
-      { model: "NotebookLM", cost: "$0.008/min", latency: "~2min/doc", privacy: "Cloud", note: "Hecho para esto: análisis + audio overviews" },
-      { model: "Claude (via API)", cost: "$0.03/1K input", latency: "2-4s", privacy: "Cloud", note: "Bueno en análisis largo" },
+      { model: "ChatGPT", cost: "Según plan", latency: "2-5s", privacy: "Cloud", note: "Mejor razonamiento, preciso" },
+      { model: "Gemini Advanced", cost: "Según plan", latency: "1-2s", privacy: "Cloud", note: "Rápido, pero menos profundo" },
+      { model: "Gemini Notebook", cost: "Según plan", latency: "~2min/doc", privacy: "Cloud", note: "Hecho para esto: análisis + audio overviews" },
+      { model: "Claude (via API)", cost: "Según plan", latency: "2-4s", privacy: "Cloud", note: "Bueno en análisis largo" },
     ],
     expert: [
-      "NotebookLM está diseñado exactamente para esto: toma un documento largo y genera resumen + audio + insights automáticamente.",
-      "Si necesitas extracción de datos estructurados: Claude o ChatGPT GPT-4 son más precisos. Si solo necesitas resumen: NotebookLM es la opción clara.",
-      "Costo: para 500 docs/mes, NotebookLM = ~$40 (2 min/doc × 500), ChatGPT/Claude = ~$30-50 según tamaño.",
-      "Recomendación: NotebookLM como flujo principal (resumen + audio para investigadores), con opción manual a Claude si necesitas datos estructurados en un doc.",
+      "Gemini Notebook está diseñado exactamente para esto: toma un documento largo y genera resumen + audio + insights automáticamente.",
+      "Si necesitas extracción de datos estructurados: Claude o ChatGPT son opciones sólidas (verifica siempre). Si solo necesitas resumen: Gemini Notebook es la opción clara.",
+      "Costo: depende del plan y del volumen; compara las tarifas vigentes antes de decidir.",
+      "Recomendación: Gemini Notebook como flujo principal (resumen + audio para investigadores), con opción manual a Claude si necesitas datos estructurados en un doc.",
     ],
   },
   {
@@ -74,13 +74,13 @@ const SCENARIOS_ES = [
       { name: "Capacidades", importance: "ALTA", reason: "Personalización y continuidad" },
     ],
     options: [
-      { model: "ChatGPT (API)", cost: "$0.50/1M", latency: "~800ms", privacy: "Cloud", note: "No cumple privacidad (datos a OpenAI)" },
-      { model: "Gemini Advanced", cost: "$0.075/1M", latency: "~600ms", privacy: "Cloud", note: "Igual restricción de privacidad" },
-      { model: "Llama 2/3.1 (self-hosted)", cost: "GPU ~$1/h", latency: "~300-500ms", privacy: "On-premises", note: "Cumple privacidad, latencia buena" },
-      { model: "Mistral 7B (self-hosted)", cost: "GPU ~$0.5/h", latency: "~200-300ms", privacy: "On-premises", note: "Más rápido, menos contexto" },
+      { model: "ChatGPT (API)", cost: "Según uso", latency: "~800ms", privacy: "Cloud", note: "No cumple privacidad (datos a OpenAI)" },
+      { model: "Gemini Advanced", cost: "Según plan", latency: "~600ms", privacy: "Cloud", note: "Igual restricción de privacidad" },
+      { model: "Llama 2/3.1 (self-hosted)", cost: "Según proveedor", latency: "~300-500ms", privacy: "On-premises", note: "Cumple privacidad, latencia buena" },
+      { model: "Mistral 7B (self-hosted)", cost: "Según proveedor", latency: "~200-300ms", privacy: "On-premises", note: "Más rápido, menos contexto" },
     ],
     expert: [
-      "Privacidad es no-negociable: cualquier cloud (ChatGPT, Gemini, NotebookLM) viola reglamentos de protección de menores en la mayoría de países.",
+      "Privacidad es no-negociable: cualquier cloud (ChatGPT, Gemini, Gemini Notebook) viola reglamentos de protección de menores en la mayoría de países.",
       "Opción obligatoria: self-hosted (Llama o Mistral) en tu infraestructura propia.",
       "Entre Llama y Mistral: Llama es mejor para tareas complejas (más contexto), Mistral es más rápido y usa menos GPU (mejor costo).",
       "Recomendación: Mistral 7B self-hosted (equilibrio costo-latencia-privacidad), con evaluación a Llama 13B si necesitas mejor comprensión de contexto.",
@@ -99,10 +99,10 @@ const SCENARIOS_ES = [
       { name: "Capacidades", importance: "MEDIA", reason: "Generación de texto, versatilidad" },
     ],
     options: [
-      { model: "ChatGPT (GPT-4)", cost: "$0.50/1M", latency: "Batch OK", privacy: "Cloud", note: "Mejor calidad, más caro" },
-      { model: "Gemini", cost: "$0.075/1M", latency: "Batch OK", privacy: "Cloud", note: "Más barato, buena calidad" },
-      { model: "Llama 3.1 70B (self-hosted)", cost: "GPU ~$2/h", latency: "Batch OK", privacy: "On-premises", note: "Caro en compute, no rentable" },
-      { model: "Open-source local (Mistral/Zephyr)", cost: "GPU barata ~$0.2/h", latency: "Batch OK", privacy: "On-premises", note: "Muy barato, calidad media" },
+      { model: "ChatGPT", cost: "Según uso", latency: "Batch OK", privacy: "Cloud", note: "Mejor calidad, más caro" },
+      { model: "Gemini", cost: "Según plan", latency: "Batch OK", privacy: "Cloud", note: "Más barato, buena calidad" },
+      { model: "Llama 3.1 70B (self-hosted)", cost: "Según proveedor", latency: "Batch OK", privacy: "On-premises", note: "Caro en compute, no rentable" },
+      { model: "Open-source local (Mistral/Zephyr)", cost: "Según proveedor", latency: "Batch OK", privacy: "On-premises", note: "Muy barato, calidad media" },
     ],
     expert: [
       "Volumen alto + costo crítico → Gemini gana (0.075/1M vs 0.50/1M de ChatGPT es 6-7x más barato).",
@@ -127,14 +127,14 @@ const SCENARIOS_EN = [
       { name: "Capabilities", importance: "MEDIUM", reason: "Routine questions" },
     ],
     options: [
-      { model: "ChatGPT (API)", cost: "$0.50/1M tokens", latency: "~800ms", privacy: "Cloud", note: "Expensive but reliable" },
-      { model: "Gemini", cost: "$0.075/1M tokens", latency: "~600ms", privacy: "Cloud", note: "Cheaper, better latency" },
-      { model: "NotebookLM", cost: "$0.008/min", latency: "~5s", privacy: "Cloud", note: "Too slow, not real-time" },
-      { model: "Llama 3.1 (self-hosted)", cost: "GPU rental ~$1/h", latency: "~300ms", privacy: "On-premises", note: "Full privacy, complex setup" },
+      { model: "ChatGPT (API)", cost: "Según plan", latency: "~800ms", privacy: "Cloud", note: "Expensive but reliable" },
+      { model: "Gemini", cost: "Según plan", latency: "~600ms", privacy: "Cloud", note: "Cheaper, better latency" },
+      { model: "Gemini Notebook", cost: "Según plan", latency: "~5s", privacy: "Cloud", note: "Too slow, not real-time" },
+      { model: "Llama 3.1 (self-hosted)", cost: "Según proveedor", latency: "~300ms", privacy: "On-premises", note: "Full privacy, complex setup" },
     ],
     expert: [
-      "Latency is first: NotebookLM is out (5s minimum).",
-      "Between ChatGPT, Gemini, and Llama self-hosted: Gemini wins on latency (600ms) and cost ($0.075/1M). ChatGPT is more reliable but expensive.",
+      "Latency is first: Gemini Notebook is out (5s minimum).",
+      "Between ChatGPT, Gemini, and Llama self-hosted: Gemini wins on latency (600ms) and cost (costo bajo). ChatGPT is more reliable but expensive.",
       "If privacy is a legal requirement: Llama self-hosted on your infrastructure, though it requires managing GPUs.",
       "Recommendation: Gemini as default (cost-latency balance), with path to Llama self-hosted if regulations demand it.",
     ],
@@ -152,16 +152,16 @@ const SCENARIOS_EN = [
       { name: "Capabilities", importance: "CRITICAL", reason: "Deep analysis, precise extraction" },
     ],
     options: [
-      { model: "ChatGPT (GPT-4)", cost: "$0.03/1K input", latency: "2-5s", privacy: "Cloud", note: "Best reasoning, precise" },
-      { model: "Gemini Advanced", cost: "$0.075/1M", latency: "1-2s", privacy: "Cloud", note: "Fast, but less deep" },
-      { model: "NotebookLM", cost: "$0.008/min", latency: "~2min/doc", privacy: "Cloud", note: "Built for this: analysis + audio overviews" },
-      { model: "Claude (via API)", cost: "$0.03/1K input", latency: "2-4s", privacy: "Cloud", note: "Good at long analysis" },
+      { model: "ChatGPT", cost: "Según plan", latency: "2-5s", privacy: "Cloud", note: "Best reasoning, precise" },
+      { model: "Gemini Advanced", cost: "Según plan", latency: "1-2s", privacy: "Cloud", note: "Fast, but less deep" },
+      { model: "Gemini Notebook", cost: "Según plan", latency: "~2min/doc", privacy: "Cloud", note: "Built for this: analysis + audio overviews" },
+      { model: "Claude (via API)", cost: "Según plan", latency: "2-4s", privacy: "Cloud", note: "Good at long analysis" },
     ],
     expert: [
-      "NotebookLM is designed exactly for this: takes a long document and auto-generates summary + audio + insights.",
-      "If you need structured data extraction: Claude or ChatGPT GPT-4 are more precise. If just summaries: NotebookLM is the clear winner.",
-      "Cost: for 500 docs/month, NotebookLM = ~$40 (2 min/doc × 500), ChatGPT/Claude = ~$30-50 depending on size.",
-      "Recommendation: NotebookLM as main flow (summary + audio for researchers), with manual Claude fallback if you need structured data.",
+      "Gemini Notebook is designed exactly for this: takes a long document and auto-generates summary + audio + insights.",
+      "If you need structured data extraction: Claude or ChatGPT are solid options (always verify). If just summaries: Gemini Notebook is the clear winner.",
+      "Cost: depends on plan and volume; compare current prices before deciding.",
+      "Recommendation: Gemini Notebook as main flow (summary + audio for researchers), with manual Claude fallback if you need structured data.",
     ],
   },
   {
@@ -177,13 +177,13 @@ const SCENARIOS_EN = [
       { name: "Capabilities", importance: "HIGH", reason: "Personalization and continuity" },
     ],
     options: [
-      { model: "ChatGPT (API)", cost: "$0.50/1M", latency: "~800ms", privacy: "Cloud", note: "Fails privacy (data to OpenAI)" },
-      { model: "Gemini Advanced", cost: "$0.075/1M", latency: "~600ms", privacy: "Cloud", note: "Same privacy restriction" },
-      { model: "Llama 2/3.1 (self-hosted)", cost: "GPU ~$1/h", latency: "~300-500ms", privacy: "On-premises", note: "Meets privacy, good latency" },
-      { model: "Mistral 7B (self-hosted)", cost: "GPU ~$0.5/h", latency: "~200-300ms", privacy: "On-premises", note: "Faster, less context" },
+      { model: "ChatGPT (API)", cost: "Según uso", latency: "~800ms", privacy: "Cloud", note: "Fails privacy (data to OpenAI)" },
+      { model: "Gemini Advanced", cost: "Según plan", latency: "~600ms", privacy: "Cloud", note: "Same privacy restriction" },
+      { model: "Llama 2/3.1 (self-hosted)", cost: "Según proveedor", latency: "~300-500ms", privacy: "On-premises", note: "Meets privacy, good latency" },
+      { model: "Mistral 7B (self-hosted)", cost: "Según proveedor", latency: "~200-300ms", privacy: "On-premises", note: "Faster, less context" },
     ],
     expert: [
-      "Privacy is non-negotiable: any cloud (ChatGPT, Gemini, NotebookLM) violates child protection regulations in most countries.",
+      "Privacy is non-negotiable: any cloud (ChatGPT, Gemini, Gemini Notebook) violates child protection regulations in most countries.",
       "Mandatory option: self-hosted (Llama or Mistral) on your own infrastructure.",
       "Between Llama and Mistral: Llama better for complex tasks (more context), Mistral faster and cheaper (less GPU).",
       "Recommendation: Mistral 7B self-hosted (cost-latency-privacy balance), evaluate Llama 13B if you need better context understanding.",
@@ -202,10 +202,10 @@ const SCENARIOS_EN = [
       { name: "Capabilities", importance: "MEDIUM", reason: "Text generation, versatility" },
     ],
     options: [
-      { model: "ChatGPT (GPT-4)", cost: "$0.50/1M", latency: "Batch OK", privacy: "Cloud", note: "Best quality, pricey" },
-      { model: "Gemini", cost: "$0.075/1M", latency: "Batch OK", privacy: "Cloud", note: "Cheaper, good quality" },
-      { model: "Llama 3.1 70B (self-hosted)", cost: "GPU ~$2/h", latency: "Batch OK", privacy: "On-premises", note: "Expensive compute, not worth it" },
-      { model: "Open-source local (Mistral/Zephyr)", cost: "Cheap GPU ~$0.2/h", latency: "Batch OK", privacy: "On-premises", note: "Very cheap, medium quality" },
+      { model: "ChatGPT", cost: "Según uso", latency: "Batch OK", privacy: "Cloud", note: "Best quality, pricey" },
+      { model: "Gemini", cost: "Según plan", latency: "Batch OK", privacy: "Cloud", note: "Cheaper, good quality" },
+      { model: "Llama 3.1 70B (self-hosted)", cost: "Según proveedor", latency: "Batch OK", privacy: "On-premises", note: "Expensive compute, not worth it" },
+      { model: "Open-source local (Mistral/Zephyr)", cost: "Según proveedor", latency: "Batch OK", privacy: "On-premises", note: "Very cheap, medium quality" },
     ],
     expert: [
       "High volume + cost critical → Gemini wins (0.075/1M vs 0.50/1M is 6-7x cheaper).",
@@ -230,14 +230,14 @@ const SCENARIOS_PT = [
       { name: "Capacidades", importance: "MÉDIA", reason: "Perguntas rotineiras" },
     ],
     options: [
-      { model: "ChatGPT (API)", cost: "$0.50/1M tokens", latency: "~800ms", privacy: "Nuvem", note: "Caro mas confiável" },
-      { model: "Gemini", cost: "$0.075/1M tokens", latency: "~600ms", privacy: "Nuvem", note: "Mais barato, latência melhor" },
-      { model: "NotebookLM", cost: "$0.008/min", latency: "~5s", privacy: "Nuvem", note: "Lento, inadequado" },
-      { model: "Llama 3.1 (auto-hospedado)", cost: "GPU ~$1/h", latency: "~300ms", privacy: "On-premises", note: "Privacidade total, complexo" },
+      { model: "ChatGPT (API)", cost: "Según plan", latency: "~800ms", privacy: "Nuvem", note: "Caro mas confiável" },
+      { model: "Gemini", cost: "Según plan", latency: "~600ms", privacy: "Nuvem", note: "Mais barato, latência melhor" },
+      { model: "Gemini Notebook", cost: "Según plan", latency: "~5s", privacy: "Nuvem", note: "Lento, inadequado" },
+      { model: "Llama 3.1 (auto-hospedado)", cost: "Según proveedor", latency: "~300ms", privacy: "On-premises", note: "Privacidade total, complexo" },
     ],
     expert: [
-      "Latência é o primeiro critério: NotebookLM está descartado (5s mínimo).",
-      "Entre ChatGPT, Gemini e Llama auto-hospedado: Gemini vence em latência (600ms) e custo ($0.075/1M). ChatGPT é mais confiável mas caro.",
+      "Latência é o primeiro critério: Gemini Notebook está descartado (5s mínimo).",
+      "Entre ChatGPT, Gemini e Llama auto-hospedado: Gemini vence em latência (600ms) e custo (costo bajo). ChatGPT é mais confiável mas caro.",
       "Se privacidade é exigência legal: Llama auto-hospedado na sua infraestrutura, embora exija gerenciar GPUs.",
       "Recomendação: Gemini como padrão (equilíbrio custo-latência), com caminho para Llama auto-hospedado se regulação exigir.",
     ],
@@ -255,16 +255,16 @@ const SCENARIOS_PT = [
       { name: "Capacidades", importance: "CRÍTICA", reason: "Análise profunda, extração precisa" },
     ],
     options: [
-      { model: "ChatGPT (GPT-4)", cost: "$0.03/1K input", latency: "2-5s", privacy: "Nuvem", note: "Melhor raciocínio, preciso" },
-      { model: "Gemini Advanced", cost: "$0.075/1M", latency: "1-2s", privacy: "Nuvem", note: "Rápido, mas menos profundo" },
-      { model: "NotebookLM", cost: "$0.008/min", latency: "~2min/doc", privacy: "Nuvem", note: "Feito para isso: análise + áudio" },
-      { model: "Claude (via API)", cost: "$0.03/1K input", latency: "2-4s", privacy: "Nuvem", note: "Bom em análise longa" },
+      { model: "ChatGPT", cost: "Según plan", latency: "2-5s", privacy: "Nuvem", note: "Melhor raciocínio, preciso" },
+      { model: "Gemini Advanced", cost: "Según plan", latency: "1-2s", privacy: "Nuvem", note: "Rápido, mas menos profundo" },
+      { model: "Gemini Notebook", cost: "Según plan", latency: "~2min/doc", privacy: "Nuvem", note: "Feito para isso: análise + áudio" },
+      { model: "Claude (via API)", cost: "Según plan", latency: "2-4s", privacy: "Nuvem", note: "Bom em análise longa" },
     ],
     expert: [
-      "NotebookLM é projetado exatamente para isto: toma documento longo e gera automaticamente resumo + áudio + insights.",
-      "Se precisa extração de dados estruturados: Claude ou ChatGPT GPT-4 são mais precisos. Se só resumo: NotebookLM é a opção clara.",
-      "Custo: para 500 docs/mês, NotebookLM = ~$40 (2 min/doc × 500), ChatGPT/Claude = ~$30-50 conforme tamanho.",
-      "Recomendação: NotebookLM como fluxo principal (resumo + áudio para pesquisadores), com opção manual a Claude se precisar dados estruturados.",
+      "Gemini Notebook é projetado exatamente para isto: toma documento longo e gera automaticamente resumo + áudio + insights.",
+      "Se precisa extração de dados estruturados: Claude ou ChatGPT são opções sólidas (sempre verifique). Se só resumo: Gemini Notebook é a opção clara.",
+      "Custo: depende do plano e do volume; compare os preços vigentes antes de decidir.",
+      "Recomendação: Gemini Notebook como fluxo principal (resumo + áudio para pesquisadores), com opção manual a Claude se precisar dados estruturados.",
     ],
   },
   {
@@ -280,13 +280,13 @@ const SCENARIOS_PT = [
       { name: "Capacidades", importance: "ALTA", reason: "Personalização e continuidade" },
     ],
     options: [
-      { model: "ChatGPT (API)", cost: "$0.50/1M", latency: "~800ms", privacy: "Nuvem", note: "Falha privacidade (dados para OpenAI)" },
-      { model: "Gemini Advanced", cost: "$0.075/1M", latency: "~600ms", privacy: "Nuvem", note: "Mesma restrição privacidade" },
-      { model: "Llama 2/3.1 (auto-hospedado)", cost: "GPU ~$1/h", latency: "~300-500ms", privacy: "On-premises", note: "Atende privacidade, latência boa" },
-      { model: "Mistral 7B (auto-hospedado)", cost: "GPU ~$0.5/h", latency: "~200-300ms", privacy: "On-premises", note: "Mais rápido, menos contexto" },
+      { model: "ChatGPT (API)", cost: "Según uso", latency: "~800ms", privacy: "Nuvem", note: "Falha privacidade (dados para OpenAI)" },
+      { model: "Gemini Advanced", cost: "Según plan", latency: "~600ms", privacy: "Nuvem", note: "Mesma restrição privacidade" },
+      { model: "Llama 2/3.1 (auto-hospedado)", cost: "Según proveedor", latency: "~300-500ms", privacy: "On-premises", note: "Atende privacidade, latência boa" },
+      { model: "Mistral 7B (auto-hospedado)", cost: "Según proveedor", latency: "~200-300ms", privacy: "On-premises", note: "Mais rápido, menos contexto" },
     ],
     expert: [
-      "Privacidade é inegociável: qualquer nuvem (ChatGPT, Gemini, NotebookLM) viola regulações de proteção de menores na maioria dos países.",
+      "Privacidade é inegociável: qualquer nuvem (ChatGPT, Gemini, Gemini Notebook) viola regulações de proteção de menores na maioria dos países.",
       "Opção obrigatória: auto-hospedado (Llama ou Mistral) na sua infraestrutura própria.",
       "Entre Llama e Mistral: Llama melhor para tarefas complexas (mais contexto), Mistral mais rápido e usa menos GPU (melhor custo).",
       "Recomendação: Mistral 7B auto-hospedado (equilíbrio custo-latência-privacidade), avaliar Llama 13B se precisar melhor compreensão de contexto.",
@@ -305,10 +305,10 @@ const SCENARIOS_PT = [
       { name: "Capacidades", importance: "MÉDIA", reason: "Geração de texto, versatilidade" },
     ],
     options: [
-      { model: "ChatGPT (GPT-4)", cost: "$0.50/1M", latency: "Lote OK", privacy: "Nuvem", note: "Melhor qualidade, caro" },
-      { model: "Gemini", cost: "$0.075/1M", latency: "Lote OK", privacy: "Nuvem", note: "Mais barato, boa qualidade" },
-      { model: "Llama 3.1 70B (auto-hospedado)", cost: "GPU ~$2/h", latency: "Lote OK", privacy: "On-premises", note: "Caro compute, não rentável" },
-      { model: "Open-source local (Mistral/Zephyr)", cost: "GPU barata ~$0.2/h", latency: "Lote OK", privacy: "On-premises", note: "Muito barato, qualidade média" },
+      { model: "ChatGPT", cost: "Según uso", latency: "Lote OK", privacy: "Nuvem", note: "Melhor qualidade, caro" },
+      { model: "Gemini", cost: "Según plan", latency: "Lote OK", privacy: "Nuvem", note: "Mais barato, boa qualidade" },
+      { model: "Llama 3.1 70B (auto-hospedado)", cost: "Según proveedor", latency: "Lote OK", privacy: "On-premises", note: "Caro compute, não rentável" },
+      { model: "Open-source local (Mistral/Zephyr)", cost: "Según proveedor", latency: "Lote OK", privacy: "On-premises", note: "Muito barato, qualidade média" },
     ],
     expert: [
       "Volume alto + custo crítico → Gemini vence (0.075/1M vs 0.50/1M é 6-7x mais barato).",
@@ -353,10 +353,10 @@ export default function ModelSelectionGuide() {
         </h2>
         <p className="text-sm text-slate-600 dark:text-slate-400">
           {locale === "en"
-            ? "Learn when to use ChatGPT, Gemini, NotebookLM, and open-source alternatives"
+            ? "Learn when to use ChatGPT, Gemini, Gemini Notebook, and open-source alternatives"
             : locale === "pt"
-              ? "Aprenda quando usar ChatGPT, Gemini, NotebookLM e alternativas open-source"
-              : "Aprende cuándo usar ChatGPT, Gemini, NotebookLM y alternativas open-source"}
+              ? "Aprenda quando usar ChatGPT, Gemini, Gemini Notebook e alternativas open-source"
+              : "Aprende cuándo usar ChatGPT, Gemini, Gemini Notebook y alternativas open-source"}
         </p>
       </div>
 

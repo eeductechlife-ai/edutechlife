@@ -8,6 +8,7 @@ import { useNotification } from "../../../context/NotificationContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { scopedKey } from "../../../utils/userScopedStorage";
+import { awardQuestionXp } from "../quizQuestionXp";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
 import SecurityWarningModal from "../SecurityWarningModal";
@@ -194,6 +195,16 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       }
     } catch (e) {
       /* silent — no debe interrumpir flujo del quiz */
+    }
+
+    // XP por cada respuesta correcta (una vez por pregunta y cuenta).
+    if (!practiceMode && Array.isArray(quizQuestions)) {
+      quizQuestions.forEach((q) => {
+        const answered = quizAnswers?.[q.id];
+        if (answered && answered === q.correctAnswer) {
+          awardQuestionXp(`exam:${activeMod}:${q.id}`);
+        }
+      });
     }
 
     if (!practiceMode && submitResult?.result) {

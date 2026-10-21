@@ -91,7 +91,7 @@ describe("ActivityHistory - tab Repaso", () => {
     expect(
       await screen.findByText("Tus repasos aparecerán aquí conforme avances"),
     ).toBeInTheDocument();
-    expect(screen.getByTestId("study-calendar")).toBeInTheDocument();
+    expect(await screen.findByTestId("study-calendar")).toBeInTheDocument();
   });
 
   it("no renderiza el modal cuando isOpen es false", () => {
