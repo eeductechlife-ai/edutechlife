@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import DOMPurify from "dompurify";
 import { supabase } from "../../lib/supabase";
+import { fetchPerfilesPublicos } from "../../lib/perfilesPublicos";
 import { useAuth } from "../../context/AuthContext";
 
 /**
@@ -79,11 +80,8 @@ export const useIALabForum = () => {
           ];
           const authorNames = {};
           if (authorIds.length) {
-            const { data: authors } = await supabase
-              .from("profiles")
-              .select("id, full_name, avatar_url")
-              .in("id", authorIds);
-            (authors || []).forEach((a) => {
+            const authors = await fetchPerfilesPublicos(supabase, authorIds);
+            Object.values(authors).forEach((a) => {
               const name =
                 typeof a.full_name === "string" ? a.full_name.trim() : "";
               authorNames[a.id] = {

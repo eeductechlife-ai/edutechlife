@@ -10,6 +10,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import useFocusTrap from "../../hooks/useFocusTrap";
 import { LEADERBOARD_PERIODS, rankEntries } from "./leaderboardPeriod";
 import useEscapeKey from "../../hooks/useEscapeKey";
+import { fetchPerfilesPublicos } from "../../lib/perfilesPublicos";
 
 const POSITION_ICONS = {
   1: {
@@ -85,18 +86,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
         .slice(0, 50);
 
       const userIds = processed.map((row) => row.user_id);
-      let profiles = {};
-      try {
-        const { data: profileData } = await supabase
-          .from("profiles")
-          .select("id, full_name, avatar_url")
-          .in("id", userIds);
-        if (profileData) {
-          profileData.forEach((p) => {
-            profiles[p.id] = p;
-          });
-        }
-      } catch {}
+      const profiles = await fetchPerfilesPublicos(supabase, userIds);
 
       const enriched = processed.map((row, idx) => ({
         rank: idx + 1,
