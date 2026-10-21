@@ -35,82 +35,129 @@
 --   ver el bloque comentado al final del archivo.
 -- ============================================================================
 
+-- Cada bloque solo corre si la tabla existe: en una base limpia (CI) activity_log
+-- no existe y en producción sí. Las comparaciones van como texto (id::text) para
+-- servir con uuid o text. Las columnas de profiles se conceden según existan.
 BEGIN;
 
 -- ── profiles ────────────────────────────────────────────────────────────────
-DROP POLICY IF EXISTS "Allow anon to read profiles"   ON public.profiles;
-DROP POLICY IF EXISTS "Allow anon to insert profiles" ON public.profiles;
-DROP POLICY IF EXISTS "Allow anon to update profiles" ON public.profiles;
-DROP POLICY IF EXISTS "Allow anon to delete profiles" ON public.profiles;
+DO $$
+DECLARE
+  col text;
+BEGIN
+  IF to_regclass('public.profiles') IS NULL THEN
+    RAISE NOTICE 'profiles no existe en esta base: se omite';
+    RETURN;
+  END IF;
 
-DROP POLICY IF EXISTS profiles_select_own ON public.profiles;
-CREATE POLICY profiles_select_own ON public.profiles
-  FOR SELECT TO authenticated
-  USING ((SELECT auth.uid())::text = id);
+  EXECUTE 'DROP POLICY IF EXISTS "Allow anon to read profiles" ON public.profiles';
+  EXECUTE 'DROP POLICY IF EXISTS "Allow anon to insert profiles" ON public.profiles';
+  EXECUTE 'DROP POLICY IF EXISTS "Allow anon to update profiles" ON public.profiles';
+  EXECUTE 'DROP POLICY IF EXISTS "Allow anon to delete profiles" ON public.profiles';
 
-DROP POLICY IF EXISTS profiles_update_own ON public.profiles;
-CREATE POLICY profiles_update_own ON public.profiles
-  FOR UPDATE TO authenticated
-  USING ((SELECT auth.uid())::text = id)
-  WITH CHECK ((SELECT auth.uid())::text = id);
+  EXECUTE 'DROP POLICY IF EXISTS profiles_select_own ON public.profiles';
+  EXECUTE 'CREATE POLICY profiles_select_own ON public.profiles
+             FOR SELECT TO authenticated
+             USING ((SELECT auth.uid())::text = id::text)';
 
-REVOKE ALL ON public.profiles FROM anon;
-REVOKE ALL ON public.profiles FROM authenticated;
-GRANT SELECT ON public.profiles TO authenticated;
--- Solo columnas de datos personales editables: nunca role ni security_violations.
-GRANT UPDATE (full_name, avatar_url, phone, updated_at) ON public.profiles TO authenticated;
+  EXECUTE 'DROP POLICY IF EXISTS profiles_update_own ON public.profiles';
+  EXECUTE 'CREATE POLICY profiles_update_own ON public.profiles
+             FOR UPDATE TO authenticated
+             USING ((SELECT auth.uid())::text = id::text)
+             WITH CHECK ((SELECT auth.uid())::text = id::text)';
+
+  EXECUTE 'REVOKE ALL ON public.profiles FROM anon';
+  EXECUTE 'REVOKE ALL ON public.profiles FROM authenticated';
+  EXECUTE 'GRANT SELECT ON public.profiles TO authenticated';
+
+  -- Solo columnas de datos personales editables: nunca role ni security_violations.
+  FOREACH col IN ARRAY ARRAY['full_name', 'avatar_url', 'phone', 'updated_at'] LOOP
+    IF EXISTS (SELECT 1 FROM information_schema.columns
+               WHERE table_schema = 'public' AND table_name = 'profiles' AND column_name = col) THEN
+      EXECUTE format('GRANT UPDATE (%I) ON public.profiles TO authenticated', col);
+    END IF;
+  END LOOP;
+END $$;
 
 -- ── activity_log ────────────────────────────────────────────────────────────
-DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.activity_log;
+DO $$
+BEGIN
+  IF to_regclass('public.activity_log') IS NULL THEN
+    RAISE NOTICE 'activity_log no existe en esta base: se omite';
+    RETURN;
+  END IF;
 
-DROP POLICY IF EXISTS activity_log_select_own ON public.activity_log;
-CREATE POLICY activity_log_select_own ON public.activity_log
-  FOR SELECT TO authenticated
-  USING ((SELECT auth.uid())::text = user_id);
+  EXECUTE 'DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.activity_log';
 
-DROP POLICY IF EXISTS activity_log_insert_own ON public.activity_log;
-CREATE POLICY activity_log_insert_own ON public.activity_log
-  FOR INSERT TO authenticated
-  WITH CHECK ((SELECT auth.uid())::text = user_id);
+  EXECUTE 'DROP POLICY IF EXISTS activity_log_select_own ON public.activity_log';
+  EXECUTE 'CREATE POLICY activity_log_select_own ON public.activity_log
+             FOR SELECT TO authenticated
+             USING ((SELECT auth.uid())::text = user_id::text)';
 
--- El padre vinculado ve la actividad de su hijo (panel de padres, en vivo).
-DROP POLICY IF EXISTS activity_log_select_padre ON public.activity_log;
-CREATE POLICY activity_log_select_padre ON public.activity_log
-  FOR SELECT TO authenticated
-  USING (EXISTS (
-    SELECT 1 FROM public.parent_student_links l
-    WHERE l.student_user_id = activity_log.user_id
-      AND l.parent_user_id = (SELECT auth.uid())::text
-      AND l.is_active
-  ));
+  EXECUTE 'DROP POLICY IF EXISTS activity_log_insert_own ON public.activity_log';
+  EXECUTE 'CREATE POLICY activity_log_insert_own ON public.activity_log
+             FOR INSERT TO authenticated
+             WITH CHECK ((SELECT auth.uid())::text = user_id::text)';
 
-REVOKE ALL ON public.activity_log FROM anon;
-REVOKE ALL ON public.activity_log FROM authenticated;
-GRANT SELECT, INSERT ON public.activity_log TO authenticated;
+  -- El padre vinculado ve la actividad de su hijo (panel de padres, en vivo).
+  IF to_regclass('public.parent_student_links') IS NOT NULL THEN
+    EXECUTE 'DROP POLICY IF EXISTS activity_log_select_padre ON public.activity_log';
+    EXECUTE 'CREATE POLICY activity_log_select_padre ON public.activity_log
+               FOR SELECT TO authenticated
+               USING (EXISTS (
+                 SELECT 1 FROM public.parent_student_links l
+                 WHERE l.student_user_id = activity_log.user_id::text
+                   AND l.parent_user_id = (SELECT auth.uid())::text
+                   AND l.is_active
+               ))';
+  END IF;
+
+  EXECUTE 'REVOKE ALL ON public.activity_log FROM anon';
+  EXECUTE 'REVOKE ALL ON public.activity_log FROM authenticated';
+  EXECUTE 'GRANT SELECT, INSERT ON public.activity_log TO authenticated';
+END $$;
 
 -- ── notifications ───────────────────────────────────────────────────────────
 -- Quedan notifications_select_own / insert_own / update_own / delete_own.
-DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.notifications;
-
-REVOKE ALL ON public.notifications FROM anon;
-REVOKE TRUNCATE, REFERENCES, TRIGGER ON public.notifications FROM authenticated;
+DO $$
+BEGIN
+  IF to_regclass('public.notifications') IS NULL THEN
+    RAISE NOTICE 'notifications no existe en esta base: se omite';
+    RETURN;
+  END IF;
+  EXECUTE 'DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.notifications';
+  EXECUTE 'REVOKE ALL ON public.notifications FROM anon';
+  EXECUTE 'REVOKE TRUNCATE, REFERENCES, TRIGGER ON public.notifications FROM authenticated';
+END $$;
 
 -- ── quiz_attempts ───────────────────────────────────────────────────────────
 -- Quedan quiz_attempts_own (SELECT) y quiz_attempts_insert_own (INSERT).
-DROP POLICY IF EXISTS quiz_all_policy    ON public.quiz_attempts;
-DROP POLICY IF EXISTS quiz_insert_policy ON public.quiz_attempts;
-
-REVOKE ALL ON public.quiz_attempts FROM anon;
-REVOKE UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON public.quiz_attempts FROM authenticated;
+DO $$
+BEGIN
+  IF to_regclass('public.quiz_attempts') IS NULL THEN
+    RAISE NOTICE 'quiz_attempts no existe en esta base: se omite';
+    RETURN;
+  END IF;
+  EXECUTE 'DROP POLICY IF EXISTS quiz_all_policy ON public.quiz_attempts';
+  EXECUTE 'DROP POLICY IF EXISTS quiz_insert_policy ON public.quiz_attempts';
+  EXECUTE 'REVOKE ALL ON public.quiz_attempts FROM anon';
+  EXECUTE 'REVOKE UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON public.quiz_attempts FROM authenticated';
+END $$;
 
 -- ── notification_logs ───────────────────────────────────────────────────────
 -- Las escribe solo el backend (service_role omite RLS). Queda
 -- notification_logs_select_own para que el padre lea las suyas.
-DROP POLICY IF EXISTS notification_logs_service_insert ON public.notification_logs;
-DROP POLICY IF EXISTS notification_logs_service_update ON public.notification_logs;
-
-REVOKE ALL ON public.notification_logs FROM anon;
-REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON public.notification_logs FROM authenticated;
+DO $$
+BEGIN
+  IF to_regclass('public.notification_logs') IS NULL THEN
+    RAISE NOTICE 'notification_logs no existe en esta base: se omite';
+    RETURN;
+  END IF;
+  EXECUTE 'DROP POLICY IF EXISTS notification_logs_service_insert ON public.notification_logs';
+  EXECUTE 'DROP POLICY IF EXISTS notification_logs_service_update ON public.notification_logs';
+  EXECUTE 'REVOKE ALL ON public.notification_logs FROM anon';
+  EXECUTE 'REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON public.notification_logs FROM authenticated';
+END $$;
 
 -- ── Comprobación: ninguna política abierta para clientes en estas tablas ────
 DO $$
