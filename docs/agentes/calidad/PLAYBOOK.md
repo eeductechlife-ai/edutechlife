@@ -7,6 +7,7 @@ enseñen bien y mejoren cada día hasta sentirse de **nivel profesional** frente
 | Subagente | Se encarga de |
 |---|---|
 | `qa-explorador` | Recorre los flujos reales como usuario (escritorio y móvil), corre Playwright, encuentra errores visibles |
+| `qa-inspector-producto` | Inspección completa del producto del día: lo graba y captura, mapea pantallas, mide, optimiza herramientas y mantiene `MEJORAS-CONTINUAS.md` |
 | `qa-tutores-ia` | Evalúa a Valerio, Dani, Nico, Max y Valeria: pedagogía, español, seguridad infantil, alucinaciones |
 | `qa-rendimiento-seo` | Lighthouse, Core Web Vitals, accesibilidad (axe), SEO técnico, enlaces rotos |
 | `qa-seguridad-datos` | Seguridad, RLS de Supabase, datos de menores, dependencias vulnerables |
@@ -33,6 +34,7 @@ enseñen bien y mejoren cada día hasta sentirse de **nivel profesional** frente
 3. Consolidar hallazgos en `BACKLOG.md` con severidad:
    - **P0** el usuario no puede registrarse, pagar, entrar o aprender; datos expuestos. → avisar al CEO de inmediato.
    - **P1** función rota o tutor que responde mal. **P2** visual/UX. **P3** mejora o idea.
+   Los hallazgos puramente visuales se anotan también para el `director-creativo` (Estudio Creativo, `docs/agentes/diseno/`).
 4. Pasar a `dev-mejorador` máximo 3 hallazgos con causa clara: primero P0/P1; si no hay, las mejoras de tamaño S de `ROADMAP-PRO.md`. Un PR por hallazgo.
    Prioriza lo que afecta la captación: registro, primera experiencia, landings y velocidad en celular.
 5. Escribir `reportes/AAAA-MM-DD.md` (formato abajo).
