@@ -442,6 +442,14 @@ jobs:
       - name: Validate schema
         run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f supabase/validate_schema.sql
 
+      # Prueba de RLS (re-auditoría S2): falla si vuelve a haber políticas
+      # abiertas sobre datos personales. Corre en una base aparte, vacía, para
+      # no chocar con el schema de Supabase local.
+      - name: RLS regression test (datos personales)
+        run: |
+          psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS rls_test" -c "CREATE DATABASE rls_test"
+          psql "postgresql://postgres:postgres@127.0.0.1:54322/rls_test" -v ON_ERROR_STOP=1 -f supabase/tests/rls_permisiva.test.sql
+
       # Ejecuta los tests de contrato contra el schema recién creado.
       - name: Backend contract tests
         working-directory: edutechlife-backend
