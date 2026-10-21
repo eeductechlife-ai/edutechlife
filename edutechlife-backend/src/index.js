@@ -5,6 +5,7 @@ setupTelemetry();
 const app = require('./app');
 const { startPaidPlanExpiry } = require('./services/paidPlans');
 const { startRecordatoriosVencimiento } = require('./services/recordatorioVencimiento');
+const { startInformesSemanalesPadres } = require('./services/informeSemanalPadres');
 const PORT = process.env.PORT || 3001;
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
@@ -20,6 +21,7 @@ async function startServer() {
 
   startPaidPlanExpiry();
   startRecordatoriosVencimiento();
+  startInformesSemanalesPadres();
 
   app.listen(PORT, () => {
     console.log('Server running on http://localhost:' + PORT);
