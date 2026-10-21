@@ -11,6 +11,8 @@
  *   WHATSAPP_TOKEN=<token permanente del usuario del sistema>
  *   WHATSAPP_PHONE_NUMBER_ID=<id del número emisor>
  *   WHATSAPP_API_VERSION=v21.0            (opcional)
+ *   WHATSAPP_IDIOMA=es                    (opcional; debe coincidir con el idioma
+ *     con el que se registraron las plantillas en Meta, por ejemplo es o es_CO)
  *   WHATSAPP_TEMPLATE_CONEXION=aviso_conexion_hijo   (opcional)
  *   WHATSAPP_TEMPLATE_SEMANAL=informe_semanal_hijo   (opcional)
  *   WHATSAPP_TEMPLATE_VERIFICACION=verificacion_padre (opcional; categoría
@@ -75,7 +77,13 @@ function numeroParaLog(telefono) {
  *   valor del botón de las plantillas de autenticación (el mismo código).
  * @returns {Promise<{ ok: boolean, id?: string, error?: string }>}
  */
-async function enviarPlantilla({ para, plantilla, parametros = [], idioma = 'es', parametroBoton }) {
+async function enviarPlantilla({
+  para,
+  plantilla,
+  parametros = [],
+  idioma = process.env.WHATSAPP_IDIOMA || 'es',
+  parametroBoton,
+}) {
   const cfg = configuracion();
   if (!cfg) return { ok: false, error: 'no_configurado' };
   if (!/^\+[1-9]\d{7,14}$/.test(String(para || ''))) return { ok: false, error: 'telefono_invalido' };

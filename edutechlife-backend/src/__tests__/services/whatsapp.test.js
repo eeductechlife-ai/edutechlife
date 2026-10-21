@@ -15,7 +15,7 @@ const {
   numeroParaLog,
 } = require('../../services/whatsapp');
 
-const ENTORNO = ['WHATSAPP_ACTIVO', 'WHATSAPP_TOKEN', 'WHATSAPP_PHONE_NUMBER_ID', 'WHATSAPP_API_VERSION'];
+const ENTORNO = ['WHATSAPP_ACTIVO', 'WHATSAPP_TOKEN', 'WHATSAPP_PHONE_NUMBER_ID', 'WHATSAPP_API_VERSION', 'WHATSAPP_IDIOMA'];
 const TELEFONO = '+573001234567';
 
 function configurar() {
@@ -96,6 +96,15 @@ describe('whatsapp: enviarPlantilla', () => {
         components: [{ type: 'body', parameters: [{ type: 'text', text: 'Mateo' }, { type: 'text', text: '15:04' }] }],
       },
     });
+  });
+
+  it('el idioma de la plantilla se puede cambiar con WHATSAPP_IDIOMA', async () => {
+    process.env.WHATSAPP_IDIOMA = 'es_CO';
+    await enviarPlantilla({ para: TELEFONO, plantilla: 'p', parametros: ['a'] });
+    expect(JSON.parse(global.fetch.mock.calls[0][1].body).template.language.code).toBe('es_CO');
+    delete process.env.WHATSAPP_IDIOMA;
+    await enviarPlantilla({ para: TELEFONO, plantilla: 'p', parametros: ['a'] });
+    expect(JSON.parse(global.fetch.mock.calls[1][1].body).template.language.code).toBe('es');
   });
 
   it('las plantillas de autenticación llevan también el botón con el código', async () => {
