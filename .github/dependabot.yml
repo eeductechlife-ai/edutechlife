@@ -1,3 +1,7 @@
+# Dependabot: las actualizaciones menores y de parche de cada carpeta llegan en
+# UN solo PR por semana; las mayores siguen separadas porque pueden romper algo
+# y cada una merece su propia revisión. Antes había un PR por paquete y se
+# acumularon unos 20 sin atender.
 version: 2
 updates:
   - package-ecosystem: "npm"
@@ -5,7 +9,12 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
+    groups:
+      backend-menores-y-parches:
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "backend"
@@ -15,7 +24,12 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
+    groups:
+      frontend-menores-y-parches:
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "frontend"
