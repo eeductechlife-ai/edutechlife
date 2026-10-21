@@ -1,106 +1,182 @@
 export const MODULE_2_EN = [
   {
-    id: 'pp-m2-1',
-    question: 'What architecture does ChatGPT use as its foundation?',
+    id: "pp-m2-1",
+    question: "What architecture does ChatGPT use as its foundation?",
     options: [
-      { id: 'pp-m2-1_a', label: 'Convolutional Neural Networks (CNN)' },
-      { id: 'pp-m2-1_b', label: 'Generative Pre-trained Transformer (GPT)' },
-      { id: 'pp-m2-1_c', label: 'Long Short-Term Memory (LSTM)' },
-      { id: 'pp-m2-1_d', label: 'Support Vector Machines (SVM)' },
+      { id: "pp-m2-1_a", label: "Convolutional Neural Networks (CNN)" },
+      { id: "pp-m2-1_b", label: "Generative Pre-trained Transformer (GPT)" },
+      { id: "pp-m2-1_c", label: "Long Short-Term Memory (LSTM)" },
+      { id: "pp-m2-1_d", label: "Support Vector Machines (SVM)" },
     ],
-    correctAnswer: 'pp-m2-1_b',
-    topic: 'GPT Architecture',
-    difficulty: 'easy',
-    feedback: 'ChatGPT is based on the GPT (Generative Pre-trained Transformer) architecture, which uses attention mechanisms to process and generate coherent text.',
-    relatedFlashcardId: 'm2-f1',
+    correctAnswer: "pp-m2-1_b",
+    topic: "GPT Architecture",
+    difficulty: "easy",
+    feedback:
+      "ChatGPT is based on the GPT (Generative Pre-trained Transformer) architecture, which uses attention mechanisms to process and generate coherent text.",
+    relatedFlashcardId: "m2-f1",
   },
   {
-    id: 'pp-m2-2',
-    question: 'What are tokens and why are they important in ChatGPT?',
+    id: "pp-m2-2",
+    question: "What are tokens and why are they important in ChatGPT?",
     options: [
-      { id: 'pp-m2-2_a', label: 'They are access credentials that limit API usage' },
-      { id: 'pp-m2-2_b', label: 'They are text units the input is divided into; they determine cost and interaction limits' },
-      { id: 'pp-m2-2_c', label: 'They are configuration parameters that adjust model speed' },
-      { id: 'pp-m2-2_d', label: 'They are security labels that classify generated content' },
+      {
+        id: "pp-m2-2_a",
+        label: "They are access credentials that limit API usage",
+      },
+      {
+        id: "pp-m2-2_b",
+        label:
+          "They are text units the input is divided into; they determine cost and interaction limits",
+      },
+      {
+        id: "pp-m2-2_c",
+        label: "They are configuration parameters that adjust model speed",
+      },
+      {
+        id: "pp-m2-2_d",
+        label: "They are security labels that classify generated content",
+      },
     ],
-    correctAnswer: 'pp-m2-2_b',
-    topic: 'Tokens',
-    difficulty: 'easy',
-    feedback: 'Tokens are the minimum units text is divided into (1 token ≈ 0.75 words in English). The model has a maximum token limit per interaction (context window), and API usage is charged per token.',
-    relatedFlashcardId: 'm2-f2',
+    correctAnswer: "pp-m2-2_b",
+    topic: "Tokens",
+    difficulty: "easy",
+    feedback:
+      "Tokens are the minimum units text is divided into (1 token ≈ 0.75 words in English). The model has a maximum token limit per interaction (context window), and API usage is charged per token.",
+    relatedFlashcardId: "m2-f2",
   },
   {
-    id: 'pp-m2-3',
-    question: 'If you are building a virtual assistant that must maintain a consistent personality throughout the conversation, which ChatGPT technique would you use?',
+    id: "pp-m2-3",
+    question:
+      "If you are building a virtual assistant that must maintain a consistent personality throughout the conversation, which ChatGPT technique would you use?",
     options: [
-      { id: 'pp-m2-3_a', label: 'Change temperature to 0.0 after each response' },
-      { id: 'pp-m2-3_b', label: 'Use a system prompt defining the role, tone, and rules of the assistant' },
-      { id: 'pp-m2-3_c', label: 'Increase the context window to the maximum allowed' },
-      { id: 'pp-m2-3_d', label: 'Retrain the model with previous conversation data' },
+      {
+        id: "pp-m2-3_a",
+        label: "Change temperature to 0.0 after each response",
+      },
+      {
+        id: "pp-m2-3_b",
+        label:
+          "Use a system prompt defining the role, tone, and rules of the assistant",
+      },
+      {
+        id: "pp-m2-3_c",
+        label: "Increase the context window to the maximum allowed",
+      },
+      {
+        id: "pp-m2-3_d",
+        label: "Retrain the model with previous conversation data",
+      },
     ],
-    correctAnswer: 'pp-m2-3_b',
-    topic: 'System Prompts',
-    difficulty: 'medium',
-    feedback: 'The system prompt is an initial instruction that defines the assistant\'s role, personality, and rules for the entire conversation. It is the most effective way to maintain consistency without modifying the model.',
-    relatedFlashcardId: 'm2-f4',
+    correctAnswer: "pp-m2-3_b",
+    topic: "System Prompts",
+    difficulty: "medium",
+    feedback:
+      "The system prompt is an initial instruction that defines the assistant's role, personality, and rules for the entire conversation. It is the most effective way to maintain consistency without modifying the model.",
+    relatedFlashcardId: "m2-f4",
   },
   {
-    id: 'pp-m2-4',
-    question: 'What is RLHF and how does it improve ChatGPT\'s behavior?',
+    id: "pp-m2-4",
+    question: "What is RLHF and how does it improve ChatGPT's behavior?",
     options: [
-      { id: 'pp-m2-4_a', label: 'An algorithm that reduces token consumption per response' },
-      { id: 'pp-m2-4_b', label: 'A technique using human feedback to align responses with human preferences and values' },
-      { id: 'pp-m2-4_c', label: 'A caching system that speeds up model responses' },
-      { id: 'pp-m2-4_d', label: 'A method to compress the model and make it more efficient' },
+      {
+        id: "pp-m2-4_a",
+        label: "An algorithm that reduces token consumption per response",
+      },
+      {
+        id: "pp-m2-4_b",
+        label:
+          "A technique using human feedback to align responses with human preferences and values",
+      },
+      {
+        id: "pp-m2-4_c",
+        label: "A caching system that speeds up model responses",
+      },
+      {
+        id: "pp-m2-4_d",
+        label: "A method to compress the model and make it more efficient",
+      },
     ],
-    correctAnswer: 'pp-m2-4_b',
-    topic: 'RLHF',
-    difficulty: 'hard',
-    feedback: 'RLHF (Reinforcement Learning from Human Feedback) trains a reward model based on human preferences, then reinforces the LLM to align its responses with those preferences. It is key to making AI useful and safe.',
-    relatedFlashcardId: 'm2-f6',
+    correctAnswer: "pp-m2-4_b",
+    topic: "RLHF",
+    difficulty: "hard",
+    feedback:
+      "RLHF (Reinforcement Learning from Human Feedback) trains a reward model based on human preferences, then reinforces the LLM to align its responses with those preferences. It is key to making AI useful and safe.",
+    relatedFlashcardId: "m2-f6",
   },
   {
-    id: 'pp-m2-5',
-    question: 'A user writes a 10,000-token prompt, but the model only accepts 8,000. What concept explains this limitation?',
+    id: "pp-m2-5",
+    question:
+      "A user writes a 10,000-token prompt, but the model only accepts 8,000. What concept explains this limitation?",
     options: [
-      { id: 'pp-m2-5_a', label: 'Tokens per minute (TPM) limit' },
-      { id: 'pp-m2-5_b', label: 'Context window' },
-      { id: 'pp-m2-5_c', label: 'Model sampling rate' },
-      { id: 'pp-m2-5_d', label: 'Free API quota' },
+      { id: "pp-m2-5_a", label: "Tokens per minute (TPM) limit" },
+      { id: "pp-m2-5_b", label: "Context window" },
+      { id: "pp-m2-5_c", label: "Model sampling rate" },
+      { id: "pp-m2-5_d", label: "Free API quota" },
     ],
-    correctAnswer: 'pp-m2-5_b',
-    topic: 'Context Window',
-    difficulty: 'medium',
-    feedback: 'The context window is the maximum number of tokens (input + output) the model can process in a single interaction. Each model has its own limit: check your plan's details to know yours.',
-    relatedFlashcardId: 'm2-f3',
+    correctAnswer: "pp-m2-5_b",
+    topic: "Context Window",
+    difficulty: "medium",
+    feedback:
+      "The context window is the maximum number of tokens (input + output) the model can process in a single interaction. Each model has its own limit: check your plan's details to know yours.",
+    relatedFlashcardId: "m2-f3",
   },
   {
-    id: 'pp-m2-6',
-    question: 'What do embeddings represent in the context of language models?',
+    id: "pp-m2-6",
+    question: "What do embeddings represent in the context of language models?",
     options: [
-      { id: 'pp-m2-6_a', label: 'Automatic summaries of long texts generated by the model' },
-      { id: 'pp-m2-6_b', label: 'Numerical representations (vectors) that capture the semantic meaning of words or texts' },
-      { id: 'pp-m2-6_c', label: 'Metadata describing the source and date of training data' },
-      { id: 'pp-m2-6_d', label: 'Grammar rules the model applies when generating text' },
+      {
+        id: "pp-m2-6_a",
+        label: "Automatic summaries of long texts generated by the model",
+      },
+      {
+        id: "pp-m2-6_b",
+        label:
+          "Numerical representations (vectors) that capture the semantic meaning of words or texts",
+      },
+      {
+        id: "pp-m2-6_c",
+        label: "Metadata describing the source and date of training data",
+      },
+      {
+        id: "pp-m2-6_d",
+        label: "Grammar rules the model applies when generating text",
+      },
     ],
-    correctAnswer: 'pp-m2-6_b',
-    topic: 'Embeddings',
-    difficulty: 'hard',
-    feedback: 'Embeddings transform words or texts into numerical vectors where distance between vectors reflects semantic similarity. They are used for semantic search, clustering, and RAG systems.',
-    relatedFlashcardId: 'm2-f7',
+    correctAnswer: "pp-m2-6_b",
+    topic: "Embeddings",
+    difficulty: "hard",
+    feedback:
+      "Embeddings transform words or texts into numerical vectors where distance between vectors reflects semantic similarity. They are used for semantic search, clustering, and RAG systems.",
+    relatedFlashcardId: "m2-f7",
   },
   {
-    id: 'pp-m2-7',
-    question: 'How do you choose the right model for a task?',
+    id: "pp-m2-7",
+    question: "How do you choose the right model for a task?",
     options: [
-      { id: 'pp-m2-7_a', label: 'By complexity and cost: a fast one for drafts and a more powerful one for demanding analysis' },
-      { id: 'pp-m2-7_b', label: 'Always the most powerful, even if it is slower and more expensive' },
-      { id: 'pp-m2-7_c', label: 'Always the cheapest, because quality is the same for every task' },
-      { id: 'pp-m2-7_d', label: 'At random: the choice of model does not affect the result' },
+      {
+        id: "pp-m2-7_a",
+        label:
+          "By complexity and cost: a fast one for drafts and a more powerful one for demanding analysis",
+      },
+      {
+        id: "pp-m2-7_b",
+        label:
+          "Always the most powerful, even if it is slower and more expensive",
+      },
+      {
+        id: "pp-m2-7_c",
+        label:
+          "Always the cheapest, because quality is the same for every task",
+      },
+      {
+        id: "pp-m2-7_d",
+        label: "At random: the choice of model does not affect the result",
+      },
     ],
-    correctAnswer: 'pp-m2-7_a',
-    topic: 'Model choice',
-    difficulty: 'medium',
-    feedback: 'Each model balances speed, cost and capability. A fast one works for drafts and summaries; a more powerful one for analysis that requires reasoning. Model names change often: check what your plan includes.',
+    correctAnswer: "pp-m2-7_a",
+    topic: "Model choice",
+    difficulty: "medium",
+    feedback:
+      "Each model balances speed, cost and capability. A fast one works for drafts and summaries; a more powerful one for analysis that requires reasoning. Model names change often: check what your plan includes.",
   },
 ];

@@ -91,9 +91,7 @@ export const modules = [
     color: "#D97757",
     topics: [
       "Conoce a Claude: la IA que trabaja contigo",
-      ,
       "Crea con Claude: Artifacts, documentos y presentaciones",
-      ,
       "Delega con Claude: Proyectos, conectores y Skills",
     ],
     challenge:
@@ -191,9 +189,7 @@ export const modules_en = [
     color: "#D97757",
     topics: [
       "Get to Know Claude: the AI That Works With You",
-      ,
       "Create with Claude: Artifacts, Documents and Presentations",
-      ,
       "Delegate with Claude: Projects, Connectors and Skills",
     ],
     challenge:
@@ -291,9 +287,7 @@ export const modules_pt = [
     color: "#D97757",
     topics: [
       "Conheça o Claude: a IA que trabalha com você",
-      ,
       "Crie com o Claude: Artifacts, documentos e apresentações",
-      ,
       "Delegue com o Claude: Projetos, conectores e Skills",
     ],
     challenge:
@@ -507,9 +501,7 @@ export const ALL_LESSONS = {
       icon: "fa-comments",
       objectives: [
         "Escribir un pedido con objetivo, audiencia, formato y tono",
-        ,
         "Controlar qué recuerda Claude entre conversaciones",
-        ,
         "Elegir el modelo adecuado para cada tarea",
       ],
     },
@@ -523,9 +515,7 @@ export const ALL_LESSONS = {
       icon: "fa-pen-nib",
       objectives: [
         "Describir el resultado final antes de pedir el contenido",
-        ,
         "Iterar con cambios pequeños y comparar versiones",
-        ,
         "Verificar cifras, nombres y fechas antes de presentar",
       ],
     },
@@ -539,9 +529,7 @@ export const ALL_LESSONS = {
       icon: "fa-diagram-project",
       objectives: [
         "Crear un Proyecto con instrucciones y archivos de referencia",
-        ,
         "Conectar herramientas revisando los permisos",
-        ,
         "Convertir un procedimiento repetido en una Skill",
       ],
     },
@@ -749,9 +737,7 @@ export const ALL_LESSONS_EN = {
       icon: "fa-comments",
       objectives: [
         "Write a request with goal, audience, format and tone",
-        ,
         "Control what Claude remembers between conversations",
-        ,
         "Choose the right model for each task",
       ],
     },
@@ -765,9 +751,7 @@ export const ALL_LESSONS_EN = {
       icon: "fa-pen-nib",
       objectives: [
         "Describe the final result before asking for content",
-        ,
         "Iterate with small changes and compare versions",
-        ,
         "Verify figures, names and dates before presenting",
       ],
     },
@@ -781,9 +765,7 @@ export const ALL_LESSONS_EN = {
       icon: "fa-diagram-project",
       objectives: [
         "Create a Project with instructions and reference files",
-        ,
         "Connect tools while reviewing permissions",
-        ,
         "Turn a repeated procedure into a Skill",
       ],
     },
@@ -991,9 +973,7 @@ export const ALL_LESSONS_PT = {
       icon: "fa-comments",
       objectives: [
         "Escrever um pedido com objetivo, público, formato e tom",
-        ,
         "Controlar o que o Claude lembra entre conversas",
-        ,
         "Escolher o modelo certo para cada tarefa",
       ],
     },
@@ -1007,9 +987,7 @@ export const ALL_LESSONS_PT = {
       icon: "fa-pen-nib",
       objectives: [
         "Descrever o resultado final antes de pedir o conteúdo",
-        ,
         "Iterar com mudanças pequenas e comparar versões",
-        ,
         "Verificar números, nomes e datas antes de apresentar",
       ],
     },
@@ -1023,9 +1001,7 @@ export const ALL_LESSONS_PT = {
       icon: "fa-diagram-project",
       objectives: [
         "Criar um Projeto com instruções e arquivos de referência",
-        ,
         "Conectar ferramentas revisando as permissões",
-        ,
         "Transformar um procedimento repetido em uma Skill",
       ],
     },
