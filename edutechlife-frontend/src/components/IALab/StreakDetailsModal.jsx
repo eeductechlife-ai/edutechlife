@@ -10,6 +10,7 @@ import { Icon } from "../../utils/iconMapping";
 import BadgeCard from "./BadgeCard";
 import { getWeekDays } from "./useWeekDays";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { fetchPerfilesPublicos } from "../../lib/perfilesPublicos";
 
 const FIRE_GRADIENTS = {
   low: "from-[var(--theme-primary)] to-cyan-400",
@@ -186,17 +187,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
         )
         .slice(0, 50);
       const userIds = processed.map((row) => row.user_id);
-      let profiles = {};
-      try {
-        const { data: profileData } = await supabase
-          .from("profiles")
-          .select("id, full_name, avatar_url, email")
-          .in("id", userIds);
-        if (profileData)
-          profileData.forEach((p) => {
-            profiles[p.id] = p;
-          });
-      } catch {}
+      const profiles = await fetchPerfilesPublicos(supabase, userIds);
       const enriched = processed.map((row, idx) => ({
         rank: idx + 1,
         userId: row.user_id,
