@@ -91,12 +91,14 @@ async function resumenSemana(authId, hasta) {
   if (!datos.data) return null;
 
   const resumen = buildWeeklySummary(datos.data.data || {}, { now: hasta });
+  // Las misiones completadas son el total acumulado, así que no cuentan como actividad de la semana.
   return {
     nombre: primerNombre(usuario.data?.first_name) || 'Tu hijo/a',
     diasActivos: resumen.activeDays,
     puntos: Math.round(resumen.pointsThisWeek),
     racha: resumen.streakCurrent,
     misiones: resumen.completedMissions,
+    hayActividad: resumen.activeDays > 0 || resumen.pointsThisWeek > 0,
   };
 }
 
@@ -205,16 +207,17 @@ async function enviarInformesSemanales({ ahora = new Date(), forzar = false } = 
       }
       const clave = { tipo: 'semanal', canal, parentId, studentId, referencia: semana.clave };
       try {
-        if (!(await reservarEnvio(clave))) {
-          resumen.omitidos++;
-          continue;
-        }
+        // Sin actividad en la semana no hay informe: un correo con ceros no le sirve al padre.
+        // Se decide antes de reservar, para no dejar filas de envíos que nunca salieron.
         if (!cacheResumen.has(studentId)) {
           cacheResumen.set(studentId, await resumenSemana(studentId, semana.hasta));
         }
         const datos = cacheResumen.get(studentId);
-        if (!datos) {
-          await cerrarEnvio(clave, { ok: false });
+        if (!datos || !datos.hayActividad) {
+          resumen.omitidos++;
+          continue;
+        }
+        if (!(await reservarEnvio(clave))) {
           resumen.omitidos++;
           continue;
         }
