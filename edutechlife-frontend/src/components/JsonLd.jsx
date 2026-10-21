@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
+import { serializarJsonLd } from "../utils/jsonLd";
 
 const SITE_URL = "https://edutechlife.co";
 
@@ -74,7 +75,7 @@ const JsonLd = ({ title, breadcrumbs }) => {
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: serializarJsonLd(schema) }}
         />
       ))}
     </Helmet>
