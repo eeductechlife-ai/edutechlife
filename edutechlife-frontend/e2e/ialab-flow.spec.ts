@@ -27,7 +27,11 @@ test.describe('IALab', () => {
 
     test('«Comenzar» lleva al primer módulo', async ({ page }) => {
       await page.goto('/ialab', { waitUntil: 'domcontentloaded' });
-      await page.getByRole('button', { name: /comenzar/i }).first().click();
+      // force: el botón escala al pasar el cursor (whileHover), así nunca queda
+      // «estable» para Playwright; sigue comprobándose que existe y es visible.
+      const comenzar = page.getByTestId('new-student-start-btn');
+      await expect(comenzar).toBeVisible();
+      await comenzar.click({ force: true });
       await expect(page).toHaveURL(/\/ialab\/1$/);
       await expect(page.getByRole('heading', { level: 1, name: MODULES[0] })).toBeVisible();
     });
