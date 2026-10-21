@@ -111,12 +111,13 @@ describe('resumenSemana', () => {
       puntos: 80, // 50 + 30; los de fuera de la semana no cuentan
       racha: 4,
       misiones: 2,
+      hayActividad: true,
     });
   });
 
   it('un niño sin actividad devuelve ceros, no un error', async () => {
     estado.tablas.smartboard_kids_data[0].data = {};
-    expect(await resumenSemana(NIÑO, hasta)).toEqual({ nombre: 'Mateo', diasActivos: 0, puntos: 0, racha: 0, misiones: 0 });
+    expect(await resumenSemana(NIÑO, hasta)).toEqual({ nombre: 'Mateo', diasActivos: 0, puntos: 0, racha: 0, misiones: 0, hayActividad: false });
   });
 
   it('sin datos guardados devuelve null', async () => {
@@ -264,7 +265,7 @@ describe('enviarInformesSemanales', () => {
     conWhatsApp();
     const HERMANO = '44444444-4444-4444-8444-444444444444';
     estado.tablas.parent_student_links.push({ parent_user_id: PADRE, student_user_id: HERMANO, is_active: true });
-    estado.tablas.smartboard_kids_data.push({ user_id: HERMANO, data: {} });
+    estado.tablas.smartboard_kids_data.push({ user_id: HERMANO, data: { pointsHistory: [{ points: 5, timestamp: '2026-10-21T15:00:00.000Z' }] } });
     estado.tablas.users.push({ id: HERMANO, first_name: 'Sara' });
     expect((await enviarInformesSemanales({ ahora: LUNES })).enviados).toBe(2);
   });
@@ -284,5 +285,38 @@ describe('startInformesSemanalesPadres', () => {
     const timer = startInformesSemanalesPadres();
     expect(timer).not.toBeNull();
     clearInterval(timer);
+  });
+});
+
+describe('informe solo para niños con actividad en la semana', () => {
+  const previo = {};
+  const ENV = ['WHATSAPP_ACTIVO', 'WHATSAPP_TOKEN', 'WHATSAPP_PHONE_NUMBER_ID', 'RESEND_API_KEY'];
+  beforeEach(() => {
+    ENV.forEach((k) => {
+      previo[k] = process.env[k];
+      delete process.env[k];
+    });
+    vi.clearAllMocks();
+    global.fetch = vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ messages: [{ id: 'w' }] }) });
+    process.env.WHATSAPP_ACTIVO = 'true';
+    process.env.WHATSAPP_TOKEN = 't';
+    process.env.WHATSAPP_PHONE_NUMBER_ID = '999';
+  });
+  afterEach(() => ENV.forEach((k) => (previo[k] === undefined ? delete process.env[k] : (process.env[k] = previo[k]))));
+
+  it('un niño sin actividad en la semana no recibe informe ni deja reservas', async () => {
+    sembrar();
+    estado.tablas.smartboard_kids_data = [{ user_id: NIÑO, data: { streak: 9, completedMissions: ['m1'] } }];
+    expect(await enviarInformesSemanales({ ahora: LUNES })).toEqual({ enviados: 0, omitidos: 1, fallos: 0 });
+    expect(global.fetch).not.toHaveBeenCalled();
+    expect(estado.tablas.avisos_padres_envios).toHaveLength(0);
+  });
+
+  it('un niño con actividad solo en puntos (sin sesiones) sí recibe informe', async () => {
+    sembrar();
+    estado.tablas.smartboard_kids_data = [
+      { user_id: NIÑO, data: { pointsHistory: [{ points: 10, timestamp: '2026-10-20T15:00:00.000Z' }] } },
+    ];
+    expect((await enviarInformesSemanales({ ahora: LUNES })).enviados).toBe(1);
   });
 });
