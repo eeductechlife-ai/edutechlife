@@ -3,6 +3,8 @@
  * Handles sending emails via Resend or fallback service
  */
 
+const logger = require('../utils/logger');
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || 'alerts@edutechlife.co';
 
@@ -20,7 +22,7 @@ async function sendEmail(to, subject, html, text, attachments) {
   }
 
   // Log email sending attempt
-  console.log(`[Email] Sending to: ${to}, Subject: ${subject}`);
+  logger.info('[Email] Sending', { to, subject });
 
   try {
     // If Resend is configured, use it
@@ -29,10 +31,12 @@ async function sendEmail(to, subject, html, text, attachments) {
     }
 
     // Fallback: Log to console (development)
-    console.log(`[Email Fallback] Email would be sent to: ${to}`);
-    console.log(`[Email Fallback] Subject: ${subject}`);
     // No se imprime el HTML: algunos correos llevan enlaces de pago (Wompi).
-    console.log(`[Email Fallback] HTML: ${String(html || '').length} caracteres (omitido en logs)`);
+    logger.info('[Email Fallback] Email would be sent', {
+      to,
+      subject,
+      htmlChars: String(html || '').length,
+    });
 
     return {
       success: true,
@@ -40,7 +44,7 @@ async function sendEmail(to, subject, html, text, attachments) {
       mode: 'fallback_console_logging'
     };
   } catch (error) {
-    console.error('[Email Error]', error);
+    logger.error('[Email Error]', { error: error.message });
     return { success: false, error: error.message };
   }
 }
@@ -68,12 +72,12 @@ async function sendViaResend(to, subject, html, text, attachments) {
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('[Resend Error]', response.status, error);
+      logger.error('[Resend Error]', { status: response.status, detail: error });
       return { success: false, error: `Resend API error: ${response.status}` };
     }
 
     const data = await response.json();
-    console.log('[Resend Success]', data);
+    logger.info('[Resend Success]', { id: data.id });
 
     return {
       success: true,
@@ -81,7 +85,7 @@ async function sendViaResend(to, subject, html, text, attachments) {
       mode: 'resend'
     };
   } catch (error) {
-    console.error('[Resend Exception]', error);
+    logger.error('[Resend Exception]', { error: error.message });
     return { success: false, error: error.message };
   }
 }
@@ -120,13 +124,13 @@ async function logCrisisIncident(supabase, studentId, studentAge, detectedConten
       ]);
 
     if (error) {
-      console.error('[CrisisLog Error]', error);
+      logger.error('[CrisisLog Error]', { error: error.message });
       return { success: false, error: error.message };
     }
 
     return { success: true, data };
   } catch (error) {
-    console.error('[CrisisLog Exception]', error);
+    logger.error('[CrisisLog Exception]', { error: error.message });
     return { success: false, error: error.message };
   }
 }

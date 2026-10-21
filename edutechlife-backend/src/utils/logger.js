@@ -22,7 +22,7 @@ const formatLog = (level, message, meta = {}) => {
   const entry = JSON.stringify({
     timestamp: new Date().toISOString(),
     level,
-    message,
+    message: redactString(String(message)),
     ...redactMeta(meta),
   });
   if (level === 'error') console.error(entry);

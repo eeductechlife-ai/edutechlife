@@ -184,13 +184,13 @@ router.get('/callback', async (req, res) => {
       if (authError) {
         // User already exists — try to get them again
         if (authError.message?.includes('email_exists')) {
-          console.warn('User already exists, retrieving ID:', normalizedEmail);
+          console.warn('User already exists, retrieving ID');
           try {
             const existingUser = await findAuthUserByEmail(normalizedEmail);
             if (existingUser?.id) {
               userId = existingUser.id;
             } else {
-              console.error('Could not retrieve existing user:', normalizedEmail);
+              console.error('Could not retrieve existing user');
               return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
             }
           } catch (retryErr) {

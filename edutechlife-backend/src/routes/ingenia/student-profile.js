@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const logger = require('../../utils/logger');
 const supabase = require('../../db/supabase');
 const { createUserClient } = require('../../db/supabaseUser');
 const { requireAuth } = require('../../middleware/auth');
@@ -98,7 +99,7 @@ router.delete('/delete-user-data', requireAuth, requireVerifiedParentalConsent, 
     });
   }
 
-  console.log(`[delete-user-data] Datos eliminados para usuario ${userId}`);
+  logger.info('[delete-user-data] Datos eliminados', { userId });
   return res.status(200).json({
     message: 'Todos tus datos han sido eliminados permanentemente.',
     results,
