@@ -18,17 +18,23 @@
 -- Deshacer: DROP FUNCTION IF EXISTS public.perfiles_publicos(text[]);
 -- ============================================================================
 
+-- plpgsql (y no sql): el cuerpo no se valida al crear la función. En una base
+-- limpia (CI) profiles no tiene full_name ni avatar_url; en producción sí.
+-- La comparación va como texto para servir con id uuid (CI) o text (prod).
 CREATE OR REPLACE FUNCTION public.perfiles_publicos(p_ids text[])
 RETURNS TABLE (id text, full_name text, avatar_url text)
-LANGUAGE sql
+LANGUAGE plpgsql
 STABLE
 SECURITY DEFINER
 SET search_path = ''
 AS $$
-  SELECT p.id, p.full_name, p.avatar_url
-  FROM public.profiles p
-  WHERE auth.uid() IS NOT NULL
-    AND p.id = ANY (p_ids[1:200]);
+BEGIN
+  RETURN QUERY
+    SELECT p.id::text, p.full_name::text, p.avatar_url::text
+    FROM public.profiles p
+    WHERE auth.uid() IS NOT NULL
+      AND p.id::text = ANY (p_ids[1:200]);
+END;
 $$;
 
 COMMENT ON FUNCTION public.perfiles_publicos(text[]) IS
