@@ -47,12 +47,21 @@ describe('errorHandler', () => {
     expect(res.status).toHaveBeenCalledWith(429);
   });
 
-  it('includes requestId from header', () => {
-    req.headers['x-request-id'] = 'req-abc-123';
+  it('includes the server-generated requestId', () => {
+    req.id = 'srv-1234';
     const err = new Error('Something broke');
     errorHandler(err, req, res, vi.fn());
     expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ requestId: 'req-abc-123' })
+      expect.objectContaining({ requestId: 'srv-1234' })
+    );
+  });
+
+  it('ignores a requestId sent by the client header', () => {
+    req.headers['x-request-id'] = 'cliente-inventado';
+    const err = new Error('Something broke');
+    errorHandler(err, req, res, vi.fn());
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ requestId: null })
     );
   });
 });
