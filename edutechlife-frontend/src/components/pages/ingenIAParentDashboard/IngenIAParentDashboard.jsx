@@ -42,6 +42,7 @@ import {
 import WeeklyReportCard from "./components/WeeklyReportCard";
 import SchoolCodeCard from "./components/SchoolCodeCard";
 import PushAvisosCard from "./components/PushAvisosCard";
+import WhatsAppAvisosCard from "./components/WhatsAppAvisosCard";
 import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
 import ParentRecommendations from "./components/ParentRecommendations";
@@ -1534,6 +1535,7 @@ const IngenIAParentDashboard = () => {
                           studentId={studentId || userId}
                         />
                         <PushAvisosCard authToken={authToken} />
+                        <WhatsAppAvisosCard authToken={authToken} />
                       </div>
                     </div>
                   </div>

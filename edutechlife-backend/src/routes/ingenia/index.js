@@ -11,6 +11,7 @@ const parentInsightsRoutes = require('./parent-insights');
 const gamificationRoutes = require('./gamification');
 const scanRoutes = require('./scan');
 const videoRoutes = require('./videos');
+const whatsappPadresRoutes = require('./whatsappPadres');
 const router = Router();
 
 router.use(coreRoutes);
@@ -24,5 +25,6 @@ router.use(parentInsightsRoutes);
 router.use(gamificationRoutes);
 router.use(scanRoutes);
 router.use(videoRoutes);
+router.use(whatsappPadresRoutes);
 
 module.exports = router;
