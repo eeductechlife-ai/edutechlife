@@ -9,6 +9,7 @@
  */
 
 const crypto = require('crypto');
+const logger = require('./logger');
 
 class OAuthStateStore {
   constructor() {
@@ -27,7 +28,7 @@ class OAuthStateStore {
     this.initialized = true;
 
     if (!this.redis) {
-      console.warn(
+      logger.warn(
         '[OAuthStateStore] Redis not available; using in-memory store. ' +
         'State tokens will not persist across server restarts. ' +
         'For production, configure Redis.'
@@ -61,7 +62,7 @@ class OAuthStateStore {
         setTimeout(() => this.memory.delete(key), this.ttlSeconds * 1000);
       }
     } catch (err) {
-      console.error('[OAuthStateStore] Failed to store state:', err.message);
+      logger.error('[OAuthStateStore] Failed to store state:', err.message);
       // Don't fail OAuth; continue with unvalidated state (degraded security)
     }
 
@@ -94,20 +95,20 @@ class OAuthStateStore {
       }
 
       if (!value || !value.isValid) {
-        console.warn('[OAuthStateStore] Invalid or expired state token');
+        logger.warn('[OAuthStateStore] Invalid or expired state token');
         return null;
       }
 
       // Check TTL (defensive, Redis/setTimeout should have cleaned up)
       const age = Date.now() - value.createdAt;
       if (age > this.ttlSeconds * 1000) {
-        console.warn('[OAuthStateStore] State token expired');
+        logger.warn('[OAuthStateStore] State token expired');
         return null;
       }
 
       return { provider: value.provider };
     } catch (err) {
-      console.error('[OAuthStateStore] Failed to validate state:', err.message);
+      logger.error('[OAuthStateStore] Failed to validate state:', err.message);
       // Deny callback on validation error (fail-secure)
       return null;
     }

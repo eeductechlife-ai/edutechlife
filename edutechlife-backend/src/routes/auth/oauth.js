@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const { OAUTH_PROVIDERS, findAuthUserByEmail, ensureProfileRow } = require('./helpers');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -54,7 +55,7 @@ router.get('/oauth/:provider', (req, res) => {
     // Redirect directly to OAuth provider
     res.redirect(authUrl.toString());
   } catch (err) {
-    console.error('OAuth initiate error:', err);
+    logger.error('OAuth initiate error:', err);
     req.log.error('OAuth initiate error', { provider: req.params.provider, error: err.message });
     res.status(500).json({
       error: 'OAuth initialization failed',
@@ -118,7 +119,7 @@ router.get('/callback', async (req, res) => {
 
     if (!tokenResponse.ok) {
       const errText = await tokenResponse.text();
-      console.error('Token exchange failed:', errText);
+      logger.error('Token exchange failed:', errText);
       return res.redirect(`${frontendUrl}/login?error=token_exchange_failed`);
     }
 
@@ -135,7 +136,7 @@ router.get('/callback', async (req, res) => {
     });
 
     if (!userResponse.ok) {
-      console.error('User fetch failed:', await userResponse.text());
+      logger.error('User fetch failed:', await userResponse.text());
       return res.redirect(`${frontendUrl}/login?error=user_fetch_failed`);
     }
 
@@ -156,7 +157,7 @@ router.get('/callback', async (req, res) => {
     // in Auth but has no profile row: createUser then fails with `email_exists`.)
     const normalizedEmail = String(oauthEmail || '').toLowerCase();
     if (!normalizedEmail) {
-      console.error('OAuth provider returned no email', { provider });
+      logger.error('OAuth provider returned no email', { provider });
       return res.redirect(`${frontendUrl}/login?error=no_email_from_provider`);
     }
 
@@ -164,7 +165,7 @@ router.get('/callback', async (req, res) => {
     try {
       authUser = await findAuthUserByEmail(normalizedEmail);
     } catch (e) {
-      console.error('findAuthUserByEmail failed:', e.message);
+      logger.error('findAuthUserByEmail failed:', e.message);
     }
 
     let userId;
@@ -184,21 +185,21 @@ router.get('/callback', async (req, res) => {
       if (authError) {
         // User already exists — try to get them again
         if (authError.message?.includes('email_exists')) {
-          console.warn('User already exists, retrieving ID');
+          logger.warn('User already exists, retrieving ID');
           try {
             const existingUser = await findAuthUserByEmail(normalizedEmail);
             if (existingUser?.id) {
               userId = existingUser.id;
             } else {
-              console.error('Could not retrieve existing user');
+              logger.error('Could not retrieve existing user');
               return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
             }
           } catch (retryErr) {
-            console.error('findAuthUserByEmail (retry) failed:', retryErr.message);
+            logger.error('findAuthUserByEmail (retry) failed:', retryErr.message);
             return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
           }
         } else {
-          console.error('Auth creation error:', authError);
+          logger.error('Auth creation error:', authError);
           return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
         }
       } else {
@@ -222,7 +223,7 @@ router.get('/callback', async (req, res) => {
     });
 
     if (linkError || !linkData?.properties?.hashed_token) {
-      console.error('Generate link error:', linkError);
+      logger.error('Generate link error:', linkError);
       return res.redirect(`${frontendUrl}/login?error=signin_failed`);
     }
 
@@ -232,7 +233,7 @@ router.get('/callback', async (req, res) => {
     });
 
     if (signInError || !signInData?.session) {
-      console.error('Sign in error:', signInError);
+      logger.error('Sign in error:', signInError);
       return res.redirect(`${frontendUrl}/login?error=signin_failed`);
     }
 
@@ -265,7 +266,7 @@ router.get('/callback', async (req, res) => {
 
     res.redirect(302, callbackTarget.toString());
   } catch (err) {
-    console.error('OAuth callback error:', err);
+    logger.error('OAuth callback error:', err);
     req.log.error('OAuth callback error', { error: err.message });
     res.redirect(`${frontendUrl}/login?error=oauth_failed`);
   }
@@ -322,7 +323,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
         // If user already exists in Auth but not in users table, just get the user
         if (authError.code === 'email_exists') {
           const authUser = await findAuthUserByEmail(demoEmail).catch((e) => {
-            console.error('findAuthUserByEmail failed:', e.message);
+            logger.error('findAuthUserByEmail failed:', e.message);
             return null;
           });
 
@@ -345,11 +346,11 @@ router.get('/oauth-demo/:provider', async (req, res) => {
             ]);
             // Ignore if user already exists in table
           } else {
-            console.error('Demo user creation error:', authError);
+            logger.error('Demo user creation error:', authError);
             return res.status(400).json({ error: 'Failed to create demo user' });
           }
         } else {
-          console.error('Demo user creation error:', authError);
+          logger.error('Demo user creation error:', authError);
           return res.status(400).json({ error: 'Failed to create demo user' });
         }
       } else {
@@ -379,7 +380,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
     });
 
     if (linkError || !linkData?.properties?.hashed_token) {
-      console.error('Demo generate link error:', linkError);
+      logger.error('Demo generate link error:', linkError);
       return res.status(400).json({ error: 'Failed to create session' });
     }
 
@@ -390,7 +391,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
     });
 
     if (signInError || !signInData?.session) {
-      console.error('Demo signin error:', signInError);
+      logger.error('Demo signin error:', signInError);
       return res.status(400).json({ error: 'Failed to create session' });
     }
 
@@ -408,7 +409,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
     const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/callback?email=${encodeURIComponent(demoEmail)}`;
     res.redirect(redirectUrl);
   } catch (err) {
-    console.error('Demo OAuth error:', err);
+    logger.error('Demo OAuth error:', err);
     res.status(500).json({ error: 'Demo OAuth failed' });
   }
 });
@@ -450,7 +451,7 @@ router.post('/exchange-token', (req, res) => {
     const redirectUrl = `${frontendUrl}/auth/callback?email=${encodeURIComponent(email)}`;
     res.redirect(302, redirectUrl);
   } catch (err) {
-    console.error('Token exchange error:', err);
+    logger.error('Token exchange error:', err);
     res.status(500).json({ error: 'Token exchange failed' });
   }
 });

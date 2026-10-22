@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { requireAuth } = require('../middleware/auth');
 const multiplayerService = require('../services/multiplayerService');
+const logger = require('../utils/logger');
 
 const router = Router();
 
@@ -30,7 +31,7 @@ router.get('/leaderboards/:period', async (req, res) => {
       leaderboard,
     });
   } catch (e) {
-    console.error('Error fetching leaderboard:', e);
+    logger.error('Error fetching leaderboard:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -45,7 +46,7 @@ router.get('/my-ranks', requireAuth, async (req, res) => {
     const ranks = await multiplayerService.getStudentRanks(userId);
     res.json({ ranks });
   } catch (e) {
-    console.error('Error fetching student ranks:', e);
+    logger.error('Error fetching student ranks:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -67,7 +68,7 @@ router.get('/leaderboard-context', requireAuth, async (req, res) => {
 
     res.json(context);
   } catch (e) {
-    console.error('Error fetching leaderboard context:', e);
+    logger.error('Error fetching leaderboard context:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -90,7 +91,7 @@ router.get('/competitions', async (req, res) => {
       events,
     });
   } catch (e) {
-    console.error('Error fetching competitions:', e);
+    logger.error('Error fetching competitions:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -107,7 +108,7 @@ router.get('/competitions/:id', requireAuth, async (req, res) => {
     const details = await multiplayerService.getCompetitionDetails(id, userId);
     res.json(details);
   } catch (e) {
-    console.error('Error fetching competition details:', e);
+    logger.error('Error fetching competition details:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -133,7 +134,7 @@ router.post('/competitions/:id/join', requireAuth, async (req, res) => {
       participantId: result.participantId,
     });
   } catch (e) {
-    console.error('Error joining competition:', e);
+    logger.error('Error joining competition:', e);
     if (e.message.includes('llena')) {
       return res.status(400).json({ error: e.message });
     }
@@ -160,7 +161,7 @@ router.get('/competition-history', requireAuth, async (req, res) => {
       history,
     });
   } catch (e) {
-    console.error('Error fetching competition history:', e);
+    logger.error('Error fetching competition history:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -175,7 +176,7 @@ router.get('/competition-stats', requireAuth, async (req, res) => {
     const stats = await multiplayerService.getCompetitionStats(userId);
     res.json(stats);
   } catch (e) {
-    console.error('Error fetching competition stats:', e);
+    logger.error('Error fetching competition stats:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

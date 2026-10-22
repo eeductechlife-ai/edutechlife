@@ -1,6 +1,7 @@
 const supabase = require('../db/supabase');
 const { getPlanById, INGENIA_PLAN_IDS } = require('../data/plans');
 const { getWompiConfig } = require('./wompi');
+const logger = require('../utils/logger');
 
 // Planes pagados por periodo (Wompi cobra una vez por periodo, no renueva
 // solo). Cada pago aprobado extiende el plan un mes o un año y el backend
@@ -93,7 +94,7 @@ async function expirePaidPlans(now = new Date()) {
       .eq('subscription_tier', 'premium')
       .lt('premium_until', iso)
       .select('id');
-    if (sErr) console.error('Vencimiento de planes (students):', sErr.message);
+    if (sErr) logger.error('Vencimiento de planes (students):', sErr.message);
     else result.students = students?.length || 0;
 
     const { data: users, error: uErr } = await supabase
@@ -102,10 +103,10 @@ async function expirePaidPlans(now = new Date()) {
       .neq('plan', 'free')
       .lt('plan_paid_until', iso)
       .select('id');
-    if (uErr) console.error('Vencimiento de planes (users):', uErr.message);
+    if (uErr) logger.error('Vencimiento de planes (users):', uErr.message);
     else result.users = users?.length || 0;
   } catch (err) {
-    console.error('Vencimiento de planes falló:', err.message);
+    logger.error('Vencimiento de planes falló:', err.message);
   }
   return result;
 }

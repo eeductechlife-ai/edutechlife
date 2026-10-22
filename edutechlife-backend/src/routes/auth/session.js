@@ -4,6 +4,7 @@ const authService = require('../../services/authService');
 const { resolveEmailFromIdentifier } = require('./helpers');
 const { avisarInicioSesionMenor } = require('../../services/avisoPadreLogin');
 const adultoObligatorio = require('../../services/adultoObligatorio');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.post('/parent-login', async (req, res) => {
     const result = await authService.signInParent({ studentEmail, parentPassword });
     res.json(result);
   } catch (e) {
-    console.error('Parent login error:', e.message);
+    logger.error('Parent login error:', e.message);
     const status = e.message.includes('Contraseña incorrecta') ? 401 : 400;
     res.status(status).json({ error: e.message });
   }
@@ -99,7 +100,7 @@ router.post('/signup', async (req, res) => {
         .select()
         .maybeSingle();
       if (studentErr && !studentErr.message?.includes('duplicate')) {
-        console.error('Auto-create student profile failed:', studentErr.message);
+        logger.error('Auto-create student profile failed:', studentErr.message);
       }
     }
 
@@ -116,14 +117,14 @@ router.post('/signup', async (req, res) => {
         });
         result.adultoInvitado = true;
       } catch (invitacionError) {
-        console.error('[adulto-obligatorio] invitación fallida:', invitacionError.message);
+        logger.error('[adulto-obligatorio] invitación fallida:', invitacionError.message);
         result.adultoInvitado = false;
       }
     }
 
     res.status(201).json(result);
   } catch (e) {
-    console.error('Signup error:', e.message);
+    logger.error('Signup error:', e.message);
     const statusCode = e.message.includes('Email') ? 400 : 400;
     res.status(statusCode).json({ error: e.message });
   }
@@ -178,14 +179,14 @@ router.post('/login', async (req, res) => {
             }
           }
         } catch (e) {
-          console.error('ensure-student-profile on login failed:', e.message);
+          logger.error('ensure-student-profile on login failed:', e.message);
         }
       })();
     }
 
     res.json(result);
   } catch (e) {
-    console.error('Login error:', e.message);
+    logger.error('Login error:', e.message);
     const statusCode = e.message.includes('Invalid') ? 401 : 400;
     res.status(statusCode).json({ error: e.message });
   }
@@ -212,7 +213,7 @@ router.post('/refresh', async (req, res) => {
     const result = await authService.refreshSession(refreshToken);
     res.json(result);
   } catch (e) {
-    console.error('Refresh error:', e.message);
+    logger.error('Refresh error:', e.message);
     res.status(401).json({ error: 'Invalid refresh token' });
   }
 });
@@ -243,7 +244,7 @@ router.post('/reset-password', async (req, res) => {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${frontendUrl}/auth/reset-password`,
       });
-      if (error) console.error('Reset password error:', error);
+      if (error) logger.error('Reset password error:', error);
     }
 
     // Always return success: never reveal whether an email is registered.
@@ -252,7 +253,7 @@ router.post('/reset-password', async (req, res) => {
       message: 'Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.',
     });
   } catch (err) {
-    console.error('Reset password error:', err);
+    logger.error('Reset password error:', err);
     res.status(500).json({
       error: 'internal_error',
       message: 'Error interno del servidor.',

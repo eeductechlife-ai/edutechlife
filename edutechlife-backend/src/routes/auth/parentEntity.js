@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -115,7 +116,7 @@ router.post('/parent-entity/register', async (req, res) => {
       email: normalizedParentEmail,
     });
   } catch (err) {
-    console.error('[parent-entity/register] error:', err.message);
+    logger.error('[parent-entity/register] error:', err.message);
     return res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

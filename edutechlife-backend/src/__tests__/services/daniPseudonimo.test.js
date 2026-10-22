@@ -105,7 +105,7 @@ describe('daniPseudonimo — fallo', () => {
     expect(p.nombreEnPrompt).toBeNull();
     expect(p.redact('Hola Sol, ¿qué tal?')).toBe('Hola tú, ¿qué tal?');
     expect(p.restore('texto')).toBe('texto');
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('[DaniPseudonimo]'), 'boom');
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('[DaniPseudonimo] ')); expect(warn).toHaveBeenCalledWith(expect.stringContaining('boom'));
     warn.mockRestore();
   });
 

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { requireAuth } = require('../middleware/auth');
 const { visionLimiter } = require('../middleware/rateLimiter');
 const { extractTextWithGoogle } = require('../services/googleOcr');
+const logger = require('../utils/logger');
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.post('/scan-image', requireAuth, visionLimiter, async (req, res) => {
     const text = await extractTextWithGoogle(imageBase64);
     res.json({ text });
   } catch (e) {
-    console.error('[scan-image] Error:', e.message);
+    logger.error('[scan-image] Error:', e.message);
     if (e.status && e.status !== 500) return res.status(e.status).json({ error: e.message });
     res.status(500).json({ error: e.message === 'Google API key no configurada' ? e.message : 'Error procesando la imagen' });
   }

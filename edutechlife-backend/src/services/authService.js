@@ -2,6 +2,7 @@ const supabase = require('../db/supabase');
 const { createSessionClient } = require('../db/sessionClient');
 const mfaService = require('./mfaService');
 const activacion = require('./activacionAdulto');
+const logger = require('../utils/logger');
 
 /**
  * Sign up a new user with email + password
@@ -74,7 +75,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
       .single();
 
     if (profileError) {
-      console.error('Profile creation failed:', profileError.message);
+      logger.error('Profile creation failed:', profileError.message);
       const isDuplicate = /duplicate|already exists/i.test(
         profileError.message || '',
       );
@@ -87,7 +88,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
         try {
           await supabase.auth.admin.deleteUser(userId);
         } catch (cleanupError) {
-          console.error(
+          logger.error(
             'Rollback del auth user falló:',
             cleanupError?.message || cleanupError,
           );
@@ -121,7 +122,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
       message: 'Cuenta creada exitosamente. Ya puedes iniciar sesión.',
     };
   } catch (e) {
-    console.error('signUp error:', e.message);
+    logger.error('signUp error:', e.message);
     throw e;
   }
 }
@@ -164,7 +165,7 @@ async function signIn({ email, password }) {
 
     let userProfile = profileData;
     if (profileError) {
-      console.warn('Profile fetch failed:', profileError.message);
+      logger.warn('Profile fetch failed:', profileError.message);
       // Auth succeeded but profile missing — create minimal one (service-role client bypasses RLS).
       // clerk_id is NOT NULL on the users table (contract test + production schema):
       // omitting it made every self-heal insert fail with 23502, permanently
@@ -185,7 +186,7 @@ async function signIn({ email, password }) {
         .single();
 
       if (insertError) {
-        console.error('Profile creation failed:', insertError.message);
+        logger.error('Profile creation failed:', insertError.message);
         // Continue anyway with minimal data
         userProfile = {
           username: email.split('@')[0],
@@ -226,7 +227,7 @@ async function signIn({ email, password }) {
       },
     };
   } catch (e) {
-    console.error('signIn error:', e.message);
+    logger.error('signIn error:', e.message);
     throw e;
   }
 }
@@ -262,7 +263,7 @@ async function refreshSession(refreshToken) {
       refreshToken: session.refresh_token,
     };
   } catch (e) {
-    console.error('refreshSession error:', e.message);
+    logger.error('refreshSession error:', e.message);
     throw e;
   }
 }
@@ -276,13 +277,13 @@ async function signOut(userId) {
     const { error } = await supabase.auth.admin.signOut(userId);
 
     if (error) {
-      console.error('Supabase signOut error:', error.message);
+      logger.error('Supabase signOut error:', error.message);
       // Doesn't throw — logout is best-effort
     }
 
     return { message: 'Signed out successfully' };
   } catch (e) {
-    console.error('signOut error:', e.message);
+    logger.error('signOut error:', e.message);
     // Still return success — client will clear tokens
     return { message: 'Signed out' };
   }

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { requireAuth } = require('../../middleware/auth');
 const { requireStudentAccess } = require('../../middleware/ownership');
 const { generateParentInsights, buildLearningGraphSummary } = require('../../services/parentInsights');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -16,7 +17,7 @@ router.get('/parent/insights', requireAuth, requireStudentAccess, async (req, re
     const insights = await generateParentInsights(studentId);
     res.json({ insights });
   } catch (e) {
-    console.error('[Parent Insights]', e.message);
+    logger.error('[Parent Insights]', e.message);
     res.status(500).json({ error: 'Error generando insights' });
   }
 });
@@ -32,7 +33,7 @@ router.get('/parent/learning-graph', requireAuth, requireStudentAccess, async (r
     const summary = await buildLearningGraphSummary(studentId);
     res.json({ summary });
   } catch (e) {
-    console.error('[Learning Graph Summary]', e.message);
+    logger.error('[Learning Graph Summary]', e.message);
     res.status(500).json({ error: 'Error generando resumen' });
   }
 });

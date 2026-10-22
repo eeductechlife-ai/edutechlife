@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
@@ -153,7 +154,7 @@ async function chatStream(apiKey, body, onChunk) {
       if (line.startsWith('data: ')) {
         const data = line.slice(6).trim();
         if (data === '[DONE]') {
-          console.log('[chatStream] DONE. bytesRead=', _bytes, 'contentChunks=', _chunks);
+          logger.info('[chatStream] DONE. bytesRead=', _bytes, 'contentChunks=', _chunks);
           return;
         }
         try {
@@ -167,7 +168,7 @@ async function chatStream(apiKey, body, onChunk) {
       }
     }
   }
-  console.log('[chatStream] done. bytesRead=', _bytes, 'contentChunks=', _chunks);
+  logger.info('[chatStream] done. bytesRead=', _bytes, 'contentChunks=', _chunks);
   } catch (e) {
     if (e.name === 'AbortError') throw new Error('DeepSeek request timed out');
     throw e;

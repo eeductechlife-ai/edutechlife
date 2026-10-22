@@ -10,6 +10,7 @@
  * sigue exactamente igual que antes.
  */
 const crypto = require('crypto');
+const logger = require('../utils/logger');
 
 const CARACTER_PALABRA = /[\p{L}\p{N}_]/u;
 const CLASE_PALABRA = '\\p{L}\\p{N}_';
@@ -98,7 +99,7 @@ function crearRestaurador(restaurar, codigo) {
 }
 
 function avisar(etapa, err) {
-  console.warn(`[DaniPseudonimo] ${etapa} falló; el nombre no se envía:`, err.message);
+  logger.warn(`[DaniPseudonimo] ${etapa} falló; el nombre no se envía:`, err.message);
 }
 
 /**

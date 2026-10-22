@@ -35,7 +35,7 @@ async function shouldCreateCrisisAlert(studentUserId, parentUserId) {
       .limit(1);
 
     if (error) {
-      console.error('Error checking for duplicate crisis alerts:', error);
+      logger.error('Error checking for duplicate crisis alerts:', error);
       // On error, allow alert creation (fail-open for safety)
       return {
         should_create: true,
@@ -59,7 +59,7 @@ async function shouldCreateCrisisAlert(studentUserId, parentUserId) {
       skip_reason: null,
     };
   } catch (e) {
-    console.error('[parentAlertsService] shouldCreateCrisisAlert failed:', e.message);
+    logger.error('[parentAlertsService] shouldCreateCrisisAlert failed:', e.message);
     // Fail-open: allow alert creation on error
     return {
       should_create: true,
@@ -85,7 +85,7 @@ async function createCrisisAlert(parentUserId, studentUserId, studentName, detec
     if (!skipDedupCheck) {
       const dedupResult = await shouldCreateCrisisAlert(studentUserId, parentUserId);
       if (!dedupResult.should_create) {
-        console.log('[Parent Alert] Crisis alert skipped:', dedupResult.skip_reason);
+        logger.info('[Parent Alert] Crisis alert skipped:', dedupResult.skip_reason);
         return {
           skipped: true,
           reason: dedupResult.skip_reason,
@@ -116,14 +116,14 @@ async function createCrisisAlert(parentUserId, studentUserId, studentName, detec
       .single();
 
     if (error) {
-      console.error('Error creating crisis alert:', error);
+      logger.error('Error creating crisis alert:', error);
       throw error;
     }
 
-    console.log('[Parent Alert] Crisis alert created:', data.id);
+    logger.info('[Parent Alert] Crisis alert created:', data.id);
     return { ...data, skipped: false };
   } catch (e) {
-    console.error('[parentAlertsService] createCrisisAlert failed:', e.message);
+    logger.error('[parentAlertsService] createCrisisAlert failed:', e.message);
     throw e;
   }
 }
@@ -160,14 +160,14 @@ async function createAchievementAlert(parentUserId, studentUserId, studentName, 
       .single();
 
     if (error) {
-      console.error('Error creating achievement alert:', error);
+      logger.error('Error creating achievement alert:', error);
       throw error;
     }
 
-    console.log('[Parent Alert] Achievement alert created:', data.id);
+    logger.info('[Parent Alert] Achievement alert created:', data.id);
     return data;
   } catch (e) {
-    console.error('[parentAlertsService] createAchievementAlert failed:', e.message);
+    logger.error('[parentAlertsService] createAchievementAlert failed:', e.message);
     throw e;
   }
 }
@@ -203,14 +203,14 @@ async function createMilestoneAlert(parentUserId, studentUserId, studentName, mo
       .single();
 
     if (error) {
-      console.error('Error creating milestone alert:', error);
+      logger.error('Error creating milestone alert:', error);
       throw error;
     }
 
-    console.log('[Parent Alert] Milestone alert created:', data.id);
+    logger.info('[Parent Alert] Milestone alert created:', data.id);
     return data;
   } catch (e) {
-    console.error('[parentAlertsService] createMilestoneAlert failed:', e.message);
+    logger.error('[parentAlertsService] createMilestoneAlert failed:', e.message);
     throw e;
   }
 }
@@ -245,14 +245,14 @@ async function createOfflineAlert(parentUserId, studentUserId, studentName, minu
       .single();
 
     if (error) {
-      console.error('Error creating offline alert:', error);
+      logger.error('Error creating offline alert:', error);
       throw error;
     }
 
-    console.log('[Parent Alert] Offline alert created:', data.id);
+    logger.info('[Parent Alert] Offline alert created:', data.id);
     return data;
   } catch (e) {
-    console.error('[parentAlertsService] createOfflineAlert failed:', e.message);
+    logger.error('[parentAlertsService] createOfflineAlert failed:', e.message);
     throw e;
   }
 }
@@ -288,14 +288,14 @@ async function createUnusualActivityAlert(parentUserId, studentUserId, studentNa
       .single();
 
     if (error) {
-      console.error('Error creating unusual activity alert:', error);
+      logger.error('Error creating unusual activity alert:', error);
       throw error;
     }
 
-    console.log('[Parent Alert] Unusual activity alert created:', data.id);
+    logger.info('[Parent Alert] Unusual activity alert created:', data.id);
     return data;
   } catch (e) {
-    console.error('[parentAlertsService] createUnusualActivityAlert failed:', e.message);
+    logger.error('[parentAlertsService] createUnusualActivityAlert failed:', e.message);
     throw e;
   }
 }
@@ -315,13 +315,13 @@ async function markAlertAsRead(alertId) {
       .single();
 
     if (error) {
-      console.error('Error marking alert as read:', error);
+      logger.error('Error marking alert as read:', error);
       throw error;
     }
 
     return data;
   } catch (e) {
-    console.error('[parentAlertsService] markAlertAsRead failed:', e.message);
+    logger.error('[parentAlertsService] markAlertAsRead failed:', e.message);
     throw e;
   }
 }
@@ -367,7 +367,7 @@ async function getParentAlerts(parentUserId, page = 1, limit = 20, filters = {})
     const { data, error, count } = await query;
 
     if (error) {
-      console.error('Error fetching parent alerts:', error);
+      logger.error('Error fetching parent alerts:', error);
       throw error;
     }
 
@@ -379,7 +379,7 @@ async function getParentAlerts(parentUserId, page = 1, limit = 20, filters = {})
       limit,
     };
   } catch (e) {
-    console.error('[parentAlertsService] getParentAlerts failed:', e.message);
+    logger.error('[parentAlertsService] getParentAlerts failed:', e.message);
     throw e;
   }
 }
@@ -397,13 +397,13 @@ async function deleteAlert(alertId) {
       .eq('id', alertId);
 
     if (error) {
-      console.error('Error deleting alert:', error);
+      logger.error('Error deleting alert:', error);
       throw error;
     }
 
-    console.log('[Parent Alert] Alert deleted:', alertId);
+    logger.info('[Parent Alert] Alert deleted:', alertId);
   } catch (e) {
-    console.error('[parentAlertsService] deleteAlert failed:', e.message);
+    logger.error('[parentAlertsService] deleteAlert failed:', e.message);
     throw e;
   }
 }
@@ -422,13 +422,13 @@ async function getUnreadAlertCount(parentUserId) {
       .is('read_at', null);
 
     if (error) {
-      console.error('Error fetching unread alert count:', error);
+      logger.error('Error fetching unread alert count:', error);
       throw error;
     }
 
     return count || 0;
   } catch (e) {
-    console.error('[parentAlertsService] getUnreadAlertCount failed:', e.message);
+    logger.error('[parentAlertsService] getUnreadAlertCount failed:', e.message);
     throw e;
   }
 }

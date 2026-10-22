@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { chatStream } = require('../services/deepseek');
 const { nicoStreamLimiter } = require('../middleware/rateLimiter');
 const { buildNicoMessages } = require('../agents/nico');
+const logger = require('../utils/logger');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -36,7 +37,7 @@ router.post('/nico/stream', nicoStreamLimiter, async (req, res) => {
     res.end();
   } catch (e) {
     if (streamClosed) return;
-    console.error('Error in Nico stream:', e);
+    logger.error('Error in Nico stream:', e);
     if (res.headersSent) {
       res.write(`data: ${JSON.stringify({ error: 'Error generando respuesta' })}\n\n`);
       res.end();

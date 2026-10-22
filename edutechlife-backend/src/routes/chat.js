@@ -94,7 +94,7 @@ router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
     }
     res.json({ result: text });
   } catch (e) {
-    console.error('Error calling DeepSeek API:', e);
+    logger.error('Error calling DeepSeek API:', e);
     const status = e.status;
     if (status === 402) return res.status(402).json({ error: 'API sin saldo disponible. Recarga tu cuenta DeepSeek.' });
     if (status === 401) return res.status(401).json({ error: 'API key inválida o expirada.' });
@@ -187,7 +187,7 @@ router.post('/stream', optionalAuth, async (req, res) => {
     res.end();
   } catch (e) {
     if (streamClosed) return;
-    console.error('Error in streaming:', e);
+    logger.error('Error in streaming:', e);
     if (res.headersSent) {
       res.write(`data: ${JSON.stringify({ error: 'Error generando respuesta' })}\n\n`);
       res.end();

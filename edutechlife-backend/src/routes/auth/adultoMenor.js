@@ -4,6 +4,7 @@ const adultoObligatorio = require('../../services/adultoObligatorio');
 const activacion = require('../../services/activacionAdulto');
 const registroAdulto = require('../../services/registroAdulto');
 const { authLimiter } = require('../../middleware/rateLimiter');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -58,11 +59,11 @@ router.post('/adulto-menor/confirmar', requireAuth, async (req, res) => {
       });
     } catch (e) {
       activado = false;
-      console.error('[adulto-obligatorio] no se pudo registrar la activación:', e.message);
+      logger.error('[adulto-obligatorio] no se pudo registrar la activación:', e.message);
     }
     return res.json({ vinculado: true, activado });
   } catch (e) {
-    console.error('[adulto-obligatorio] confirmar error:', e.message);
+    logger.error('[adulto-obligatorio] confirmar error:', e.message);
     return res.status(500).json({ error: 'No se pudo confirmar el vínculo' });
   }
 });
@@ -90,7 +91,7 @@ router.get('/adulto-menor/estado', requireAuth, async (req, res) => {
       .catch(() => ({ invitacionPendiente: false, correoAdulto: null }));
     return res.json({ mostrarAviso, ...resumen });
   } catch (e) {
-    console.error('[adulto-obligatorio] estado error:', e.message);
+    logger.error('[adulto-obligatorio] estado error:', e.message);
     return res.json({ mostrarAviso: false });
   }
 });
@@ -127,7 +128,7 @@ router.post('/adulto-menor/invitar', requireAuth, async (req, res) => {
     return res.status(201).json({ enviado: true });
   } catch (e) {
     if (e.status === 400) return res.status(400).json({ error: e.message });
-    console.error('[adulto-obligatorio] invitar error:', e.message);
+    logger.error('[adulto-obligatorio] invitar error:', e.message);
     return res.status(500).json({ error: 'No se pudo enviar la invitación' });
   }
 });
@@ -139,7 +140,7 @@ function responderError(res, e, mensaje500) {
     if (e.motivo) cuerpo.motivo = e.motivo;
     return res.status(e.status).json(cuerpo);
   }
-  console.error(`[adulto-obligatorio] ${mensaje500}:`, e.message);
+  logger.error(`[adulto-obligatorio] ${mensaje500}:`, e.message);
   return res.status(500).json({ error: mensaje500 });
 }
 

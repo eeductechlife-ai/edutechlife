@@ -36,7 +36,7 @@ async function createStudentProfile(res, userId, email) {
     .single();
 
   if (error) {
-    console.error('Error creating student profile:', error);
+    logger.error('Error creating student profile:', error);
     return res.status(500).json({ error: error.message });
   }
 
@@ -80,14 +80,14 @@ router.delete('/delete-user-data', requireAuth, async (req, res) => {
         }
         results[table] = `error: ${error.message}`;
         hadFatalError = true;
-        console.error(`[delete-user-data] Error borrando ${table}:`, error.message);
+        logger.error(`[delete-user-data] Error borrando ${table}:`, error.message);
       } else {
         results[table] = 'deleted';
       }
     } catch (e) {
       results[table] = `error: ${e.message}`;
       hadFatalError = true;
-      console.error(`[delete-user-data] Excepción borrando ${table}:`, e.message);
+      logger.error(`[delete-user-data] Excepción borrando ${table}:`, e.message);
     }
   }
 
@@ -131,7 +131,7 @@ router.get('/student-profile', requireAuth, async (req, res) => {
 
     res.json(serializeStudentProfile(data));
   } catch (e) {
-    console.error('Error fetching student profile:', e);
+    logger.error('Error fetching student profile:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -228,7 +228,7 @@ router.put('/student-profile', requireAuth, async (req, res) => {
       profile: serializeStudentProfile(result.data),
     });
   } catch (e) {
-    console.error('Error updating student profile:', e);
+    logger.error('Error updating student profile:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -290,7 +290,7 @@ router.post('/student-profile/avatar', requireAuth, async (req, res) => {
 
     res.json({ avatarUrl: publicUrlData.publicUrl });
   } catch (e) {
-    console.error('Error uploading student avatar:', e);
+    logger.error('Error uploading student avatar:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -391,7 +391,7 @@ router.get('/export-user-data', requireAuth, async (req, res) => {
       ...(warnings.length ? { warnings: { not_exported: warnings } } : {}),
     });
   } catch (e) {
-    console.error('Error exporting user data:', e);
+    logger.error('Error exporting user data:', e);
     res.status(500).json({ error: 'Error al exportar datos personales' });
   }
 });

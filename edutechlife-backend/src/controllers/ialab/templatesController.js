@@ -43,7 +43,7 @@ async function createTemplate(req, res) {
     logger.info('[IALab Templates] Saved in-memory', { templateName, userId });
     res.status(201).json({ success: true, message: 'Template saved successfully', template: savedTemplate });
   } catch (error) {
-    console.error('Error saving IALab template:', error);
+    logger.error('Error saving IALab template:', error);
     res.status(500).json({ error: 'Failed to save template', details: 'Error interno' });
   }
 }
@@ -97,7 +97,7 @@ async function getTemplates(req, res) {
     logger.info('[IALab Templates] Retrieved', { count: filteredTemplates.length, userId });
     res.json({ success: true, templates: filteredTemplates, total: filteredTemplates.length });
   } catch (error) {
-    console.error('Error retrieving IALab templates:', error);
+    logger.error('Error retrieving IALab templates:', error);
     res.status(500).json({ error: 'Failed to retrieve templates', details: 'Error interno' });
   }
 }
@@ -124,7 +124,7 @@ async function updateTemplate(req, res) {
       return res.json({ success: true, message: 'Template updated successfully', template: data });
     }
 
-    console.log('[IALab Templates] Updated template: ' + templateId + ', new name: ' + templateName);
+    logger.info('[IALab Templates] Updated template: ' + templateId + ', new name: ' + templateName);
     res.json({
       success: true, message: 'Template updated successfully',
       template: {
@@ -134,7 +134,7 @@ async function updateTemplate(req, res) {
       }
     });
   } catch (error) {
-    console.error('Error updating IALab template:', error);
+    logger.error('Error updating IALab template:', error);
     res.status(500).json({ error: 'Failed to update template', details: 'Error interno' });
   }
 }
@@ -153,10 +153,10 @@ async function deleteTemplate(req, res) {
       return res.json({ success: true, message: 'Template deleted successfully' });
     }
 
-    console.log('[IALab Templates] Deleted template: ' + templateId);
+    logger.info('[IALab Templates] Deleted template: ' + templateId);
     res.json({ success: true, message: 'Template deleted successfully' });
   } catch (error) {
-    console.error('Error deleting IALab template:', error);
+    logger.error('Error deleting IALab template:', error);
     res.status(500).json({ error: 'Failed to delete template', details: 'Error interno' });
   }
 }

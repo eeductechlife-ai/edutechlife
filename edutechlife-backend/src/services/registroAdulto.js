@@ -10,6 +10,7 @@ const supabase = require('../db/supabase');
 const authService = require('./authService');
 const adultoObligatorio = require('./adultoObligatorio');
 const activacion = require('./activacionAdulto');
+const logger = require('../utils/logger');
 
 const TABLA = 'invitaciones_adulto_menor';
 const ESPERA_REENVIO_MS = 2 * 60 * 1000;
@@ -136,7 +137,7 @@ async function registrarPadreDesdeInvitacion({ token, nombre, password, aceptaAu
     .from('users')
     .update({ user_type: 'parent', account_type: 'smartboard' })
     .eq('id', adultoId);
-  if (perfilError) console.error('[registro-adulto] no se pudo marcar la cuenta como padre:', perfilError.message);
+  if (perfilError) logger.error('[registro-adulto] no se pudo marcar la cuenta como padre:', perfilError.message);
 
   const confirmacion = await adultoObligatorio.confirmarInvitacion({ token, adultoId, adultoEmail: correo });
   if (!confirmacion.valida) {
@@ -155,7 +156,7 @@ async function registrarPadreDesdeInvitacion({ token, nombre, password, aceptaAu
     });
   } catch (e) {
     activado = false;
-    console.error('[registro-adulto] no se pudo registrar la activación:', e.message);
+    logger.error('[registro-adulto] no se pudo registrar la activación:', e.message);
   }
 
   return {

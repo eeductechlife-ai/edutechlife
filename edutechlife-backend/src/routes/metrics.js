@@ -18,6 +18,7 @@ const {
   getRetentionCohort,
 } = require("../services/metricsService");
 const { verifyAdmin } = require("../middleware/auth");
+const logger = require('../utils/logger');
 
 /**
  * GET /api/admin/metrics/engagement
@@ -59,7 +60,7 @@ router.get("/engagement", verifyAdmin, async (req, res) => {
       product_type: productType || "all",
     });
   } catch (error) {
-    console.error("Error in GET /metrics/engagement:", error);
+    logger.error("Error in GET /metrics/engagement:", error);
     res.status(500).json({
       error: error.message,
     });
@@ -93,7 +94,7 @@ router.get("/active-users", verifyAdmin, async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error in GET /metrics/active-users:", error);
+    logger.error("Error in GET /metrics/active-users:", error);
     res.status(500).json({
       error: error.message,
     });
@@ -127,7 +128,7 @@ router.get("/completion-rate", verifyAdmin, async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error in GET /metrics/completion-rate:", error);
+    logger.error("Error in GET /metrics/completion-rate:", error);
     res.status(500).json({
       error: error.message,
     });
@@ -170,7 +171,7 @@ router.get("/feature-adoption", verifyAdmin, async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error in GET /metrics/feature-adoption:", error);
+    logger.error("Error in GET /metrics/feature-adoption:", error);
     res.status(500).json({
       error: error.message,
     });
@@ -208,7 +209,7 @@ router.get("/retention", verifyAdmin, async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error in GET /metrics/retention:", error);
+    logger.error("Error in GET /metrics/retention:", error);
     res.status(500).json({
       error: error.message,
     });
@@ -242,7 +243,7 @@ router.get("/health", verifyAdmin, async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error in GET /metrics/health:", error);
+    logger.error("Error in GET /metrics/health:", error);
     res.status(500).json({
       error: error.message,
     });
@@ -271,7 +272,7 @@ router.post("/track-event", async (req, res) => {
     }
 
     // TODO: Send to analytics service (PostHog, Segment, etc.)
-    console.log("Tracked event:", {
+    logger.info("Tracked event:", {
       event_name,
       user_id,
       properties,
@@ -283,7 +284,7 @@ router.post("/track-event", async (req, res) => {
       event: event_name,
     });
   } catch (error) {
-    console.error("Error in POST /metrics/track-event:", error);
+    logger.error("Error in POST /metrics/track-event:", error);
     res.status(500).json({
       error: error.message,
     });

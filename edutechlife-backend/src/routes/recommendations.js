@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { requireAuth } = require('../middleware/auth');
+const logger = require('../utils/logger');
 const {
   getStudentState,
   getNextBestAction,
@@ -40,7 +41,7 @@ router.get('/', requireAuth, async (req, res) => {
       generatedAt: new Date().toISOString(),
     });
   } catch (err) {
-    console.error('[recommendations] error:', err.message);
+    logger.error('[recommendations] error:', err.message);
     res.status(500).json({ error: 'No se pudieron generar recomendaciones' });
   }
 });
@@ -54,7 +55,7 @@ router.get('/plan/daily', requireAuth, async (req, res) => {
     const plan = await generateDailyPlan(req.userId);
     res.json({ plan, generatedAt: new Date().toISOString() });
   } catch (err) {
-    console.error('[recommendations/plan/daily] error:', err.message);
+    logger.error('[recommendations/plan/daily] error:', err.message);
     res.status(500).json({ error: 'No se pudo generar el plan diario' });
   }
 });
@@ -68,7 +69,7 @@ router.get('/plan/weekly', requireAuth, async (req, res) => {
     const plan = await generateWeeklyPlan(req.userId);
     res.json({ plan, generatedAt: new Date().toISOString() });
   } catch (err) {
-    console.error('[recommendations/plan/weekly] error:', err.message);
+    logger.error('[recommendations/plan/weekly] error:', err.message);
     res.status(500).json({ error: 'No se pudo generar el plan semanal' });
   }
 });

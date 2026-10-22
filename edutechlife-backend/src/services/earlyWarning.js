@@ -12,6 +12,7 @@
  *   5. streak_breaks     — current_streak = 0 AND total_days_active > 5
  */
 const { createClient } = require("@supabase/supabase-js");
+const logger = require('../utils/logger');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -182,7 +183,7 @@ async function saveWarning(studentId, warning) {
     ...warning,
   });
 
-  if (error) console.error(`[EarlyWarning] Insert failed for ${warning.type}:`, error.message);
+  if (error) logger.error(`[EarlyWarning] Insert failed for ${warning.type}:`, error.message);
 }
 
 /**

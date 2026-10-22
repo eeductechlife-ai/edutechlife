@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const { requireAuth } = require('../../middleware/auth');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -81,7 +82,7 @@ router.post('/sync-user', requireAuth, async (req, res) => {
       .select();
 
     if (error) {
-      console.error('Supabase insert error:', error);
+      logger.error('Supabase insert error:', error);
       return res.status(500).json({
         error: 'Failed to sync user to Supabase',
       });
@@ -99,7 +100,7 @@ router.post('/sync-user', requireAuth, async (req, res) => {
       user: data?.[0] || null,
     });
   } catch (err) {
-    console.error('Auth sync error:', err);
+    logger.error('Auth sync error:', err);
     req.log.error('Unexpected error in auth sync', { error: err.message });
 
     res.status(500).json({
@@ -143,7 +144,7 @@ router.get('/user/:clerk_id', requireAuth, async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.error('Get user error:', err);
+    logger.error('Get user error:', err);
     res.status(500).json({
       error: 'Failed to fetch user',
     });

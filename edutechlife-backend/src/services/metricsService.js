@@ -10,12 +10,13 @@
  */
 
 const { createClient } = require("@supabase/supabase-js");
+const logger = require('../utils/logger');
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.warn("Supabase credentials not configured for metrics service");
+  logger.warn("Supabase credentials not configured for metrics service");
 }
 
 const supabase = supabaseUrl
@@ -48,13 +49,13 @@ async function getActiveUsers(period = "day") {
       .distinct();
 
     if (error) {
-      console.error(`Error fetching ${period} active users:`, error);
+      logger.error(`Error fetching ${period} active users:`, error);
       return 0;
     }
 
     return data?.length || 0;
   } catch (e) {
-    console.error(`Exception in getActiveUsers(${period}):`, e);
+    logger.error(`Exception in getActiveUsers(${period}):`, e);
     return 0;
   }
 }
@@ -87,7 +88,7 @@ async function getLessonCompletionRate(
     const { data, error, count } = await attemptsQuery;
 
     if (error) {
-      console.error("Error fetching completion rate:", error);
+      logger.error("Error fetching completion rate:", error);
       return 0;
     }
 
@@ -98,7 +99,7 @@ async function getLessonCompletionRate(
 
     return Math.max(0, Math.min(100, rate)); // Clamp 0-100
   } catch (e) {
-    console.error("Exception in getLessonCompletionRate:", e);
+    logger.error("Exception in getLessonCompletionRate:", e);
     return 0;
   }
 }
@@ -135,7 +136,7 @@ async function getAvgSessionDuration(opts = { days: 30, productType: null }) {
 
     return Math.max(0, avgMinutes);
   } catch (e) {
-    console.error("Exception in getAvgSessionDuration:", e);
+    logger.error("Exception in getAvgSessionDuration:", e);
     return 0;
   }
 }
@@ -160,7 +161,7 @@ async function getParentEngagementRate(opts = { days: 30 }) {
       .distinct();
 
     if (error1) {
-      console.error("Error fetching engaged parents:", error1);
+      logger.error("Error fetching engaged parents:", error1);
       return 0;
     }
 
@@ -171,7 +172,7 @@ async function getParentEngagementRate(opts = { days: 30 }) {
       .eq("user_type", "parent");
 
     if (error2) {
-      console.error("Error fetching total parents:", error2);
+      logger.error("Error fetching total parents:", error2);
       return 0;
     }
 
@@ -182,7 +183,7 @@ async function getParentEngagementRate(opts = { days: 30 }) {
     );
     return Math.max(0, Math.min(100, rate));
   } catch (e) {
-    console.error("Exception in getParentEngagementRate:", e);
+    logger.error("Exception in getParentEngagementRate:", e);
     return 0;
   }
 }
@@ -210,7 +211,7 @@ async function getFeatureAdoptionRate(featureName, opts = { days: 30 }) {
       .distinct();
 
     if (error1) {
-      console.error(`Error fetching feature usage for ${featureName}:`, error1);
+      logger.error(`Error fetching feature usage for ${featureName}:`, error1);
       return { rate: 0, activeUsers: 0, totalUsers: 0 };
     }
 
@@ -222,7 +223,7 @@ async function getFeatureAdoptionRate(featureName, opts = { days: 30 }) {
       .distinct();
 
     if (error2) {
-      console.error("Error fetching total users:", error2);
+      logger.error("Error fetching total users:", error2);
       return { rate: 0, activeUsers: 0, totalUsers: 0 };
     }
 
@@ -238,7 +239,7 @@ async function getFeatureAdoptionRate(featureName, opts = { days: 30 }) {
       totalUsers: totalCount,
     };
   } catch (e) {
-    console.error(`Exception in getFeatureAdoptionRate(${featureName}):`, e);
+    logger.error(`Exception in getFeatureAdoptionRate(${featureName}):`, e);
     return { rate: 0, activeUsers: 0, totalUsers: 0 };
   }
 }
@@ -291,7 +292,7 @@ async function getRetentionCohort(daysAfter, opts = { periodDays: 30 }) {
 
     return Math.max(0, Math.min(100, rate));
   } catch (e) {
-    console.error(`Exception in getRetentionCohort(${daysAfter}):`, e);
+    logger.error(`Exception in getRetentionCohort(${daysAfter}):`, e);
     return 0;
   }
 }
@@ -413,7 +414,7 @@ async function getEngagementMetrics(opts = { days: 30, productType: null }) {
       ],
     };
   } catch (error) {
-    console.error("Error in getEngagementMetrics:", error);
+    logger.error("Error in getEngagementMetrics:", error);
     return null;
   }
 }

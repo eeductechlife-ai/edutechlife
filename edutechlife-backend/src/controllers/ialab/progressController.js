@@ -50,7 +50,7 @@ async function saveProgress(req, res) {
       }
 
       if (findError || dbError) {
-        console.error('[IALab Progress] Supabase error:', findError || dbError);
+        logger.error('[IALab Progress] Supabase error:', findError || dbError);
         throw findError || dbError;
       }
 
@@ -120,7 +120,7 @@ async function saveProgress(req, res) {
 
     res.json({ success: true, progress: userProgress, message: 'Progress saved successfully' });
   } catch (e) {
-    console.error('Error saving IALab progress:', e);
+    logger.error('Error saving IALab progress:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 }
@@ -173,7 +173,7 @@ async function getProgress(req, res) {
     }
     res.json(userProgress);
   } catch (e) {
-    console.error('Error retrieving IALab progress:', e);
+    logger.error('Error retrieving IALab progress:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 }

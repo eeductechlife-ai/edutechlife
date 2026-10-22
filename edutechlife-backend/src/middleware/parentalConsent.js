@@ -1,5 +1,6 @@
 const { estaActivo } = require('../services/adultoObligatorio');
 const activacion = require('../services/activacionAdulto');
+const logger = require('../utils/logger');
 
 // Edad a partir de la cual no se exige adulto responsable (Ley 1581).
 const MINOR_MAX_AGE = 18;
@@ -33,7 +34,7 @@ async function requireAdultoActivado(req, res, next) {
   try {
     estado = await activacion.estadoActivacion(req.userId);
   } catch (e) {
-    console.warn('[adulto-activado] no se pudo verificar la activación (se deja pasar):', e.message);
+    logger.warn('[adulto-activado] no se pudo verificar la activación (se deja pasar):', e.message);
     return next();
   }
 

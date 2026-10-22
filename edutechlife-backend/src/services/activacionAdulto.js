@@ -17,6 +17,7 @@
  * requireAdultoActivado y solo con ADULTO_OBLIGATORIO=true.
  */
 const supabase = require('../db/supabase');
+const logger = require('../utils/logger');
 
 const TABLA = 'activaciones_adulto_menor';
 // Si cambia, cambiar también activadoEnSesion.
@@ -50,7 +51,7 @@ async function marcarEnSesion(estudianteId, activadaAt) {
     });
     if (error) throw error;
   } catch (e) {
-    console.warn('[activacion-adulto] no se pudo copiar la marca a la sesión:', e.message);
+    logger.warn('[activacion-adulto] no se pudo copiar la marca a la sesión:', e.message);
   }
 }
 
@@ -92,7 +93,7 @@ async function registrarActivacionSinFallar(datos) {
   try {
     await registrarActivacion(datos);
   } catch (e) {
-    console.error('[activacion-adulto] no se pudo registrar la activación:', e.message);
+    logger.error('[activacion-adulto] no se pudo registrar la activación:', e.message);
   }
 }
 

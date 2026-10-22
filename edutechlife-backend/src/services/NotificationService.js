@@ -155,7 +155,7 @@ async function sendCrisisAlert(crisisAlertId) {
       }
     };
   } catch (error) {
-    console.error('[NotificationService] Error in sendCrisisAlert:', error.message);
+    logger.error('[NotificationService] Error in sendCrisisAlert:', error.message);
     return {
       success: false,
       error: error.message
@@ -205,7 +205,7 @@ async function sendNotificationToParent(parent, crisisAlert, student, parentEmai
       }
     };
   } catch (error) {
-    console.error('[NotificationService] Error in sendNotificationToParent:', error.message);
+    logger.error('[NotificationService] Error in sendNotificationToParent:', error.message);
     return { success: false, error: error.message };
   }
 }
@@ -239,7 +239,7 @@ async function getParentPreferences(parentId) {
 
     return prefs;
   } catch (error) {
-    console.error('[NotificationService] Error fetching preferences:', error.message);
+    logger.error('[NotificationService] Error fetching preferences:', error.message);
     // Return defaults on error (safety first)
     return {
       email_enabled: true,
@@ -330,7 +330,7 @@ async function sendPushNotification(parentId, studentName, crisisAlert) {
       message: 'Push notification queued (stub implementation)'
     };
   } catch (error) {
-    console.error('[NotificationService] Push send error:', error.message);
+    logger.error('[NotificationService] Push send error:', error.message);
 
     await logNotification(parentId, crisisAlert.id, 'push', 'failed', {
       error: error.message
@@ -366,7 +366,7 @@ async function sendSmsNotification(parentId, phoneNumber, studentName, crisisAle
       message: 'SMS queued (stub implementation)'
     };
   } catch (error) {
-    console.error('[NotificationService] SMS send error:', error.message);
+    logger.error('[NotificationService] SMS send error:', error.message);
 
     await logNotification(parentId, crisisAlert.id, 'sms', 'failed', {
       error: error.message
@@ -399,10 +399,10 @@ async function logNotification(parentId, crisisAlertId, channel, status, metadat
       });
 
     if (error) {
-      console.error(`[NotificationService] Failed to log notification: ${error.message}`);
+      logger.error(`[NotificationService] Failed to log notification: ${error.message}`);
     }
   } catch (error) {
-    console.error('[NotificationService] Error logging notification:', error.message);
+    logger.error('[NotificationService] Error logging notification:', error.message);
   }
 }
 

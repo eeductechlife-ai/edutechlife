@@ -1,5 +1,6 @@
 const supabase = require('../db/supabase');
 const { chat } = require('./deepseek');
+const logger = require('../utils/logger');
 
 /**
  * Parent-Dani Chat Service
@@ -202,7 +203,7 @@ ${JSON.stringify(context, null, 2)}`;
       conversationId,
     };
   } catch (e) {
-    console.error('Error calling Dani for parent:', e);
+    logger.error('Error calling Dani for parent:', e);
     throw new Error('Error generando respuesta del tutor');
   }
 }

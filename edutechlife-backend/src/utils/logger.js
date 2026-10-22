@@ -18,11 +18,24 @@ const redactMeta = (meta) => {
   }
 };
 
-const formatLog = (level, message, meta = {}) => {
+const esObjeto = (v) => v !== null && typeof v === 'object' && !Array.isArray(v) && !(v instanceof Error);
+
+const texto = (v) => {
+  if (v instanceof Error) return v.message;
+  if (typeof v === 'string') return v;
+  if (v !== null && typeof v === 'object') return JSON.stringify(v);
+  return String(v);
+};
+
+const formatLog = (level, args) => {
+  // Firma antigua: (mensaje, { metadatos }). Firma de consola: varios valores.
+  const conMeta = args.length === 2 && esObjeto(args[1]);
+  const message = conMeta ? args[0] : args.map(texto).join(' ');
+  const meta = conMeta ? args[1] : {};
   const entry = JSON.stringify({
     timestamp: new Date().toISOString(),
     level,
-    message: redactString(String(message)),
+    message: redactString(texto(message)),
     ...redactMeta(meta),
   });
   if (level === 'error') console.error(entry);
@@ -31,10 +44,10 @@ const formatLog = (level, message, meta = {}) => {
 };
 
 const logger = {
-  debug: (msg, meta) => { if (currentLevel <= levels.debug) formatLog('debug', msg, meta); },
-  info: (msg, meta) => { if (currentLevel <= levels.info) formatLog('info', msg, meta); },
-  warn: (msg, meta) => { if (currentLevel <= levels.warn) formatLog('warn', msg, meta); },
-  error: (msg, meta) => { if (currentLevel <= levels.error) formatLog('error', msg, meta); },
+  debug: (...args) => { if (currentLevel <= levels.debug) formatLog('debug', args); },
+  info: (...args) => { if (currentLevel <= levels.info) formatLog('info', args); },
+  warn: (...args) => { if (currentLevel <= levels.warn) formatLog('warn', args); },
+  error: (...args) => { if (currentLevel <= levels.error) formatLog('error', args); },
 };
 
 module.exports = logger;

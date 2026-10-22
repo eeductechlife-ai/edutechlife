@@ -1,4 +1,5 @@
 const supabase = require('../db/supabase');
+const logger = require('../utils/logger');
 
 const EDUCATIONAL_ENDPOINTS = [
   '/api/ingenia/student-profile',
@@ -43,7 +44,7 @@ function ferpaAuditLog(req, res, next) {
       requestor_type: requestorType(req),
       data_category: categorizePath(req.path),
     }).then(({ error }) => {
-      if (error) console.warn('[FERPA] audit log insert failed:', error.message);
+      if (error) logger.warn('[FERPA] audit log insert failed:', error.message);
     });
   });
 

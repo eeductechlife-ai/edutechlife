@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { requireAuth } = require('../../middleware/auth');
 const { recommendVideos } = require('../../services/youtubeVideos');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get('/videos', requireAuth, async (req, res) => {
     const videos = await recommendVideos(q, apiKey);
     res.json({ videos });
   } catch (e) {
-    console.error('[IngenIA videos]', e.message);
+    logger.error('[IngenIA videos]', e.message);
     res.status(e.status === 403 ? 503 : 502).json({ error: 'No se pudieron cargar los videos' });
   }
 });

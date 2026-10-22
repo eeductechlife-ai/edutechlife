@@ -4,6 +4,7 @@ const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-node');
 const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http');
 const { resourceFromAttributes } = require('@opentelemetry/resources');
 const { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } = require('@opentelemetry/semantic-conventions');
+const logger = require('../utils/logger');
 
 function setupTelemetry() {
   const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
@@ -35,9 +36,9 @@ function setupTelemetry() {
   process.on('SIGINT', () => sdk.shutdown());
 
   if (otlpEndpoint) {
-    console.log(`[OTel] Traces → ${otlpEndpoint}`);
+    logger.info(`[OTel] Traces → ${otlpEndpoint}`);
   } else {
-    console.log('[OTel] Traces → console (set OTEL_EXPORTER_OTLP_ENDPOINT for a collector)');
+    logger.info('[OTel] Traces → console (set OTEL_EXPORTER_OTLP_ENDPOINT for a collector)');
   }
 }
 

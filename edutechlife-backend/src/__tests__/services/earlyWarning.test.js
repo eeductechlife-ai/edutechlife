@@ -201,7 +201,7 @@ describe('earlyWarning: persistencia', () => {
       })
     );
     await expect(runAllDetectors('s1')).resolves.toEqual([]);
-    expect(err).toHaveBeenCalledWith(expect.stringContaining('Insert failed for inactivity'), 'duplicado');
+    expect(err).toHaveBeenCalledWith(expect.stringContaining('Insert failed for inactivity: duplicado'));
     err.mockRestore();
   });
 
