@@ -186,6 +186,24 @@ const parentalInviteLimiter = rateLimit({
   skip: () => process.env.NODE_ENV !== 'production',
 });
 
+// Códigos de verificación de WhatsApp (POST /api/ingenia/padre/whatsapp/codigo):
+// cada uno manda un mensaje a un número que escribe el padre. Sin tope, una
+// cuenta podía usarlo para escribirle a cualquier número. Cinco por hora y por
+// padre bastan para equivocarse de número y reintentar.
+const whatsappCodigoLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: {
+    error: 'Ya pediste varios códigos. Intenta de nuevo en una hora.',
+    retryAfter: 3600,
+  },
+  keyGenerator: userAwareKey,
+  skip: () => process.env.NODE_ENV !== 'production',
+});
+
 // Enlaces de cobro Wompi por correo (POST /api/payments/wompi/link-cobro): solo
 // admins. Cinco por hora y por administrador. Sin `skip` fuera de producción:
 // el tope protege correos y pagos reales, también en pruebas.
@@ -253,4 +271,5 @@ module.exports = {
   visionLimiter,
   parentalInviteLimiter,
   cobroLinkLimiter,
+  whatsappCodigoLimiter,
 };

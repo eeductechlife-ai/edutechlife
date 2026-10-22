@@ -11,7 +11,7 @@ function errorHandler(err, req, res, _next) {
 
   res.status(err.status || 500).json({
     error: 'Error interno del servidor',
-    requestId: req.headers['x-request-id'] || null,
+    requestId: req.id || null, // generado en el servidor (app.js); nunca desde el cliente
   });
 }
 
