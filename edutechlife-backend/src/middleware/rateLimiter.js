@@ -109,6 +109,18 @@ const nicoStreamLimiter = rateLimit({
   skip: () => process.env.NODE_ENV !== 'production',
 });
 
+// El plan de automatización es caro (≈2000 tokens) y público: pocas llamadas por IP.
+const automationPlanLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: { error: 'Generaste varios planes seguidos. Intenta de nuevo en unos minutos.', retryAfter: 600 },
+  keyGenerator: userAwareKey,
+  skip: () => process.env.NODE_ENV !== 'production',
+});
+
 const examSubmissionLimiter = rateLimit({
   windowMs: 30 * 1000,
   max: 3,
@@ -264,6 +276,7 @@ module.exports = {
   authLimiter,
   chatMessageLimiter,
   nicoStreamLimiter,
+  automationPlanLimiter,
   examSubmissionLimiter,
   challengeSubmissionLimiter,
   ttsLimiter,

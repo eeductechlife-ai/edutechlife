@@ -30,10 +30,11 @@ function sanitizeNicoHistory(messages) {
 }
 
 /** Mensajes listos para el modelo, o null si no hay un mensaje del usuario al final. */
-function buildNicoMessages(messages) {
+function buildNicoMessages(messages, { memoryBlock = '' } = {}) {
   const history = sanitizeNicoHistory(messages);
   if (!history.length || history[history.length - 1].role !== 'user') return null;
-  return [{ role: 'system', content: NICO_SYSTEM_PROMPT }, ...history];
+  const system = memoryBlock ? `${NICO_SYSTEM_PROMPT}\n\n${memoryBlock}` : NICO_SYSTEM_PROMPT;
+  return [{ role: 'system', content: system }, ...history];
 }
 
 module.exports = { buildNicoMessages, sanitizeNicoHistory, NICO_MAX_TURNS, NICO_MAX_CHARS };
