@@ -18,6 +18,7 @@ const supabase = require('../db/supabase');
 const { sendEmail } = require('./emailService');
 const logger = require('../utils/logger');
 const { configuracionVapid, enviarPushPadre } = require('./webPush');
+const { avisarConexionWhatsApp } = require('./avisoWhatsappPadres');
 
 const TABLA_REGISTRO = 'aviso_padre_login';
 const MAYORIA_DE_EDAD = 18; // Ley 1581 de 2012: menor de 18 años
@@ -205,6 +206,16 @@ async function avisarInicioSesionMenor(studentId, { ahora = new Date() } = {}) {
       logger.warn('[aviso-padre] menor sin padre o acudiente vinculado: no se envió aviso', { studentId });
       return resultado(false, 'sin_padre');
     }
+
+    // WhatsApp: un mensaje en cada conexión (ventana corta), sin la ventana de
+    // 24 h del correo, y aunque el correo no esté configurado. No se espera y
+    // nunca lanza: el inicio de sesión no depende de él.
+    avisarConexionWhatsApp({
+      studentId,
+      nombre: menor.nombre,
+      padreIds: padres.map((p) => p.id),
+      ahora,
+    }).catch(() => {});
 
     // Sin Resend, emailService imprime el HTML completo en consola: no se llama.
     const correoActivo = Boolean(process.env.RESEND_API_KEY);

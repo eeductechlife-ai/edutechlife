@@ -9,7 +9,6 @@ const PUBLIC_ROUTES = [
   { path: '/', name: 'inicio', title: /Educaci[oó]n.*IA/i },
   { path: '/ialab-academic', name: 'catálogo de IALab', title: /IALab Academic/i },
   { path: '/conoce-ingenia', name: 'qué es IngenIA', title: /IngenIA/i },
-  { path: '/planes', name: 'planes', title: /planes/i },
   { path: '/proyectos', name: 'proyectos nacionales', title: /Proyectos/i },
   { path: '/consultoria', name: 'consultoría educativa', title: /Consultor[ií]a/i },
   { path: '/consultoria-b2b', name: 'consultoría B2B', title: /B2B/i },
@@ -18,6 +17,14 @@ const PUBLIC_ROUTES = [
   { path: '/login', name: 'iniciar sesión', title: /Iniciar Sesi[oó]n/i },
   { path: '/sign-up/ingenia', name: 'registro de IngenIA', title: /Registro IngenIA/i },
 ] as const;
+
+// /planes se retiró (#133): ya no es una página, redirige a /conoce-ingenia.
+test.describe('Redirección retirada', () => {
+  test('/planes lleva a /conoce-ingenia', async ({ page }) => {
+    await page.goto('/planes', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\/conoce-ingenia\/?$/);
+  });
+});
 
 test.describe('Páginas públicas', () => {
   for (const route of PUBLIC_ROUTES) {
