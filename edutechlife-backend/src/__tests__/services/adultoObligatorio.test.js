@@ -32,7 +32,7 @@ function constructorConsulta(nombre) {
     if (estado.op === 'upsert') {
       const claves = estado.conflicto.split(',');
       const existente = filas.find((r) => claves.every((c) => r[c] === estado.valores[c]));
-      if (existente) Object.assign(existente, estado.valores);
+      if (existente) { if (!estado.ignorarDuplicados) Object.assign(existente, estado.valores); }
       else filas.push({ id: secuencia++, ...estado.valores });
       return { data: estado.valores, error: null };
     }
@@ -50,16 +50,21 @@ function constructorConsulta(nombre) {
     eq(columna, valor) { estado.filtros.push((r) => r[columna] === valor); return consulta; },
     gt(columna, valor) { estado.filtros.push((r) => r[columna] > valor); return consulta; },
     limit(n) { estado.limite = n; return consulta; },
+    order() { return consulta; },
     maybeSingle() { estado.single = true; return consulta; },
     insert(valores) { estado.op = 'insert'; estado.valores = valores; return consulta; },
     update(cambios) { estado.op = 'update'; estado.cambios = cambios; return consulta; },
-    upsert(valores, { onConflict }) { estado.op = 'upsert'; estado.valores = valores; estado.conflicto = onConflict; return consulta; },
+    upsert(valores, { onConflict, ignoreDuplicates }) { estado.op = 'upsert'; estado.valores = valores; estado.conflicto = onConflict; estado.ignorarDuplicados = ignoreDuplicates; return consulta; },
     then(resolver, rechazar) { return Promise.resolve(ejecutar()).then(resolver, rechazar); },
   };
   return consulta;
 }
 
-const mockSupabase = { from: vi.fn((nombre) => constructorConsulta(nombre)), auth: { getUser: vi.fn() } };
+const updateUserByIdMock = vi.fn().mockResolvedValue({ data: {}, error: null });
+const mockSupabase = {
+  from: vi.fn((nombre) => constructorConsulta(nombre)),
+  auth: { getUser: vi.fn(), admin: { updateUserById: updateUserByIdMock } },
+};
 
 delete require.cache[supabasePath];
 require.cache[supabasePath] = { id: supabasePath, filename: supabasePath, loaded: true, exports: mockSupabase };
@@ -117,6 +122,7 @@ beforeEach(() => {
   signUpMock.mockReset();
   signUpMock.mockResolvedValue({ user: { id: ESTUDIANTE, email: CORREO_MENOR }, token: 't', refreshToken: 'r' });
   mockSupabase.from.mockClear();
+  updateUserByIdMock.mockClear();
   filasDe('users').push({ id: ESTUDIANTE, email: CORREO_MENOR, adulto_obligatorio: false });
   filasDe('users').push({ id: ADULTO, email: CORREO_ADULTO });
   process.env.ADULTO_OBLIGATORIO = 'true';
@@ -306,7 +312,7 @@ describe('banner y registro de adulto para estudiantes existentes', () => {
 
   it('estado: menor existente sin adulto ve el aviso', async () => {
     const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
-    expect(res.body).toEqual({ mostrarAviso: true });
+    expect(res.body).toMatchObject({ mostrarAviso: true });
     expect(sendMock).not.toHaveBeenCalled();
   });
 
@@ -351,18 +357,115 @@ describe('banner y registro de adulto para estudiantes existentes', () => {
     expect(sendMock).not.toHaveBeenCalled();
   });
 
+  const autorizacion = { aceptaAutorizacion: true, versionAutorizacion: 'adulto-menor-v1-2026-10-20' };
+
   it('confirmar: adulto con sesión y correo invitado vincula al menor', async () => {
     await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: adultoValido });
     const token = extraerToken();
     usuarioActual = { id: ADULTO, email: CORREO_ADULTO };
-    const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token });
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token, ...autorizacion });
     expect(res.status).toBe(200);
     expect(filasDe('parent_student_links').find((l) => l.parent_user_id === ADULTO)?.is_active).toBe(true);
+  });
+
+  it('confirmar: la primera confirmación activa la cuenta del niño una sola vez, con evidencia', async () => {
+    await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: adultoValido });
+    const token = extraerToken();
+    usuarioActual = { id: ADULTO, email: CORREO_ADULTO };
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token, ...autorizacion });
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ vinculado: true, activado: true });
+
+    const activaciones = filasDe('activaciones_adulto_menor');
+    expect(activaciones).toHaveLength(1);
+    expect(activaciones[0]).toMatchObject({
+      estudiante_id: ESTUDIANTE,
+      adulto_id: ADULTO,
+      adulto_email: CORREO_ADULTO,
+      metodo: 'invitacion',
+      version_autorizacion: 'adulto-menor-v1-2026-10-20',
+      invitacion_id: filasDe('invitaciones_adulto_menor')[0].id,
+    });
+    expect(activaciones[0].activada_at).toBeTruthy();
+    expect(updateUserByIdMock).toHaveBeenCalledWith(ESTUDIANTE, {
+      app_metadata: { ingenia_adulto_activado_at: activaciones[0].activada_at },
+    });
+  });
+
+  it('confirmar: una segunda confirmación (otro adulto) no reemplaza la activación original', async () => {
+    await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: adultoValido });
+    usuarioActual = { id: ADULTO, email: CORREO_ADULTO };
+    await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token: extraerToken(), ...autorizacion });
+    const original = { ...filasDe('activaciones_adulto_menor')[0] };
+
+    const OTRO = 'c0000000-0000-4000-8000-000000000003';
+    filasDe('invitaciones_adulto_menor').push({
+      id: 999, estudiante_id: ESTUDIANTE, adulto_email: 'tia@ejemplo.com', estado: 'pendiente',
+      token_hash: servicio.hashToken('t'.repeat(40)), expira_at: new Date(Date.now() + 60000).toISOString(),
+    });
+    usuarioActual = { id: OTRO, email: 'tia@ejemplo.com' };
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token: 't'.repeat(40), ...autorizacion });
+    expect(res.status).toBe(200);
+    expect(filasDe('activaciones_adulto_menor')).toHaveLength(1);
+    expect(filasDe('activaciones_adulto_menor')[0]).toEqual(original);
+  });
+
+  it('confirmar: sin aceptar el texto de autorización no vincula ni activa', async () => {
+    await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 11, adulto: adultoValido });
+    const token = extraerToken();
+    usuarioActual = { id: ADULTO, email: CORREO_ADULTO };
+    for (const cuerpo of [{ token }, { token, aceptaAutorizacion: true, versionAutorizacion: 'inventada' }]) {
+      const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send(cuerpo);
+      expect(res.status).toBe(400);
+      expect(res.body.motivo).toBe('falta_autorizacion');
+    }
+    expect(filasDe('parent_student_links')).toHaveLength(0);
+    expect(filasDe('activaciones_adulto_menor')).toHaveLength(0);
+    expect(filasDe('invitaciones_adulto_menor')[0].estado).toBe('pendiente');
   });
 
   it('confirmar: sin sesión → 401 y no vincula', async () => {
     usuarioActual = null;
     const res = await request(appAdulto()).post('/api/auth/adulto-menor/confirmar').send({ token: 'x'.repeat(40) });
     expect(res.status).toBe(401);
+  });
+});
+
+describe('estado del aviso con la activación única', () => {
+  beforeEach(() => {
+    filasDe('students').push({ auth_id: ESTUDIANTE, age: 10 });
+    usuarioActual = { id: ESTUDIANTE, email: CORREO_MENOR };
+  });
+  afterEach(() => {
+    usuarioActual = null;
+  });
+
+  it('un niño ya activado no ve el aviso aunque su invitación haya vencido', async () => {
+    filasDe('activaciones_adulto_menor').push({ estudiante_id: ESTUDIANTE, metodo: 'invitacion' });
+    filasDe('invitaciones_adulto_menor').push({
+      estudiante_id: ESTUDIANTE, estado: 'vencida', expira_at: new Date(Date.now() - 1000).toISOString(),
+    });
+    const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
+    expect(res.body).toEqual({ mostrarAviso: false });
+  });
+
+  it('un niño ya activado no puede volver a pedir invitación (409)', async () => {
+    filasDe('activaciones_adulto_menor').push({ estudiante_id: ESTUDIANTE, metodo: 'invitacion' });
+    const res = await request(appAdulto()).post('/api/auth/adulto-menor/invitar').send({ edad: 10, adulto: adultoValido });
+    expect(res.status).toBe(409);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it('un niño sin edad registrada ve el aviso', async () => {
+    tablas.students = [];
+    filasDe('users').find((u) => u.id === ESTUDIANTE).account_type = 'smartboard';
+    const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
+    expect(res.body).toMatchObject({ mostrarAviso: true });
+  });
+
+  it('con la bandera apagada nunca hay aviso', async () => {
+    process.env.ADULTO_OBLIGATORIO = 'false';
+    const res = await request(appAdulto()).get('/api/auth/adulto-menor/estado');
+    expect(res.body).toEqual({ mostrarAviso: false });
   });
 });

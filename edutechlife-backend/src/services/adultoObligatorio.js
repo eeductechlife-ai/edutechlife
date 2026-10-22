@@ -186,7 +186,7 @@ async function confirmarInvitacion({ token, adultoId, adultoEmail }) {
     );
   if (vinculoError) throw vinculoError;
 
-  return { valida: true, estudianteId: data.estudiante_id };
+  return { valida: true, estudianteId: data.estudiante_id, invitacionId: data.id, adultoEmail: data.adulto_email };
 }
 
 const EDAD_INGENIA_MIN = 6;

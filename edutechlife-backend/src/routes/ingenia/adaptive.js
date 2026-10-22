@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const { requireAuth } = require('../../middleware/auth');
-const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { requireStudentAccess, assertStudentAccess } = require('../../middleware/ownership');
 const {
   getStudentState,
@@ -145,7 +144,7 @@ router.get('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, r
 
 // POST /api/ingenia/adaptive/mastery
 // Body: { studentId, competencyId, score } OR { studentId, entries: [{competencyId, score}] }
-router.post('/adaptive/mastery', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
+router.post('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId, competencyId, score, entries } = req.body;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -176,7 +175,7 @@ router.post('/adaptive/mastery', requireAuth, requireStudentAccess, requireVerif
  * GET /api/ingenia/adaptive/warnings?studentId=uuid
  * Runs all 4 detectors and returns active (unresolved) warnings.
  */
-router.get('/adaptive/warnings', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/adaptive/warnings', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
   try {

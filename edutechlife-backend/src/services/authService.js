@@ -1,6 +1,7 @@
 const supabase = require('../db/supabase');
 const { createSessionClient } = require('../db/sessionClient');
 const mfaService = require('./mfaService');
+const activacion = require('./activacionAdulto');
 
 /**
  * Sign up a new user with email + password
@@ -396,6 +397,14 @@ async function signUpParent({ studentEmail, parentPassword, parentName, invitati
       },
       { onConflict: 'parent_user_id,student_user_id' },
     );
+
+  // El padre que se enlaza con el código del hijo activa su cuenta de IngenIA
+  // (una sola vez; si ya estaba activada se conserva la primera evidencia).
+  await activacion.registrarActivacionSinFallar({
+    estudianteId: studentProfile.id,
+    adultoId: userId,
+    metodo: 'codigo_padre',
+  });
 
   return { message: 'Cuenta de padre creada exitosamente. Ya puedes iniciar sesión.' };
 }

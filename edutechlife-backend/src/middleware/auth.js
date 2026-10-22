@@ -20,6 +20,9 @@ async function requireAuth(req, res, next) {
     // Rol de confianza (app_metadata, no editable por el usuario). Lo usa el
     // guard de producto para dejar pasar a admin/content_creator.
     req.userRole = user.app_metadata?.role || null;
+    // app_metadata completo: lo usa requireAdultoActivado para saber, sin otra
+    // consulta, si un adulto ya activó la cuenta del niño.
+    req.userAppMetadata = user.app_metadata || {};
     next();
   } catch {
     return res.status(401).json({ error: 'Token inválido o expirado' });
