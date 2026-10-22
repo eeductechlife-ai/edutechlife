@@ -314,6 +314,9 @@ const OtherProfileView = ({ userId, t }) => {
           <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300">
             {t("common.user_not_found")}
           </h3>
+          <div className="mt-5">
+            <BackToCourseButton t={t} fullWidth />
+          </div>
         </div>
       </div>
     );
