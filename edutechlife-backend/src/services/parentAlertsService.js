@@ -1,4 +1,5 @@
 const supabase = require('../db/supabase');
+const logger = require('../utils/logger');
 
 /**
  * Parent Alerts Service
@@ -44,7 +45,7 @@ async function shouldCreateCrisisAlert(studentUserId, parentUserId) {
     }
 
     if (count > 0 && data && data.length > 0) {
-      console.log(`[Alert Dedup] Crisis alert already exists for student ${studentUserId} (${data[0].id})`);
+      logger.info('[Alert Dedup] Crisis alert already exists', { studentUserId, alertId: data[0].id });
       return {
         should_create: false,
         existing_alert_id: data[0].id,

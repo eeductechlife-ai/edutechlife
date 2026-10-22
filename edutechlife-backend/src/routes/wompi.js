@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const logger = require('../utils/logger');
 const { requireAuth } = require('../middleware/auth');
 const { requireAdmin } = require('../middleware/adminAuth');
 const { cobroLinkLimiter } = require('../middleware/rateLimiter');
@@ -82,7 +83,7 @@ router.post('/events', async (req, res) => {
       return res.status(500).json({ error: 'No se pudo activar el plan' });
     }
     if (result.paidUntil) {
-      console.log('Wompi: plan activo hasta', result.paidUntil, activation.planId, activation.userId);
+      logger.info('Wompi: plan activo', { paidUntil: result.paidUntil, planId: activation.planId, userId: activation.userId });
     }
   }
 
@@ -126,7 +127,7 @@ router.post('/link-cobro', requireAdmin, cobroLinkLimiter, async (req, res) => {
   const correo = buildCobroEmail(checkout.url);
   const envio = await sendEmail(usuario.email, correo.subject, correo.html, correo.text);
   const emailEnviado = envio?.success === true;
-  console.log('[wompi/link-cobro] enlace generado', planId, usuario.id, 'correo enviado:', emailEnviado);
+  logger.info('[wompi/link-cobro] enlace generado', { planId, userId: usuario.id, emailEnviado });
 
   res.json({ url: checkout.url, planId, emailEnviado, correo: usuario.email });
 });

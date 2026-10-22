@@ -7,6 +7,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const { sendEmail } = require('./emailService');
+const logger = require('../utils/logger');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -59,7 +60,7 @@ async function sendCrisisAlert(crisisAlertId) {
       .single();
 
     if (studentError) {
-      console.warn(`[NotificationService] Student not found: ${crisisAlert.student_id}`);
+      logger.warn('[NotificationService] Student not found', { studentId: crisisAlert.student_id });
     }
 
     // 3. Find parent using student's parent_email
@@ -75,11 +76,11 @@ async function sendCrisisAlert(crisisAlertId) {
       .single();
 
     if (parentError && parentError.code !== 'PGRST116') {
-      console.warn(`[NotificationService] Parent lookup warning: ${parentError.message}`);
+      logger.warn('[NotificationService] Parent lookup warning', { error: parentError.message });
     }
 
     if (!parent) {
-      console.warn(`[NotificationService] Parent not found for email: ${parentEmail}. Creating minimal record.`);
+      logger.warn('[NotificationService] Parent not found; creating minimal record');
       // Create a parent record if it doesn't exist (fallback)
       const { data: newParent, error: createError } = await supabase
         .from('parents')
@@ -143,7 +144,7 @@ async function sendCrisisAlert(crisisAlertId) {
       throw new Error('Failed to send notification via any channel');
     }
 
-    console.log(`[NotificationService] Crisis alert ${crisisAlertId} sent to parent ${parent.id}`);
+    logger.info('[NotificationService] Crisis alert sent to parent', { crisisAlertId, parentId: parent.id });
 
     return {
       success: true,
@@ -223,7 +224,7 @@ async function getParentPreferences(parentId) {
 
     if (error && error.code === 'PGRST116') {
       // No preferences record yet; return defaults
-      console.log(`[NotificationService] No preferences for parent ${parentId}, using defaults`);
+      logger.info('[NotificationService] No preferences, using defaults', { parentId });
       return {
         email_enabled: true,
         push_enabled: true,
@@ -292,7 +293,7 @@ async function sendEmailNotification(parentId, parentEmail, crisisAlert, student
       error: result.error
     };
   } catch (error) {
-    console.error('[NotificationService] Email send error:', error.message);
+    logger.error('[NotificationService] Email send error', { error: error.message });
 
     // Log the failure
     await logNotification(parentId, crisisAlert.id, 'email', 'failed', {
@@ -315,7 +316,7 @@ async function sendPushNotification(parentId, studentName, crisisAlert) {
   try {
     // STUB: Implement with Firebase Cloud Messaging or OneSignal
     // For now, just log that it would be sent
-    console.log(`[NotificationService] Push notification stub for parent ${parentId}: "${studentName} needs help"`);
+    logger.info('[NotificationService] Push notification stub', { parentId });
 
     // Log as sent (stub implementation)
     await logNotification(parentId, crisisAlert.id, 'push', 'sent', {
@@ -350,7 +351,7 @@ async function sendPushNotification(parentId, studentName, crisisAlert) {
 async function sendSmsNotification(parentId, phoneNumber, studentName, crisisAlert) {
   try {
     // STUB: Implement with Twilio or AWS SNS
-    console.log(`[NotificationService] SMS notification stub to ${phoneNumber}: "${studentName} needs help"`);
+    logger.info('[NotificationService] SMS notification stub', { parentId });
 
     // Log as sent (stub implementation)
     await logNotification(parentId, crisisAlert.id, 'sms', 'sent', {

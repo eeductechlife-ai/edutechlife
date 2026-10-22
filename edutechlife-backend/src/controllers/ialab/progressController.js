@@ -1,4 +1,5 @@
 const supabase = require('../../db/supabase');
+const logger = require('../../utils/logger');
 
 const progressStore = new Map();
 
@@ -68,7 +69,7 @@ async function saveProgress(req, res) {
       if (score >= 4) achievements.push('module_' + moduleId + '_excellent');
       if (completedModules === 5) achievements.push('course_complete');
 
-      console.log('[IALab Progress] Saved to Supabase for user: ' + userId + ', module: ' + moduleId);
+      logger.info('[IALab Progress] Saved to Supabase', { userId, moduleId });
       return res.json({
         success: true,
         progress: {
@@ -115,7 +116,7 @@ async function saveProgress(req, res) {
     }
 
     progressStore.set(userId, userProgress);
-    console.log('[IALab Progress] Saved in-memory for user: ' + userId + ', module: ' + moduleId);
+    logger.info('[IALab Progress] Saved in-memory', { userId, moduleId });
 
     res.json({ success: true, progress: userProgress, message: 'Progress saved successfully' });
   } catch (e) {

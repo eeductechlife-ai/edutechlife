@@ -1,4 +1,5 @@
 const supabase = require('../../db/supabase');
+const logger = require('../../utils/logger');
 
 function isSupabaseReady() {
   return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY);
@@ -29,7 +30,7 @@ async function createTemplate(req, res) {
       }).select('*').single();
 
       if (error) throw error;
-      console.log('[IALab Templates] Saved to Supabase: ' + templateName + ' for user: ' + userId);
+      logger.info('[IALab Templates] Saved to Supabase', { templateName, userId });
       return res.status(201).json({ success: true, message: 'Template saved successfully', template: data });
     }
 
@@ -39,7 +40,7 @@ async function createTemplate(req, res) {
       category: category || 'general', difficulty: difficulty || 'intermediate',
       createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), usageCount: 0
     };
-    console.log('[IALab Templates] Saved in-memory: ' + templateName + ' for user: ' + userId);
+    logger.info('[IALab Templates] Saved in-memory', { templateName, userId });
     res.status(201).json({ success: true, message: 'Template saved successfully', template: savedTemplate });
   } catch (error) {
     console.error('Error saving IALab template:', error);
@@ -93,7 +94,7 @@ async function getTemplates(req, res) {
     if (category && category !== 'all') filteredTemplates = filteredTemplates.filter(t => t.category === category);
     if (difficulty && difficulty !== 'all') filteredTemplates = filteredTemplates.filter(t => t.difficulty === difficulty);
 
-    console.log('[IALab Templates] Retrieved ' + filteredTemplates.length + ' templates for user: ' + userId);
+    logger.info('[IALab Templates] Retrieved', { count: filteredTemplates.length, userId });
     res.json({ success: true, templates: filteredTemplates, total: filteredTemplates.length });
   } catch (error) {
     console.error('Error retrieving IALab templates:', error);

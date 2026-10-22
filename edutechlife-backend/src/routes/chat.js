@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { chatMessageLimiter } = require('../middleware/rateLimiter');
 const { optionalAuth } = require('../middleware/auth');
+const logger = require('../utils/logger');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -89,7 +90,7 @@ router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
     if (!text) return res.status(500).json({ error: 'No response from API' });
 
     if (req.userId) {
-      console.log(`[DeepSeek] call attributed to user ${req.userId} (${Date.now() - new Date().getTime()}ms)`);
+      logger.info('[DeepSeek] call attributed', { userId: req.userId });
     }
     res.json({ result: text });
   } catch (e) {
