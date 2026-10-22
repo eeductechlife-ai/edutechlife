@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const logger = require('../utils/logger');
 
 const router = Router();
 const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
@@ -119,7 +120,7 @@ router.post('/', async (req, res) => {
 
       if (!response.ok) {
         const err = await response.text();
-        console.error('[TTS] Error:', err);
+        logger.error('[TTS] Error:', err);
         return res.status(response.status).json({ error: 'TTS upstream error' });
       }
 
@@ -153,7 +154,7 @@ router.post('/', async (req, res) => {
       });
 
       if (!response.ok) {
-        console.error(`[TTS] Error on chunk "${chunk.slice(0, 50)}..."`, response.status);
+        logger.error(`[TTS] Error on chunk "${chunk.slice(0, 50)}..."`, response.status);
         continue;
       }
 
@@ -171,7 +172,7 @@ router.post('/', async (req, res) => {
     const concatenated = audioBuffers.join('');
     res.json({ audioContent: concatenated });
   } catch (error) {
-    console.error('[TTS] Proxy error:', error);
+    logger.error('[TTS] Proxy error:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

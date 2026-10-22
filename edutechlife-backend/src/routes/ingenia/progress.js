@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const { requireAuth } = require('../../middleware/auth');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -45,7 +46,7 @@ router.get('/student-progress', requireAuth, async (req, res) => {
     const progress = student.progress_json || {};
     res.json({ subjectTime: progress.subjectTime || {}, sessions: progress.sessions || [] });
   } catch (e) {
-    console.error('student-progress get error:', e.message);
+    logger.error('student-progress get error:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });
@@ -83,12 +84,12 @@ router.post('/student-progress', requireAuth, async (req, res) => {
   try {
     const saved = await saveStudentJson(userId, 'progress_json', { subjectTime, sessions });
     if (saved.error) {
-      console.error('student-progress save error:', saved.error);
+      logger.error('student-progress save error:', saved.error);
       return res.status(500).json({ error: saved.error });
     }
     res.json({ success: true });
   } catch (e) {
-    console.error('student-progress post error:', e.message);
+    logger.error('student-progress post error:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });
@@ -129,7 +130,7 @@ router.get('/student-grades', requireAuth, async (req, res) => {
         .single();
 
       if (createErr && !createErr.message?.includes('duplicate')) {
-        console.error('student create error:', createErr.message);
+        logger.error('student create error:', createErr.message);
         return res.status(500).json({ error: createErr.message });
       }
 
@@ -139,7 +140,7 @@ router.get('/student-grades', requireAuth, async (req, res) => {
     const grades = student.data?.grades_json || [];
     res.json({ grades });
   } catch (e) {
-    console.error('student-grades get error:', e.message);
+    logger.error('student-grades get error:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });
@@ -156,12 +157,12 @@ router.post('/student-grades', requireAuth, async (req, res) => {
   try {
     const saved = await saveStudentJson(userId, 'grades_json', grades);
     if (saved.error) {
-      console.error('student-grades save error:', saved.error);
+      logger.error('student-grades save error:', saved.error);
       return res.status(500).json({ error: saved.error });
     }
     res.json({ success: true, grades });
   } catch (e) {
-    console.error('student-grades post error:', e.message);
+    logger.error('student-grades post error:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });
@@ -196,7 +197,7 @@ router.get('/improvement-plan', requireAuth, async (req, res) => {
       currentFocus: plan?.plan_json?.currentFocus || null,
     });
   } catch (e) {
-    console.error('Error loading improvement plan:', e.message);
+    logger.error('Error loading improvement plan:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });
@@ -232,7 +233,7 @@ router.put('/improvement-plan', requireAuth, async (req, res) => {
     if (error) throw error;
     res.json({ ok: true });
   } catch (e) {
-    console.error('Error saving improvement plan:', e.message);
+    logger.error('Error saving improvement plan:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });

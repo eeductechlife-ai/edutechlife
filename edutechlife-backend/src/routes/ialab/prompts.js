@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { chat } = require('../../services/deepseek');
 const { IALAB_SYSTEM_PROMPT, generateFallbackResult } = require('../../services/ialabPrompts');
+const logger = require('../../utils/logger');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -100,14 +101,14 @@ router.post('/', async (req, res) => {
       parsedResult.timestamp = new Date().toISOString();
       parsedResult.responseTime = Date.now() - startTime;
     } catch (parseError) {
-      console.error('Error parsing AI response:', parseError);
+      logger.error('Error parsing AI response:', parseError);
       parsedResult = generateFallbackResult(prompt, templateType, startTime);
     }
 
-    console.log('[IALab Prompts] Generated prompt for template: ' + templateType + ' | Time: ' + (Date.now() - startTime) + 'ms');
+    logger.info('[IALab Prompts] Generated prompt for template: ' + templateType + ' | Time: ' + (Date.now() - startTime) + 'ms');
     res.json(parsedResult);
   } catch (e) {
-    console.error('Error in IALab prompts endpoint:', e);
+    logger.error('Error in IALab prompts endpoint:', e);
     res.status(500).json({
       error: 'Error interno del servidor',
       fallback: {

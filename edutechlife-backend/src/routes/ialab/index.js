@@ -4,6 +4,7 @@ const { modulesData, modulesList } = require('../../data/modules');
 const { saveProgress, getProgress } = require('../../controllers/ialab/progressController');
 const { createTemplate, getTemplates, updateTemplate, deleteTemplate } = require('../../controllers/ialab/templatesController');
 const { examSubmissionLimiter, challengeSubmissionLimiter } = require('../../middleware/rateLimiter');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -39,7 +40,7 @@ router.get('/modules/:id', async (req, res) => {
         return res.json(fullModule);
       }
     } catch (dbErr) {
-      console.warn('[IALab Modules] DB fallback for module ' + moduleId + ':', dbErr.message);
+      logger.warn('[IALab Modules] DB fallback for module ' + moduleId + ':', dbErr.message);
     }
   }
 

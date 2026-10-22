@@ -8,6 +8,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const notificationService = require('./NotificationService');
+const logger = require('../utils/logger');
 
 class AlertListenerService {
   /**
@@ -22,7 +23,7 @@ class AlertListenerService {
     // listener se desactiva con un aviso y el resto de la API sigue operando.
     this.supabase = null;
     if (!supabaseUrl || !serviceRoleKey) {
-      console.warn(
+      logger.warn(
         '[AlertListenerService] Desactivado: falta SUPABASE_URL o la service key ' +
           '(SUPABASE_SERVICE_ROLE_KEY / SUPABASE_SERVICE_KEY).',
       );
@@ -41,13 +42,13 @@ class AlertListenerService {
    */
   start() {
     if (!this.supabase) {
-      console.warn(
+      logger.warn(
         '[AlertListenerService] Sin cliente Supabase: listener no iniciado.',
       );
       return;
     }
 
-    console.log('[AlertListenerService] Starting listener for crisis_alerts');
+    logger.info('[AlertListenerService] Starting listener for crisis_alerts');
 
     try {
       this.subscription = this.supabase
@@ -64,20 +65,20 @@ class AlertListenerService {
           }
         )
         .on('error', (error) => {
-          console.error('[AlertListenerService] Subscription error:', error.message);
+          logger.error('[AlertListenerService] Subscription error:', error.message);
           this.handleError();
         })
         .on('status', (status) => {
-          console.log('[AlertListenerService] Subscription status:', status);
+          logger.info('[AlertListenerService] Subscription status:', status);
           if (status === 'SUBSCRIBED') {
             this.retryCount = 0; // Reset retry count on successful connection
           }
         })
         .subscribe();
 
-      console.log('[AlertListenerService] Listener started successfully');
+      logger.info('[AlertListenerService] Listener started successfully');
     } catch (error) {
-      console.error('[AlertListenerService] Error starting listener:', error.message);
+      logger.error('[AlertListenerService] Error starting listener:', error.message);
       this.handleError();
     }
   }
@@ -89,20 +90,20 @@ class AlertListenerService {
   async handleNewAlert(payload) {
     try {
       const crisisAlert = payload.new;
-      console.log(`[AlertListenerService] New crisis alert detected: ${crisisAlert.id}`);
+      logger.info(`[AlertListenerService] New crisis alert detected: ${crisisAlert.id}`);
 
       // Send notification to parent
       const result = await notificationService.sendCrisisAlert(crisisAlert.id);
 
       if (result.success) {
-        console.log(`[AlertListenerService] Notification sent for alert ${crisisAlert.id}`);
+        logger.info(`[AlertListenerService] Notification sent for alert ${crisisAlert.id}`);
       } else {
-        console.error(
+        logger.error(
           `[AlertListenerService] Failed to send notification for alert ${crisisAlert.id}: ${result.error}`
         );
       }
     } catch (error) {
-      console.error('[AlertListenerService] Error handling new alert:', error.message);
+      logger.error('[AlertListenerService] Error handling new alert:', error.message);
     }
   }
 
@@ -112,14 +113,14 @@ class AlertListenerService {
    */
   async handleError() {
     if (this.retryCount >= this.maxRetries) {
-      console.error('[AlertListenerService] Max retries reached. Listener stopped.');
+      logger.error('[AlertListenerService] Max retries reached. Listener stopped.');
       return;
     }
 
     this.retryCount++;
     const delay = this.retryDelay * Math.pow(2, this.retryCount - 1);
 
-    console.log(
+    logger.info(
       `[AlertListenerService] Retrying in ${delay}ms (attempt ${this.retryCount}/${this.maxRetries})`
     );
 
@@ -132,7 +133,7 @@ class AlertListenerService {
    * Stop the realtime listener
    */
   stop() {
-    console.log('[AlertListenerService] Stopping listener');
+    logger.info('[AlertListenerService] Stopping listener');
 
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -158,7 +159,7 @@ class AlertListenerService {
 
       return !error;
     } catch (error) {
-      console.error('[AlertListenerService] Health check failed:', error.message);
+      logger.error('[AlertListenerService] Health check failed:', error.message);
       return false;
     }
   }

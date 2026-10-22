@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { requireAuth } = require('../middleware/auth');
 const parentChatService = require('../services/parentChatService');
+const logger = require('../utils/logger');
 
 const router = Router();
 
@@ -23,7 +24,7 @@ router.get('/conversations', requireAuth, async (req, res) => {
       count: conversations.length,
     });
   } catch (e) {
-    console.error('Error fetching conversations:', e);
+    logger.error('Error fetching conversations:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -54,7 +55,7 @@ router.post('/conversations', requireAuth, async (req, res) => {
       message: isNew ? 'Conversación creada' : 'Conversación existente',
     });
   } catch (e) {
-    console.error('Error creating/getting conversation:', e);
+    logger.error('Error creating/getting conversation:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -80,7 +81,7 @@ router.get('/conversations/:conversationId', requireAuth, async (req, res) => {
       count: history.length,
     });
   } catch (e) {
-    console.error('Error fetching conversation history:', e);
+    logger.error('Error fetching conversation history:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -117,7 +118,7 @@ router.post('/conversations/:conversationId/messages', requireAuth, async (req, 
       response: result.response,
     });
   } catch (e) {
-    console.error('Error sending message to Dani:', e);
+    logger.error('Error sending message to Dani:', e);
     if (e.message.includes('no encontrada')) {
       return res.status(404).json({ error: e.message });
     }
@@ -147,7 +148,7 @@ router.get('/conversations/:conversationId/summary', requireAuth, async (req, re
       generatedAt: summary.generated_at,
     });
   } catch (e) {
-    console.error('Error generating summary:', e);
+    logger.error('Error generating summary:', e);
     res.status(500).json({ error: 'Error generando resumen' });
   }
 });
@@ -169,7 +170,7 @@ router.post('/conversations/:conversationId/archive', requireAuth, async (req, r
       status: 'archived',
     });
   } catch (e) {
-    console.error('Error archiving conversation:', e);
+    logger.error('Error archiving conversation:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -188,7 +189,7 @@ router.get('/context/:studentId', requireAuth, async (req, res) => {
 
     res.json({ context });
   } catch (e) {
-    console.error('Error building context:', e);
+    logger.error('Error building context:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

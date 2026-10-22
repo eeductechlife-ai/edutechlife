@@ -8,6 +8,7 @@ const { sendCrisisAlert, logCrisisIncident } = require('../../services/emailServ
 const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../../services/daniOrchestrator');
 const { validateInput, detectEmotionalState, sanitizeOutput } = require('../../services/aiSafetyGateway');
 const { createMemoriaFilter, parseMemoria, buildMemoryRow, saveDaniMemory } = require('../../services/daniMemory');
+const logger = require('../../utils/logger');
 const {
   pseudonimoActivo,
   prepararPseudonimo,
@@ -83,7 +84,7 @@ async function pseudonimoDelUsuario(userId) {
     if (!data) return null;
     return prepararPseudonimo({ studentId: data.id, name: data.name });
   } catch (e) {
-    console.warn('[DaniPseudonimo] no se pudo leer el perfil; el contexto del cliente no se envía:', e.message);
+    logger.warn('[DaniPseudonimo] no se pudo leer el perfil; el contexto del cliente no se envía:', e.message);
     return { ...pseudonimoFallido(), sinPerfil: true };
   }
 }
@@ -116,7 +117,7 @@ router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, re
 
     res.json({ result: text });
   } catch (e) {
-    console.error('Error calling Dani AI:', e);
+    logger.error('Error calling Dani AI:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -183,10 +184,10 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
           consentData.parent_email
         );
 
-        console.log('[Crisis Escalation] Email sent:', emailResult);
+        logger.info('[Crisis Escalation] Email sent:', emailResult);
       }
     } catch (e) {
-      console.error('[Crisis Escalation Error]', e);
+      logger.error('[Crisis Escalation Error]', e);
       // Don't fail the chat request if escalation fails
     }
   }
@@ -227,7 +228,7 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
     res.end();
   } catch (e) {
     if (streamClosed) return;
-    console.error('Error calling Dani AI (stream):', e);
+    logger.error('Error calling Dani AI (stream):', e);
     res.write(`data: ${JSON.stringify({ error: 'Error generando respuesta' })}\n\n`);
     res.end();
   }
@@ -263,7 +264,7 @@ router.post('/ai', requireAuth, requireVerifiedParentalConsent, async (req, res)
 
     res.json({ result: text });
   } catch (e) {
-    console.error('[IngenIA AI] Error:', e.message);
+    logger.error('[IngenIA AI] Error:', e.message);
     const status = e.status;
     if (status === 402) return res.status(402).json({ error: 'API sin saldo disponible.' });
     if (status === 401) return res.status(401).json({ error: 'API key inválida o expirada.' });
@@ -307,7 +308,7 @@ router.get('/dani/history', requireAuth, requireVerifiedParentalConsent, async (
 
     res.json({ messages });
   } catch (e) {
-    console.error('[Dani History]', e.message);
+    logger.error('[Dani History]', e.message);
     res.status(500).json({ error: 'Error loading history' });
   }
 });
@@ -372,7 +373,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
   try {
     ctx = await loadStudentContext(studentId);
   } catch (e) {
-    console.error('[DaniOrchestrator] Context load failed:', e.message);
+    logger.error('[DaniOrchestrator] Context load failed:', e.message);
     ctx = { profile: null, mastery: [], memory: null, activePlan: null, todaySchedule: [] };
   }
 
@@ -388,8 +389,8 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
     });
     if (pseudo) systemPrompt += `\n\n${pseudo.instruccion}`;
   } catch (e) {
-    console.error('[Dani2 Prompt build failed]', e.stack || e.message);
-    console.error('[Dani2 ctx sample]', JSON.stringify(ctx).slice(0, 600));
+    logger.error('[Dani2 Prompt build failed]', e.stack || e.message);
+    logger.error('[Dani2 ctx sample]', JSON.stringify(ctx).slice(0, 600));
     return res.status(500).json({ error: 'Error generando contexto' });
   }
 
@@ -456,7 +457,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
         await logCrisisIncident(supabase, req.userId, consentData.student_age, sanitized, 'high', consentData.parent_email);
       }
     } catch (e) {
-      console.error('[Dani2 Crisis]', e.message);
+      logger.error('[Dani2 Crisis]', e.message);
     }
   }
 
@@ -484,7 +485,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
     saveDaniMemory(
       supabase,
       buildMemoryRow(studentId, ctx.memory, parseMemoria(memoriaTexto), emotional.state)
-    ).catch((e) => console.error('[Dani2] memory save failed:', e.message));
+    ).catch((e) => logger.error('[Dani2] memory save failed:', e.message));
 
     if (streamClosed) return;
     if (crisisDetection.level !== 'none') {
@@ -506,13 +507,13 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
         model_used: DEFAULT_MODEL(),
       }).then(({ error: insertErr }) => {
         if (insertErr && insertErr.code !== '42P01') {
-          console.error('[Dani2] Conversation save failed:', insertErr.message);
+          logger.error('[Dani2] Conversation save failed:', insertErr.message);
         }
       });
     }
   } catch (e) {
     if (streamClosed) return;
-    console.error('[Dani2 Stream Error]', e.message);
+    logger.error('[Dani2 Stream Error]', e.message);
     if (res.headersSent) {
       // El stream SSE ya empezó: no se pueden cambiar headers; terminar el
       // stream con una señal de error en lugar de res.status().json().

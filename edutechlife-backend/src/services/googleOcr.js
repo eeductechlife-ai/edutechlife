@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const GOOGLE_VISION_URL = 'https://vision.googleapis.com/v1/images:annotate';
 
 /**
@@ -31,7 +32,7 @@ async function extractTextWithGoogle(imageBase64) {
 
   if (!response.ok) {
     const errText = await response.text();
-    console.error('[googleOcr] Vision API error:', response.status, errText.slice(0, 300));
+    logger.error('[googleOcr] Vision API error:', response.status, errText.slice(0, 300));
     const err = new Error(
       response.status === 403 ? 'Vision API no habilitada. Contacta al administrador.' : 'Error de Vision API'
     );

@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const logger = require('../utils/logger');
 
 const TEMPLATES_DIR = path.join(__dirname, '../../email-templates');
 
@@ -51,7 +52,7 @@ async function loadTemplate(templateName, variables = {}) {
     // Render variables into template
     return renderTemplate(html, variables);
   } catch (error) {
-    console.error(`[Template Error] Failed to load template "${templateName}":`, error.message);
+    logger.error(`[Template Error] Failed to load template "${templateName}":`, error.message);
     throw new Error(`Template not found or invalid: ${templateName}`);
   }
 }

@@ -16,6 +16,7 @@
 const crypto = require('crypto');
 const supabase = require('../db/supabase');
 const { sendEmail } = require('./emailService');
+const logger = require('../utils/logger');
 
 const MAYORIA_DE_EDAD = 18;
 const TOKEN_TTL_MS = 72 * 60 * 60 * 1000;
@@ -128,7 +129,7 @@ async function crearInvitacion({ estudianteId, correo, nombre }) {
       `Confirma tu vínculo en: ${url}`,
     );
   } catch (e) {
-    console.error('[adulto-obligatorio] no se pudo enviar la invitación:', e.message);
+    logger.error('[adulto-obligatorio] no se pudo enviar la invitación:', e.message);
   }
   return { estado: 'pendiente' };
 }

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { requireAuth, requireVerifiedParentalConsent } = require('../middleware/auth');
 const predictionService = require('../services/predictionService');
+const logger = require('../utils/logger');
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get('/risk-score/:userId', requireAuth, async (req, res) => {
     const riskScore = await predictionService.getStudentRiskScore(userId);
     res.json(riskScore);
   } catch (e) {
-    console.error('Error fetching risk score:', e);
+    logger.error('Error fetching risk score:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -47,7 +48,7 @@ router.get('/alerts', requireAuth, async (req, res) => {
       count: alerts.length,
     });
   } catch (e) {
-    console.error('Error fetching parent alerts:', e);
+    logger.error('Error fetching parent alerts:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -71,7 +72,7 @@ router.get('/alerts/:studentId', requireAuth, async (req, res) => {
 
     res.json({ alerts, count: alerts.length });
   } catch (e) {
-    console.error('Error fetching student alerts:', e);
+    logger.error('Error fetching student alerts:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -102,7 +103,7 @@ router.post('/alerts', requireAuth, async (req, res) => {
 
     res.status(201).json({ alert });
   } catch (e) {
-    console.error('Error creating alert:', e);
+    logger.error('Error creating alert:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -119,7 +120,7 @@ router.put('/alerts/:alertId/read', requireAuth, async (req, res) => {
     const alert = await predictionService.markAlertAsRead(alertId, parentId);
     res.json({ alert, success: true });
   } catch (e) {
-    console.error('Error marking alert as read:', e);
+    logger.error('Error marking alert as read:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -147,7 +148,7 @@ router.post('/alerts/:alertId/action', requireAuth, async (req, res) => {
 
     res.json({ action, success: true });
   } catch (e) {
-    console.error('Error recording alert action:', e);
+    logger.error('Error recording alert action:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -174,7 +175,7 @@ router.get('/learning-gaps/:studentId', requireAuth, async (req, res) => {
 
     res.json({ gaps, count: gaps.length });
   } catch (e) {
-    console.error('Error fetching learning gaps:', e);
+    logger.error('Error fetching learning gaps:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -205,7 +206,7 @@ router.post('/learning-gaps/:studentId', requireAuth, async (req, res) => {
 
     res.status(201).json({ gap });
   } catch (e) {
-    console.error('Error creating learning gap:', e);
+    logger.error('Error creating learning gap:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -220,7 +221,7 @@ router.get('/dashboard', requireAuth, async (req, res) => {
     const summary = await predictionService.getParentDashboardSummary(parentId);
     res.json(summary);
   } catch (e) {
-    console.error('Error fetching dashboard summary:', e);
+    logger.error('Error fetching dashboard summary:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -242,7 +243,7 @@ router.get('/alert-suggestions/:studentId', requireAuth, async (req, res) => {
     const suggestions = await predictionService.getAlertSuggestions(studentId);
     res.json({ suggestions, count: suggestions.length });
   } catch (e) {
-    console.error('Error fetching alert suggestions:', e);
+    logger.error('Error fetching alert suggestions:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

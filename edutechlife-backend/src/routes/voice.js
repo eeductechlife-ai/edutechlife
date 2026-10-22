@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const logger = require('../utils/logger');
 
 const router = Router();
 
@@ -45,7 +46,7 @@ router.get('/token', async (req, res) => {
     const token = await client.getAccessToken();
     res.json({ access_token: token });
   } catch (error) {
-    console.error('Error generating Google token:', error);
+    logger.error('Error generating Google token:', error);
     res.status(500).json({ error: error.message });
   }
 });

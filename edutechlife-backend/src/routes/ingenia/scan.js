@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { chat } = require('../../services/deepseek');
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
+const logger = require('../../utils/logger');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -191,7 +192,7 @@ router.post('/scan', requireAuth, requireVerifiedParentalConsent, async (req, re
       // Intenta visión nativa con DeepSeek; si falla (modelo sin visión), usa OCR fallback
       try {
         result = await analyzeImageViaVision(imageBase64, systemPrompt, subject);
-        console.log('[scan] vision: ok');
+        logger.info('[scan] vision: ok');
       } catch (visionErr) {
         const msg = visionErr.message || '';
         const isVisionUnsupported =
@@ -202,7 +203,7 @@ router.post('/scan', requireAuth, requireVerifiedParentalConsent, async (req, re
           visionErr.status === 400;
 
         if (isVisionUnsupported) {
-          console.log('[scan] DeepSeek vision not supported, falling back to Google Vision OCR');
+          logger.info('[scan] DeepSeek vision not supported, falling back to Google Vision OCR');
           result = await analyzeImageViaOCR(imageBase64, systemPrompt, subject);
         } else {
           throw visionErr;
@@ -231,7 +232,7 @@ router.post('/scan', requireAuth, requireVerifiedParentalConsent, async (req, re
 
     res.json(normalizeResult(result));
   } catch (e) {
-    console.error('[scan] Error:', e.message);
+    logger.error('[scan] Error:', e.message);
     res.status(500).json({ error: e.message || 'Error procesando el material' });
   }
 });

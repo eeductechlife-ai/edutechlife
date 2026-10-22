@@ -4,6 +4,7 @@ const { requireStudentAccess } = require('../../middleware/ownership');
 const { getStudentMissions, recordActivity } = require('../../services/missionEngine');
 const { checkAndUnlockBadges, getStudentBadges } = require('../../services/badgeEngine');
 const { createClient } = require('@supabase/supabase-js');
+const logger = require('../../utils/logger');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -108,7 +109,7 @@ router.get('/gamification/missions', requireAuth, requireStudentAccess, async (r
     const missions = await getStudentMissions(studentId);
     res.json({ missions });
   } catch (e) {
-    console.error('[MissionEngine]', e.message);
+    logger.error('[MissionEngine]', e.message);
     res.status(500).json({ error: 'Error obteniendo misiones' });
   }
 });
@@ -122,11 +123,11 @@ router.post('/gamification/activity', requireAuth, requireStudentAccess, async (
     await recordActivity(studentId, activityType, meta);
     const newBadges = await checkAndUnlockBadges(studentId);
     updateLeagueXP(studentId, activityType).catch((err) =>
-      console.error('[LeagueXP]', err.message),
+      logger.error('[LeagueXP]', err.message),
     );
     res.json({ ok: true, newBadges });
   } catch (e) {
-    console.error('[Gamification Activity]', e.message);
+    logger.error('[Gamification Activity]', e.message);
     res.status(500).json({ error: 'Error registrando actividad' });
   }
 });
@@ -139,7 +140,7 @@ router.get('/gamification/badges', requireAuth, requireStudentAccess, async (req
     const badges = await getStudentBadges(studentId);
     res.json({ badges });
   } catch (e) {
-    console.error('[BadgeEngine]', e.message);
+    logger.error('[BadgeEngine]', e.message);
     res.status(500).json({ error: 'Error obteniendo badges' });
   }
 });
@@ -176,7 +177,7 @@ router.get('/league/current', requireAuth, async (req, res) => {
 
     res.json(data || { league_tier: 'bronze', week_start: weekStartStr, xp_earned: 0, rank: null });
   } catch (e) {
-    console.error('[League]', e.message);
+    logger.error('[League]', e.message);
     res.status(500).json({ error: 'Error obteniendo liga' });
   }
 });

@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { challengeSubmissionLimiter } = require('../../middleware/rateLimiter');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -83,7 +84,7 @@ router.post('/', challengeSubmissionLimiter, (req, res) => {
     if (!hasTask) feedback.push('Define claramente la tarea principal');
     if (!hasConstraints) feedback.push('Considera agregar restricciones para mejores resultados');
 
-    console.log('[IALab Evaluation] Evaluated prompt of ' + wordCount + ' words, score: ' + totalScore.toFixed(1) + '/10');
+    logger.info('[IALab Evaluation] Evaluated prompt of ' + wordCount + ' words, score: ' + totalScore.toFixed(1) + '/10');
     res.json({
       success: true,
       evaluation: {
@@ -100,7 +101,7 @@ router.post('/', challengeSubmissionLimiter, (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error evaluating prompt:', error);
+    logger.error('Error evaluating prompt:', error);
     res.status(500).json({ error: 'Failed to evaluate prompt', details: 'Error interno' });
   }
 });

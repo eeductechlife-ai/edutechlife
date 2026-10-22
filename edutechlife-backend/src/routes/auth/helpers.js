@@ -1,4 +1,5 @@
 const supabase = require('../../db/supabase');
+const logger = require('../../utils/logger');
 
 const OAUTH_PROVIDERS = {
   google: {
@@ -87,12 +88,12 @@ async function ensureProfileRow(userId, email, extra = {}) {
       .maybeSingle();
 
     if (error) {
-      console.error('ensureProfileRow insert failed:', error.message);
+      logger.error('ensureProfileRow insert failed:', error.message);
       return null;
     }
     return inserted;
   } catch (err) {
-    console.error('ensureProfileRow unexpected error:', err.message);
+    logger.error('ensureProfileRow unexpected error:', err.message);
     return null;
   }
 }
@@ -115,7 +116,7 @@ async function resolveEmailFromIdentifier(identifier) {
       .maybeSingle();
     return data?.email ? data.email.toLowerCase() : null;
   } catch (err) {
-    console.error('resolveEmailFromIdentifier failed:', err.message);
+    logger.error('resolveEmailFromIdentifier failed:', err.message);
     return null;
   }
 }

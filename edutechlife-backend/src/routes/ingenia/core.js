@@ -5,6 +5,7 @@ const { assertAuthIdAccess } = require('../../middleware/ownership');
 const { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary } = require('../../services/weeklyReport');
 const { sendEmail } = require('../../services/emailService');
 const { getStudentMastery } = require('../../services/competencyMastery');
+const logger = require('../../utils/logger');
 
 const routeLogger = (req) => req.log || console;
 const router = Router();
@@ -42,7 +43,7 @@ router.get('/data/:userId', requireAuth, async (req, res) => {
 
     res.json(data.data);
   } catch (e) {
-    console.error('Error fetching smartboard data:', e);
+    logger.error('Error fetching smartboard data:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -89,7 +90,7 @@ router.get('/progress/:userId', requireAuth, async (req, res) => {
       vakResult: kidData.vakResult ?? null,
     });
   } catch (e) {
-    console.error('Error fetching smartboard progress:', e);
+    logger.error('Error fetching smartboard progress:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -193,7 +194,7 @@ router.post('/weekly-report', requireAuth, async (req, res) => {
       mastery: masterySummary,
     });
   } catch (e) {
-    console.error('Error generando reporte semanal:', e);
+    logger.error('Error generando reporte semanal:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -260,7 +261,7 @@ router.get('/wellbeing-status', requireAuth, async (req, res) => {
       status: highAlerts > 0 ? 'attention' : 'calm',
     });
   } catch (e) {
-    console.error('Error obteniendo estado de bienestar:', e);
+    logger.error('Error obteniendo estado de bienestar:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -382,7 +383,7 @@ router.post('/timetable', requireAuth, async (req, res) => {
 
     return res.json({ timetableId, slotsCount: savedSlots.length, slots: savedSlots });
   } catch (e) {
-    console.error('[timetable POST] Error:', e.message);
+    logger.error('[timetable POST] Error:', e.message);
     return res.status(500).json({ error: e.message || 'Error guardando horario' });
   }
 });

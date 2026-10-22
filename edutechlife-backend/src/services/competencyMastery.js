@@ -1,5 +1,6 @@
 const { createClient } = require("@supabase/supabase-js");
 const { getDbaForSubjectGrade } = require("./dbaCatalog");
+const logger = require('../utils/logger');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -87,7 +88,7 @@ async function batchUpdateMastery(studentId, entries) {
   const results = await Promise.all(
     entries.map(({ competencyId, score }) =>
       updateCompetencyMastery(studentId, competencyId, score).catch((e) => {
-        console.error(`[Mastery] update failed for ${competencyId}:`, e.message);
+        logger.error(`[Mastery] update failed for ${competencyId}:`, e.message);
         return { competencyId, error: e.message };
       }),
     ),

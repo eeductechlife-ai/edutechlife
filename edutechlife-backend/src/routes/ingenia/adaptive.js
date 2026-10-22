@@ -20,6 +20,7 @@ const {
   getCompetencyIdsForSubject,
 } = require('../../services/competencyMastery');
 const { runAllDetectors, resolveWarning } = require('../../services/earlyWarning');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -31,7 +32,7 @@ router.get('/adaptive/state', requireAuth, requireStudentAccess, async (req, res
     const state = await getStudentState(studentId);
     res.json({ state });
   } catch (e) {
-    console.error('[Adaptive state]', e.message);
+    logger.error('[Adaptive state]', e.message);
     res.status(500).json({ error: 'Error getting student state' });
   }
 });
@@ -44,7 +45,7 @@ router.get('/adaptive/next-action', requireAuth, requireStudentAccess, async (re
     const state = await getStudentState(studentId);
     res.json({ action: getNextBestAction(state), recommendations: generateRecommendations(state) });
   } catch (e) {
-    console.error('[Adaptive next-action]', e.message);
+    logger.error('[Adaptive next-action]', e.message);
     res.status(500).json({ error: 'Error getting next action' });
   }
 });
@@ -61,7 +62,7 @@ router.post('/adaptive/daily-plan', requireAuth, requireStudentAccess, async (re
     await saveLearningPlan(studentId, plan, 'daily');
     res.json({ plan });
   } catch (e) {
-    console.error('[Adaptive daily-plan]', e.message);
+    logger.error('[Adaptive daily-plan]', e.message);
     res.status(500).json({ error: 'Error generating daily plan' });
   }
 });
@@ -78,7 +79,7 @@ router.post('/adaptive/weekly-plan', requireAuth, requireStudentAccess, async (r
     await saveLearningPlan(studentId, plan, 'weekly');
     res.json({ plan });
   } catch (e) {
-    console.error('[Adaptive weekly-plan]', e.message);
+    logger.error('[Adaptive weekly-plan]', e.message);
     res.status(500).json({ error: 'Error generating weekly plan' });
   }
 });
@@ -95,7 +96,7 @@ router.post('/adaptive/improvement-plan', requireAuth, requireStudentAccess, asy
     await saveLearningPlan(studentId, { ...plan, type: 'monthly' });
     res.json({ plan });
   } catch (e) {
-    console.error('[Adaptive improvement-plan]', e.message);
+    logger.error('[Adaptive improvement-plan]', e.message);
     res.status(500).json({ error: 'Error generando el plan' });
   }
 });
@@ -111,7 +112,7 @@ router.post('/adaptive/improvement-plan/resequence', requireAuth, requireStudent
     await saveLearningPlan(studentId, { ...plan, type: 'monthly' });
     res.json({ plan, changed });
   } catch (e) {
-    console.error('[Adaptive improvement-plan resequence]', e.message);
+    logger.error('[Adaptive improvement-plan resequence]', e.message);
     res.status(500).json({ error: 'Error actualizando el plan' });
   }
 });
@@ -124,7 +125,7 @@ router.post('/adaptive/recommendations', requireAuth, requireStudentAccess, asyn
     const { recommendations, persisted } = await recommendContent(studentId, state);
     res.json({ recommendations, persisted });
   } catch (e) {
-    console.error('[Adaptive recommendations]', e.message);
+    logger.error('[Adaptive recommendations]', e.message);
     res.status(500).json({ error: 'Error generating recommendations' });
   }
 });
@@ -137,7 +138,7 @@ router.get('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, r
     const records = await getStudentMastery(studentId, subject || undefined);
     res.json({ mastery: records });
   } catch (e) {
-    console.error('[Mastery GET]', e.message);
+    logger.error('[Mastery GET]', e.message);
     res.status(500).json({ error: 'Error retrieving mastery data' });
   }
 });
@@ -166,7 +167,7 @@ router.post('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, 
     const result = await updateCompetencyMastery(studentId, competencyId, score);
     res.json(result);
   } catch (e) {
-    console.error('[Mastery POST]', e.message);
+    logger.error('[Mastery POST]', e.message);
     res.status(500).json({ error: 'Error updating mastery' });
   }
 });
@@ -182,7 +183,7 @@ router.get('/adaptive/warnings', requireAuth, requireStudentAccess, async (req, 
     const warnings = await runAllDetectors(studentId);
     res.json({ warnings });
   } catch (e) {
-    console.error('[EarlyWarning]', e.message);
+    logger.error('[EarlyWarning]', e.message);
     res.status(500).json({ error: 'Error ejecutando detectores' });
   }
 });

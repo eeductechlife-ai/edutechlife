@@ -8,6 +8,7 @@
  */
 
 const supabase = require('../db/supabase');
+const logger = require('../utils/logger');
 
 /**
  * Verify JWT token from Authorization header
@@ -46,7 +47,7 @@ async function requireAdmin(req, res, next) {
 
     next();
   } catch (error) {
-    console.error('[adminAuth] Error:', error.message);
+    logger.error('[adminAuth] Error:', error.message);
     res.status(401).json({ error: 'Authentication failed' });
   }
 }

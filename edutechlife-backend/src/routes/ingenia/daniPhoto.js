@@ -4,6 +4,7 @@ const { extractTextWithGoogle } = require('../../services/googleOcr');
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { visionLimiter } = require('../../middleware/rateLimiter');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -62,7 +63,7 @@ router.post('/dani/photo', requireAuth, requireVerifiedParentalConsent, visionLi
       const text = await transcribeWithVision(imageBase64, visionModel);
       if (text) return res.json({ text: text.slice(0, MAX_TEXT_CHARS), source: 'vision' });
     } catch (e) {
-      console.warn('[dani/photo] vision failed, falling back to OCR:', e.status || '', e.message);
+      logger.warn('[dani/photo] vision failed, falling back to OCR:', e.status || '', e.message);
     }
   }
 
@@ -70,7 +71,7 @@ router.post('/dani/photo', requireAuth, requireVerifiedParentalConsent, visionLi
     const text = await extractTextWithGoogle(imageBase64);
     res.json({ text: text.slice(0, MAX_TEXT_CHARS), source: 'ocr' });
   } catch (e) {
-    console.error('[dani/photo] OCR failed:', e.message);
+    logger.error('[dani/photo] OCR failed:', e.message);
     res.status(e.status && e.status !== 500 ? e.status : 500).json({ error: 'No pude leer la foto. Intenta de nuevo.' });
   }
 });

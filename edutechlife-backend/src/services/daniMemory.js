@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 /**
  * Dani's long-term memory about a student.
  *
@@ -135,7 +136,7 @@ async function saveDaniMemory(supabase, row) {
   const { error } = await supabase.from('dani_memory').upsert(row, { onConflict: 'student_id' });
   // 42P01: table not created in this environment yet.
   if (error && error.code !== '42P01') {
-    console.error('[daniMemory] save failed:', error.message);
+    logger.error('[daniMemory] save failed:', error.message);
   }
 }
 

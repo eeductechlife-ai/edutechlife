@@ -6,6 +6,7 @@
 const express = require('express');
 const { requireAdmin } = require('../middleware/adminAuth');
 const supabase = require('../db/supabase');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ router.get('/users', requireAdmin, async (req, res) => {
     });
 
     if (error) {
-      console.error('[admin/users] listUsers error:', error.message);
+      logger.error('[admin/users] listUsers error:', error.message);
       return res.status(500).json({ error: 'Failed to list users' });
     }
 
@@ -66,7 +67,7 @@ router.get('/users', requireAdmin, async (req, res) => {
       hasMore: users.length === perPage,
     });
   } catch (err) {
-    console.error('[admin/users] unexpected error:', err.message);
+    logger.error('[admin/users] unexpected error:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -91,7 +92,7 @@ router.patch('/users/:userId/role', requireAdmin, async (req, res) => {
     });
 
     if (error) {
-      console.error('[admin/users/role] updateUserById error:', error.message);
+      logger.error('[admin/users/role] updateUserById error:', error.message);
       return res.status(500).json({ error: 'Failed to update user role' });
     }
 
@@ -101,7 +102,7 @@ router.patch('/users/:userId/role', requireAdmin, async (req, res) => {
       role: data.user.app_metadata?.role || null,
     });
   } catch (err) {
-    console.error('[admin/users/role] unexpected error:', err.message);
+    logger.error('[admin/users/role] unexpected error:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -134,7 +135,7 @@ router.get('/analytics/students', requireAdmin, async (req, res) => {
       dataPoints: levels.length,
     });
   } catch (err) {
-    console.error('[admin/analytics/students] error:', err.message);
+    logger.error('[admin/analytics/students] error:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -274,7 +275,7 @@ router.get('/analytics/smartboard', requireAdmin, async (req, res) => {
       meta: { days, since, generatedAt: new Date().toISOString() },
     });
   } catch (err) {
-    console.error('[admin/analytics/smartboard] error:', err.message);
+    logger.error('[admin/analytics/smartboard] error:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -423,7 +424,7 @@ router.get('/educator/students', requireAdmin, async (req, res) => {
 
     res.json({ students: enriched, summary, ...(institutionId ? { institution_id: institutionId } : {}) });
   } catch (err) {
-    console.error('[admin/educator/students] error:', err.message);
+    logger.error('[admin/educator/students] error:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

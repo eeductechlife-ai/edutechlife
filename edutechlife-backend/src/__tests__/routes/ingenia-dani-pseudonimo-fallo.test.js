@@ -41,10 +41,8 @@ describe('DANI_PSEUDONIMO encendido con fallo del reemplazo', () => {
     expect(/(?<![\p{L}\p{N}_])Sol(?![\p{L}\p{N}_])/u.test(enviado)).toBe(false);
     expect(enviado).toContain('Dirígete al estudiante de tú');
     expect(h.llamadas[0].messages.at(-1).content).toBe('Hola, tú. ¿Me ayudas con fracciones?');
-    expect(console.warn).toHaveBeenCalledWith(
-      expect.stringContaining('[DaniPseudonimo]'),
-      expect.stringContaining('patrón roto'),
-    );
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('[DaniPseudonimo] '));
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('patrón roto'));
     const chunks = eventosSSE(r.text).filter((e) => e.chunk);
     expect(chunks.length).toBeGreaterThan(0);
   });

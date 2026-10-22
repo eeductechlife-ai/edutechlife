@@ -1,5 +1,6 @@
+const logger = require('../utils/logger');
 function errorHandler(err, req, res, _next) {
-  console.error(`[${new Date().toISOString()}] ${err.message}`, err.stack);
+  logger.error(`[${new Date().toISOString()}] ${err.message}`, err.stack);
 
   if (err.message.startsWith('Origen no permitido')) {
     return res.status(403).json({ error: 'Origen no permitido' });

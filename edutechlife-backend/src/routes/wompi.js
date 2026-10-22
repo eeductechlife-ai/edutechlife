@@ -79,7 +79,7 @@ router.post('/events', async (req, res) => {
     });
     if (result.error) {
       // 500 para que Wompi reintente: el pago está aprobado y el plan no quedó activo.
-      console.error('Wompi: no se pudo activar el plan', activation.planId, result.error);
+      logger.error('Wompi: no se pudo activar el plan', activation.planId, result.error);
       return res.status(500).json({ error: 'No se pudo activar el plan' });
     }
     if (result.paidUntil) {
@@ -116,7 +116,7 @@ router.post('/link-cobro', requireAdmin, cobroLinkLimiter, async (req, res) => {
   try {
     usuario = await findAuthUserByEmail(email);
   } catch (err) {
-    console.error('[wompi/link-cobro] no se pudo buscar el usuario:', err.message);
+    logger.error('[wompi/link-cobro] no se pudo buscar el usuario:', err.message);
     return res.status(500).json({ error: 'No se pudo buscar el usuario' });
   }
   if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });

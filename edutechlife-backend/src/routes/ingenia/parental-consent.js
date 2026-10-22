@@ -4,6 +4,7 @@ const supabase = require('../../db/supabase');
 const { requireAuth } = require('../../middleware/auth');
 const { parentalInviteLimiter } = require('../../middleware/rateLimiter');
 const { sendConsentVerificationEmail } = require('../../services/emailService');
+const logger = require('../../utils/logger');
 
 const router = Router();
 
@@ -44,7 +45,7 @@ router.post('/parental-consent', requireAuth, parentalInviteLimiter, async (req,
       .select();
 
     if (error) {
-      console.error('Error inserting parental consent:', error);
+      logger.error('Error inserting parental consent:', error);
       return res.status(500).json({ error: 'Failed to save parental consent' });
     }
 
@@ -56,7 +57,7 @@ router.post('/parental-consent', requireAuth, parentalInviteLimiter, async (req,
         token: verificationToken,
       });
     } catch (emailError) {
-      console.error('Error sending consent verification email:', emailError.message);
+      logger.error('Error sending consent verification email:', emailError.message);
     }
 
     // No exponer el verification_token al cliente; solo el estado.
@@ -65,7 +66,7 @@ router.post('/parental-consent', requireAuth, parentalInviteLimiter, async (req,
       data: { id: data[0].id, verification_status: 'pending' }
     });
   } catch (e) {
-    console.error('Error processing parental consent:', e);
+    logger.error('Error processing parental consent:', e);
     res.status(500).json({ error: 'Failed to process parental consent' });
   }
 });
@@ -95,7 +96,7 @@ router.post('/parental-consent/verify', async (req, res) => {
       verification_status: data.verification_status,
     });
   } catch (e) {
-    console.error('Error verifying parental consent:', e);
+    logger.error('Error verifying parental consent:', e);
     res.status(500).json({ error: 'Error al verificar el consentimiento' });
   }
 });
@@ -168,12 +169,12 @@ router.post('/parental-consent/request', requireAuth, async (req, res) => {
     try {
       await sendConsentVerificationEmail({ parentEmail: parentUser.email, studentAge: age, token: verificationToken });
     } catch (emailError) {
-      console.error('Error sending consent verification email:', emailError.message);
+      logger.error('Error sending consent verification email:', emailError.message);
     }
 
     res.status(201).json({ verification_status: 'pending' });
   } catch (e) {
-    console.error('Error auto-requesting parental consent (non-blocking):', e.message);
+    logger.error('Error auto-requesting parental consent (non-blocking):', e.message);
     res.status(200).json({ verification_status: 'none' });
   }
 });
@@ -208,7 +209,7 @@ router.get('/parental-consent/status', requireAuth, async (req, res) => {
         : null,
     });
   } catch (e) {
-    console.error('Error reading parental consent status:', e);
+    logger.error('Error reading parental consent status:', e);
     res.status(500).json({ error: 'Error al consultar el consentimiento' });
   }
 });
@@ -288,7 +289,7 @@ router.get('/parental-consent/verify', async (req, res) => {
         registerUrl,
       ));
   } catch (e) {
-    console.error('Error verifying parental consent (GET):', e);
+    logger.error('Error verifying parental consent (GET):', e);
     res.status(500).json({ error: 'Error al verificar el consentimiento' });
   }
 });

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { requireAuth, requireVerifiedParentalConsent } = require('../middleware/auth');
 const achievementService = require('../services/achievementService');
+const logger = require('../utils/logger');
 
 const router = Router();
 
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
     });
     res.json({ achievements });
   } catch (e) {
-    console.error('Error fetching achievements:', e);
+    logger.error('Error fetching achievements:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -39,7 +40,7 @@ router.get('/:id', async (req, res) => {
     const stats = await achievementService.getAchievementStats(id);
     res.json({ achievement, stats });
   } catch (e) {
-    console.error('Error fetching achievement:', e);
+    logger.error('Error fetching achievement:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -66,7 +67,7 @@ router.get('/student/:userId', requireAuth, async (req, res) => {
       count: achievements.length,
     });
   } catch (e) {
-    console.error('Error fetching student achievements:', e);
+    logger.error('Error fetching student achievements:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -83,7 +84,7 @@ router.post('/:id/claim', requireAuth, async (req, res) => {
     const result = await achievementService.claimAchievementReward(userId, id);
     res.json({ success: result.claimed, pointsAwarded: result.points });
   } catch (e) {
-    console.error('Error claiming achievement reward:', e);
+    logger.error('Error claiming achievement reward:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -98,7 +99,7 @@ router.post('/:id/view', requireAuth, async (req, res) => {
     await achievementService.markAchievementViewed(id);
     res.json({ success: true });
   } catch (e) {
-    console.error('Error marking achievement viewed:', e);
+    logger.error('Error marking achievement viewed:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -127,7 +128,7 @@ router.post('/check/:userId', requireAuth, async (req, res) => {
       achievements: unlockedList,
     });
   } catch (e) {
-    console.error('Error checking achievements:', e);
+    logger.error('Error checking achievements:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
@@ -142,7 +143,7 @@ router.get('/rarity/:rarity', async (req, res) => {
     const achievements = await achievementService.getAchievementsByRarity(rarity);
     res.json({ achievements, count: achievements.length });
   } catch (e) {
-    console.error('Error fetching achievements by rarity:', e);
+    logger.error('Error fetching achievements by rarity:', e);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
