@@ -5,6 +5,7 @@ const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { detectCrisis } = require('../../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident } = require('../../services/emailService');
+const adultoObligatorio = require('../../services/adultoObligatorio');
 const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../../services/daniOrchestrator');
 const { validateInput, detectEmotionalState, sanitizeOutput } = require('../../services/aiSafetyGateway');
 const { createMemoriaFilter, parseMemoria, buildMemoryRow, saveDaniMemory } = require('../../services/daniMemory');
@@ -88,6 +89,56 @@ async function pseudonimoDelUsuario(userId) {
   }
 }
 
+/**
+ * Adultos a quienes avisar de una crisis y edad del estudiante. Primero el
+ * modelo de adulto obligatorio (vínculo activo o invitación pendiente); como
+ * respaldo, parent_consents. Una fuente que falla no impide probar la siguiente.
+ */
+async function destinatariosCrisis(userId) {
+  let correos = [];
+  let edad = null;
+  try {
+    correos = await adultoObligatorio.correosAdultosResponsables(userId);
+    edad = await adultoObligatorio.edadDelEstudiante(userId);
+  } catch (e) {
+    console.error('[Crisis Escalation] no se pudo leer el adulto vinculado', { studentId: userId, code: e.code });
+  }
+
+  if (!correos.length || edad === null) {
+    const { data: consentimiento } = await supabase
+      .from('parent_consents')
+      .select('parent_email, student_age')
+      .eq('student_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!correos.length && consentimiento?.parent_email) correos = [consentimiento.parent_email];
+    if (edad === null) edad = consentimiento?.student_age ?? null;
+  }
+  return { correos, edad };
+}
+
+/** Avisa a los adultos responsables. Nunca hace fallar el chat. */
+async function escalarCrisis(userId, contenido) {
+  try {
+    const { correos, edad } = await destinatariosCrisis(userId);
+    if (!correos.length) {
+      // Sin PII: solo el id, para que el equipo lo atienda a mano.
+      console.error('[Crisis Escalation] crisis alta sin adulto a quien avisar', { studentId: userId });
+      return;
+    }
+    for (const correo of correos) {
+      const envio = await sendCrisisAlert(correo, 'Estudiante', edad, contenido, 'high');
+      if (!envio?.success) {
+        console.error('[Crisis Escalation] no se pudo enviar la alerta', { studentId: userId });
+      }
+      await logCrisisIncident(supabase, userId, edad, contenido, 'high', correo);
+    }
+  } catch (e) {
+    console.error('[Crisis Escalation Error]', { studentId: userId, message: e.message });
+  }
+}
+
 router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { messages, context } = req.body;
 
@@ -153,42 +204,7 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
 
   // If high-risk crisis detected, handle escalation
   if (crisisDetection.level === 'high') {
-    try {
-      // Get parent email from parent_consents table
-      const { data: consentData, error: consentError } = await supabase
-        .from('parent_consents')
-        .select('parent_email, student_age')
-        .eq('student_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-
-      if (consentData && consentData.parent_email) {
-        // Send crisis alert to parent
-        const emailResult = await sendCrisisAlert(
-          consentData.parent_email,
-          'Estudiante', // Would come from user metadata
-          consentData.student_age,
-          lastUserMessage,
-          'high'
-        );
-
-        // Log incident to database
-        await logCrisisIncident(
-          supabase,
-          userId,
-          consentData.student_age,
-          lastUserMessage,
-          'high',
-          consentData.parent_email
-        );
-
-        console.log('[Crisis Escalation] Email sent:', emailResult);
-      }
-    } catch (e) {
-      console.error('[Crisis Escalation Error]', e);
-      // Don't fail the chat request if escalation fails
-    }
+    await escalarCrisis(userId, lastUserMessage);
   }
 
   const contextoModelo = !pseudo ? context : pseudo.sinPerfil ? undefined : redactarProfundo(context, pseudo);
@@ -443,21 +459,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
 
   // 8. Crisis escalation (same as existing /chat/stream)
   if (crisisDetection.level === 'high') {
-    try {
-      const { data: consentData } = await supabase
-        .from('parent_consents')
-        .select('parent_email, student_age')
-        .eq('student_id', req.userId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-      if (consentData?.parent_email) {
-        await sendCrisisAlert(consentData.parent_email, 'Estudiante', consentData.student_age, sanitized, 'high');
-        await logCrisisIncident(supabase, req.userId, consentData.student_age, sanitized, 'high', consentData.parent_email);
-      }
-    } catch (e) {
-      console.error('[Dani2 Crisis]', e.message);
-    }
+    await escalarCrisis(req.userId, sanitized);
   }
 
   try {
