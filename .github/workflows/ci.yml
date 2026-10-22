@@ -42,13 +42,13 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
 
       - name: Cache Vite deps
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules/.vite
           key: vite-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -105,7 +105,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -136,7 +136,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -204,7 +204,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -235,7 +235,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -310,7 +310,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -346,7 +346,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-frontend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
@@ -377,7 +377,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-nm
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: edutechlife-backend/node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-backend/package-lock.json') }}
