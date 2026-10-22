@@ -9,18 +9,17 @@ const router = Router();
 
 /**
  * POST /api/auth/parent-register
- * Crea una cuenta de padre vinculada al email del estudiante.
- * El padre usa el mismo email pero diferente contraseña.
+ * RETIRADO (auditoría S10, 2026-10-22): ya no se crean cuentas de padre con el
+ * alias «+padre» del correo del estudiante. El padre se registra desde la
+ * invitación que llega a su correo (ver /api/auth/adulto-menor/registrar).
+ * Las cuentas de padre que ya existen siguen entrando por /parent-login.
  */
-router.post('/parent-register', async (req, res) => {
-  const { studentEmail, parentPassword, parentName, invitationToken } = req.body || {};
-  try {
-    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName, invitationToken });
-    res.status(201).json(result);
-  } catch (e) {
-    console.error('Parent register error:', e.message);
-    res.status(400).json({ error: e.message });
-  }
+router.post('/parent-register', (req, res) => {
+  res.status(410).json({
+    error:
+      'El registro de padres con alias ya no está disponible. Revisa tu correo: ahí llega la invitación de tu hijo/a para crear tu cuenta de padre, madre o acudiente.',
+    motivo: 'alias_retirado',
+  });
 });
 
 /**
