@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 import JsonLd from "./JsonLd";
 
-const SITE_URL = "https://edutechlife.co";
+const SITE_URL = "https://www.edutechlife.co";
 
 const SEO = ({
   title,
