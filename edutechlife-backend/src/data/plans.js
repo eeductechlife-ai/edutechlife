@@ -83,6 +83,8 @@ const PLANS = [
     price: 14900000, // "desde": precio base del plan
     currency: 'cop',
     interval: 'month',
+    // Lleva valoración gratis antes del cobro: solo se cobra con /link-cobro.
+    requiereValoracion: true,
     unlisted: true,
   },
   {
@@ -91,6 +93,8 @@ const PLANS = [
     price: 24900000,
     currency: 'cop',
     interval: 'month',
+    // Lleva valoración gratis antes del cobro: solo se cobra con /link-cobro.
+    requiereValoracion: true,
     unlisted: true,
   },
   {
