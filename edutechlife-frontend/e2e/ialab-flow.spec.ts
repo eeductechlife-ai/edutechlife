@@ -6,8 +6,8 @@ const MODULES = [
   'Artesano Digital: Prompts',
   'Arquitecto Digital: ChatGPT',
   'Detective de Datos: Gemini',
-  'Alquimista Digital: NotebookLM',
-  'Guardián Digital: Ética IA',
+  'Alquimista Digital: Gemini Notebook',
+  'Director de Orquesta: Claude',
 ];
 
 test.describe('IALab', () => {

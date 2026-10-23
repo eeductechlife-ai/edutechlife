@@ -9,7 +9,7 @@
  * Módulo 2 → chatgpt    (ChatGPT: verde signature, Söhne/Inter)
  * Módulo 3 → gemini     (Gemini: azul Google, Google Sans, gradiente)
  * Módulo 4 → notebooklm (NotebookLM: azul profundo + amber podcast)
- * Módulo 5 → ethics     (Editorial serio: rojo + amber)
+ * Módulo 5 → claude     (Claude: entorno de chat cálido, acento terracota)
  *
  * Cualquier ID no reconocido cae en 'default' — nunca romper la UI.
  */
@@ -19,6 +19,7 @@ export const THEME_NAMES = /** @type {const} */ ([
   "chatgpt",
   "gemini",
   "notebooklm",
+  "claude",
 ]);
 
 // El módulo 5 (Ética) usa el tema `default`: el rojo se reserva para
@@ -29,13 +30,13 @@ const MODULE_TO_THEME = {
   2: "chatgpt",
   3: "gemini",
   4: "notebooklm",
-  5: "default",
+  5: "claude",
 };
 
 /**
  * Devuelve el nombre de tema para un módulo dado.
  * @param {number|string|null|undefined} moduleId
- * @returns {"default"|"chatgpt"|"gemini"|"notebooklm"}
+ * @returns {"default"|"chatgpt"|"gemini"|"notebooklm"|"claude"}
  */
 export function mapModuleToTheme(moduleId) {
   const id = Number(moduleId);
@@ -64,8 +65,14 @@ export const THEME_META = {
     tagline: "Diseño inspirado en Gemini para que domines la herramienta real",
   },
   notebooklm: {
-    label: "NotebookLM",
-    inspiredBy: "Google NotebookLM",
-    tagline: "Diseño inspirado en NotebookLM para que domines la herramienta real",
+    label: "Gemini Notebook",
+    inspiredBy: "Google Gemini Notebook",
+    tagline:
+      "Diseño inspirado en Gemini Notebook para que domines la herramienta real",
+  },
+  claude: {
+    label: "Claude",
+    inspiredBy: "Claude",
+    tagline: "Diseño inspirado en Claude para que domines la herramienta real",
   },
 };

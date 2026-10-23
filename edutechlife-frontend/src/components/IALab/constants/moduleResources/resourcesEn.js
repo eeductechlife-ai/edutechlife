@@ -1,5 +1,5 @@
+// Contenido del curso IALab (generado desde el parche del rediseño 2026-10).
 const RESOURCES_EN = {
-  // MODULE 1: THE DIGITAL ARTISAN — PROMPT ENGINEERING
   "The Artisan's Foundations: What is Generative AI?": {
     title: "The Artisan's Foundations: What is Generative AI?",
     description:
@@ -36,9 +36,21 @@ const RESOURCES_EN = {
         thumbnailType: "premium",
         fullscreen: true,
       },
+      {
+        id: "fundamentals-guide-1",
+        type: "pdf",
+        title: "Guide: What generative AI is",
+        url: "/ialab-resources/modulo1/guia-fundamentos-en.pdf",
+        pages: 4,
+        format: "PDF",
+        size: "0.63 MB",
+        description:
+          "How it works, what it can and cannot do, and how to use it with judgment. Read after the video.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
     ],
   },
-
   "The Artisan's Chisel: What is a Prompt?": {
     title: "The Artisan's Chisel: What is a Prompt?",
     description:
@@ -66,10 +78,10 @@ const RESOURCES_EN = {
         id: "prompt-guide-1",
         type: "pdf",
         title: "Guide: Anatomy of a Prompt",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
-        pages: 12,
+        url: "/ialab-resources/modulo1/guia-prompt-en.pdf",
+        pages: 5,
         format: "PDF",
-        size: "249 KB",
+        size: "0.77 MB",
         description:
           "Your artisan's reference manual: proven techniques, ready-to-use examples, and craft secrets that will transform how you work with AI.",
         thumbnailType: "premium",
@@ -85,13 +97,51 @@ const RESOURCES_EN = {
         difficulty: "Beginner",
         fullscreen: true,
       },
+    ],
+  },
+  "The Guardian's Shield: What You Should Not Share": {
+    title: "The Guardian's Shield: What You Should Not Share",
+    description:
+      "Every text you paste leaves your computer. Learn which data you never share and how to anonymize before pasting.",
+    learningObjectives: [
+      "Identify personal and sensitive data",
+      "Anonymize a text before pasting it",
+      "Know what to do if you already shared sensitive data",
+    ],
+    estimatedTime: "20 minutes",
+    difficulty: "Beginner",
+    resources: [
       {
-        id: "prompt-lab-ova-1",
-        type: "ova_interactive",
-        title: "The Hammer",
+        id: "privacy-video-1",
+        type: "video",
+        title: "Privacy and AI: What You Need to Know",
+        url: "https://www.youtube.com/embed/BoR5KjsRK9U",
+        duration: "9:20",
+        thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
+        provider: "youtube",
         description:
-          "The digital artisan's workbench: write real prompts, run them against the model, and refine until you get the exact result. Four proven techniques plus a final challenge.",
-        estimatedTime: "15 minutes",
+          "9:20 that can save your reputation. Discover the privacy risks lurking in every AI tool and how to neutralize them.",
+      },
+      {
+        id: "privacy-guide-1",
+        type: "pdf",
+        title: "AI Privacy Manual",
+        url: "/ialab-resources/modulo1/guia-privacidad-en.pdf",
+        pages: 4,
+        format: "PDF",
+        size: "0.72 MB",
+        description:
+          "7-step practical checklist to shield your privacy while maximizing artificial intelligence. Your digital survival manual.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
+      {
+        id: "privacy-ova-1",
+        type: "ova_interactive",
+        title: "The Risk Compass",
+        description:
+          "Face real risk scenarios and learn to protect your data like a guardian. Includes the ethical stars game that will test your decisions.",
+        estimatedTime: "20 minutes",
         difficulty: "Intermediate",
         interactiveElements: 5,
         thumbnailType: "premium",
@@ -99,10 +149,56 @@ const RESOURCES_EN = {
       },
     ],
   },
-
-  // ============================================================================
-  // MODULE 2: THE AUTOMATION ARCHITECT — CHATGPT POWER
-  // ============================================================================
+  "The Guardian's Oath: Ethics and Bias": {
+    title: "The Guardian's Oath: Ethics and Bias",
+    description:
+      "Ethics is practiced by deciding. You will learn to spot bias, apply three questions and disclose your use of AI.",
+    learningObjectives: [
+      "Apply the three questions: is it true? is it fair? do I disclose it?",
+      "Disclose when and how you used AI",
+      "Keep a person responsible for decisions that affect others",
+    ],
+    estimatedTime: "20 minutes",
+    difficulty: "Beginner",
+    resources: [
+      {
+        id: "ethics-video-1",
+        type: "video",
+        title: "Ethical AI: Principles and Practice",
+        url: "https://www.youtube.com/embed/idplIgnLStI",
+        duration: "6:05",
+        thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
+        provider: "youtube",
+        description:
+          "6:05 that condense everything you need to implement ethical AI in the real world. The ultimate guardian guide.",
+      },
+      {
+        id: "bias-guide-1",
+        type: "pdf",
+        title: "Etica de la Inteligencia artificial",
+        url: "/ialab-resources/modulo1/guia-etica-en.pdf",
+        pages: 5,
+        format: "PDF",
+        size: "0.63 MB",
+        description:
+          "5 pages that condense everything you need to ethically shield your relationship with AI. Required reading for guardians.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
+      {
+        id: "bias-ova-1",
+        type: "ova_interactive",
+        title: "The Mirror of Truth",
+        description:
+          "Test your guardian eye: analyze real AI responses and uncover biases most people would never notice. 6 challenges that will sharpen your instinct.",
+        estimatedTime: "15 minutes",
+        difficulty: "Intermediate",
+        interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+    ],
+  },
   "The Architect's Blueprints: Complete ChatGPT Guide": {
     title: "The Architect's Blueprints: Complete ChatGPT Guide",
     description:
@@ -131,10 +227,10 @@ const RESOURCES_EN = {
         id: "chatgpt-guide-modulo2",
         type: "pdf",
         title: "Complete ChatGPT Guide",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/Las-Herramientas-Integradas-de-ChatGPT.pdf/guia_edutechlife_modulo2.pdf",
-        pages: 12,
+        url: "/ialab-resources/modulo2/guia-chatgpt-en.pdf",
+        pages: 9,
         format: "PDF",
-        size: "4.2 MB",
+        size: "1.54 MB",
         description:
           "The architect's handbook: tips, tricks, and practical examples organized to build any project with ChatGPT. Quick reference for digital construction professionals.",
         thumbnailType: "premium",
@@ -154,7 +250,6 @@ const RESOURCES_EN = {
       },
     ],
   },
-
   "The Architect's Scaffolding: Integrated Tools": {
     title: "The Architect's Scaffolding: Integrated Tools",
     description:
@@ -172,12 +267,12 @@ const RESOURCES_EN = {
         id: "workflow-pdf-modulo2",
         type: "pdf",
         title: "Integrated ChatGPT Tools",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%202%20guia%20de%20intro/Las-Herramientas-Integradas-de-ChatGPT.pdf",
-        pages: 10,
+        url: "/ialab-resources/modulo2/guia-herramientas-chatgpt-en.pdf",
+        pages: 4,
         format: "PDF",
-        size: "4.8 MB",
+        size: "0.91 MB",
         description:
-          "Discover how Web Search, Data Analysis, DALL-E 3, and Canvas work together like a construction crew to solve complex problems.",
+          "Discover how Web Search, Data Analysis, image generation, and Canvas work together like a construction crew to solve complex problems.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -193,28 +288,15 @@ const RESOURCES_EN = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-      {
-        id: "automation-flows-ova-1",
-        type: "ova_interactive",
-        title: "The Assembly Line",
-        description:
-          "Framework + 3 practical cases: how a marketer, educator and entrepreneur use ChatGPT's integrated tools in flows that multiply their productivity.",
-        estimatedTime: "22 minutes",
-        difficulty: "Intermediate",
-        interactiveElements: 5,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
     ],
   },
-
-  "The Building's Facade: GPTs and Function Calling": {
-    title: "The Building's Facade: GPTs and Function Calling",
+  "The Building's Facade: GPTs, Projects and Agents": {
+    title: "The Building's Facade: GPTs, Projects and Agents",
     description:
-      "The facade is what the world sees — but behind it lies a complex structure that holds it up. Build custom GPTs with external API connections that work as the invisible infrastructure of your masterpiece.",
+      "The facade is what the world sees. Build custom GPTs with your own instructions and knowledge, organize your work in Projects, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
     learningObjectives: [
       "Create custom GPTs as reusable building modules",
-      "Configure Function Calling actions to connect with external APIs",
+      "Organize a Project with files and instructions for one piece of work",
       "Share your creations and learn from the community of digital architects",
       "Evaluate when to use a custom GPT vs. standard ChatGPT construction",
     ],
@@ -222,14 +304,15 @@ const RESOURCES_EN = {
     difficulty: "Advanced",
     resources: [
       {
-        id: "gpts-guide-1",
-        type: "image",
-        title: "GPTs and Actions Guide",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%20de%20aplicaciones/WhatsApp%20Image%202026-05-07%20at%2020.35.40.jpeg",
-        format: "JPEG",
-        size: "2.1 MB",
+        id: "facade-guide-1",
+        type: "pdf",
+        title: "Guide: GPTs, Projects and agents",
+        url: "/ialab-resources/modulo2/guia-fachada-en.pdf",
+        pages: 4,
+        format: "PDF",
+        size: "0.90 MB",
         description:
-          "Quick visual guide to build, configure, and publish your first custom GPT. The digital architect's executive blueprints.",
+          "When to use a Project, a GPT or an agent, and how to test a GPT before sharing it.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -247,10 +330,6 @@ const RESOURCES_EN = {
       },
     ],
   },
-
-  // ============================================================================
-  // MODULE 3: MASTER GEMINI
-  // ============================================================================
   "The Multimodal Detective Awakens": {
     title: "The Multimodal Detective Awakens",
     description:
@@ -268,7 +347,7 @@ const RESOURCES_EN = {
         id: "gemini-video-1",
         type: "video",
         title: "Gemini: Accelerated Detective Training",
-        url: "https://www.youtube.com/embed/XV-2xnFMJqI",
+        url: "https://www.youtube.com/embed/Y5-5dI3Iero",
         duration: "7:34",
         thumbnail: "https://img.youtube.com/vi/XV-2xnFMJqI/maxresdefault.jpg",
         provider: "youtube",
@@ -279,30 +358,28 @@ const RESOURCES_EN = {
         id: "gemini-guide-1",
         type: "pdf",
         title: "Field Guide: Introduction to Gemini",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_gemini_modulo3.pdf",
-        pages: 11,
+        url: "/ialab-resources/modulo3/guia-gemini-en.pdf",
+        pages: 6,
         format: "PDF",
-        size: "2.8 MB",
+        size: "0.79 MB",
         description:
           "The detective's field manual: learn to use Gemini to study, work, and create content with the precision of a professional investigator.",
         thumbnailType: "premium",
         immersiveView: true,
       },
       {
-        id: "gemini-ova-1",
+        id: "gemini-multimodal-ova-1",
         type: "ova_interactive",
-        title: "Lab: Test Your Multimodal Magnifying Glass",
-        description:
-          "Put your detective skills to the test: feed Gemini images, texts, and audio and watch it analyze everything in real time.",
+        title: "Testing the Magnifying Glass",
+        description: null,
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
-        interactiveElements: 5,
+        interactiveElements: 6,
         thumbnailType: "premium",
         fullscreen: true,
       },
     ],
   },
-
   "Grounding: When Evidence Touches the Real World": {
     title: "Grounding: When Evidence Touches the Real World",
     description:
@@ -317,23 +394,13 @@ const RESOURCES_EN = {
     difficulty: "Intermediate",
     resources: [
       {
-        id: "workspace-video-1",
-        type: "video",
-        title: "Gemini in Google Workspace: Detective's Complete Guide",
-        url: "https://www.youtube.com/embed/0pQKzGzZjZ0",
-        duration: "20:15",
-        thumbnail: "https://img.youtube.com/vi/0pQKzGzZjZ0/maxresdefault.jpg",
-        provider: "youtube",
-        description:
-          "Learn to integrate your digital magnifying glass into every Google tool and automate your daily investigations in minutes.",
-      },
-      {
         id: "workspace-template-1",
-        type: "document",
-        title: "Detective's Toolkit: Google Workspace Templates",
-        url: "/templates/gemini-workspace-templates.json",
-        format: "JSON",
-        size: "2.1 MB",
+        type: "pdf",
+        title: "Gemini in Practice: Field Exercises",
+        url: "/ialab-resources/modulo3/practica-gemini-en.pdf",
+        pages: 4,
+        format: "PDF",
+        size: "0.72 MB",
         description:
           "Templates ready for action in every Google Workspace app. Just copy, paste, and customize for each case.",
       },
@@ -351,7 +418,6 @@ const RESOURCES_EN = {
       },
     ],
   },
-
   "Deep Research: The Forensic Toolkit": {
     title: "Deep Research: The Forensic Toolkit",
     description:
@@ -369,7 +435,7 @@ const RESOURCES_EN = {
         id: "gemini-cases-video-1",
         type: "video",
         title: "Real Cases: Digital Detectives in Action",
-        url: "https://www.youtube.com/embed/1pG8VvJGQgE",
+        url: "https://www.youtube.com/embed/XAshixrvG5k",
         duration: "16:30",
         thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
         provider: "youtube",
@@ -377,29 +443,17 @@ const RESOURCES_EN = {
           "Companies and professionals reveal how Gemini transformed their investigation methods. Results that look like magic — but it's all method.",
       },
       {
-        id: "gemini-cases-guide-1",
+        id: "deep-research-guide-1",
         type: "pdf",
-        title: "Case Files: 24 Pages of Solved Mysteries",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_casos_de_uso_gemini_modulo3.pdf",
-        pages: 24,
+        title: "Guide: Deep Research, step by step",
+        url: "/ialab-resources/modulo3/guia-deep-research-en.pdf",
+        pages: 4,
         format: "PDF",
-        size: "5.1 MB",
+        size: "0.60 MB",
         description:
-          "20 real cases solved with the exact prompts they used. Learn from the best detectives in the digital world.",
+          "Four stages to research with evidence: question, plan, verification and writing with stated limits.",
         thumbnailType: "premium",
         immersiveView: true,
-      },
-      {
-        id: "gemini-cases-ova-1",
-        type: "ova_interactive",
-        title: "The Open Case",
-        description:
-          "Face 6 real cases — from analyzing a contract to debunking fake news — and solve them using Gemini as your investigation partner.",
-        estimatedTime: "25 minutes",
-        difficulty: "Advanced",
-        interactiveElements: 6,
-        thumbnailType: "premium",
-        fullscreen: true,
       },
       {
         id: "gemini-deep-research-ova-1",
@@ -415,12 +469,8 @@ const RESOURCES_EN = {
       },
     ],
   },
-
-  // ============================================================================
-  // MODULE 4: THE KNOWLEDGE ALCHEMIST — NOTEBOOKLM
-  // ============================================================================
-  "The Document Alchemist: Your First Spell with NotebookLM": {
-    title: "The Document Alchemist: Your First Spell with NotebookLM",
+  "The Document Alchemist: Your First Spell with Gemini Notebook": {
+    title: "The Document Alchemist: Your First Spell with Gemini Notebook",
     description:
       "Google's secret tool for digital alchemists: upload your PDFs and get precise answers with verbatim citations. Your personal librarian with AI superpowers.",
     learningObjectives: [
@@ -435,7 +485,7 @@ const RESOURCES_EN = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "First Steps with NotebookLM",
+        title: "First Steps with Gemini Notebook",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
@@ -446,13 +496,13 @@ const RESOURCES_EN = {
       {
         id: "notebooklm-guide-1",
         type: "pdf",
-        title: "NotebookLM Guide",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/guia_edutechlife_modulo3%20.pdf",
-        pages: 10,
+        title: "Gemini Notebook Guide",
+        url: "/ialab-resources/modulo4/guia-gemini-notebook-en.pdf",
+        pages: 6,
         format: "PDF",
-        size: "2.3 MB",
+        size: "0.89 MB",
         description:
-          "The alchemist's grimoire: 10 pages to master NotebookLM from your first notebook to advanced research techniques.",
+          "The alchemist's grimoire: 10 pages to master Gemini Notebook from your first notebook to advanced research techniques.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -461,7 +511,7 @@ const RESOURCES_EN = {
         type: "ova_interactive",
         title: "The Grimoire",
         description:
-          "7 questions that will make you a NotebookLM expert. Complete the challenge with MAX as your personal guide on this alchemical journey.",
+          "7 questions that will make you a Gemini Notebook expert. Complete the challenge with MAX as your personal guide on this alchemical journey.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 7,
@@ -470,7 +520,6 @@ const RESOURCES_EN = {
       },
     ],
   },
-
   "The Art of Curation: How to Choose and Synthesize Sources": {
     title: "The Art of Curation: How to Choose and Synthesize Sources",
     description:
@@ -485,25 +534,13 @@ const RESOURCES_EN = {
     difficulty: "Intermediate",
     resources: [
       {
-        id: "notebook-summary-video-1",
-        type: "image",
-        title: "Smart Summaries with NotebookLM",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/3-INFOGRAFIA.jpeg",
-        format: "JPEG",
-        size: "2.5 MB",
-        description:
-          "Infographic on advanced summary and analysis techniques with NotebookLM. The alchemist's treasure map for document transformation.",
-        thumbnailType: "premium",
-        immersiveView: true,
-      },
-      {
         id: "notebook-summary-template-1",
         type: "pdf",
-        title: "Notebook LM cuaderno del futuro",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/6-%20NotebookLM_El_Cuaderno_del_Futuro.pdf",
-        pages: 15,
+        title: "Gemini Notebook: the notebook of the future",
+        url: "/ialab-resources/modulo4/plantillas-cuaderno-del-futuro-en.pdf",
+        pages: 4,
         format: "PDF",
-        size: "2.5 MB",
+        size: "0.62 MB",
         description:
           "Professional summary templates for each document type: academic, business, technical, and more. The alchemist's toolkit for every occasion.",
       },
@@ -521,7 +558,6 @@ const RESOURCES_EN = {
       },
     ],
   },
-
   "The Secret Formula: Audio Overviews and Document Management": {
     title: "The Secret Formula: Audio Overviews and Document Management",
     description:
@@ -547,16 +583,17 @@ const RESOURCES_EN = {
           "Discover how to create podcasts from your PDFs. Ideal for learning while traveling, exercising, or resting. The sound of alchemy in motion.",
       },
       {
-        id: "notebook-audio-guide-1",
-        type: "ova_interactive",
-        title: "The Sound Formula",
+        id: "notebook-audio-pdf-1",
+        type: "pdf",
+        title: "Guide: Audio and documents, in order",
+        url: "/ialab-resources/modulo4/guia-audio-documentos-en.pdf",
+        pages: 3,
+        format: "PDF",
+        size: "0.60 MB",
         description:
-          "Complete NotebookLM course: 6 interactive modules with practical exercises and a final challenge to become a master alchemist.",
-        estimatedTime: "30 minutes",
-        difficulty: "Intermediate",
-        interactiveElements: 6,
+          "Use audio to review without replacing verification, and organize your sources with dates and without personal data.",
         thumbnailType: "premium",
-        fullscreen: true,
+        immersiveView: true,
       },
       {
         id: "notebook-audio-ova-1",
@@ -570,175 +607,152 @@ const RESOURCES_EN = {
         thumbnailType: "premium",
         fullscreen: true,
       },
+    ],
+  },
+  "Get to Know Claude: the AI That Works With You": {
+    title: "Get to Know Claude: the AI That Works With You",
+    description:
+      "Before giving instructions, know the instrument. What Claude is, how it differs from a search engine, how to write a request with goal, audience and format, how memory works and when to choose a faster model or a more capable one.",
+    learningObjectives: [
+      "Write a request with goal, audience, format and tone",
+      "Control what Claude remembers between conversations",
+      "Choose the right model for each type of task",
+    ],
+    estimatedTime: "20 min",
+    difficulty: "Beginner",
+    resources: [
       {
-        id: "document-mastery-ova-1",
-        type: "ova_interactive",
-        title: "The Transmutation",
+        id: "claude-video-intro-1",
+        type: "video",
+        url: "https://www.youtube.com/embed/0vZ_UVLhSQQ",
+        duration: "5:19",
+        thumbnail: "https://img.youtube.com/vi/0vZ_UVLhSQQ/maxresdefault.jpg",
+        provider: "youtube",
+        title: "Introduction to Claude.ai (Spanish)",
         description:
-          "Framework + 3 practical cases: researcher, educator, enterprise. How to transform complex documents into listenable podcasts without losing depth.",
-        estimatedTime: "24 minutes",
-        difficulty: "Advanced",
-        interactiveElements: 5,
+          'Official Anthropic video, in English (original title: "Getting started with Claude.ai"): how to get started with Claude.ai and have your first useful conversation.',
+      },
+      {
+        id: "claude-guide-es",
+        type: "pdf",
+        title: "The Conductor's Guide: Claude Step by Step",
+        url: "/ialab-resources/modulo5/guia-claude-en.pdf",
+        pages: 4,
+        format: "PDF",
+        size: "0.59 MB",
+        description:
+          "Module guide: how to ask well, control memory, choose a model and review every result.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
+      {
+        id: "claude-first-request-ova-1",
+        type: "ova_interactive",
+        title: "The First Request",
+        description: null,
+        estimatedTime: "15 minutes",
+        difficulty: "Intermediate",
+        interactiveElements: 3,
         thumbnailType: "premium",
         fullscreen: true,
       },
     ],
   },
-
-  // ============================================================================
-  // MODULE 5: ETHICS AND PRIVACY
-  // ============================================================================
-  "The Guardian's Vow: 4 Sacred Principles": {
-    title: "The Guardian's Vow: 4 Sacred Principles",
+  "Create with Claude: Artifacts, Documents and Presentations": {
+    title: "Create with Claude: Artifacts, Documents and Presentations",
     description:
-      "The 4 pillars that separate responsible professionals from reckless ones. Transparency, fairness, accountability, and privacy — your complete ethical armor.",
+      "Artifacts are pieces you see and edit next to the conversation: documents, charts, presentations and small applications. Learn to describe the result, iterate with small adjustments, compare versions and review before sharing.",
     learningObjectives: [
-      "Recognize the 7 types of biases lurking in every AI model",
-      "Develop a sixth sense for detecting biases in AI responses",
-      "Apply algorithmic justice strategies like an expert guardian",
-      "Evaluate AI result fairness with forensic precision",
+      "Describe the final result before asking for the content",
+      "Iterate with small adjustments instead of redoing everything",
+      "Verify figures, names and dates before presenting",
     ],
-    estimatedTime: "17 minutes",
+    estimatedTime: "25 min",
     difficulty: "Intermediate",
     resources: [
       {
-        id: "bias-video-1",
+        id: "claude-artifacts-video-1",
         type: "video",
-        title: "Los Pilares de la IA",
-        url: "https://www.youtube.com/embed/QAyIrImVUx8",
-        duration: "1:56",
-        thumbnail: "https://img.youtube.com/vi/QAyIrImVUx8/maxresdefault.jpg",
-        provider: "youtube",
+        title: "Create with Claude: your first Artifact",
+        url: "/videos/curso/modulo5-artifacts.mp4",
+        duration: "3 min",
         description:
-          "In just 1:56, discover the 4 pillars every AI guardian must know. A short video that will change your perspective forever.",
+          "See how to ask for a document and review it before sharing it.",
+        thumbnailType: "premium",
       },
       {
-        id: "bias-guide-1",
+        id: "claude-artifacts-guide-1",
         type: "pdf",
-        title: "Etica de la Inteligencia artificial",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/2-guia_edutechlife_modulo5.pdf",
-        pages: 9,
+        title: "Guide: Create with Claude, Artifacts Step by Step",
+        url: "/ialab-resources/modulo5/guia-artifacts-en.pdf",
+        pages: 4,
         format: "PDF",
-        size: "2.6 MB",
+        size: "0.67 MB",
         description:
-          "9 pages that condense everything you need to ethically shield your relationship with AI. Required reading for guardians.",
+          "What you can create with an Artifact, the 5 parts of a good request and how to improve it with small changes before sharing it.",
         thumbnailType: "premium",
         immersiveView: true,
       },
       {
-        id: "bias-ova-1",
+        id: "claude-artifacts-ova-1",
         type: "ova_interactive",
-        title: "The Mirror of Truth",
+        title: "The Artifacts Workshop",
         description:
-          "Test your guardian eye: analyze real AI responses and uncover biases most people would never notice. 6 challenges that will sharpen your instinct.",
+          "Build the perfect request for a document or presentation: choose goal, audience, format and constraints, and see the result before asking.",
+        estimatedTime: "15 minutes",
+        difficulty: "Intermediate",
+        interactiveElements: 4,
+        fullscreen: true,
+        thumbnailType: "premium",
+      },
+    ],
+  },
+  "Delegate with Claude: Projects, Connectors and Skills": {
+    title: "Delegate with Claude: Projects, Connectors and Skills",
+    description:
+      "A Project keeps the context of one piece of work; connectors give access to your tools with permissions you approve; a Skill reuses a procedure; scheduled tasks automate recurring work. Delegating means defining the goal, the limits and the review: the final decision is still yours.",
+    learningObjectives: [
+      "Create a Project with instructions and reference files",
+      "Connect a tool while reviewing the permissions you grant",
+      "Turn a repeated procedure into a reusable Skill",
+    ],
+    estimatedTime: "30 min",
+    difficulty: "Intermediate",
+    resources: [
+      {
+        id: "claude-video-proyectos-1",
+        type: "video",
+        title: "Projects in Claude: your workspace (Spanish narration)",
+        url: "/videos/curso/modulo5-proyectos.mp4",
+        duration: "3 min",
+        description:
+          "How to create a Project, save instructions and files. Sharing with your team requires a Team or Enterprise plan.",
+        thumbnailType: "premium",
+      },
+      {
+        id: "claude-delegation-ova-1",
+        type: "ova_interactive",
+        title: "The Delegation Board",
+        description:
+          "Sort real tasks: what to delegate, what to delegate with review and what never to delegate. Get feedback on every decision.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 6,
-        thumbnailType: "premium",
         fullscreen: true,
-      },
-    ],
-  },
-
-  "The Mirror of Truth: Is Your AI Fair?": {
-    title: "The Mirror of Truth: Is Your AI Fair?",
-    description:
-      "Did you know your AI could be discriminating without you knowing? Learn to shield your data and algorithms against the most dangerous biases.",
-    learningObjectives: [
-      "Decode the hidden journey of your data inside AI systems",
-      "Detect privacy vulnerabilities others overlook",
-      "Implement guardian-level data protection shields",
-      "Configure AI tools with cybersecurity expert precision",
-    ],
-    estimatedTime: "29 minutes",
-    difficulty: "Intermediate",
-    resources: [
-      {
-        id: "privacy-video-1",
-        type: "video",
-        title: "Privacy and AI: What You Need to Know",
-        url: "https://www.youtube.com/embed/BoR5KjsRK9U",
-        duration: "9:20",
-        thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
-        provider: "youtube",
-        description:
-          "9:20 that can save your reputation. Discover the privacy risks lurking in every AI tool and how to neutralize them.",
+        thumbnailType: "premium",
       },
       {
-        id: "privacy-guide-1",
+        id: "claude-guide-es-plantillas",
         type: "pdf",
-        title: "AI Privacy Manual",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/7-Ethical_AI_Mastery.pdf",
-        pages: 13,
+        title: "Templates: requests, Projects and the review protocol",
+        url: "/ialab-resources/modulo5/guia-claude-plantillas-en.pdf",
+        pages: 2,
         format: "PDF",
-        size: "3.8 MB",
+        size: "0.49 MB",
         description:
-          "7-step practical checklist to shield your privacy while maximizing artificial intelligence. Your digital survival manual.",
+          "Ready-to-use templates: a request for Claude, Project instructions and a checklist before sharing.",
         thumbnailType: "premium",
         immersiveView: true,
-      },
-      {
-        id: "privacy-ova-1",
-        type: "ova_interactive",
-        title: "The Risk Compass",
-        description:
-          "Face real risk scenarios and learn to protect your data like a guardian. Includes the ethical stars game that will test your decisions.",
-        estimatedTime: "20 minutes",
-        difficulty: "Intermediate",
-        interactiveElements: 5,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
-    ],
-  },
-
-  "The Guardian's Legacy: Navigating the Law": {
-    title: "The Guardian's Legacy: Navigating the Law",
-    description:
-      "AI laws are changing the world. From the EU AI Act to local regulations, know the rules of the game and become a benchmark for ethical governance.",
-    learningObjectives: [
-      "Apply ethical principles with the authority of a certified guardian",
-      "Detect and stop inappropriate AI uses before they escalate",
-      "Lead with transparency: make ethical disclosure your personal hallmark",
-      "Design responsible use policies that protect your entire organization",
-    ],
-    estimatedTime: "31 minutes",
-    difficulty: "Advanced",
-    resources: [
-      {
-        id: "ethics-video-1",
-        type: "video",
-        title: "Ethical AI: Principles and Practice",
-        url: "https://www.youtube.com/embed/idplIgnLStI",
-        duration: "6:05",
-        thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
-        provider: "youtube",
-        description:
-          "6:05 that condense everything you need to implement ethical AI in the real world. The ultimate guardian guide.",
-      },
-      {
-        id: "ethics-ova-1",
-        type: "ova_interactive",
-        title: "The Ethical Tribunal",
-        description:
-          "Face 8 real ethical dilemmas where there are no easy answers. Every decision you make has consequences. Are you ready to be a guardian?",
-        estimatedTime: "25 minutes",
-        difficulty: "Advanced",
-        interactiveElements: 8,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
-      {
-        id: "ethics-cases-ova-1",
-        type: "ova_interactive",
-        title: "The Guardian's Cases",
-        description:
-          "A 5-question framework plus 3 real AI cases: hiring, healthcare, and copyright. Make decisions and discover how an ethical guardian thinks.",
-        estimatedTime: "20 minutes",
-        difficulty: "Advanced",
-        interactiveElements: 6,
-        thumbnailType: "premium",
-        fullscreen: true,
       },
     ],
   },

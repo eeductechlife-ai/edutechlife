@@ -6,17 +6,29 @@ const longText = (n) => "x ".repeat(Math.max(1, Math.floor(n / 2))).trim();
 // Respuestas "buenas" en el formato exacto que espera cada localEvaluate.
 const GOOD = {
   1: {
-    ej1: JSON.stringify({ rol: "Experto", contexto: "Empresa", tarea: "Crear campaña" }),
+    ej1: JSON.stringify({
+      rol: "Experto",
+      contexto: "Empresa",
+      tarea: "Crear campaña",
+    }),
     ej2: longText(300),
     ej3: longText(400),
   },
   2: { ej1: longText(220), ej2: longText(260), ej3: longText(260) },
-  3: { ej1: longText(220), ej2: longText(220), ej3: longText(260), ej4: longText(420) },
+  3: {
+    ej1: longText(220),
+    ej2: longText(220),
+    ej3: longText(260),
+    ej4: longText(420),
+  },
   4: {
     ej1: JSON.stringify({
       documents: [{ index: 1 }, { index: 2 }, { index: 3 }, { index: 4 }],
     }),
-    ej2: JSON.stringify({ table: {}, synthesis: "síntesis integradora de varios conceptos" }),
+    ej2: JSON.stringify({
+      table: {},
+      synthesis: "síntesis integradora de varios conceptos",
+    }),
     ej3: JSON.stringify({
       hook: "un gancho completo de prueba",
       evidencia: "evidencia de prueba suficiente",
@@ -27,26 +39,17 @@ const GOOD = {
   },
   5: {
     ej1: JSON.stringify({
-      biases: [
-        { index: 1, justification: "justificación amplia con evidencia del caso", pipeline: "data", severity: 1 },
-        { index: 2, justification: "otra justificación extensa y razonada", pipeline: "model", severity: 2 },
-      ],
-    }),
-    ej2: JSON.stringify({
-      impact: { candidates: "afecta a muchos candidatos en el proceso", company: "la empresa pierde talento valioso", society: "se mantiene la desigualdad social" },
-      rootCauses: {
-        c1: { justification: "causa técnica ampliamente justificada en los datos", biasIndexes: [1] },
-        c2: { justification: "causa humana explicada con detalle suficiente", biasIndexes: [2] },
+      answers: {
+        t1: "review",
+        t2: "delegate",
+        t3: "never",
+        t4: "review",
+        t5: "delegate",
+        t6: "never",
       },
-      severityMatrix: { a: 1, b: 2, c: 3, d: 1, e: 2, f: 3 },
     }),
-    ej3: JSON.stringify({
-      principles: [{ id: 1, relevance: "importante por la equidad del sistema" }],
-      actions: [
-        { biasIndex: 1, measure: "una medida de mitigación con detalle y plazo concreto", type: "mitigation", timeline: "2026" },
-        { biasIndex: 2, measure: "otra acción de monitoreo con descripción amplia", type: "monitoring", timeline: "2026" },
-      ],
-    }),
+    ej2: "Escribo un pedido para Claude con objetivo: una propuesta de dos páginas para un colegio, audiencia: la rectoría, formato: documento con portada, tono formal y cercano, y restricciones: no prometer resultados garantizados ni usar cifras sin verificar en la fuente original del proyecto.",
+    ej3: "Protocolo: no compartimos datos personales ni confidenciales de los clientes con la herramienta; anonimizamos antes de subir. Verificamos cada cifra y cita en la fuente original antes de usar el resultado. La responsable revisa y firma la decisión final, y declaramos cuándo y cómo usamos IA en cada entrega.",
   },
 };
 

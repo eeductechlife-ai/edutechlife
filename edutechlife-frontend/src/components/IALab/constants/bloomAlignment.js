@@ -52,6 +52,7 @@ export const MODULE_BLOOM = {
   1: [
     { level: "recordar", verb: "Identificar" },
     { level: "aplicar", verb: "Construir" },
+    { level: "evaluar", verb: "Verificar" },
   ],
   2: [
     { level: "comprender", verb: "Describir" },
@@ -69,9 +70,9 @@ export const MODULE_BLOOM = {
     { level: "crear", verb: "Producir" },
   ],
   5: [
-    { level: "analizar", verb: "Detectar" },
-    { level: "evaluar", verb: "Juzgar" },
-    { level: "crear", verb: "Diseñar" },
+    { level: "aplicar", verb: "Redactar" },
+    { level: "crear", verb: "Producir" },
+    { level: "evaluar", verb: "Supervisar" },
   ],
 };
 
@@ -116,19 +117,19 @@ export const MODULE_CASE_STUDY = {
     scenario:
       "Un equipo clínico debe alinear criterios a partir de ocho artículos y repasarlos durante sus traslados.",
     prompt:
-      "Cura las fuentes, sintetiza con citas en NotebookLM y genera un Audio Overview para repaso.",
+      "Cura las fuentes, sintetiza con citas en Gemini Notebook y genera un Audio Overview para repaso.",
     outcome:
       "Un protocolo interno citado y un audio que resume las conclusiones mientras el equipo se desplaza.",
   },
   5: {
-    industry: "Finanzas",
-    title: "Un crédito que se puede explicar",
+    industry: "Consultoría",
+    title: "Una propuesta revisada antes del viernes",
     scenario:
-      "Una fintech evalúa solicitudes de crédito con IA y debe justificar cada rechazo ante el solicitante.",
+      "Una consultora debe entregar una propuesta a un cliente en dos días, con cifras que deben estar verificadas.",
     prompt:
-      "Audita sesgos, aplica explicabilidad, define supervisión humana y verifica el cumplimiento normativo.",
+      "Escribe un pedido completo para Claude con objetivo, audiencia, formato, tono y restricciones, y define quién revisa cada cifra.",
     outcome:
-      "Decisiones justas, explicables y auditables, con derecho a revisión para cada solicitante.",
+      "Una propuesta lista para enviar, con cifras verificadas y un protocolo claro de quién firma.",
   },
 };
 

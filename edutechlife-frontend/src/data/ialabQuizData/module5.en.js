@@ -1,1035 +1,923 @@
+// Banco del módulo 5 (Claude), en inglés: mismo contenido, ids, orden de opciones y correctAnswer que module5.js.
+// La correcta nunca es la opción más larga ni la más corta. La clave vive en src/data/ialab.js.
 export const MODULE_5_EN = [
   {
     id: "m5q1",
     question:
-      "A hiring system was trained on data from a mostly male company and penalized CVs with certain terms. What bias appears and where does it start?",
+      "You are going to ask Claude for a proposal for a client. Which request keeps Claude from having to guess key details?",
     options: [
-      { id: "m5q1_a", label: "Sampling bias, starting in the training data" },
-      { id: "m5q1_b", label: "Automation bias, due to a lack of human review" },
+      {
+        id: "m5q1_a",
+        label:
+          "Goal, the client who reads it, format, tone and what not to promise",
+      },
+      {
+        id: "m5q1_b",
+        label:
+          "The goal and the format; Claude can decide the tone and the limits on its own",
+      },
       {
         id: "m5q1_c",
-        label: "Confirmation bias, from the recruiter's prior ideas",
+        label: "A previous proposal and the line 'make one like this'",
       },
-      { id: "m5q1_d", label: "Labeling bias, from wrong annotators" },
+      {
+        id: "m5q1_d",
+        label:
+          "A list of adjectives: professional, creative, complete and persuasive",
+      },
     ],
     correctAnswer: "m5q1_a",
-    topic: "AI Bias",
-    difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    topic: "Getting to know Claude",
+    difficulty: "easy",
+    source: "Lesson 1: Get to know Claude",
     feedback:
-      "The historical data did not represent the population, so the bias began in collection. Review the bias lab.",
+      "A complete request has five parts: goal, audience, format, tone and limits. Every missing part is an assumption Claude makes for you.",
   },
   {
     id: "m5q2",
-    question:
-      "ChatGPT cites a health study that does not exist in any search. What do you do?",
+    question: "What does an Artifact let you do in Claude?",
     options: [
       {
         id: "m5q2_a",
-        label: "Do not use the fact and verify the source yourself",
+        label: "Store fixed instructions that apply to every chat",
       },
-      { id: "m5q2_b", label: "Use the fact because the AI is rarely wrong" },
-      { id: "m5q2_c", label: "Ask the AI again and trust its answer" },
+      {
+        id: "m5q2_b",
+        label: "Connect Claude to Gmail or Drive so it can read your files",
+      },
+      {
+        id: "m5q2_c",
+        label: "See and improve a piece next to the chat, step by step",
+      },
       {
         id: "m5q2_d",
-        label: "Ignore it because hallucinations are not common",
+        label: "Remember your preferred tone from one chat to the next",
       },
     ],
-    correctAnswer: "m5q2_a",
-    topic: "Hallucinations",
-    difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    correctAnswer: "m5q2_c",
+    topic: "Creating with Claude",
+    difficulty: "easy",
+    source: "Lesson 2: Create with Claude",
     feedback:
-      "A hallucination is false information that looks real. Always verify critical data like health.",
+      "An Artifact is a piece (document, table or small app) that lives next to the chat: you see it, improve it step by step and export it. Fixed instructions go in a Project, preferences in memory and access to your apps in connectors.",
   },
   {
     id: "m5q3",
     question:
-      "An AI gives a diagnosis that contradicts your professional judgment. How do you act?",
+      "Claude gives you a table with sales figures. What do you do before presenting it to the team?",
     options: [
-      { id: "m5q3_a", label: "I question the AI and consult other experts" },
-      { id: "m5q3_b", label: "I accept the AI because it is smarter" },
-      { id: "m5q3_c", label: "I let the AI decide the treatment" },
-      { id: "m5q3_d", label: "I restart the system and ask again" },
+      {
+        id: "m5q3_a",
+        label: "Ask Claude to check its own figures and trust its answer",
+      },
+      {
+        id: "m5q3_b",
+        label:
+          "Compare each figure with the original source and redo one calculation",
+      },
+      {
+        id: "m5q3_c",
+        label:
+          "Check spelling and format, since the figures come from the file",
+      },
+      {
+        id: "m5q3_d",
+        label:
+          "Ask it to add the source for each figure and present the table like that",
+      },
     ],
-    correctAnswer: "m5q3_a",
-    topic: "Responsibility",
+    correctAnswer: "m5q3_b",
+    topic: "Oversight",
     difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Do not fall for automation bias: your professional judgment is irreplaceable.",
+      "Claude can get figures wrong and still sound sure, even when it checks itself. Citing a source is not checking it: compare with the original data before presenting.",
   },
   {
     id: "m5q4",
-    question: "Which of these is NOT a good privacy practice with AI?",
+    question: "What is the best way to use a Project in Claude?",
     options: [
-      { id: "m5q4_a", label: "Uploading client data to a public chatbot" },
-      { id: "m5q4_b", label: "Reading the privacy policies of the tool" },
-      { id: "m5q4_c", label: "Avoiding sharing confidential data with the AI" },
-      { id: "m5q4_d", label: "Using enterprise versions with data protection" },
+      {
+        id: "m5q4_a",
+        label:
+          "One single Project for all your work, so Claude has all the context",
+      },
+      {
+        id: "m5q4_b",
+        label:
+          "Paste the same instructions at the start of every chat in the Project",
+      },
+      {
+        id: "m5q4_c",
+        label: "Upload all the company's files in case one is needed",
+      },
+      {
+        id: "m5q4_d",
+        label: "One Project per recurring job, with its own rules and files",
+      },
     ],
-    correctAnswer: "m5q4_a",
-    topic: "Privacy",
+    correctAnswer: "m5q4_d",
+    topic: "Projects and memory",
     difficulty: "easy",
-    source: "PDF: AI Privacy Manual",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Never upload sensitive data to public tools. Review the privacy manual.",
+      "A Project stores the instructions and files for a specific job that repeats, so you do not repeat them in every chat. Mixing topics or uploading extra files gives it useless context and can expose data.",
   },
   {
     id: "m5q5",
     question:
-      "A bank rejects a loan with AI and does not explain why. Which principle is violated?",
+      "You want Claude to read your correo to prepare a reply to a client. What do you do?",
     options: [
       {
         id: "m5q5_a",
-        label: "Transparency and explainability of the decision",
+        label:
+          "Connect only correo, check its permissions and approve the reply yourself",
       },
-      { id: "m5q5_b", label: "Privacy, by hiding the use of the AI" },
-      { id: "m5q5_c", label: "The speed of the decision process" },
-      { id: "m5q5_d", label: "Efficiency, by using human analysts" },
+      {
+        id: "m5q5_b",
+        label:
+          "Connect email, files and calendar at once so you do not repeat the process",
+      },
+      {
+        id: "m5q5_c",
+        label:
+          "Copy the client's full emails into the chat, with their details",
+      },
+      {
+        id: "m5q5_d",
+        label: "Connect correo and let Claude send the reply",
+      },
     ],
     correctAnswer: "m5q5_a",
-    topic: "Transparency",
+    topic: "Connectors and Skills",
     difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "People have the right to understand automatic decisions that affect them. Review the code of ethics.",
+      "With a connector you give access only to what the task needs and you approve its permissions. You can disconnect it when you finish, and you review and send the reply yourself.",
   },
   {
     id: "m5q6",
-    question:
-      "Your boss asks you to generate fake reviews of a product with AI. What is the ethical stance?",
+    question: "What is the difference between a Skill and a Project?",
     options: [
       {
         id: "m5q6_a",
-        label: "Refuse and propose honest promotion alternatives",
+        label:
+          "A Skill keeps the files of a job; a Project keeps the steps of a procedure",
       },
-      { id: "m5q6_b", label: "Do it because it is part of your job" },
+      {
+        id: "m5q6_b",
+        label:
+          "A Skill keeps the conversations of a job; a Project keeps your tone and preferences",
+      },
       {
         id: "m5q6_c",
-        label: "Do it changing details so they do not look fake",
+        label:
+          "A Skill keeps a procedure with steps and templates; a Project, the context of a job",
       },
-      { id: "m5q6_d", label: "Quit without an explanation" },
+      {
+        id: "m5q6_d",
+        label:
+          "They are the same thing with another name: both keep instructions and files for one job",
+      },
     ],
-    correctAnswer: "m5q6_a",
-    topic: "Responsible Use",
+    correctAnswer: "m5q6_c",
+    topic: "Connectors and Skills",
     difficulty: "medium",
-    source: "OVA: Lab: Ethical Dilemmas",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Fake reviews deceive and can be illegal. Propose ethical alternatives. Review the dilemmas lab.",
+      "A Skill stores a procedure you always do the same way: steps, templates and examples. A Project stores the context of a job that repeats, with its instructions and files. Connectors give access to your apps.",
   },
   {
     id: "m5q7",
     question:
-      "A distracted driver trusts the autopilot and has an accident. What bias does this describe?",
+      "Every Monday you prepare the same to-do report and always explain the same steps to Claude. What should you do?",
     options: [
       {
         id: "m5q7_a",
-        label: "Automation bias: they trusted without critical review",
+        label:
+          "Keep writing out the full steps in every chat so that none of them get lost",
       },
-      { id: "m5q7_b", label: "Sampling bias in the training data" },
-      { id: "m5q7_c", label: "Algorithmic bias against certain objects" },
-      { id: "m5q7_d", label: "A normal human error with no bias" },
+      {
+        id: "m5q7_b",
+        label:
+          "Save those steps in a Skill, use it every Monday and review the report",
+      },
+      {
+        id: "m5q7_c",
+        label: "Use an incognito chat so Claude always starts clean",
+      },
+      {
+        id: "m5q7_d",
+        label: "Create a new Project every Monday with the same steps",
+      },
     ],
-    correctAnswer: "m5q7_a",
-    topic: "Automation Bias",
+    correctAnswer: "m5q7_b",
+    topic: "Delegating with Claude",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Automation bias is trusting the machine too much. Keep active supervision.",
+      "A procedure you always do the same way is saved as a Skill: Claude applies the same steps each time and you only review the result. Incognito does not keep the procedure for the following week, and creating a Project every week repeats the work.",
   },
   {
     id: "m5q8",
-    question:
-      "What is the most responsible strategy to protect data when using AI?",
+    question: "What does 'delegating with judgment' to Claude mean?",
     options: [
       {
         id: "m5q8_a",
-        label: "Use secure tools and anonymize sensitive information",
+        label: "Delegate only easy tasks and do the important ones yourself",
       },
-      { id: "m5q8_b", label: "Avoid using AI with any data at all" },
+      {
+        id: "m5q8_b",
+        label:
+          "Delegate everything Claude does well and review only if something fails",
+      },
       {
         id: "m5q8_c",
-        label: "Post the data on social media for the community to help",
+        label:
+          "Hand over the task and the decision if the request has all five parts",
       },
       {
         id: "m5q8_d",
-        label: "Trust that the AI protects everything automatically",
+        label:
+          "Hand over the draft, review what goes out and keep the decision",
       },
     ],
-    correctAnswer: "m5q8_a",
-    topic: "Data Protection",
-    difficulty: "medium",
-    source: "PDF: AI Privacy Manual",
+    correctAnswer: "m5q8_d",
+    topic: "Delegating with Claude",
+    difficulty: "easy",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Protecting data is your responsibility: secure tools and anonymized data.",
+      "Delegating is not walking away: you hand over the form and the draft, review what goes to third parties and keep the decision. A good request improves the result, but it does not transfer responsibility.",
   },
   {
     id: "m5q9",
     question:
-      "A high-risk AI system (for example, approving a mortgage) under the EU must comply with:",
+      "Claude seems to remember details from earlier conversations. What do you do if you want to control that information?",
     options: [
-      { id: "m5q9_a", label: "Conformity assessment and human supervision" },
-      { id: "m5q9_b", label: "A total ban on using AI in that case" },
-      { id: "m5q9_c", label: "Voluntary registration with no obligations" },
-      { id: "m5q9_d", label: "Paying an annual fee to use it" },
+      {
+        id: "m5q9_a",
+        label:
+          "Review memory in the settings and edit or delete what you do not want",
+      },
+      {
+        id: "m5q9_b",
+        label: "Create a Project, because Projects erase the general memory",
+      },
+      {
+        id: "m5q9_c",
+        label:
+          "Always write in incognito, even if you need it to remember your tone",
+      },
+      {
+        id: "m5q9_d",
+        label:
+          "Ask it to save everything, because more memory always gives better answers in every chat",
+      },
     ],
     correctAnswer: "m5q9_a",
-    topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    topic: "Privacy and data",
+    difficulty: "medium",
+    source: "Lesson 1: Get to know Claude",
     feedback:
-      "High-risk systems require transparency, documentation and human supervision. Review the regulatory framework.",
+      "Memory is reviewed and adjusted in the settings: you decide what it should remember. Incognito is for a one-off chat you do not want kept in memory, not for all your work.",
   },
   {
     id: "m5q10",
     question:
-      "Your educational app collects student performance data. Which data-minimization practice is correct?",
+      "You are going to upload to Claude a contract that contains clients' personal data. What is the most prudent step?",
     options: [
       {
         id: "m5q10_a",
-        label: "Store only what is needed with informed consent",
+        label: "Upload it in full, because it is an internal company document",
       },
       {
         id: "m5q10_b",
-        label: "Collect all the data just in case it is needed",
+        label: "Upload it in full and delete the chat as soon as you finish",
       },
       {
         id: "m5q10_c",
-        label: "Share the data with third parties without telling users",
+        label:
+          "Anonymize the personal data and share only the clauses you need",
       },
-      { id: "m5q10_d", label: "Store the data with no deletion plan" },
+      {
+        id: "m5q10_d",
+        label:
+          "Upload it in full and ask Claude not to take the names or phone numbers into account",
+      },
     ],
-    correctAnswer: "m5q10_a",
-    topic: "Privacy by Design",
+    correctAnswer: "m5q10_c",
+    topic: "Privacy and data",
     difficulty: "medium",
-    source: "PDF: AI Privacy Manual",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Minimize the data: only what is needed, with consent and a clear deletion plan.",
+      "Minimize the data you share: anonymize it or get authorization before uploading, and follow your organization's policy and the law (in Colombia, Law 1581 of 2012). Deleting the chat afterwards or asking it to ignore the names does not undo the fact that you already shared them.",
   },
   {
     id: "m5q11",
-    question:
-      "What are the 4 key ethical principles that guide the responsible use of AI?",
+    question: "What is the difference between a Project and Claude's memory?",
     options: [
       {
         id: "m5q11_a",
-        label: "Transparency, fairness, accountability and privacy",
+        label:
+          "The Project remembers your preferences in every chat; memory, only inside a single one",
       },
-      { id: "m5q11_b", label: "Speed, savings, automation and efficiency" },
-      { id: "m5q11_c", label: "Popularity, profit, scale and competition" },
-      { id: "m5q11_d", label: "Innovation, investment, patent and ownership" },
+      {
+        id: "m5q11_b",
+        label:
+          "The Project stores a job's rules and files; memory, details across chats",
+      },
+      {
+        id: "m5q11_c",
+        label: "None: both store the same thing, only where you see it changes",
+      },
+      {
+        id: "m5q11_d",
+        label:
+          "Memory stores reference files; the Project, your preferred tone",
+      },
     ],
-    correctAnswer: "m5q11_a",
-    topic: "Ethical Principles",
-    difficulty: "easy",
-    source: "Video: Ethical AI: Principles and Practice",
+    correctAnswer: "m5q11_b",
+    topic: "Projects and memory",
+    difficulty: "medium",
+    source: "Lesson 1: Get to know Claude",
     feedback:
-      "Transparency, fairness, accountability and privacy are the pillars. Review the principles video.",
+      "The Project is the context of a specific job: instructions and files. Memory remembers preferences and useful details across conversations. For example, your brand goes in a Project and your tone preference, in memory.",
   },
   {
     id: "m5q12",
-    question: "What does the principle of transparency mean in an AI system?",
+    question:
+      "Claude offers you a fact with a citation to a study. What is the right step?",
     options: [
       {
         id: "m5q12_a",
-        label: "That people can understand how and why the AI decides",
+        label: "Ask it for the study's link and cite it if Claude provides one",
       },
       {
         id: "m5q12_b",
-        label: "That the system works without anyone knowing how it does it",
+        label: "Cite it if the author and journal sound famous",
       },
       {
         id: "m5q12_c",
-        label: "That it uses only public data with no controls of any kind",
+        label:
+          "Ask Claude if it is sure about the fact and cite it if it confirms",
       },
       {
         id: "m5q12_d",
-        label: "That its code stays secret in order to protect the business",
+        label: "Find the original study and confirm it says the same thing",
       },
     ],
-    correctAnswer: "m5q12_a",
-    topic: "Transparency",
+    correctAnswer: "m5q12_d",
+    topic: "Limits and errors",
     difficulty: "easy",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Transparency lets people understand and audit the decisions. Review the code of ethics.",
+      "A citation can look real and not exist or say something else; a link or a confirmation from Claude does not prove it. Always check the primary source.",
   },
   {
     id: "m5q13",
-    question: "What is sampling bias in an AI model?",
+    question:
+      "Which task is best suited to delegate to Claude with minimal review?",
     options: [
       {
         id: "m5q13_a",
-        label: "The training data does not represent the whole population",
+        label: "Format a minutes template that you already approved",
       },
       {
         id: "m5q13_b",
-        label: "The system runs slowly with very large databases",
+        label: "Write and send the reply to a client's complaint",
       },
       {
         id: "m5q13_c",
-        label: "The model switches language without you asking it to",
+        label: "Sort 200 client emails that include names and phone numbers",
       },
       {
         id: "m5q13_d",
-        label: "The model retrains itself with every user query",
+        label: "Summarize a report with figures for the board",
       },
     ],
     correctAnswer: "m5q13_a",
-    topic: "Bias in AI",
-    difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    topic: "Delegating with Claude",
+    difficulty: "easy",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Sampling bias comes from unrepresentative data. Practice in the bias lab.",
+      "Form tasks with no underlying decision are ideal to delegate. Whatever goes to third parties, contains personal data or figures for decisions is delegated and reviewed.",
   },
   {
     id: "m5q14",
-    question: "What is confirmation bias applied to AI?",
+    question:
+      "You want Claude to create a presentation for your board. What do you provide first?",
     options: [
       {
         id: "m5q14_a",
-        label:
-          "The system reinforces existing patterns without questioning them",
+        label: "The topic and the number of slides; Claude decides the message",
       },
       {
         id: "m5q14_b",
-        label: "The AI always confirms that its data is fully complete",
+        label: "The quarter's figures so Claude chooses what to highlight",
       },
       {
         id: "m5q14_c",
-        label: "The model asks for confirmation before every answer",
+        label:
+          "The main message, who will see it, the checked figures and the length",
       },
       {
         id: "m5q14_d",
-        label: "The user confirms their password in order to use the AI",
+        label:
+          "A previous presentation from another company so it copies the design and the content",
       },
     ],
-    correctAnswer: "m5q14_a",
-    topic: "Bias in AI",
+    correctAnswer: "m5q14_c",
+    topic: "Creating with Claude",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "Lesson 2: Create with Claude",
     feedback:
-      "Confirmation bias reinforces what is already in the data. Review the bias lab.",
+      "A good presentation starts with the message and the audience. If Claude chooses what to highlight, the decision is its own, not yours; and the figures are checked before they go on a slide.",
   },
   {
     id: "m5q15",
-    question: "What is labeling bias?",
+    question:
+      "Claude made a change to a document you had already edited. What should you do?",
     options: [
       {
         id: "m5q15_a",
         label:
-          "Training labels carry the prejudices of the people who create them",
+          "Accept the new version, because every change improves the last one",
       },
       {
         id: "m5q15_b",
-        label: "The system classifies the data automatically and neutrally",
+        label: "Compare it with the previous version and keep what improves",
       },
       {
         id: "m5q15_c",
-        label: "The AI puts a visible label on each generated answer",
+        label: "Ask it to redo everything from scratch with a longer request",
       },
       {
         id: "m5q15_d",
-        label: "The model disables the labels when there is a lot of data",
+        label: "Go back to your version without checking what changed",
       },
     ],
-    correctAnswer: "m5q15_a",
-    topic: "Bias in AI",
+    correctAnswer: "m5q15_b",
+    topic: "Creating with Claude",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "Lesson 2: Create with Claude",
     feedback:
-      "If the labeler has biases, the model learns them. Review the bias lab.",
+      "Each change leaves a different version: compare before and after and decide what stays. Starting over or discarding without looking wastes what already worked.",
   },
   {
     id: "m5q16",
-    question: "What is automation bias?",
+    question:
+      "You write to Claude: “Write an email to the families about Saturday’s meeting, in a warm tone and without student names.” Which part of the request is missing?",
     options: [
       {
         id: "m5q16_a",
-        label: "Trusting the machine without enough human supervision",
+        label: "Nothing: the request already has all five parts complete",
       },
       {
         id: "m5q16_b",
-        label: "Automating a task without documenting the internal process",
+        label: "The tone: how the email should sound and which words to avoid",
       },
       {
         id: "m5q16_c",
-        label: "The AI automating every single bias that is in the data",
+        label:
+          "The limits: which data the email must not include and what to avoid in its writing",
       },
       {
         id: "m5q16_d",
-        label: "Using too many different AI tools at the same time",
+        label: "The format: how the email looks and how long it should be",
       },
     ],
-    correctAnswer: "m5q16_a",
-    topic: "Automation Bias",
+    correctAnswer: "m5q16_d",
+    topic: "Limits and errors",
     difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "Lesson 1: Get to know Claude",
     feedback:
-      "Automation bias is over-trusting the machine. Keep active human supervision.",
+      "A complete request has five parts: goal, audience, format, tone and limits. This one leaves out the format, so Claude would decide the length and structure on its own.",
   },
   {
     id: "m5q17",
     question:
-      "An AI systematically penalizes a certain group in hiring. What do you do?",
+      "What is the best practice when writing a Project's instructions?",
     options: [
       {
         id: "m5q17_a",
-        label: "Stop the system, document the bias and correct the data",
+        label: "State Claude's role, purpose, tone and what it must never do",
       },
       {
         id: "m5q17_b",
-        label: "Ignore it because the model works fast and cheap",
+        label: "Paste the company's full manual instead of instructions",
       },
       {
         id: "m5q17_c",
-        label: "Hide the results in order to avoid legal complaints",
+        label:
+          "Write only the tone, because Claude infers the rest from the files you upload",
       },
       {
         id: "m5q17_d",
-        label: "Upload more of the same historical data to the affected system",
+        label: "Include the clients' phone numbers to personalize each reply",
       },
     ],
     correctAnswer: "m5q17_a",
-    topic: "Bias Mitigation",
-    difficulty: "hard",
-    source: "OVA: Lab: Detect the Bias",
+    topic: "Projects and memory",
+    difficulty: "medium",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "When bias is detected, stop, document and correct. Practice in the bias lab.",
+      "A Project's instructions say who Claude is, what it is for, how it sounds and what it must never do. Files complement them, and personal data is not uploaded without authorization.",
   },
   {
     id: "m5q18",
-    question: "What is fairness in an AI system?",
+    question:
+      "A colleague asks you for a report made with Claude that contains confidential company data. What do you do?",
     options: [
       {
         id: "m5q18_a",
-        label: "Treating groups fairly and avoiding disproportionate impacts",
+        label:
+          "Publish it with an open link, because only my colleague will have it",
       },
       {
         id: "m5q18_b",
-        label: "Always giving the same answer to any type of user",
+        label:
+          "Share it in full, because an AI made it and it is not an official document",
       },
       {
         id: "m5q18_c",
-        label: "Assigning the resources to the user with the most seniority",
+        label: "Check whether they may see it and share only what is allowed",
       },
       {
         id: "m5q18_d",
-        label: "Optimizing only the speed of the computer system",
+        label: "Ask Claude for a summary and send it without reviewing it",
       },
     ],
-    correctAnswer: "m5q18_a",
-    topic: "Fairness",
+    correctAnswer: "m5q18_c",
+    topic: "Privacy and data",
     difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Fairness aims to avoid unjust impacts between groups. Review the code of ethics.",
+      "A tool generating a document does not change how confidential it is. Anyone who receives an open link can see it: share only what the policy allows and only with the right people.",
   },
   {
     id: "m5q19",
-    question: "What does the explainability of an AI model aim for?",
+    question:
+      "You have spent weeks working in a school's Project and you are asked for a text for an unrelated client. Where do you do it?",
     options: [
       {
         id: "m5q19_a",
-        label: "That automatic decisions can be justified to people",
+        label:
+          "In the same Project, because Claude already knows your style well",
       },
       {
         id: "m5q19_b",
-        label: "That the model explains why it consumes so many resources",
+        label: "Outside that Project, so its rules and files do not carry over",
       },
       {
         id: "m5q19_c",
-        label: "That the system summarizes its answers in fewer words",
+        label: "In the same Project, asking it to ignore its instructions",
       },
       {
         id: "m5q19_d",
-        label: "That its answers can be translated into other languages",
+        label:
+          "In the Project, after deleting its instructions and writing them again when you finish",
       },
     ],
-    correctAnswer: "m5q19_a",
-    topic: "Explainability",
-    difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    correctAnswer: "m5q19_b",
+    topic: "Delegating with Claude",
+    difficulty: "hard",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Explainability lets you justify decisions to the people affected. Review the code of ethics.",
+      "Each Project applies its instructions and files to all its chats. Unrelated work goes in another Project or a separate chat, so you do not carry over rules or data that do not apply.",
   },
   {
     id: "m5q20",
-    question: "What does the principle of accountability imply?",
+    question:
+      "Claude compared the résumés for a job opening and recommends one candidate. What do you do with that recommendation?",
     options: [
       {
         id: "m5q20_a",
         label:
-          "That there are clear people and processes that answer for the results",
+          "Hire her if the analysis quotes the data from each résumé correctly",
       },
       {
         id: "m5q20_b",
-        label:
-          "That the AI is the only one responsible for any possible failure",
+        label: "Ask Claude to confirm its choice and then follow it",
       },
       {
         id: "m5q20_c",
-        label: "That users accept the terms and conditions when using the AI",
+        label: "Accept it, because the request had all five parts",
       },
       {
         id: "m5q20_d",
-        label: "That responsibility is diluted among all of the users",
+        label: "Review the analysis as input and decide yourself whom to hire",
       },
     ],
-    correctAnswer: "m5q20_a",
-    topic: "Accountability",
+    correctAnswer: "m5q20_d",
+    topic: "Oversight",
     difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "There must always be people responsible for the results. Review the code of ethics.",
+      "Choosing whom to hire is a decision about a person: that decision is not delegated. Claude can sort and compare; you review the analysis and decide. Neither a confirmation from Claude nor a good request transfers the responsibility.",
   },
   {
     id: "m5q21",
     question:
-      "A medical AI suggests a treatment. What is the best supervision practice?",
+      "You are going to ask Claude for an attendance report for a course. Which version of the data do you share?",
     options: [
       {
         id: "m5q21_a",
-        label:
-          "A professional validates the suggestion before applying it to the patient",
+        label: "Attendance by student code, without names or phone numbers",
       },
       {
         id: "m5q21_b",
-        label: "Applying the recommended treatment without any review at all",
+        label: "The full list with names, because the report is internal",
       },
       {
         id: "m5q21_c",
-        label: "Discarding the AI because it can never be useful in health",
+        label:
+          "The full list in an incognito chat, because that way it is not saved",
       },
       {
         id: "m5q21_d",
-        label: "Letting the patient decide without consulting anyone",
+        label: "The full list inside a private Project",
       },
     ],
     correctAnswer: "m5q21_a",
-    topic: "Human Supervision",
-    difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
+    topic: "Privacy and data",
+    difficulty: "easy",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "In critical areas, a professional validates the final decision. Review the principles video.",
+      "Share only what is needed: with codes instead of names the report comes out the same. Neither incognito nor a private Project authorizes you to share personal data (in Colombia, Law 1581 of 2012).",
   },
   {
     id: "m5q22",
     question:
-      "Which is an example of sensitive data you should NOT upload to a public AI?",
+      "You ask Claude to 'write me an email for a client' and the result comes out long and too formal. What best explains what happened?",
     options: [
       {
         id: "m5q22_a",
-        label: "Medical records or identity documents of real customers",
+        label: "Claude writes long by default and you must always trim it",
       },
-      { id: "m5q22_b", label: "A public Wikipedia text about ancient history" },
-      { id: "m5q22_c", label: "A general idea for a newspaper headline" },
-      { id: "m5q22_d", label: "A question about any academic topic" },
+      {
+        id: "m5q22_b",
+        label:
+          "You used a fast model; a more powerful one would have written it short and warm",
+      },
+      {
+        id: "m5q22_c",
+        label:
+          "The request gave no audience, format or tone, so Claude assumed them",
+      },
+      {
+        id: "m5q22_d",
+        label:
+          "Claude imitates formal emails from the internet and that style cannot be changed",
+      },
     ],
-    correctAnswer: "m5q22_a",
-    topic: "Privacy",
-    difficulty: "easy",
-    source: "PDF: AI Privacy Manual",
+    correctAnswer: "m5q22_c",
+    topic: "Limits and errors",
+    difficulty: "medium",
+    source: "Lesson 1: Get to know Claude",
     feedback:
-      "Health or identity data is sensitive: never upload it to public tools. Review the manual.",
+      "Every part missing from the request is something Claude assumes for you. If you do not say what it is for, who reads it, how long it is and what tone to use, Claude chooses, and it may not be what you wanted. A complete request has a goal, audience, format, tone and limits.",
   },
   {
     id: "m5q23",
-    question: "What is privacy by design?",
+    question: "Which of these is a good way to create an interactive Artifact?",
     options: [
       {
         id: "m5q23_a",
-        label: "Building data protection in from the very start of the system",
+        label:
+          "Ask for every feature in one very long message so you never have to iterate",
       },
       {
         id: "m5q23_b",
-        label: "Adding privacy only if there is a user complaint",
+        label:
+          "Say what it is for, what data it takes and what it shows; then iterate",
       },
       {
         id: "m5q23_c",
-        label: "Hiding the data use in the small print of the contract",
+        label: "Ask for 'an interactive app' and let Claude choose the rest",
       },
       {
         id: "m5q23_d",
-        label: "Collecting everything and deciding privacy at the end",
+        label: "Share it with the team as soon as it appears and fix it later",
       },
     ],
-    correctAnswer: "m5q23_a",
-    topic: "Privacy by Design",
+    correctAnswer: "m5q23_b",
+    topic: "Creating with Claude",
     difficulty: "medium",
-    source: "PDF: AI Privacy Manual",
+    source: "Lesson 2: Create with Claude",
     feedback:
-      "Privacy is designed in from the start, not added at the end. Review the privacy manual.",
+      "Describe the use, the input data and the result, improve it with small changes and test the piece before sharing it.",
   },
   {
     id: "m5q24",
-    question: "What is the principle of data minimization?",
+    question:
+      "What is a good practice when reviewing a document Claude wrote for your client?",
     options: [
       {
         id: "m5q24_a",
         label:
-          "Collecting and storing only the data that is strictly necessary",
+          "Check only the spelling, because you already asked for the content well",
       },
       {
         id: "m5q24_b",
-        label: "Collecting all possible data just in case it is needed",
+        label: "Ask Claude to review it and send it if it finds no errors",
       },
       {
         id: "m5q24_c",
-        label: "Compressing the data so that it takes up less space",
+        label:
+          "Read the introduction and the closing, which is what the client looks at",
       },
-      { id: "m5q24_d", label: "Deleting the data randomly every so often" },
+      {
+        id: "m5q24_d",
+        label: "Check data, names, dates and tone against what you want to say",
+      },
     ],
-    correctAnswer: "m5q24_a",
-    topic: "Data Protection",
-    difficulty: "medium",
-    source: "PDF: AI Privacy Manual",
+    correctAnswer: "m5q24_d",
+    topic: "Oversight",
+    difficulty: "easy",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Minimizing means asking for and storing only what is necessary. Review the manual.",
+      "A well-written text can contain wrong data or a wrong name, and Claude does not always catch its own mistakes. A full human review is a must.",
   },
   {
     id: "m5q25",
-    question: "How are AI systems classified by risk level (EU)?",
+    question:
+      "You want to reuse the same procedure for writing meeting minutes across several projects. What should you create?",
     options: [
       {
         id: "m5q25_a",
-        label: "Unacceptable, high, limited and minimal risk",
+        label:
+          "A Skill with the steps, the template and a sample set of minutes",
       },
-      { id: "m5q25_b", label: "Small, medium, large and gigantic risk" },
-      { id: "m5q25_c", label: "Technical, human and financial risk only" },
-      { id: "m5q25_d", label: "Public, private and confidential risk only" },
+      {
+        id: "m5q25_b",
+        label:
+          "A new Project for each meeting, with the procedure pasted into the instructions",
+      },
+      {
+        id: "m5q25_c",
+        label: "Nothing: let memory remember it and apply it on its own",
+      },
+      {
+        id: "m5q25_d",
+        label: "An Artifact with the previous minutes to copy each time",
+      },
     ],
     correctAnswer: "m5q25_a",
-    topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    topic: "Connectors and Skills",
+    difficulty: "medium",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "The EU distinguishes unacceptable, high, limited and minimal risk. Review the code of ethics.",
+      "What you repeat becomes a Skill: the procedure stays the same every time, works in any job and saves time.",
   },
   {
     id: "m5q26",
     question:
-      "What kind of AI systems are prohibited because of their unacceptable risk?",
+      "Which of these statements about AI and work is the most responsible?",
     options: [
       {
         id: "m5q26_a",
-        label: "Those that seriously manipulate or discriminate against people",
+        label: "If the request is well written, human review is unnecessary",
       },
       {
         id: "m5q26_b",
-        label: "Those that summarize internal company documents",
+        label: "AI is useful for ideas, but not for professional work",
       },
       {
         id: "m5q26_c",
-        label: "Those that translate texts into other common languages",
+        label: "AI speeds up work, but the decision still remains human",
       },
       {
         id: "m5q26_d",
-        label: "Those that suggest ideas for a marketing campaign",
+        label:
+          "If Claude makes a mistake, the tool is responsible for the error",
       },
     ],
-    correctAnswer: "m5q26_a",
-    topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    correctAnswer: "m5q26_c",
+    topic: "Delegating with Claude",
+    difficulty: "easy",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Uses that seriously manipulate or discriminate are prohibited. Review the code of ethics.",
+      "AI speeds up work, professional work included. The decision and its consequences still belong to the person, however good the request is.",
   },
   {
     id: "m5q27",
-    question: "A high-risk AI system must, among other things…",
+    question:
+      "You want Claude to analyze a large data file. What do you do to get a reliable result?",
     options: [
       {
         id: "m5q27_a",
-        label: "Be documented, evaluated and have human supervision",
+        label: "Ask directly for the final conclusion to save time",
       },
       {
         id: "m5q27_b",
-        label: "Work with no registration or evaluation of any kind",
+        label: "Ask for the analysis steps and check a sample by hand",
       },
-      { id: "m5q27_c", label: "Operate only at night to consume less energy" },
+      {
+        id: "m5q27_c",
+        label: "Ask Claude to confirm the result twice",
+      },
       {
         id: "m5q27_d",
-        label: "Publish all of its code openly as a mandatory rule",
+        label: "Ask for a chart: if it looks consistent, the data is right",
       },
     ],
-    correctAnswer: "m5q27_a",
-    topic: "Regulatory Framework",
+    correctAnswer: "m5q27_b",
+    topic: "Limits and errors",
     difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "Lesson 2: Create with Claude",
     feedback:
-      "High risk requires documentation, evaluation and human supervision. Review the framework.",
+      "Ask for the method and check a sample with an independent calculation. Claude confirming or a chart looking good does not prove the data is right.",
   },
   {
     id: "m5q28",
     question:
-      "An AI app makes decisions about student scholarships. What must you guarantee?",
+      "Claude drafted a report for a client and you reviewed and adjusted it. What do you do about the use of AI when you deliver it?",
     options: [
       {
         id: "m5q28_a",
-        label: "Fair criteria, human review and a way to appeal the decision",
+        label:
+          "Nothing: I reviewed and adjusted it, so the report is now only mine",
       },
       {
         id: "m5q28_b",
-        label: "That it decides without ever explaining its selection criteria",
+        label: "I mention it only if the client asks how it was made",
       },
       {
         id: "m5q28_c",
-        label: "That it grants scholarships only to whoever uses the app most",
+        label: "I credit Claude as author, since it wrote most of it",
       },
       {
         id: "m5q28_d",
-        label: "That the decision is final with no possibility of appeal",
+        label: "I disclose how I used AI and who answers for the content",
       },
     ],
-    correctAnswer: "m5q28_a",
-    topic: "Governance",
-    difficulty: "hard",
-    source: "OVA: Lab: Ethical Dilemmas",
+    correctAnswer: "m5q28_d",
+    topic: "Delegating with Claude",
+    difficulty: "medium",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Decisions that affect people require fairness, review and the right to appeal.",
+      "Disclosing your use of AI is part of delivering honestly: you say what it helped with and who reviewed and answers for the result. Reviewing it does not erase that you used AI, and responsibility belongs to a person, not to the tool.",
   },
   {
     id: "m5q29",
-    question: "What is a bias audit in an AI system?",
+    question:
+      "You want to ask Claude a one-off question that stays out of your history and its memory. What do you do?",
     options: [
       {
         id: "m5q29_a",
-        label:
-          "Systematically checking whether the model treats any group unfairly",
+        label: "Open an incognito chat and share only the data that is needed",
       },
       {
         id: "m5q29_b",
-        label: "Measuring only the response speed of the whole system",
+        label:
+          "Ask it in your work Project, since it already has all your instructions",
       },
       {
         id: "m5q29_c",
-        label: "Checking how many registered users the platform has",
+        label: "Ask it in a normal chat, because memory is private",
       },
-      { id: "m5q29_d", label: "Verifying only the monthly cost of the tool" },
+      {
+        id: "m5q29_d",
+        label:
+          "Use incognito and paste client data, since that is allowed there",
+      },
     ],
     correctAnswer: "m5q29_a",
-    topic: "Audit",
-    difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    topic: "Privacy and data",
+    difficulty: "easy",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Auditing bias means checking whether any group ends up harmed. Practice in the bias lab.",
+      "Incognito is for a one-off chat: it is not saved to your history or used for memory. Anthropic may still keep those conversations for a period for safety reasons, and incognito does not authorize you to share personal data: share only what is needed. A normal chat or a Project does keep that context.",
   },
   {
     id: "m5q30",
     question:
-      "A model discriminates even after the 'gender' field is removed. What do you do?",
+      "When you finish a project with Claude, which practice leaves a better base for the next one?",
     options: [
       {
         id: "m5q30_a",
-        label: "Look for proxy variables and correct the indirect bias",
+        label: "Delete the Project to start the next one without context",
       },
       {
         id: "m5q30_b",
-        label: "Consider the problem solved just by removing that field",
+        label: "Leave everything in memory so Claude remembers it on its own",
       },
       {
         id: "m5q30_c",
-        label: "Add more data and trust that it will fix itself",
-      },
-      { id: "m5q30_d", label: "Hide the results until nobody notices again" },
-    ],
-    correctAnswer: "m5q30_a",
-    topic: "Bias Mitigation",
-    difficulty: "hard",
-    source: "OVA: Lab: Detect the Bias",
-    feedback:
-      "Some variables substitute for the removed attribute (indirect bias). Review the bias lab.",
-  },
-  {
-    id: "m5q31",
-    question: "Which is an UNETHICAL use of AI?",
-    options: [
-      {
-        id: "m5q31_a",
         label:
-          "Impersonating a person's identity with generated voice or image",
+          "Save instructions, examples and lessons learned in a Project or Skill",
       },
       {
-        id: "m5q31_b",
-        label: "Summarizing your own report for a work meeting",
-      },
-      {
-        id: "m5q31_c",
-        label: "Checking the spelling of a text before publishing it",
-      },
-      {
-        id: "m5q31_d",
-        label: "Generating ideas for a personal learning project",
-      },
-    ],
-    correctAnswer: "m5q31_a",
-    topic: "Responsible Use",
-    difficulty: "easy",
-    source: "Video: Ethical AI: Principles and Practice",
-    feedback:
-      "Impersonating identities with AI is unethical and can be illegal. Review the principles video.",
-  },
-  {
-    id: "m5q32",
-    question:
-      "You must explain to a user why the AI rejected their request. What do you apply?",
-    options: [
-      {
-        id: "m5q32_a",
+        id: "m5q30_d",
         label:
-          "Explainability: give understandable reasons and a review option",
-      },
-      {
-        id: "m5q32_b",
-        label: "Opacity: answer only that 'the system decided it that way'",
-      },
-      {
-        id: "m5q32_c",
-        label: "Speed: close the case as fast as possible without explaining",
-      },
-      {
-        id: "m5q32_d",
-        label: "Automation: let nobody else intervene in the case at all",
+          "Keep the full chat history and reread all of it the next time you start",
       },
     ],
-    correctAnswer: "m5q32_a",
-    topic: "Explainability",
+    correctAnswer: "m5q30_c",
+    topic: "Projects and memory",
     difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Explain the reasons in clear language and allow review. Review the code of ethics.",
-  },
-  {
-    id: "m5q33",
-    question:
-      "An educational chatbot starts giving inappropriate answers to minors. What do you do?",
-    options: [
-      {
-        id: "m5q33_a",
-        label: "Pause the system, investigate and add content safeguards",
-      },
-      {
-        id: "m5q33_b",
-        label: "Let it keep running and warn only if someone complains",
-      },
-      {
-        id: "m5q33_c",
-        label: "Remove moderation so that it answers with more freedom",
-      },
-      {
-        id: "m5q33_d",
-        label: "Blame the minors for the way they use the system",
-      },
-    ],
-    correctAnswer: "m5q33_a",
-    topic: "Safeguards",
-    difficulty: "hard",
-    source: "OVA: Lab: Ethical Dilemmas",
-    feedback:
-      "With minors, pause, investigate and strengthen content safeguards. Review the dilemmas lab.",
-  },
-  {
-    id: "m5q34",
-    question: "What does it mean for an AI system to be 'auditable'?",
-    options: [
-      {
-        id: "m5q34_a",
-        label: "That third parties can review how it works and how it decides",
-      },
-      {
-        id: "m5q34_b",
-        label: "That its code stays hidden even from its own creator",
-      },
-      {
-        id: "m5q34_c",
-        label: "That it needs no technical maintenance during its useful life",
-      },
-      {
-        id: "m5q34_d",
-        label:
-          "That it works the same even if the base data changes completely",
-      },
-    ],
-    correctAnswer: "m5q34_a",
-    topic: "Audit",
-    difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
-    feedback:
-      "Auditable means it can be reviewed by third parties. Review the code of ethics.",
-  },
-  {
-    id: "m5q35",
-    question:
-      "The AI suggests a decision that affects many people. Which principle requires reviewing it?",
-    options: [
-      {
-        id: "m5q35_a",
-        label: "Accountability and transparency with human supervision",
-      },
-      {
-        id: "m5q35_b",
-        label: "Efficiency, to settle the case in the shortest possible time",
-      },
-      {
-        id: "m5q35_c",
-        label: "Scalability, so the AI decides the largest possible volume",
-      },
-      {
-        id: "m5q35_d",
-        label: "Automation, to eliminate the intervention of people",
-      },
-    ],
-    correctAnswer: "m5q35_a",
-    topic: "Accountability",
-    difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
-    feedback:
-      "High-impact decisions require transparency and human supervision. Review the principles video.",
-  },
-  {
-    id: "m5q36",
-    question: "How is a detected bias in a model mitigated?",
-    options: [
-      {
-        id: "m5q36_a",
-        label: "Improving the data and adding ongoing testing and monitoring",
-      },
-      {
-        id: "m5q36_b",
-        label: "Ignoring it, because biases usually fix themselves over time",
-      },
-      {
-        id: "m5q36_c",
-        label: "Hiding the negative results of the brand-new system",
-      },
-      {
-        id: "m5q36_d",
-        label: "Increasing the speed of the model so it is not noticed",
-      },
-    ],
-    correctAnswer: "m5q36_a",
-    topic: "Bias Mitigation",
-    difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
-    feedback:
-      "Mitigation combines better data, testing and monitoring. Practice in the bias lab.",
-  },
-  {
-    id: "m5q37",
-    question: "What characterizes limited-risk AI systems (EU)?",
-    options: [
-      {
-        id: "m5q37_a",
-        label: "Transparency obligations, without being high risk",
-      },
-      {
-        id: "m5q37_b",
-        label: "A total ban on their use in any possible context",
-      },
-      {
-        id: "m5q37_c",
-        label: "A special license requirement in order to develop them",
-      },
-      {
-        id: "m5q37_d",
-        label: "A ban on publishing that AI is being used in them",
-      },
-    ],
-    correctAnswer: "m5q37_a",
-    topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
-    feedback:
-      "Limited risk requires transparency, not prohibition. Review the code of ethics.",
-  },
-  {
-    id: "m5q38",
-    question:
-      "You are about to deploy an AI system at work. Which governance practice helps most?",
-    options: [
-      {
-        id: "m5q38_a",
-        label: "Defining owners, fairness metrics and a monitoring plan",
-      },
-      {
-        id: "m5q38_b",
-        label: "Publishing it with no owners and no tracking metrics",
-      },
-      {
-        id: "m5q38_c",
-        label: "Measuring only how much money the system saves each month",
-      },
-      {
-        id: "m5q38_d",
-        label: "Avoiding registering any incident that happens afterward",
-      },
-    ],
-    correctAnswer: "m5q38_a",
-    topic: "Governance",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
-    feedback:
-      "Owners, metrics and monitoring are the basis of governance. Review the code of ethics.",
-  },
-  {
-    id: "m5q39",
-    question:
-      "An employee uses AI to decide about people without leaving a trace. What is breached?",
-    options: [
-      {
-        id: "m5q39_a",
-        label: "The traceability and the accountability of the decisions",
-      },
-      {
-        id: "m5q39_b",
-        label: "The speed of the process for settling that single case",
-      },
-      {
-        id: "m5q39_c",
-        label: "The popularity of the system among the internal users",
-      },
-      {
-        id: "m5q39_d",
-        label: "The operating cost of keeping that tool active",
-      },
-    ],
-    correctAnswer: "m5q39_a",
-    topic: "Accountability",
-    difficulty: "hard",
-    source: "OVA: Lab: Ethical Dilemmas",
-    feedback:
-      "Without traceability there is no possible accountability. Review the ethical dilemmas lab.",
-  },
-  {
-    id: "m5q40",
-    question:
-      "Case: AI that decides on credit must be fair, explainable and regulated. Which plan is most complete?",
-    options: [
-      {
-        id: "m5q40_a",
-        label:
-          "Audit biases, explain decisions, supervise humans and comply with the law",
-      },
-      {
-        id: "m5q40_b",
-        label: "Automate everything to eliminate any human intervention",
-      },
-      {
-        id: "m5q40_c",
-        label: "Hide the criteria to avoid questions from the applicants",
-      },
-      {
-        id: "m5q40_d",
-        label: "Optimize only the approval speed of each single request",
-      },
-    ],
-    correctAnswer: "m5q40_a",
-    topic: "Governance",
-    difficulty: "hard",
-    source: "OVA: Lab: Ethical Dilemmas",
-    feedback:
-      "The complete plan combines auditing, explainability, supervision and regulatory compliance.",
+      "What works should be saved in a Project or a Skill: that way every new job starts from what you learned, without rereading chats or relying on what memory keeps.",
   },
 ];

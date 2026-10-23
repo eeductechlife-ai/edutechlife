@@ -303,7 +303,7 @@ export const OVA_CATALOG = [
   {
     id: "bias-ova-1",
     title: "El Espejo de la Verdad",
-    module: 5,
+    module: 1,
     icon: "fa-exclamation-triangle",
     duration: "15 min",
     description: "Detector de sesgos algorítmicos.",
@@ -312,7 +312,7 @@ export const OVA_CATALOG = [
   {
     id: "privacy-ova-1",
     title: "La Brújula de Riesgos",
-    module: 5,
+    module: 1,
     icon: "fa-shield-alt",
     duration: "20 min",
     description: "Privacidad y evaluación de riesgos.",
@@ -321,7 +321,7 @@ export const OVA_CATALOG = [
   {
     id: "ethics-ova-1",
     title: "El Tribunal Ético",
-    module: 5,
+    module: 1,
     icon: "fa-scale-balanced",
     duration: "25 min",
     description: "Dilemas éticos con consecuencias reales.",
@@ -330,11 +330,47 @@ export const OVA_CATALOG = [
   {
     id: "ethics-cases-ova-1",
     title: "Casos del Guardián",
-    module: 5,
+    module: 1,
     icon: "fa-gavel",
     duration: "20 min",
     description: "Ética aplicada al mundo real.",
     component: "OVAEthicsCases",
+  },
+  {
+    id: "claude-artifacts-ova-1",
+    title: "El Taller de Artifacts",
+    module: 5,
+    icon: "fa-pen-nib",
+    duration: "15 min",
+    description: "Arma el pedido perfecto para Claude.",
+    component: "OVAClaudeArtifacts",
+  },
+  {
+    id: "claude-delegation-ova-1",
+    title: "El Tablero de Delegación",
+    module: 5,
+    icon: "fa-diagram-project",
+    duration: "15 min",
+    description: "Qué delegar, qué delegar con revisión y qué nunca delegar.",
+    component: "OVAClaudeDelegation",
+  },
+  {
+    id: "gemini-multimodal-ova-1",
+    title: "La Lupa a Prueba",
+    module: 3,
+    icon: "fa-eye",
+    duration: "15 min",
+    description: "Elige la forma de trabajar cada material con Gemini para obtener un resultado verificable.",
+    component: "OVAMultimodalLab",
+  },
+  {
+    id: "claude-first-request-ova-1",
+    title: "El Primer Pedido",
+    module: 5,
+    icon: "fa-comments",
+    duration: "15 min",
+    description: "Elige el pedido que dice qué quieres, para quién, en qué formato y con qué límites.",
+    component: "OVAClaudeFirstRequest",
   },
 ];
 
@@ -355,14 +391,14 @@ export const MODULE_NAMES = {
     pt: "O Detetive de Dados — Rastreamento com Gemini",
   },
   4: {
-    es: "El Alquimista del Conocimiento — NotebookLM",
-    en: "The Knowledge Alchemist — NotebookLM",
-    pt: "O Alquimista do Conhecimento — NotebookLM",
+    es: "El Alquimista del Conocimiento — Gemini Notebook",
+    en: "The Knowledge Alchemist — Gemini Notebook",
+    pt: "O Alquimista do Conhecimento — Gemini Notebook",
   },
   5: {
-    es: "El Guardián de la IA — Ética y Gobernanza",
-    en: "The AI Guardian — Ethics and Governance",
-    pt: "O Guardião da IA — Ética e Governança",
+    es: "El Director de Orquesta — Claude",
+    en: "The Conductor — Claude",
+    pt: "O Maestro — Claude",
   },
 };
 

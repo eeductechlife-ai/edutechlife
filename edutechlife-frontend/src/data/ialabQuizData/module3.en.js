@@ -5,16 +5,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q1_a",
-        label: "Researches deeply and builds reports with cited sources",
+        label: "Researches deeply and writes reports",
       },
-      { id: "m3q1_b", label: "Does quick and shallow searches on Google" },
-      { id: "m3q1_c", label: "Turns any question into a game" },
-      { id: "m3q1_d", label: "Installs new extensions in your browser" },
+      {
+        id: "m3q1_b",
+        label: "Does quick and shallow searches on Google",
+      },
+      {
+        id: "m3q1_c",
+        label: "Turns any question into a game",
+      },
+      {
+        id: "m3q1_d",
+        label: "Installs new extensions in your browser",
+      },
     ],
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "easy",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Deep Research works across sources and returns a cited report. Watch the cases video.",
   },
@@ -24,16 +33,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q2_a",
-        label: "To confirm each source is real and the fact is correct",
+        label: "To confirm sources and facts",
       },
-      { id: "m3q2_b", label: "Because Gemini citations are always false" },
-      { id: "m3q2_c", label: "Because Gemini almost never shows its sources" },
-      { id: "m3q2_d", label: "Because sources only work in another language" },
+      {
+        id: "m3q2_b",
+        label: "Because citations are false",
+      },
+      {
+        id: "m3q2_c",
+        label: "Because Gemini almost never shows its sources",
+      },
+      {
+        id: "m3q2_d",
+        label: "Because sources only work in another language",
+      },
     ],
     correctAnswer: "m3q2_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Always verify: the AI can be wrong. Practice in the case-solving lab.",
   },
@@ -49,7 +67,10 @@ export const MODULE_3_EN = [
         id: "m3q3_b",
         label: "Making the AI work without an internet connection",
       },
-      { id: "m3q3_c", label: "Saving the conversations on the device" },
+      {
+        id: "m3q3_c",
+        label: "Saving the conversations on the device",
+      },
       {
         id: "m3q3_d",
         label: "Automatically translating everything to another language",
@@ -58,7 +79,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q3_a",
     topic: "Grounding",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Grounding anchors answers to live data. Review the field exercises.",
   },
@@ -68,16 +89,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q4_a",
-        label: "It understands text, images, audio and video at once",
+        label: "Understands text, images and audio",
       },
-      { id: "m3q4_b", label: "It only works with written text" },
-      { id: "m3q4_c", label: "It needs a high-speed modem" },
-      { id: "m3q4_d", label: "It uses several languages at the same time" },
+      {
+        id: "m3q4_b",
+        label: "It only works with written text",
+      },
+      {
+        id: "m3q4_c",
+        label: "It needs a high-speed modem",
+      },
+      {
+        id: "m3q4_d",
+        label: "It uses several languages at the same time",
+      },
     ],
     correctAnswer: "m3q4_a",
     topic: "Multimodality",
     difficulty: "easy",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "You can show it an image, PDF or video in the same chat. See the ecosystem map.",
   },
@@ -87,16 +117,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q5_a",
-        label: "Summarize emails and write in Docs from the app",
+        label: "Summarize emails and write in Docs",
       },
-      { id: "m3q5_b", label: "Only generate images for presentations" },
-      { id: "m3q5_c", label: "Use Gemini only inside Google Slides" },
-      { id: "m3q5_d", label: "Install a separate program on the computer" },
+      {
+        id: "m3q5_b",
+        label: "Only generate images",
+      },
+      {
+        id: "m3q5_c",
+        label: "Use Gemini only inside Google Slides",
+      },
+      {
+        id: "m3q5_d",
+        label: "Install a separate program on the computer",
+      },
     ],
     correctAnswer: "m3q5_a",
     topic: "Google Workspace",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini helps in Gmail, Docs and Sheets from each app. Practice in the ecosystem OVA.",
   },
@@ -107,16 +146,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q6_a",
-        label: "With Gemini Live sharing the screen in real time",
+        label: "With Gemini Live sharing the screen",
       },
-      { id: "m3q6_b", label: "By taking a photo of the chart to upload later" },
-      { id: "m3q6_c", label: "By drawing the chart from memory to explain it" },
-      { id: "m3q6_d", label: "By waiting to get the file by email" },
+      {
+        id: "m3q6_b",
+        label: "By asking a colleague to explain it later",
+      },
+      {
+        id: "m3q6_c",
+        label: "By drawing the chart from memory to explain it",
+      },
+      {
+        id: "m3q6_d",
+        label: "By waiting for the email",
+      },
     ],
     correctAnswer: "m3q6_a",
     topic: "Gemini Live",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini Live lets you share the screen and ask about what you see. Review the ecosystem OVA.",
   },
@@ -127,16 +175,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q7_a",
-        label: "Deep Research and then verify each cited source",
+        label: "Deep Research, then verify each source",
       },
-      { id: "m3q7_b", label: "Ask once and accept the first answer" },
-      { id: "m3q7_c", label: "Copy the first Google results" },
-      { id: "m3q7_d", label: "Ask for a summary without requesting sources" },
+      {
+        id: "m3q7_b",
+        label: "Ask once and accept the first answer",
+      },
+      {
+        id: "m3q7_c",
+        label: "Copy the first Google results",
+      },
+      {
+        id: "m3q7_d",
+        label: "Ask for a summary without requesting sources",
+      },
     ],
     correctAnswer: "m3q7_a",
     topic: "Professional Research",
     difficulty: "medium",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Combine Deep Research with source verification. Watch the cases video.",
   },
@@ -147,16 +204,25 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q8_a",
-        label: "Use Deep Research with keywords and verify the citations",
+        label: "Deep Research and citation checks",
       },
-      { id: "m3q8_b", label: "Read twenty articles by hand before writing" },
-      { id: "m3q8_c", label: "Ask for a topic summary without sources" },
-      { id: "m3q8_d", label: "Search Google and write without checking" },
+      {
+        id: "m3q8_b",
+        label: "Read twenty articles by hand before writing",
+      },
+      {
+        id: "m3q8_c",
+        label: "Ask for a summary",
+      },
+      {
+        id: "m3q8_d",
+        label: "Search Google and write without checking",
+      },
     ],
     correctAnswer: "m3q8_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Deep Research finds sources and you verify and write. Practice in the case lab.",
   },
@@ -164,18 +230,27 @@ export const MODULE_3_EN = [
     id: "m3q9",
     question: "What is the best way to use Gemini to study a new topic?",
     options: [
-      { id: "m3q9_a", label: "As a tutor: ask, request examples and practice" },
+      {
+        id: "m3q9_a",
+        label: "As a tutor: ask, request examples, practice",
+      },
       {
         id: "m3q9_b",
         label: "Ask for the full essay and hand it in without reading",
       },
-      { id: "m3q9_c", label: "Use it only to translate the texts" },
-      { id: "m3q9_d", label: "Avoid it because it makes studying harder" },
+      {
+        id: "m3q9_c",
+        label: "Use it only to translate the texts",
+      },
+      {
+        id: "m3q9_d",
+        label: "Avoid it because it makes studying harder",
+      },
     ],
     correctAnswer: "m3q9_a",
     topic: "Guided Learning",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Use it as a tutor to learn actively. Review the introduction manual.",
   },
@@ -186,47 +261,56 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q10_a",
-        label: "Current data from Google services inside the chat",
+        label: "Current data from Google services in chat",
       },
-      { id: "m3q10_b", label: "They fully replace the Google websites" },
+      {
+        id: "m3q10_b",
+        label: "They fully replace the Google websites",
+      },
       {
         id: "m3q10_c",
         label: "They only work to book flights and nothing else",
       },
-      { id: "m3q10_d", label: "They require paying an extra subscription" },
+      {
+        id: "m3q10_d",
+        label: "They require paying an extra subscription",
+      },
     ],
     correctAnswer: "m3q10_a",
     topic: "Gemini Extensions",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Extensions bring live information from Google services. Review the ecosystem map.",
   },
   {
     id: "m3q11",
-    question: "Which of these is NOT a type of content Gemini can analyze?",
+    question:
+      "What does Gemini Live let you do when you point the camera at an object?",
     options: [
       {
         id: "m3q11_a",
-        label:
-          "A real physical object that has not been digitized or photographed",
+        label: "Identify it and answer questions about it",
       },
       {
         id: "m3q11_b",
-        label: "A photograph uploaded inside the conversation window",
+        label: "Convert it into a PDF automatically",
       },
       {
         id: "m3q11_c",
-        label: "A PDF file with several pages of written content",
+        label: "Send it to your email without you seeing it, in the background",
       },
-      { id: "m3q11_d", label: "An audio clip with a recorded interview on it" },
+      {
+        id: "m3q11_d",
+        label: "Delete it from the phone screen completely",
+      },
     ],
     correctAnswer: "m3q11_a",
     topic: "Multimodality",
     difficulty: "medium",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Gemini processes digital content (text, image, audio, video, PDF), not physical objects.",
+      "Gemini Live uses the camera to identify what you point at and answer questions about it.",
   },
   {
     id: "m3q12",
@@ -235,12 +319,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q12_a",
-        label:
-          "It understands your question and drafts an answer, not just links",
+        label: "It understands your question and drafts an answer",
       },
       {
         id: "m3q12_b",
-        label: "It guarantees that every single result it gives is true",
+        label: "It guarantees that everything it says is true",
       },
       {
         id: "m3q12_c",
@@ -254,7 +337,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q12_a",
     topic: "Gemini Basics",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Gemini drafts answers from your question, while a search engine lists links. Review the manual.",
   },
@@ -264,12 +347,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q13_a",
-        label:
-          "To anchor the answer to current information and show its sources",
+        label: "To anchor answers in current information",
       },
       {
         id: "m3q13_b",
-        label: "To disconnect the AI from the internet and save data",
+        label: "To disconnect the AI",
       },
       {
         id: "m3q13_c",
@@ -284,7 +366,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q13_a",
     topic: "Grounding",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Grounding connects the answer to live data and its sources. Review the field exercises.",
   },
@@ -313,7 +395,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q14_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Verify by opening the source: a formatted citation does not guarantee the data is correct.",
   },
@@ -323,8 +405,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q15_a",
-        label:
-          "It explores many sources, analyzes them and writes a cited report",
+        label: "It explores sources and writes a cited report",
       },
       {
         id: "m3q15_b",
@@ -336,13 +417,13 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q15_d",
-        label: "It only answers simple general-knowledge questions",
+        label: "It answers simple questions",
       },
     ],
     correctAnswer: "m3q15_a",
     topic: "Deep Research",
     difficulty: "easy",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Deep Research goes through many sources and delivers a cited report. Review the real cases video.",
   },
@@ -353,11 +434,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q16_a",
-        label: "State the topic, the angle and the type of sources you want",
+        label: "State the topic, the angle and the source type",
       },
       {
         id: "m3q16_b",
-        label: "Write a single word and let it guess the angle by itself",
+        label: "Write just a single word and wait",
       },
       {
         id: "m3q16_c",
@@ -371,7 +452,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "Defining topic, angle and sources improves the report. Practice in the case lab.",
   },
@@ -381,8 +462,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q17_a",
-        label:
-          "Checking one data point against at least two independent sources",
+        label: "Check a fact against two independent sources",
       },
       {
         id: "m3q17_b",
@@ -390,7 +470,7 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q17_c",
-        label: "Drawing a triangle shape to organize all your ideas",
+        label: "Drawing a triangle shape to organize ideas",
       },
       {
         id: "m3q17_d",
@@ -400,7 +480,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q17_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Triangulating means checking against independent sources to reduce the risk of error.",
   },
@@ -411,8 +491,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q18_a",
-        label:
-          "It can process very long documents within a single conversation",
+        label: "It processes very long documents in one chat",
       },
       {
         id: "m3q18_b",
@@ -421,7 +500,7 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q18_c",
-        label: "It only accepts files of a single page at most",
+        label: "It accepts one page",
       },
       {
         id: "m3q18_d",
@@ -431,7 +510,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q18_a",
     topic: "Long Context",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Long context lets you work with big documents without splitting them. Review the ecosystem map.",
   },
@@ -441,7 +520,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q19_a",
-        label: "Share your screen and ask live questions about what is shown",
+        label: "Share your screen and ask live questions",
       },
       {
         id: "m3q19_b",
@@ -453,13 +532,13 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q19_d",
-        label: "Replace the other participants with automatic answers",
+        label: "Replace the other participants",
       },
     ],
     correctAnswer: "m3q19_a",
     topic: "Gemini Live",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini Live analyzes in real time what you share on screen. Review the ecosystem OVA.",
   },
@@ -470,7 +549,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q20_a",
-        label: "Ask for sources or discard the data until you can verify it",
+        label: "Ask for sources or discard the data",
       },
       {
         id: "m3q20_b",
@@ -482,13 +561,13 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q20_d",
-        label: "Attribute the data to a well-known generic source",
+        label: "Attribute the data to a source",
       },
     ],
     correctAnswer: "m3q20_a",
     topic: "Verification",
     difficulty: "hard",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "Without a verifiable source, the data is not used. Ask for support or discard it.",
   },
@@ -498,7 +577,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q21_a",
-        label: "Summarize emails, draft in Docs and help you out in Sheets",
+        label: "Summarize emails, draft in Docs, help in Sheets",
       },
       {
         id: "m3q21_b",
@@ -506,7 +585,7 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q21_c",
-        label: "Completely replace traditional email as we know it",
+        label: "Replace traditional email entirely",
       },
       {
         id: "m3q21_d",
@@ -516,7 +595,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q21_a",
     topic: "Google Workspace",
     difficulty: "easy",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Gemini assists in Gmail, Docs and Sheets, integrated into each app. Review the ecosystem OVA.",
   },
@@ -527,11 +606,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q22_a",
-        label: "Ask for the analysis right where the spreadsheet already lives",
+        label: "Ask for the analysis where the spreadsheet lives",
       },
       {
         id: "m3q22_b",
-        label: "Copy the data by hand into a brand-new conversation",
+        label: "Copy the data by hand",
       },
       {
         id: "m3q22_c",
@@ -545,7 +624,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q22_a",
     topic: "Google Workspace",
     difficulty: "medium",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Working inside the app avoids copying data and reduces errors. Review the ecosystem OVA.",
   },
@@ -555,14 +634,16 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q23_a",
-        label:
-          "To bring current data from those services into the conversation",
+        label: "Bring current data from those services into chat",
       },
       {
         id: "m3q23_b",
         label: "To completely replace the websites of those services",
       },
-      { id: "m3q23_c", label: "To block internet access for greater security" },
+      {
+        id: "m3q23_c",
+        label: "To block internet access for greater security",
+      },
       {
         id: "m3q23_d",
         label: "To download those services so you can use them offline",
@@ -571,7 +652,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q23_a",
     topic: "Gemini Extensions",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Extensions add live data from Google services into the chat. Review the ecosystem map.",
   },
@@ -582,11 +663,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q24_a",
-        label: "A specific question, bounded and verifiable with real sources",
+        label: "A specific, bounded, verifiable question",
       },
       {
         id: "m3q24_b",
-        label: "A broad topic with no angle, to see what the AI says",
+        label: "A broad topic",
       },
       {
         id: "m3q24_c",
@@ -600,7 +681,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q24_a",
     topic: "Professional Research",
     difficulty: "medium",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "A good question is specific and verifiable. Review the field manual.",
   },
@@ -617,7 +698,10 @@ export const MODULE_3_EN = [
         id: "m3q25_b",
         label: "Use the data anyway because the AI presented it as true",
       },
-      { id: "m3q25_c", label: "Invent a similar citation to back the data up" },
+      {
+        id: "m3q25_c",
+        label: "Invent a similar citation to back the data up",
+      },
       {
         id: "m3q25_d",
         label: "Publish it without a citation and avoid reader questions",
@@ -626,7 +710,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q25_a",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "If you cannot verify the source, the data does not hold. Practice in the case lab.",
   },
@@ -636,7 +720,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q26_a",
-        label: "Learning from its explanations and verifying what you learn",
+        label: "Learn from its explanations and verify",
       },
       {
         id: "m3q26_b",
@@ -648,13 +732,13 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q26_d",
-        label: "Using it to solve in-person exams while they happen",
+        label: "Solving exams for you",
       },
     ],
     correctAnswer: "m3q26_a",
     topic: "Responsible Use",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Use it as a tutor: understand, practice and verify. Review the field manual.",
   },
@@ -665,7 +749,8 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q27_a",
-        label: "Upload it and ask for answers citing the pages or sections",
+        label:
+          "Upload it and ask for answers anchored to specific sections you can verify",
       },
       {
         id: "m3q27_b",
@@ -677,13 +762,14 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q27_d",
-        label: "Ask for a summary without citing where the info came from",
+        label:
+          "Ask for a quick summary without saying which section the information came from, to save time",
       },
     ],
     correctAnswer: "m3q27_a",
     topic: "Long Context",
     difficulty: "hard",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Ask for answers anchored to specific sections so you can verify. Review the field exercises.",
   },
@@ -693,13 +779,16 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q28_a",
-        label: "It can describe it, extract text or answer about its content",
+        label: "It can describe it, extract text or answer about it",
       },
       {
         id: "m3q28_b",
         label: "It only stores it without analyzing any of its content",
       },
-      { id: "m3q28_c", label: "It replaces it with a similar generated image" },
+      {
+        id: "m3q28_c",
+        label: "It replaces it with a similar generated image",
+      },
       {
         id: "m3q28_d",
         label: "It publishes it online instantly without any permission",
@@ -708,7 +797,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q28_a",
     topic: "Multimodality",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Gemini understands images: it describes, reads text and answers about them. Review the map.",
   },
@@ -718,7 +807,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q29_a",
-        label: "Review some of the cited sources to confirm key findings",
+        label: "Review some cited sources to confirm key findings",
       },
       {
         id: "m3q29_b",
@@ -726,7 +815,7 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q29_c",
-        label: "Remove the citations so that the text looks cleaner",
+        label: "Remove all the citations from the text",
       },
       {
         id: "m3q29_d",
@@ -736,7 +825,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q29_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "A long report does not guarantee accuracy: verify key findings in its sources.",
   },
@@ -746,11 +835,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q30_a",
-        label: "State what data you have, what you want and in what format",
+        label: "State your data, your goal and the format",
       },
       {
         id: "m3q30_b",
-        label: "Upload the file without explaining what you need from it",
+        label: "Upload the file to the chat",
       },
       {
         id: "m3q30_c",
@@ -764,7 +853,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q30_a",
     topic: "Analysis with Gemini",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Specify data, goal and format for a truly useful analysis. Review the field exercises.",
   },
@@ -775,7 +864,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q31_a",
-        label: "Check both against sources and decide based on the evidence",
+        label: "Check both against sources and decide",
       },
       {
         id: "m3q31_b",
@@ -787,13 +876,13 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q31_d",
-        label: "Use the first one and delete the second from your history",
+        label: "Use the first one",
       },
     ],
     correctAnswer: "m3q31_a",
     topic: "Critical Thinking",
     difficulty: "hard",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "When answers differ, go back to the sources. Review the real cases video.",
   },
@@ -822,7 +911,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q32_a",
     topic: "Privacy",
     difficulty: "medium",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Review the policy and anonymize before uploading internal data. Review the manual.",
   },
@@ -833,7 +922,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q33_a",
-        label: "Deep Research does a deep, extensive analysis with a report",
+        label: "Deep Research does a deep, extensive analysis",
       },
       {
         id: "m3q33_b",
@@ -841,7 +930,7 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q33_c",
-        label: "They are identical and only the button color changes",
+        label: "They are identical in every way",
       },
       {
         id: "m3q33_d",
@@ -851,7 +940,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q33_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Deep Research goes deeper and delivers a report with sources. Review the ecosystem map.",
   },
@@ -861,11 +950,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q34_a",
-        label: "Review the text before sending or sharing it with other people",
+        label: "Review the text before sending or sharing it",
       },
       {
         id: "m3q34_b",
-        label: "Send it immediately because the AI rarely fails",
+        label: "Send it right away",
       },
       {
         id: "m3q34_c",
@@ -879,7 +968,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q34_a",
     topic: "Google Workspace",
     difficulty: "easy",
-    source: "OVA: Interactive Mission: Master the Gemini Ecosystem",
+    source: "The Multimodal Lens",
     feedback:
       "Always review before sending: you are responsible for the final message.",
   },
@@ -890,7 +979,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q35_a",
-        label: "As support to understand, respecting your institution's rules",
+        label: "As study support, following your institution's rules",
       },
       {
         id: "m3q35_b",
@@ -908,7 +997,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q35_a",
     topic: "Responsible Use",
     difficulty: "easy",
-    source: "PDF: Field Manual: Introduction to Gemini",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
       "Use it as support and respect your institution's integrity rules. Review the manual.",
   },
@@ -918,7 +1007,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q36_a",
-        label: "One that depends on recent data, such as prices or news",
+        label: "One that depends on recent data",
       },
       {
         id: "m3q36_b",
@@ -928,12 +1017,15 @@ export const MODULE_3_EN = [
         id: "m3q36_c",
         label: "A creative fiction task with no external data at all",
       },
-      { id: "m3q36_d", label: "A simple math operation without any context" },
+      {
+        id: "m3q36_d",
+        label: "A simple math operation",
+      },
     ],
     correctAnswer: "m3q36_a",
     topic: "Grounding",
     difficulty: "medium",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Grounding shines with current information that changes fast. Review the field exercises.",
   },
@@ -944,7 +1036,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q37_a",
-        label: "Ask about specific sections and request that it cite the page",
+        label: "Ask about specific sections and verify answers",
       },
       {
         id: "m3q37_b",
@@ -954,12 +1046,15 @@ export const MODULE_3_EN = [
         id: "m3q37_c",
         label: "Delete the document and guess the content yourself",
       },
-      { id: "m3q37_d", label: "Ask for an invented summary to save time" },
+      {
+        id: "m3q37_d",
+        label: "Ask for an invented summary to save time",
+      },
     ],
     correctAnswer: "m3q37_a",
     topic: "Long Context",
     difficulty: "hard",
-    source: "PDF: Gemini in Practice: Field Exercises",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Focus by sections and ask for citations to move faster and verify. Review the field exercises.",
   },
@@ -969,7 +1064,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q38_a",
-        label: "Checking flights or places with current data inside the chat",
+        label: "Check flights or places with current data",
       },
       {
         id: "m3q38_b",
@@ -977,7 +1072,7 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q38_c",
-        label: "Avoiding any other website forever from now on",
+        label: "Avoiding any other websites online",
       },
       {
         id: "m3q38_d",
@@ -987,7 +1082,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q38_a",
     topic: "Gemini Extensions",
     difficulty: "easy",
-    source: "Visual guide: Gemini Ecosystem Map",
+    source: "Gemini Ecosystem: Your Visual Research Map",
     feedback:
       "Extensions add current data to help you decide better. Review the ecosystem map.",
   },
@@ -998,7 +1093,7 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q39_a",
-        label: "Find a more reliable source that backs it up, or discard it",
+        label: "Find a more reliable source or discard it",
       },
       {
         id: "m3q39_b",
@@ -1010,13 +1105,13 @@ export const MODULE_3_EN = [
       },
       {
         id: "m3q39_d",
-        label: "Hide it in a footnote so that nobody notices it",
+        label: "Hide it in a footnote",
       },
     ],
     correctAnswer: "m3q39_a",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "OVA: Lab: Solve the Case — 6 Challenges",
+    source: "The Guardian's Cases",
     feedback:
       "A source with no author is not enough: find reliable backup or discard the data.",
   },
@@ -1027,12 +1122,11 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q40_a",
-        label:
-          "Deep Research with angle and sources, then verification of the citations",
+        label: "Deep Research with focus and citation checks",
       },
       {
         id: "m3q40_b",
-        label: "A normal search and copy the very first result you find",
+        label: "A normal search and copy the first result",
       },
       {
         id: "m3q40_c",
@@ -1046,7 +1140,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q40_a",
     topic: "Professional Research",
     difficulty: "hard",
-    source: "Video: Real Cases: Digital Detectives in Action",
+    source: "Real Cases: Digital Detectives in Action",
     feedback:
       "The ideal flow: Deep Research with sources and verification afterward. Review the video.",
   },

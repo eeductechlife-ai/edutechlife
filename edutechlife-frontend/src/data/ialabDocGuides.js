@@ -60,7 +60,7 @@ const ES = {
   },
   "notebooklm-guide-1": {
     summary:
-      "Guía de NotebookLM: cómo cargar fuentes, obtener respuestas con citas y generar Audio Overviews para repasar.",
+      "Guía de Gemini Notebook: cómo cargar fuentes, obtener respuestas con citas y generar Audio Overviews para repasar.",
     before: [
       "¿Qué documentos quiero convertir en una fuente única de consulta?",
       "¿Cómo distinguiré una cita textual de una interpretación?",
@@ -101,6 +101,64 @@ const ES = {
     ],
     after:
       "Revisa tus últimos prompts y marca los que contengan datos personales. Reescríbelos minimizando la información.",
+  },
+  "claude-guide-es": {
+    summary:
+      "Guía del director para trabajar con Claude: cómo pedir bien con los cinco elementos, cuándo usar Artifacts, Proyectos, conectores y Skills, y qué nunca delegar.",
+    before: [
+      "¿Qué tarea de mi trabajo podría delegar a Claude con revisión?",
+      "¿Qué elementos (objetivo, audiencia, formato, tono, restricciones) suelo olvidar al pedir algo?",
+      "¿Qué decisión nunca debería delegar, aunque la IA la haga bien?",
+    ],
+    after:
+      "Escribe un pedido real para una tarea de tu semana usando los cinco elementos y compara el resultado con tu pedido anterior.",
+  },
+  "claude-guide-es-plantillas": {
+    summary:
+      "Plantillas para reutilizar: pedido base, instrucciones de Proyecto y lista de revisión antes de compartir cualquier resultado.",
+    before: [
+      "¿Qué procedimiento repito cada semana y podría guardar como Skill?",
+      "¿Qué instrucciones daría a un Proyecto de mi área de trabajo?",
+      "¿Qué revisión mínima necesita un documento antes de compartirlo?",
+    ],
+    after:
+      "Crea una instrucción de Proyecto para tu área, pruébala con una tarea real y ajústala después de revisar el resultado.",
+  },
+  "fundamentals-guide-1": {
+    summary: "Qué es la IA generativa, cómo predice respuestas plausibles y qué límites tiene: alucinaciones, falta de contexto, sesgos y cambios con el tiempo.",
+    before: [
+      "¿Qué diferencia hay entre una respuesta plausible y una respuesta correcta?",
+      "¿Qué tarea mía podría hacer la IA sin que yo pierda aprendizaje?",
+      "¿Qué dato de la IA usé alguna vez sin verificarlo?",
+    ],
+    after: "Escribe una respuesta de IA que hayas recibido y compárala con una fuente original: ¿qué cambió, qué faltó y qué verificarías antes de usarla?",
+  },
+  "facade-guide-1": {
+    summary: "Cómo elegir entre Proyecto, GPT y agente de ChatGPT, cómo armar un Proyecto y cómo probar un GPT antes de compartirlo.",
+    before: [
+      "¿Qué trabajo mío se repite y necesita el mismo contexto cada vez?",
+      "¿Qué regla pondría en las instrucciones de un asistente?",
+      "¿Qué paso de una tarea de varios pasos no delegaría sin revisarlo?",
+    ],
+    after: "Diseña un Proyecto para un trabajo real: nombre, instrucciones, archivos y una prueba con un caso límite.",
+  },
+  "deep-research-guide-1": {
+    summary: "Proceso de Deep Research en cuatro etapas: pregunta investigable, revisión del plan, verificación de fuentes y redacción con límites declarados.",
+    before: [
+      "¿Qué pregunta concreta necesito responder y para quién?",
+      "¿Qué fuente primaria esperaría encontrar sobre ese tema?",
+      "¿Qué diría si dos fuentes se contradicen?",
+    ],
+    after: "Elige un tema de tu área, investígalo con Deep Research y verifica tres conclusiones abriendo sus fuentes. ¿Cuál resistió la verificación?",
+  },
+  "notebook-audio-pdf-1": {
+    summary: "Cómo usar los Audio Overviews para repasar sin reemplazar la verificación, y cómo organizar las fuentes de un cuaderno por tema, con fechas y sin datos personales.",
+    before: [
+      "¿Qué documento de mi trabajo convendría convertir en audio para repasar?",
+      "¿Qué idea del audio tendría que comprobar antes de usarla?",
+      "¿Qué datos personales podría tener un documento que voy a subir?",
+    ],
+    after: "Prepara un cuaderno con tres fuentes del mismo tema, genera un audio, escribe tres ideas con tus palabras y compáralas con las citas.",
   },
 };
 
@@ -162,7 +220,7 @@ const EN = {
   },
   "notebooklm-guide-1": {
     summary:
-      "NotebookLM guide: how to upload sources, get answers with citations, and generate Audio Overviews for review.",
+      "Gemini Notebook guide: how to upload sources, get answers with citations, and generate Audio Overviews for review.",
     before: [
       "Which documents do I want to turn into a single source of truth?",
       "How will I distinguish a direct quote from an interpretation?",
@@ -203,6 +261,64 @@ const EN = {
     ],
     after:
       "Review your last prompts and flag any with personal data. Rewrite them minimizing the information.",
+  },
+  "claude-guide-es": {
+    summary:
+      "The conductor's guide to working with Claude: how to ask well with the five elements, when to use Artifacts, Projects, connectors and Skills, and what you never delegate.",
+    before: [
+      "Which task in my work could I delegate to Claude with review?",
+      "Which elements (goal, audience, format, tone, constraints) do I usually forget when I ask?",
+      "Which decision should I never delegate, even if AI does it well?",
+    ],
+    after:
+      "Write a real request for a task from your week using the five elements, and compare the result with your previous request.",
+  },
+  "claude-guide-es-plantillas": {
+    summary:
+      "Templates to reuse: a base request, Project instructions and a checklist to review any result before sharing it.",
+    before: [
+      "Which procedure do I repeat each week that I could save as a Skill?",
+      "What instructions would I give a Project for my team's work?",
+      "What minimum review does a document need before I share it?",
+    ],
+    after:
+      "Create Project instructions for your area, test them on a real task and adjust them after reviewing the result.",
+  },
+  "fundamentals-guide-1": {
+    summary: "What generative AI is, how it predicts plausible answers, and its limits: hallucinations, missing context, biases and changes over time.",
+    before: [
+      "What is the difference between a plausible answer and a correct one?",
+      "Which task of mine could AI do without my losing learning?",
+      "Which AI fact have I ever used without checking it?",
+    ],
+    after: "Take an AI answer you received and compare it with an original source: what changed, what was missing, and what would you verify before using it?",
+  },
+  "facade-guide-1": {
+    summary: "How to choose between a ChatGPT Project, GPT and agent, how to set up a Project, and how to test a GPT before sharing it.",
+    before: [
+      "Which of my work tasks repeats and needs the same context each time?",
+      "Which rule would I put in the instructions of an assistant?",
+      "Which step of a multi-step task would I not delegate without review?",
+    ],
+    after: "Design a Project for a real piece of work: name, instructions, files and a test with an edge case.",
+  },
+  "deep-research-guide-1": {
+    summary: "The Deep Research process in four stages: a researchable question, plan review, source verification and writing with stated limits.",
+    before: [
+      "What specific question do I need to answer, and for whom?",
+      "Which primary source would I expect on that topic?",
+      "What would I do if two sources contradict each other?",
+    ],
+    after: "Pick a topic from your field, research it with Deep Research and verify three conclusions by opening their sources. Which one held up?",
+  },
+  "notebook-audio-pdf-1": {
+    summary: "How to use Audio Overviews to review without replacing verification, and how to organize a notebook's sources by topic, with dates and without personal data.",
+    before: [
+      "Which document from my work would be worth turning into audio for review?",
+      "Which idea in the audio would I have to check before using it?",
+      "What personal data might a document I am about to upload contain?",
+    ],
+    after: "Prepare a notebook with three sources on the same topic, generate an audio, write three ideas in your own words and compare them with the citations.",
   },
 };
 
@@ -264,7 +380,7 @@ const PT = {
   },
   "notebooklm-guide-1": {
     summary:
-      "Guia do NotebookLM: como carregar fontes, obter respostas com citações e gerar Audio Overviews para revisar.",
+      "Guia do Gemini Notebook: como carregar fontes, obter respostas com citações e gerar Audio Overviews para revisar.",
     before: [
       "Quais documentos quero transformar em uma fonte única de consulta?",
       "Como vou distinguir uma citação textual de uma interpretação?",
@@ -305,6 +421,64 @@ const PT = {
     ],
     after:
       "Revise seus últimos prompts e marque os que contenham dados pessoais. Reescreva-os minimizando a informação.",
+  },
+  "claude-guide-es": {
+    summary:
+      "Guia do maestro para trabalhar com o Claude: como pedir bem com os cinco elementos, quando usar Artifacts, Projetos, conectores e Skills, e o que nunca delegar.",
+    before: [
+      "Qual tarefa do meu trabalho poderia delegar ao Claude com revisão?",
+      "Quais elementos (objetivo, público, formato, tom, restrições) costumo esquecer ao pedir algo?",
+      "Qual decisão eu nunca deveria delegar, mesmo que a IA faça bem?",
+    ],
+    after:
+      "Escreva um pedido real para uma tarefa da sua semana usando os cinco elementos e compare o resultado com o seu pedido anterior.",
+  },
+  "claude-guide-es-plantillas": {
+    summary:
+      "Modelos para reutilizar: pedido base, instruções de Projeto e lista de revisão antes de compartilhar qualquer resultado.",
+    before: [
+      "Qual procedimento repito toda semana e poderia guardar como Skill?",
+      "Que instruções daria a um Projeto da minha área de trabalho?",
+      "Qual revisão mínima um documento precisa antes de ser compartilhado?",
+    ],
+    after:
+      "Crie instruções de Projeto para a sua área, teste-as com uma tarefa real e ajuste depois de revisar o resultado.",
+  },
+  "fundamentals-guide-1": {
+    summary: "O que é a IA generativa, como prevê respostas plausíveis e quais são seus limites: alucinações, falta de contexto, vieses e mudanças com o tempo.",
+    before: [
+      "Qual é a diferença entre uma resposta plausível e uma resposta correta?",
+      "Que tarefa minha a IA poderia fazer sem que eu perdesse aprendizado?",
+      "Que dado da IA eu já usei alguma vez sem verificar?",
+    ],
+    after: "Pegue uma resposta de IA que você recebeu e compare com uma fonte original: o que mudou, o que faltou e o que você verificaria antes de usar?",
+  },
+  "facade-guide-1": {
+    summary: "Como escolher entre Projeto, GPT e agente do ChatGPT, como montar um Projeto e como testar um GPT antes de compartilhar.",
+    before: [
+      "Qual trabalho meu se repete e precisa do mesmo contexto toda vez?",
+      "Que regra eu colocaria nas instruções de um assistente?",
+      "Que etapa de uma tarefa de várias etapas eu não delegaria sem revisar?",
+    ],
+    after: "Desenhe um Projeto para um trabalho real: nome, instruções, arquivos e um teste com um caso limite.",
+  },
+  "deep-research-guide-1": {
+    summary: "O processo do Deep Research em quatro etapas: pergunta pesquisável, revisão do plano, verificação das fontes e redação com limites declarados.",
+    before: [
+      "Qual pergunta concreta eu preciso responder, e para quem?",
+      "Que fonte primária eu esperaria encontrar sobre esse tema?",
+      "O que eu faria se duas fontes se contradizem?",
+    ],
+    after: "Escolha um tema da sua área, pesquise com o Deep Research e verifique três conclusões abrindo as fontes. Qual resistiu à verificação?",
+  },
+  "notebook-audio-pdf-1": {
+    summary: "Como usar os Audio Overviews para revisar sem substituir a verificação, e como organizar as fontes de um caderno por tema, com datas e sem dados pessoais.",
+    before: [
+      "Qual documento do meu trabalho valeria a pena transformar em áudio para revisar?",
+      "Que ideia do áudio eu precisaria conferir antes de usar?",
+      "Que dados pessoais um documento que vou enviar pode conter?",
+    ],
+    after: "Prepare um caderno com três fontes do mesmo tema, gere um áudio, escreva três ideias com as suas palavras e compare com as citações.",
   },
 };
 

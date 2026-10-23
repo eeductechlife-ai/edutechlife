@@ -4,8 +4,8 @@ import { MODULE_1 } from "../module1.js";
 const words = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
 
 describe("MODULE_1 (examen / mi reto)", () => {
-  it("tiene un banco de 40 preguntas para la ruleta", () => {
-    expect(MODULE_1).toHaveLength(40);
+  it("tiene un banco de 60 preguntas (prompts + ética) para la ruleta", () => {
+    expect(MODULE_1).toHaveLength(60);
   });
 
   it("tiene ids únicos y estructura válida", () => {

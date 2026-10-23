@@ -1,52 +1,118 @@
-/**
- * CONSTANTES: contentEn.js
- *
- * English educational content for IALab modules 2-5
- * Module 1 remains with its original hardcoded data
- */
-
+// Contenido del curso IALab (generado desde el parche del rediseño 2026-10).
 const CONTENT_EN = {
   1: {
     objective:
       "By the end of this module you will be able to write prompts with the RTF formula (Role + Task + Format) plus the needed context, getting useful answers from any AI model on the first try.",
     learningPoints: [
       {
-        text: "Identify the role, context, task and format inside a prompt",
-        icon: "fa-bullseye",
+        text: "Explain what generative AI is and why it sometimes gets things wrong",
+        icon: "fa-brain",
       },
       {
-        text: "Rewrite a vague prompt so it is clear, specific and actionable",
+        text: "Write prompts with the RTF formula and improve them by iterating",
         icon: "fa-wand-magic-sparkles",
       },
       {
-        text: "Spot common prompt mistakes and fix them by iterating",
-        icon: "fa-exclamation-triangle",
+        text: "Spot bias, privacy risks and fake citations before you use a result",
+        icon: "fa-shield-halved",
       },
-      { text: "Apply the RTF formula to a real study or work case", icon: "fa-rocket" },
+      {
+        text: "Use AI transparently and within the law",
+        icon: "fa-scale-balanced",
+      },
     ],
     overviewData: {
       title:
-        "The Digital Artisan: Prompt Engineering — The Foundation of Every AI Interaction",
+        "The Digital Craftsman: Prompts and Ethics — The Foundations of Every AI Interaction",
       description:
-        "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence.",
+        "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence. A responsible craftsman also knows when not to use the tool: here you will learn to verify, protect data and use AI within the law.",
       mission:
-        "Your mission as an artisan: complete each lesson and multimedia resource (videos, guides, and labs). Every tool you master brings you 20% closer to your certification. Precise instructions are your quality seal!",
+        "Your mission as an artisan: complete each lesson and multimedia resource (videos, guides, and labs). Every tool you master brings you 20% closer to your certification. Precise instructions are your quality seal! This module includes the guardian's oath: without verifying, protecting data and disclosing your AI use, no prompt is finished.",
       topics: [
         {
           title: "The Artisan's Foundations: What is Generative AI?",
           icon: "fa-brain",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Explain in your own words what generative AI is, what it does well and why it sometimes gets things wrong.",
         },
         {
           title: "The Artisan's Chisel: What is a Prompt?",
           icon: "fa-comments",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Write a clear request with the Role + Task + Format formula and improve it until it works for you.",
+        },
+        {
+          title: "The Guardian's Shield: What You Should Not Share",
+          icon: "fa-lock",
+          resources: 3,
+          duration: "20 min",
+          outcome:
+            "Decide which data you never share with an AI and anonymize a text before pasting it.",
+        },
+        {
+          title: "The Guardian's Oath: Ethics and Bias",
+          icon: "fa-shield-halved",
+          resources: 3,
+          duration: "20 min",
+          outcome:
+            "Spot a bias in an AI answer, apply three questions (is it true? is it fair? do I disclose it?) and disclose when you used AI.",
         },
       ],
     },
-    lessons: [],
+    lessons: [
+      {
+        id: 1,
+        title: "The Artisan's Foundations: What is Generative AI?",
+        description: "Understand the tool before you use it",
+        detailedDescription:
+          "Before you ask AI for anything, it helps to know how it works. You will see what generative AI is, why it answers confidently even when it is wrong, what it does well and where its limits are. With that foundation you can use it with judgment from day one, even if you have never used it before. You will also review how AI began, from its first models to today, to understand where its limits come from.",
+        duration: "20 min",
+        format: "Video",
+        icon: "fa-brain",
+        badgeColor: "bg-cyan-100 text-cyan-800",
+        themeColor: "#4DA8C4",
+      },
+      {
+        id: 2,
+        title: "The Artisan's Chisel: What is a Prompt?",
+        description: "Ask for exactly what you need",
+        detailedDescription:
+          "A prompt is the instruction you give the AI. You will learn the RTF formula (Role + Task + Format), how to add the context the AI does not have, and how to improve an answer by asking for adjustments instead of starting over. You will practice with study, work and everyday cases until you get useful results on the first try.",
+        duration: "20 min",
+        format: "Lab",
+        icon: "fa-comments",
+        badgeColor: "bg-sky-100 text-sky-800",
+        themeColor: "#199DB9",
+      },
+      {
+        id: 3,
+        title: "The Guardian's Shield: What You Should Not Share",
+        description: "Protect your data and other people's data",
+        detailedDescription:
+          "Everything you paste into an AI leaves your computer. You will learn which data you never share (identity, health, minors, passwords), how to anonymize a text before pasting it and what to do if you already shared something sensitive. That protects your privacy and other people's.",
+        duration: "20 min",
+        format: "Reading",
+        icon: "fa-lock",
+        badgeColor: "bg-emerald-100 text-emerald-800",
+        themeColor: "#0E7490",
+      },
+      {
+        id: 4,
+        title: "The Guardian's Oath: Ethics and Bias",
+        description: "Decide with judgment, spot bias and disclose your use",
+        detailedDescription:
+          "Ethics is deciding well even when nobody forces you to. You will learn three of the five questions for every result (is it true? is it fair? do I disclose it?), how to spot bias in an answer and how to declare your AI use. At the end, you will see how the European Union classifies AI systems by risk. You will also learn that impersonating someone with AI is unethical, and how to protect minors when a system answers badly.",
+        duration: "20 min",
+        format: "Lab",
+        icon: "fa-shield-halved",
+        badgeColor: "bg-emerald-100 text-emerald-800",
+        themeColor: "#0E7490",
+      },
+    ],
     accordionContent: {
       1: {
         objective: "🎯 The Artisan's Foundations",
@@ -58,9 +124,86 @@ const CONTENT_EN = {
         objectiveDesc:
           "A well-crafted prompt is your most powerful tool: learn to write instructions AI understands the first time.",
       },
+      3: {
+        objective: "🔒 The Guardian's Shield",
+        objectiveDesc:
+          "Before you paste anything into an AI, decide what goes in and what stays with you.",
+        achievements: [
+          {
+            icon: "fa-check",
+            text: "Identify personal data: ID numbers, phones, health and minors' data",
+          },
+          {
+            icon: "fa-check",
+            text: "Anonymize a text before pasting it (roles instead of names)",
+          },
+          {
+            icon: "fa-check",
+            text: "Know what to do if you already shared a sensitive piece of data",
+          },
+        ],
+        warnings: [
+          {
+            icon: "fa-times",
+            text: "Pasting other people's data without their permission",
+          },
+          {
+            icon: "fa-times",
+            text: "Uploading information about minors",
+          },
+          {
+            icon: "fa-times",
+            text: "Sharing passwords or verification codes",
+          },
+        ],
+        example: {
+          label: "The Guardian vs. The Reckless",
+          weak: "❌ The reckless: Pasted the grade list with students' full names to ask for report-card comments.",
+          strong:
+            "✅ The guardian: Replaced the names with “Student A, B, C”, removed the school and ID numbers, and asked only for the comment format.",
+        },
+      },
+      4: {
+        objective: "🛡️ The Guardian's Oath",
+        objectiveDesc:
+          "Before you trust a result, look at it in the mirror: spot bias, decide with judgment, protect people and disclose how you used AI.",
+        achievements: [
+          {
+            icon: "fa-check",
+            text: "Recognize which people or perspectives an answer leaves out",
+          },
+          {
+            icon: "fa-check",
+            text: "Apply the three questions: is it true? is it fair? do I disclose it?",
+          },
+          {
+            icon: "fa-check",
+            text: "Disclose when and how you used AI and keep a person responsible for decisions",
+          },
+        ],
+        warnings: [
+          {
+            icon: "fa-times",
+            text: "Believing an answer just because it sounds sure: it may be biased or carry invented citations",
+          },
+          {
+            icon: "fa-times",
+            text: "Letting AI decide alone about hiring, grading or sanctioning",
+          },
+          {
+            icon: "fa-times",
+            text: "Presenting AI-generated work as your own without reviewing or disclosing it",
+          },
+        ],
+        example: {
+          label: "The Guardian vs. The Reckless",
+          weak: "❌ The reckless: A student handed in an AI-generated essay with invented citations and examples of only one kind of person. The professor found out and the student lost credibility.",
+          strong:
+            "✅ The guardian: Used AI as an assistant, asked for the same task with different profiles to see the bias, checked every source, disclosed the use and handed in solid, honest work.",
+        },
+      },
     },
   },
-
   2: {
     objective:
       "Design and build intelligent systems with ChatGPT: from foundations to full automation of your daily work as a true digital architect.",
@@ -69,18 +212,24 @@ const CONTENT_EN = {
         text: "Design master blueprints with advanced System Prompts",
         icon: "fa-sliders",
       },
-      { text: "Connect structures with external APIs", icon: "fa-code" },
+      {
+        text: "Build GPTs and Projects that work with your context",
+        icon: "fa-code",
+      },
       {
         text: "Build your own custom GPT as an architectural module",
         icon: "fa-robot",
       },
-      { text: "Automate complete construction workflows", icon: "fa-cog" },
+      {
+        text: "Automate complete construction workflows",
+        icon: "fa-cog",
+      },
     ],
     overviewData: {
       title:
         "The Digital Architect: ChatGPT & Automation — Build Your Own Work Ecosystem",
       description:
-        "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, create GPTs as construction modules, and connect everything with external APIs to raise digital structures that work on their own.",
+        "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, create GPTs as construction modules, organize Projects, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
       mission:
         "Your mission as an architect: complete each lesson and master the art of building with ChatGPT. Every structure you design brings you closer to your automation architect certification. Build your digital masterpiece!",
       topics: [
@@ -89,18 +238,24 @@ const CONTENT_EN = {
           icon: "fa-book-open",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Ask ChatGPT for an everyday task and get a useful answer on the first try.",
         },
         {
           title: "The Architect's Scaffolding: Integrated Tools",
           icon: "fa-layer-group",
-          resources: 3,
-          duration: "42 min",
+          resources: 2,
+          duration: "30 min",
+          outcome:
+            "Choose the right ChatGPT tool (search, files, images or voice) and check what it gives you.",
         },
         {
-          title: "The Building's Facade: GPTs and Function Calling",
+          title: "The Building's Facade: GPTs, Projects and Agents",
           icon: "fa-code",
           resources: 2,
           duration: "20 min",
+          outcome:
+            "Organize a repeated task in a Project and decide when a GPT or an agent makes sense.",
         },
       ],
     },
@@ -110,7 +265,7 @@ const CONTENT_EN = {
         title: "The Architect's Blueprints: Complete ChatGPT Guide",
         description: "The foundations of every great digital construction",
         detailedDescription:
-          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects.",
+          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects. Currency note: OpenAI retires custom GPTs on December 11, 2026 and replaces them with plugins. Start now with Projects and with the plugins connected to your account.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -122,7 +277,7 @@ const CONTENT_EN = {
         title: "The Architect's Scaffolding: Integrated Tools",
         description: "The tools that raise your digital construction",
         detailedDescription:
-          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's arsenal: Web Search, Data Analysis with Python, DALL-E 3, Canvas, and Projects. Learn to combine them to build powerful automations that multiply your productivity.",
+          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's arsenal: Web Search, Data Analysis with Python, image generation, Canvas, and Projects. Learn to combine them to build powerful automations that multiply your productivity.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -131,10 +286,10 @@ const CONTENT_EN = {
       },
       {
         id: 3,
-        title: "The Building's Facade: GPTs and Function Calling",
+        title: "The Building's Facade: GPTs, Projects and Agents",
         description: "Connect your work to the real world",
         detailedDescription:
-          "The facade is what the world sees, but behind it lies a complex structure that holds it up. Take your constructions to the next level: connect custom GPTs with APIs, databases, and external services. Create automated workflows that solve real problems while you design the next project.",
+          "The facade is what the world sees. Here you build tailored assistants: GPTs with your instructions and knowledge, Projects that organize each piece of work, and ChatGPT's agent for multi-step tasks. Learn to design, test, and use them without losing control of any decision. OpenAI has announced it will retire custom GPTs on provisional dates: check in your account whether your GPT is still available, and consider moving its instructions to a Project.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -177,15 +332,15 @@ const CONTENT_EN = {
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Amateur: Using GPT-4 for everything, even tasks GPT-3.5 handles in seconds",
+          weak: "❌ Amateur: Using the most powerful model for everything, even for tasks the fast model solves in seconds",
           strong:
-            "✅ Architect: GPT-3.5 for quick drafts and summaries, GPT-4 for complex structural analysis and deep reasoning — the right material for each layer of construction",
+            "✅ Architect: GPT-6 Luna for quick drafts and summaries, GPT-6 Sol for complex structural analysis — the right material for each layer of the build, depending on your plan",
         },
       },
       2: {
         objective: "🏗️ The Architect's Scaffolding",
         objectiveDesc:
-          "Master ChatGPT's tool ecosystem: Web Search, Code, DALL-E 3, Canvas, and Projects.",
+          "Master ChatGPT's tool ecosystem: Web Search, Code, image generation, Canvas, and Projects.",
         achievements: [
           {
             icon: "fa-check",
@@ -203,7 +358,7 @@ const CONTENT_EN = {
         warnings: [
           {
             icon: "fa-times",
-            text: "Using DALL-E 3 for long text or brand logos — like using a chisel as a hammer",
+            text: "Asking image generation for long text or brand logos without reviewing it — text inside images comes out with errors; write it in Canvas",
           },
           {
             icon: "fa-times",
@@ -218,51 +373,50 @@ const CONTENT_EN = {
           label: "Integrated workflow example",
           weak: "❌ Isolated: Asking for updated data without enabling Web Search → outdated results like a building without foundations",
           strong:
-            "✅ Integrated: Search current data (Browse) → analyze with Python (Code Interpreter) → generate infographic (DALL-E 3) → edit in Canvas — a construction in 4 perfectly orchestrated phases",
+            "✅ Integrated: Search current data (Browse) → analyze with Python (Code Interpreter) → generate infographic (image) → edit in Canvas — a construction in 4 perfectly orchestrated phases",
         },
       },
       3: {
-        objective: "⚡ The Architect's Flow",
+        objective: "🧱 The Architect's Facade",
         objectiveDesc:
-          "Connect your ChatGPT builds to the outside world via APIs: data, actions, and full automation.",
+          "Build custom GPTs and Projects, and use them so ChatGPT works with your context on every task.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Configure Function Calling with the OpenAI API like digital plumbing systems",
+            text: "Create a custom GPT with clear instructions, your own knowledge, and a defined goal",
           },
           {
             icon: "fa-check",
-            text: "Define functions with clear JSON schemas — the blueprints of your connections",
+            text: "Organize a Project with files, instructions, and conversations for one piece of work",
           },
           {
             icon: "fa-check",
-            text: "Create multi-step automated workflows that run 24/7",
+            text: "Use ChatGPT's agent on multi-step tasks, reviewing each step before you approve it",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Not validating API responses before using them — like not inspecting construction materials",
+            text: "Loading sensitive or minors' data into a GPT without checking who can see it — like leaving confidential blueprints on the street",
           },
           {
             icon: "fa-times",
-            text: "Sending sensitive data without authentication — like leaving doors open at your construction site",
+            text: "Delegating to the agent decisions that need your judgment — the agent executes, you approve",
           },
           {
             icon: "fa-times",
-            text: "Not handling connection errors properly — like having no earthquake contingency plan",
+            text: "Publishing a GPT without testing it on real cases — like handing over a facade without inspection",
           },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Basic prompt: What's the weather today? — like asking the weather by looking out the window",
+          weak: "❌ Generic: Starting every conversation from scratch, with no instructions or files, and repeating the same context",
           strong:
-            "✅ Function Calling: ChatGPT detects the intent, calls the weather API, receives JSON data, and generates: The current weather in Bogotá is 18°C with 65% humidity. We recommend bringing an umbrella due to 80% rain probability this afternoon. An elegant facade connecting to live real-world data.",
+            "✅ Facade: A «Proposal advisor» GPT with your tone, your templates, and your prices, inside a Project that stores each client's documents. Every answer comes with your context already loaded.",
         },
       },
     },
   },
-
   3: {
     objective:
       "Wield your digital magnifying glass: investigate deeply, verify every clue, and analyze information with the precision of a master detective.",
@@ -276,7 +430,7 @@ const CONTENT_EN = {
         icon: "fa-signal",
       },
       {
-        text: "Dig until you find the truth — deep investigations no other detective can match",
+        text: "Dig until you find the truth — step-by-step deep investigations with sources you can check",
         icon: "fa-search",
       },
       {
@@ -296,18 +450,24 @@ const CONTENT_EN = {
           icon: "fa-google",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Ask Gemini to read a photo, a document or an audio recording and check what it understood.",
         },
         {
           title: "Grounding: When Evidence Touches the Real World",
           icon: "fa-layer-group",
-          resources: 3,
+          resources: 2,
           duration: "20 min",
+          outcome:
+            "Tell an answer with sources from one that only sounds good, and open the sources to check it.",
         },
         {
           title: "Deep Research: The Forensic Toolkit",
           icon: "fa-search",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Commission a research task from Gemini and review its report source by source.",
         },
       ],
     },
@@ -344,7 +504,7 @@ const CONTENT_EN = {
         description:
           "Dig until you find the truth with deep investigation tools",
         detailedDescription:
-          "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, automatic fact-checking to verify every source, and technical report generation any expert would endorse.",
+          "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, source verification to verify every source, and technical report generation any expert would endorse.",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -434,7 +594,7 @@ const CONTENT_EN = {
       3: {
         objective: "🔍 Deep Research",
         objectiveDesc:
-          "For complex cases: deep investigations with verifiable sources and automatic fact-checking.",
+          "For complex cases: deep investigations with verifiable sources and source verification.",
         achievements: [
           {
             icon: "fa-check",
@@ -472,7 +632,6 @@ const CONTENT_EN = {
       },
     },
   },
-
   4: {
     objective:
       "Turn documents into gold: podcasts that sound like professional radio, summaries that cut to the chase, and answers that cite every source without making things up.",
@@ -496,39 +655,46 @@ const CONTENT_EN = {
     ],
     overviewData: {
       title:
-        "The Digital Alchemist: NotebookLM — Where Your Documents Become Knowledge",
+        "The Digital Alchemist: Gemini Notebook — Where Your Documents Become Knowledge",
       description:
         "In this module, you will become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in formats that captivate, educate, and transform.",
       mission:
         "Become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in ways that captivate, educate, and transform.",
       topics: [
         {
-          title: "The Document Alchemist: Your First Spell with NotebookLM",
+          title:
+            "The Document Alchemist: Your First Spell with Gemini Notebook",
           icon: "fa-microphone",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Create your first notebook with your documents and ask it questions it answers with citations.",
         },
         {
           title: "The Art of Curation: How to Choose and Synthesize Sources",
           icon: "fa-book-open",
-          resources: 3,
+          resources: 2,
           duration: "20 min",
+          outcome:
+            "Choose good sources and turn them into a summary or study guide you can verify.",
         },
         {
           title: "The Secret Formula: Audio Overviews and Document Management",
           icon: "fa-podcast",
-          resources: 4,
-          duration: "44 min",
+          resources: 3,
+          duration: "30 min",
+          outcome:
+            "Generate an audio summary of your documents and organize your notebooks so you can find everything.",
         },
       ],
     },
     lessons: [
       {
         id: 1,
-        title: "The Document Alchemist: Your First Spell with NotebookLM",
+        title: "The Document Alchemist: Your First Spell with Gemini Notebook",
         description: "Where PDFs come to life",
         detailedDescription:
-          "Meet NotebookLM, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with exact citations. It doesn't hallucinate. It doesn't make things up. It's your librarian with superpowers.",
+          "Meet Gemini Notebook, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with exact citations. It doesn't hallucinate. It doesn't make things up. It's your librarian with superpowers.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -564,7 +730,7 @@ const CONTENT_EN = {
       1: {
         objective: "🎯 The First Spell",
         objectiveDesc:
-          "NotebookLM only talks about what it knows: your sources. AI that revolutionizes knowledge management.",
+          "Gemini Notebook only talks about what it knows: your sources. AI that revolutionizes knowledge management.",
         achievements: [
           {
             icon: "fa-check",
@@ -576,7 +742,7 @@ const CONTENT_EN = {
           },
           {
             icon: "fa-check",
-            text: "Tell the difference between an expert librarian (NotebookLM) and a generic chatbot",
+            text: "Tell the difference between an expert librarian (Gemini Notebook) and a generic chatbot",
           },
         ],
         warnings: [
@@ -680,208 +846,214 @@ const CONTENT_EN = {
       },
     },
   },
-
   5: {
     objective:
-      "Master the 4 ethical pillars that companies demand today and become the guardian who ensures AI serves humanity.",
+      "Conduct Claude like an orchestra conductor: delegate real work, create documents and pieces, and supervise every result with human judgment.",
     learningPoints: [
       {
-        text: "Detect algorithmic biases like a guardian",
-        icon: "fa-shield-check",
+        text: "Write instructions Claude understands on the first try",
+        icon: "fa-comments",
       },
       {
-        text: "Master AI regulations that protect millions",
-        icon: "fa-briefcase",
+        text: "Create documents, presentations and interactive pieces with Artifacts",
+        icon: "fa-pen-nib",
       },
-      { text: "Shield data and privacy from threats", icon: "fa-lock" },
       {
-        text: "Create ethical protocols that save reputations",
-        icon: "fa-clipboard-check",
+        text: "Delegate recurring work with Projects, connectors and Skills",
+        icon: "fa-diagram-project",
+      },
+      {
+        text: "Supervise every result: verify data and protect information",
+        icon: "fa-shield-halved",
       },
     ],
     overviewData: {
-      title:
-        "The Digital Guardian: AI Ethics & Governance — The Mark of a Responsible Professional",
+      title: "The Conductor: Claude — Delegate with Judgment",
       description:
-        "Every time you use AI, you're making ethical decisions — whether you know it or not. Are your uploaded files protected? Is the output fair for everyone? Who's accountable if something goes wrong? This module isn't just theory — it's your training to become an AI guardian.",
+        "Claude is no longer just a chat: it creates documents and presentations, connects to your work tools, remembers context and can carry out multi-step tasks. This module teaches you to conduct it: what to ask, how to review what it delivers and what you must never delegate.",
       mission:
-        "Become the guardian AI needs. Complete your global certification with the ethical skills that separate responsible professionals from those who risk their careers.",
+        "Your mission as conductor: complete every lesson and delegate one real task from your work. A good conductor doesn't play every instrument; they set the score, listen and correct. Conduct with judgment!",
       topics: [
         {
-          title: "The Guardian's Vow: 4 Sacred Principles",
-          icon: "fa-balance-scale",
+          title: "Get to Know Claude: the AI That Works With You",
+          icon: "fa-comments",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Write a first complete request for Claude, with goal, audience, format and limits.",
         },
         {
-          title: "The Mirror of Truth: Is Your AI Fair?",
-          icon: "fa-exclamation-triangle",
+          title: "Create with Claude: Artifacts, Documents and Presentations",
+          icon: "fa-pen-nib",
           resources: 3,
-          duration: "20 min",
+          duration: "25 min",
+          outcome:
+            "Ask Claude for a document or a presentation, adjust it with small changes and check the facts before sharing it.",
         },
         {
-          title: "The Guardian's Legacy: Navigating the Law",
-          icon: "fa-shield-alt",
+          title: "Delegate with Claude: Projects, Connectors and Skills",
+          icon: "fa-diagram-project",
           resources: 3,
-          duration: "20 min",
+          duration: "30 min",
+          outcome:
+            "Decide what to delegate to Claude, what you review and what you never delegate, and set up a Project for recurring work.",
         },
       ],
     },
     lessons: [
       {
         id: 1,
-        title: "The Guardian's Vow: 4 Sacred Principles",
-        description: "The ethical foundations every AI guardian must know",
+        title: "Get to Know Claude: the AI That Works With You",
+        description: "How to think and ask like an orchestra conductor",
         detailedDescription:
-          "Welcome to guardian training. Before you use any AI tool, there are 4 principles you must engrave in your professional DNA: transparency, fairness, accountability, and privacy. These aren't abstract theory — they're the shield that protects your users, your organization, and your reputation.",
+          "Before giving instructions, know the instrument. What Claude is, how it differs from a search engine, how to write a request with goal, audience and format, how memory works and when to choose a faster model or a more capable one.",
         duration: "20 min",
         format: "Reading",
-        icon: "fa-balance-scale",
-        badgeColor: "bg-red-100 text-red-800",
-        themeColor: "#EF4444",
+        icon: "fa-comments",
+        badgeColor: "bg-orange-100 text-orange-800",
+        themeColor: "#D97757",
       },
       {
         id: 2,
-        title: "The Mirror of Truth: Is Your AI Fair?",
-        description: "Detect and destroy hidden biases in algorithms",
+        title: "Create with Claude: Artifacts, Documents and Presentations",
+        description: "From an idea to a document or piece ready to share",
         detailedDescription:
-          "Every algorithm inherits the prejudices of its creators and its data. In this lesson, you'll become a bias hunter: learn to detect algorithmic discrimination, understand its root causes, and apply fairness strategies that make your systems truly inclusive.",
-        duration: "20 min",
+          "Artifacts are pieces you see and edit next to the conversation: documents, charts, presentations and small applications. Learn to describe the result, iterate with small adjustments, compare versions and review before sharing.",
+        duration: "25 min",
         format: "Lab",
-        icon: "fa-exclamation-triangle",
-        badgeColor: "bg-orange-100 text-orange-800",
-        themeColor: "#F97316",
+        icon: "fa-pen-nib",
+        badgeColor: "bg-amber-100 text-amber-800",
+        themeColor: "#E8A33D",
       },
       {
         id: 3,
-        title: "The Guardian's Legacy: Navigating the Law",
-        description:
-          "The legal framework and best practices every guardian must master",
+        title: "Delegate with Claude: Projects, Connectors and Skills",
+        description: "Recurring work without losing control",
         detailedDescription:
-          "Wanting to do right isn't enough — you need to know the law. From the EU AI Act to local regulations, data protection to corporate governance, this lesson gives you the legal map to navigate AI without putting anyone at risk.",
-        duration: "20 min",
+          "A Project keeps the context of one piece of work; connectors give access to your tools with permissions you approve; a Skill reuses a procedure; scheduled tasks automate recurring work. Delegating means defining the goal, the limits and the review: the final decision is still yours.",
+        duration: "30 min",
         format: "Video",
-        icon: "fa-shield-alt",
-        badgeColor: "bg-slate-100 text-slate-800",
-        themeColor: "#64748B",
+        icon: "fa-diagram-project",
+        badgeColor: "bg-teal-100 text-teal-800",
+        themeColor: "#0097A7",
       },
     ],
     accordionContent: {
       1: {
-        objective: "🛡️ The Guardian's Ethical Oath",
+        objective: "🎼 Know your instrument",
         objectiveDesc:
-          "Build a bulletproof ethical framework for generative AI: protect users, organizations, and society.",
+          "Understand what Claude is, how it keeps context and how to ask for what you need on the first try.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Internalize the 4 sacred pillars of the AI guardian",
+            text: "Write a request with goal, audience, format and tone",
           },
           {
             icon: "fa-check",
-            text: "Detect ethical dilemmas in real-world cases before they cause harm",
+            text: "Control what Claude remembers between conversations",
           },
           {
             icon: "fa-check",
-            text: "Apply a fail-safe ethical checklist before every AI interaction",
+            text: "Choose the right model for each type of task",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Using AI as a weapon without a shield — ignoring the impact on people",
+            text: "Asking without context and expecting it to guess the result",
           },
           {
             icon: "fa-times",
-            text: "Believing AI is neutral — unguarded technology is dangerous",
+            text: "Using the most powerful model for simple tasks: spending without gaining",
           },
           {
             icon: "fa-times",
-            text: "Ignoring unintended consequences until it's too late",
+            text: "Assuming recent data is right without checking a current source",
           },
         ],
         example: {
-          label: "The Guardian vs. The Reckless",
-          weak: "❌ The reckless: A student used AI to generate an entire essay without verification. The AI invented data, fake citations, and non-existent references. The professor caught everything, and the student lost all academic credibility.",
+          label: "Practical example",
+          weak: "❌ Vague: 'Write me a proposal for a client'. Generic result, no audience or tone.",
           strong:
-            "✅ The guardian: A student used AI as an assistant, verified every source with real data, disclosed AI use to the professor, and submitted an impeccable paper. Result: deep learning + professor trust + perfect grade.",
+            "✅ Clear: 'A 2-page proposal for a school principal's office in Manizales, formal but warm tone, with objective, a 3-month plan and pricing in pesos'. Useful on the first try.",
         },
       },
       2: {
-        objective: "🔍 The Bias Hunter",
+        objective: "🖋️ Create with Artifacts",
         objectiveDesc:
-          "Detect and eliminate the biases AI inherits from its data before they cause harm.",
+          "Turn an idea into a document, a presentation or an interactive piece, and review it before sharing.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Identify 7 types of algorithmic biases like a forensic expert",
+            text: "Describe the final result before asking for the content",
           },
           {
             icon: "fa-check",
-            text: "Analyze real cases where AI discriminated — and understand why",
+            text: "Iterate with small adjustments instead of redoing everything",
           },
           {
             icon: "fa-check",
-            text: "Apply surgical bias mitigation techniques",
+            text: "Verify figures, names and dates before presenting",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Blindly trusting AI results without verifying fairness",
+            text: "Accepting a change without comparing it with your version",
           },
           {
             icon: "fa-times",
-            text: "Feeding AI training data that excludes entire groups",
+            text: "Presenting a figure without checking its source",
           },
           {
             icon: "fa-times",
-            text: "Never auditing AI outputs — silence is not safety",
+            text: "Sharing an interactive piece without testing it",
           },
         ],
         example: {
-          label: "The AI That Discriminated Without Knowing It",
-          weak: "❌ Biased: A hiring AI learned from 10 years of historical data where only men held certain positions. It automatically began filtering out women — not out of malice, but from corrupted data.",
+          label: "Iteration example",
+          weak: "❌ One request: 'Make me a company presentation'. Ten generic slides.",
           strong:
-            "✅ Fair: The audit team detected the bias in the testing phase, retrained the model with balanced data, included fairness variables, and established quarterly audits. The AI now selects without prejudice.",
+            "✅ Iterating: first a 6-slide outline, then the message of each slide, then charts with verified figures. Three steps, a result ready for the board.",
         },
       },
       3: {
-        objective: "📜 The Guardian's Code",
+        objective: "🎛️ Delegate with judgment",
         objectiveDesc:
-          "Learn the laws governing AI and design protocols that shield your organization.",
+          "Use Projects, connectors and Skills so recurring work moves forward without losing control of decisions.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Master the European Union AI Act like a compliance expert",
+            text: "Create a Project with instructions and reference files",
           },
           {
             icon: "fa-check",
-            text: "Understand legal obligations for privacy and transparency",
+            text: "Connect a tool while reviewing the permissions you grant",
           },
           {
             icon: "fa-check",
-            text: "Design an ethical AI protocol worthy of a guardian",
+            text: "Turn a repeated procedure into a reusable Skill",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Ignoring current AI regulations — ignorance is no defense",
+            text: "Giving passwords in the chat or accepting permissions without reading them",
           },
           {
             icon: "fa-times",
-            text: "Processing personal data with AI without legal protection",
+            text: "Letting a multi-step task act without confirming important actions",
           },
           {
             icon: "fa-times",
-            text: "Implementing AI in your organization without governance policies",
+            text: "Uploading third parties' personal data without judgment or a clear policy",
           },
         ],
         example: {
-          label: "Two Worlds, One Algorithm",
-          weak: "❌ No protocol: A startup deployed customer service chatbots without ethical oversight. Within 48 hours, the chatbot had insulted clients in 3 different languages, violated privacy norms, and triggered a PR crisis.",
+          label: "The conductor vs. the spectator",
+          weak: "❌ Spectator: Connected their email, asked 'reply to everything' and sent replies unread. A client received a wrong figure.",
           strong:
-            "✅ With protocol: An AI ethics committee approved every implementation, quarterly audits caught problems before they reached the public, a mandatory privacy checklist before every deployment, and transparent disclosure to end users. Result: customer trust, zero incidents.",
+            "✅ Conductor: Defined what to reply to, reviewed each draft and used a scheduled task for the weekly summary. They decide what gets sent.",
         },
       },
     },

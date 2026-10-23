@@ -231,11 +231,11 @@ const COURSE_KNOWLEDGE = [
   },
   {
     id: 4,
-    title: "El Alquimista del Conocimiento: NotebookLM",
+    title: "El Alquimista del Conocimiento: Gemini Notebook",
     objective:
       "Convierte documentos en oro: podcasts que cautivan, resúmenes que iluminan y un asistente que solo habla de lo que sabe.",
     description:
-      "Imagina un bibliotecario que ha leído cada palabra de tus PDFs, los entiende a profundidad y te responde con citas exactas. Sin alucinaciones. Sin inventos. Eso es NotebookLM: la herramienta de Google que transforma documentos en conocimiento vivo.",
+      "Imagina un bibliotecario que ha leído cada palabra de tus PDFs, los entiende a profundidad y te responde con citas exactas. Sin alucinaciones. Sin inventos. Eso es Gemini Notebook: la herramienta de Google que transforma documentos en conocimiento vivo.",
     challenge:
       "MISIÓN: Crea un programa de radio científico. Convierte 5 papers sobre neuroplasticidad en un podcast de 15 minutos que hasta tu abuela entendería.",
     topics: [
@@ -243,7 +243,7 @@ const COURSE_KNOWLEDGE = [
         title:
           "El Alquimista de Documentos: Convierte PDFs en Oro de Conocimiento",
         description:
-          "Conoce a tu nuevo superpoder: NotebookLM, el asistente de Google que lee todas tus fuentes y te responde solo con información verificada. No es un chatbot cualquiera — es tu bibliotecario personal con memoria impecable.",
+          "Conoce a tu nuevo superpoder: Gemini Notebook, el asistente de Google que lee todas tus fuentes y te responde solo con información verificada. No es un chatbot cualquiera — es tu bibliotecario personal con memoria impecable.",
         difficulty: "Principiante",
         learningObjectives: [
           "Construir tu primera biblioteca inteligente donde los documentos cobran vida",
@@ -253,10 +253,10 @@ const COURSE_KNOWLEDGE = [
         resources: [
           {
             type: "video",
-            title: "Primeros Pasos con NotebookLM",
+            title: "Primeros Pasos con Gemini Notebook",
             duration: "10:15",
           },
-          { type: "pdf", title: "Guía de NotebookLM", pages: 14 },
+          { type: "pdf", title: "Guía de Gemini Notebook", pages: 14 },
           { type: "ova", title: "El Grimorio" },
         ],
       },
@@ -273,7 +273,7 @@ const COURSE_KNOWLEDGE = [
         resources: [
           {
             type: "video",
-            title: "Resúmenes Inteligentes con NotebookLM",
+            title: "Resúmenes Inteligentes con Gemini Notebook",
             duration: "3:33",
           },
           { type: "document", title: "Plantillas de Resumen" },

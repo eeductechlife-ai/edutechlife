@@ -1,3 +1,16 @@
+import { getClaudeTasks, normalizeClaudeLocale } from "../../../data/ova/claudeModule";
+
+const CLAUDE_TASK_COUNT = getClaudeTasks("es").length;
+const parseClaudeAnswers = (raw) => {
+  try {
+    return JSON.parse(raw || "{}").answers || {};
+  } catch {
+    return {};
+  }
+};
+const countClaudeCorrect = (answers) =>
+  getClaudeTasks("es").filter((t) => answers[t.id] === t.answer).length;
+
 const MODULE_CONFIG = {
   1: {
     name: { es: "Ingeniería de Prompts", en: "Prompt Engineering" },
@@ -759,280 +772,98 @@ Devuelve SOLO JSON válido.`,
     },
   },
   5: {
-    name: { es: "IA Responsable y Ética", en: "Responsible and Ethical AI" },
+    name: { es: "Claude: El Director de Orquesta", en: "Claude: The Conductor", pt: "Claude: O Maestro" },
     totalSteps: 3,
     generateSystemPrompt: () =>
-      "Eres un experto en ética de IA, sesgos algorítmicos y regulación. Genera 3 ejercicios de nivel medio sobre ética en inteligencia artificial. Devuelve SOLO JSON.",
-    generateUserPrompt:
-      () => `Genera un JSON con 3 ejercicios sobre ética en IA:
-1. casoEtico: Descripción detallada de un caso real de sesgo algorítmico (3-4 oraciones). Incluye el contexto, los datos usados, y el resultado problemático. Ejemplo: "Un sistema de contratación basado en IA entrenado con datos históricos de una empresa tecnológica mostraba preferencia por candidatos hombres. El sistema penalizaba CVs que incluían palabras como 'voluntariado' o 'licencia maternal'."
-2. tiposSesgo: Array con 4 tipos de sesgo (nombres y descripciones). El estudiante debe identificar cuáles están presentes en el caso y CLASIFICAR el riesgo del caso según el AI Act de la UE (riesgo inaceptable, alto, limitado o mínimo).
-3. protocoloPlantilla: Un esquema con secciones: principios rectores, medidas de prevención, medidas de mitigación, plan de monitoreo.
+      "Eres un experto en productividad con IA y en uso responsable de asistentes como Claude. Genera 2 escenarios de trabajo real de nivel medio para practicar. Devuelve SOLO JSON.",
+    generateUserPrompt: () => `Genera un JSON con 2 escenarios de trabajo real:
+1. casoBrief: una situación de 3-4 oraciones para la que el estudiante debe escribir un pedido completo a Claude. Debe pedir un resultado concreto, sin dar objetivo, audiencia, formato, tono ni restricciones.
+2. casoProtocolo: una situación de 3-4 oraciones que involucra datos personales de clientes y el uso de una herramienta de IA, para diseñar un protocolo de uso.
 
-Formato JSON exacto:
-{
-  "casoEtico": "texto",
-  "tiposSesgo": [{ "nombre": "string", "descripcion": "string" }],
-  "protocoloPlantilla": { "principios": [], "prevencion": "", "mitigacion": "", "monitoreo": "" }
-}`,
-    evaluateSystemPrompt:
-      () => `Eres un evaluador EXPERTO en ética de IA. Sé BENÉVOLO. Devuelve SOLO JSON.
+Formato JSON exacto: { "casoBrief": "texto", "casoProtocolo": "texto" }`,
+    evaluateSystemPrompt: () => `Eres un evaluador EXPERTO en uso responsable de IA y productividad. Sé BENÉVOLO: el estudiante está aprendiendo. Devuelve SOLO JSON.
 
-CRITERIOS - EJERCICIO 1 (Identificar sesgos):
-- Identificó al menos un sesgo: 50%
-- Identificó múltiples sesgos y etapas del pipeline: 70%
-- Identificación precisa y bien razonada: 80-100%
+CRITERIOS - EJERCICIO 1 (Clasificar tareas): la nota ya viene calculada en el mensaje del usuario. Usa ese valor exacto en nota_ej1.
 
-CRITERIOS - EJERCICIO 2 (Análisis de impacto y causas raíz):
-La herramienta guiada recoge: impacto en candidatos/empresa/sociedad, causas raíz
-(técnicas/humanas/datos/proceso con justificación) y una matriz de severidad. NO hay un campo
-de clasificación AI Act: no lo exijas.
-- Describió el impacto en los grupos afectados: 60%
-- Identificó causas raíz y completó la matriz de severidad: 75-85%
-- Análisis sistémico y bien justificado con evidencia del caso: 90-100%
-- Sé BENÉVOLO: si describió impacto y al menos una causa raíz, no bajes de 70.
+CRITERIOS - EJERCICIO 2 (Pedido para Claude):
+- Escribió un pedido con alguna instrucción clara: 50%
+- Cubre 2 o 3 de: objetivo, audiencia, formato, tono, restricciones: 70%
+- Cubre los 5 con claridad y especificidad: 90-100%
 
-CRITERIOS - EJERCICIO 3 (Protocolo ético):
-- Propuso principios y medidas básicas: 50%
-- Protocolo coherente con principios específicos: 70%
-- Protocolo completo y aplicable: 80-100%
+CRITERIOS - EJERCICIO 3 (Protocolo de uso). Debe cubrir: datos que no se comparten, verificación antes de usar, quién revisa y firma, cómo se declara el uso de IA.
+- Propuso medidas básicas: 50%
+- Cubre 2 o 3 de los 4 puntos: 70%
+- Cubre los 4 puntos con medidas concretas: 90-100%
 
 Formato: { "nota_ej1": N, "nota_ej2": N, "nota_ej3": N, "notaGlobal": N, "feedback_ej1": "S", "feedback_ej2": "S", "feedback_ej3": "S" }`,
-    evaluateUserPrompt: (
-      exercises,
-      responses,
-    ) => `Evalúa estas respuestas sobre ética en IA. Sé BENÉVOLO.
+    evaluateUserPrompt: (exercises, responses) => {
+      const answers = parseClaudeAnswers(responses.ej1);
+      const correct = countClaudeCorrect(answers);
+      const nota1 = Math.round((correct / CLAUDE_TASK_COUNT) * 100);
+      return `Evalúa estas respuestas del módulo Claude. Sé BENÉVOLO.
 
-CASO ÉTICO: ${exercises?.casoEtico || "N/A"}
-Identificación del estudiante: ${responses.ej1}
+EJERCICIO 1: el estudiante acertó ${correct} de ${CLAUDE_TASK_COUNT} tareas. Usa nota_ej1 = ${nota1} exactamente.
 
-TIPOS DE SESGO: ${JSON.stringify(exercises?.tiposSesgo)}
-Análisis del estudiante: ${responses.ej2}
+CASO DEL PEDIDO: ${exercises?.casoBrief || "N/A"}
+Pedido del estudiante: ${responses.ej2 || ""}
 
-PROTOCOLO del estudiante: ${responses.ej3}
+CASO DEL PROTOCOLO: ${exercises?.casoProtocolo || "N/A"}
+Protocolo del estudiante: ${responses.ej3 || ""}
 
-Devuelve SOLO JSON válido.`,
+Devuelve SOLO JSON válido.`;
+    },
     fallbackExercises: (locale) => {
-      const isEn = locale === "en";
-      return isEn
-        ? {
-            casoEtico:
-              "A hiring AI system trained on historical data from a tech company showed preference for male candidates. The system penalized CVs that included words like 'volunteering' or 'maternity leave'. Female candidates with equivalent qualifications received lower scores.",
-            tiposSesgo: [
-              {
-                nombre: "Sampling Bias",
-                descripcion:
-                  "The training data doesn't represent the population fairly.",
-              },
-              {
-                nombre: "Labeling Bias",
-                descripcion: "Historical labels contain human biases.",
-              },
-              {
-                nombre: "Automation Bias",
-                descripcion:
-                  "Over-reliance on automated decisions without human oversight.",
-              },
-              {
-                nombre: "Confirmation Bias",
-                descripcion:
-                  "The system reinforces existing patterns without question.",
-              },
-            ],
-            protocoloPlantilla: {
-              principios: [
-                "Transparencia",
-                "Equidad",
-                "Privacidad",
-                "Rendición de cuentas",
-              ],
-              prevencion: "",
-              mitigacion: "",
-              monitoreo: "",
-            },
-          }
-        : {
-            casoEtico:
-              "Un sistema de contratación basado en IA entrenado con datos históricos de una empresa tecnológica mostraba preferencia por candidatos hombres. El sistema penalizaba CVs que incluían palabras como 'voluntariado' o 'licencia maternal'. Las candidatas mujeres con calificaciones equivalentes recibían puntuaciones más bajas.",
-            tiposSesgo: [
-              {
-                nombre: "Sesgo de muestreo",
-                descripcion:
-                  "Los datos de entrenamiento no representan a la población de manera justa.",
-              },
-              {
-                nombre: "Sesgo de etiquetado",
-                descripcion:
-                  "Las etiquetas históricas contienen sesgos humanos.",
-              },
-              {
-                nombre: "Sesgo de automatización",
-                descripcion:
-                  "Dependencia excesiva en decisiones automatizadas sin supervisión humana.",
-              },
-              {
-                nombre: "Sesgo de confirmación",
-                descripcion:
-                  "El sistema refuerza patrones existentes sin cuestionarlos.",
-              },
-            ],
-            protocoloPlantilla: {
-              principios: [
-                "Transparencia",
-                "Equidad",
-                "Privacidad",
-                "Rendición de cuentas",
-              ],
-              prevencion: "",
-              mitigacion: "",
-              monitoreo: "",
-            },
-          };
+      const lang = normalizeClaudeLocale(locale);
+      const scenarios = {
+        es: {
+          casoBrief:
+            "Tu directora te pide una propuesta para una alianza con un colegio de Manizales antes del viernes. Necesita algo que pueda leer en el celular en cinco minutos y que convenza sin prometer demasiado.",
+          casoProtocolo:
+            "Tu equipo quiere usar Claude para resumir las encuestas de satisfacción de clientes, que incluyen nombres, correos y comentarios personales. Debe quedar claro qué se comparte, qué se revisa y quién firma las conclusiones.",
+        },
+        en: {
+          casoBrief:
+            "Your director asks for a proposal for a partnership with a school in Manizales before Friday. It must be readable on a phone in five minutes and persuasive without overpromising.",
+          casoProtocolo:
+            "Your team wants to use Claude to summarize customer satisfaction surveys that include names, emails and personal comments. It must be clear what is shared, what is reviewed and who signs the conclusions.",
+        },
+        pt: {
+          casoBrief:
+            "Sua diretora pede uma proposta de parceria com um colégio de Manizales até sexta-feira. Precisa ser lida no celular em cinco minutos e convencer sem prometer demais.",
+          casoProtocolo:
+            "Sua equipe quer usar o Claude para resumir pesquisas de satisfação de clientes, que incluem nomes, e-mails e comentários pessoais. Deve ficar claro o que se compartilha, o que se revisa e quem assina as conclusões.",
+        },
+      };
+      return {
+        tareas: getClaudeTasks(lang).map((t) => ({ id: t.id, task: t.task })),
+        ...scenarios[lang],
+      };
     },
     localEvaluate: (responses) => {
-      let n1 = 0;
-      let feedback_ej1 = "";
-      try {
-        const parsed = JSON.parse(responses.ej1 || "{}");
-        const biases = parsed.biases || [];
-        const biasCount = biases.length;
-        const hasJustifications = biases.every(
-          (b) => b.justification?.trim().length > 20,
-        );
-        const hasPipelines = biases.every((b) => b.pipeline);
-        const hasSeverity =
-          biases.some((b) => b.severity === 1) &&
-          biases.some((b) => b.severity === 2);
+      const correct = countClaudeCorrect(parseClaudeAnswers(responses.ej1));
+      const nota_ej1 = Math.round((correct / CLAUDE_TASK_COUNT) * 100);
+      const feedback_ej1 = `Acertaste ${correct} de ${CLAUDE_TASK_COUNT} tareas. Revisa las que fallaste: cada una trae la razón de la respuesta correcta.`;
 
-        if (biasCount === 0) {
-          n1 = 0;
-          feedback_ej1 =
-            "No se identificaron sesgos. Revisa el caso y busca patrones de discriminación o sesgo algorítmico.";
-        } else if (biasCount === 1) {
-          n1 = hasJustifications ? 60 : 40;
-          feedback_ej1 =
-            "Identificaste al menos un sesgo. Para mejorar, justifica con evidencia del caso y selecciona la etapa del pipeline.";
-        } else if (biasCount >= 2 && !hasSeverity) {
-          n1 = hasJustifications && hasPipelines ? 75 : 60;
-          feedback_ej1 =
-            "Buena identificación de sesgos. Completa la justificación, pipeline y ranking de severidad para cada uno.";
-        } else if (biasCount >= 2 && hasSeverity) {
-          n1 = hasJustifications && hasPipelines ? 90 : 75;
-          feedback_ej1 =
-            "Excelente análisis forense. Has identificado, justificado y priorizado los sesgos correctamente.";
-        } else {
-          n1 = 85;
-          feedback_ej1 =
-            "Buen trabajo identificando sesgos. Revisa si hay más sesgos en el caso.";
-        }
-      } catch {
-        n1 = 0;
-        feedback_ej1 =
-          "No se pudo analizar tu respuesta. Asegúrate de completar el análisis forense.";
-      }
+      const brief = (responses.ej2 || "").trim();
+      const briefWords = brief ? brief.split(/\s+/).length : 0;
+      const nota_ej2 = briefWords >= 40 ? 75 : briefWords >= 15 ? 55 : briefWords > 0 ? 35 : 0;
+      const feedback_ej2 =
+        nota_ej2 >= 75
+          ? "Pedido completo y específico. Revisa que el formato y el tono coincidan con la audiencia."
+          : "Agrega objetivo, audiencia, formato, tono y restricciones: así Claude acierta a la primera.";
 
-      let n2 = 0;
-      let feedback_ej2 = "";
-      try {
-        const parsed = JSON.parse(responses.ej2 || "{}");
-        const impact = parsed.impact || {};
-        const rootCauses = parsed.rootCauses || {};
-        const severityMatrix = parsed.severityMatrix || {};
+      const protocol = (responses.ej3 || "").trim();
+      const protocolWords = protocol ? protocol.split(/\s+/).length : 0;
+      const keyTerms = /(dato|personal|confidencial|verific|revis|firm|responsable|declar|divulg)/gi;
+      const hits = (protocol.match(keyTerms) || []).length;
+      const nota_ej3 = protocolWords === 0 ? 0 : hits >= 6 ? 80 : hits >= 3 ? 65 : 45;
+      const feedback_ej3 =
+        nota_ej3 >= 80
+          ? "Protocolo sólido: cubre datos, verificación, responsabilidad y declaración de IA."
+          : "Cubre los cuatro puntos: datos que no se comparten, verificación, quién firma y cómo se declara la IA.";
 
-        const impactFields = ["candidates", "company", "society"].filter(
-          (k) => impact[k]?.trim().length > 20,
-        ).length;
-        const rootCauseCount = Object.values(rootCauses).filter(
-          (c) => c?.justification?.trim().length > 20,
-        ).length;
-        const matrixFilled = Object.keys(severityMatrix).length >= 6;
-
-        if (impactFields === 0) {
-          n2 = 0;
-          feedback_ej2 =
-            "No se evaluó el impacto. Describe cómo el sesgo afecta a cada grupo.";
-        } else if (impactFields < 3 || rootCauseCount === 0) {
-          n2 = 50;
-          feedback_ej2 =
-            "Evalúa el impacto en los 3 grupos y al menos 2 causas raíz para un mejor análisis.";
-        } else if (rootCauseCount >= 2 && !matrixFilled) {
-          n2 = 70;
-          feedback_ej2 =
-            "Buen análisis de impacto y causas. Completa la matriz de severidad para un análisis más profundo.";
-        } else if (rootCauseCount >= 2 && matrixFilled) {
-          n2 = 90;
-          feedback_ej2 =
-            "Excelente evaluación de impacto con causas raíz identificadas y matriz de severidad completa.";
-        } else {
-          n2 = 75;
-          feedback_ej2 =
-            "Buen análisis. Revisa si hay más causas raíz que puedas identificar.";
-        }
-      } catch {
-        n2 = 0;
-        feedback_ej2 =
-          "No se pudo analizar tu respuesta. Completa la evaluación de impacto.";
-      }
-
-      let n3 = 0;
-      let feedback_ej3 = "";
-      try {
-        const parsed = JSON.parse(responses.ej3 || "{}");
-        const principles = parsed.principles || [];
-        const actions = parsed.actions || [];
-
-        const hasPrinciples = principles.length > 0;
-        const hasRelevance = principles.every((p) => p.relevance);
-        const actionsWithMeasures = actions.filter(
-          (a) => a.measure?.trim().length > 20,
-        ).length;
-        const actionsWithTimeline = actions.filter((a) => a.timeline).length;
-
-        if (!hasPrinciples && actionsWithMeasures === 0) {
-          n3 = 0;
-          feedback_ej3 =
-            "No se propusieron principios ni acciones. Diseña un protocolo ético completo.";
-        } else if (hasPrinciples && !hasRelevance) {
-          n3 = 50;
-          feedback_ej3 =
-            "Buenos principios. Indica por qué cada principio es relevante para este caso.";
-        } else if (
-          hasRelevance &&
-          actionsWithMeasures > 0 &&
-          actionsWithTimeline < actionsWithMeasures
-        ) {
-          n3 = 70;
-          feedback_ej3 =
-            "Buen plan de remediación. Asigna un plazo a cada acción.";
-        } else if (
-          hasRelevance &&
-          actionsWithMeasures > 0 &&
-          actionsWithTimeline >= actionsWithMeasures
-        ) {
-          n3 = 90;
-          feedback_ej3 =
-            "Excelente protocolo ético con principios sólidos, acciones concretas y plazos definidos.";
-        } else {
-          n3 = 75;
-          feedback_ej3 =
-            "Buen protocolo. Revisa si todas las acciones tienen medida y plazo.";
-        }
-      } catch {
-        n3 = 0;
-        feedback_ej3 =
-          "No se pudo analizar tu respuesta. Completa el diseño del protocolo ético.";
-      }
-
-      const notaGlobal = Math.round(((n1 + n2 + n3) / 3) * 10) / 10;
-      return {
-        nota_ej1: n1,
-        nota_ej2: n2,
-        nota_ej3: n3,
-        notaGlobal,
-        feedback_ej1,
-        feedback_ej2,
-        feedback_ej3,
-      };
+      const notaGlobal = Math.round(((nota_ej1 + nota_ej2 + nota_ej3) / 3) * 10) / 10;
+      return { nota_ej1, nota_ej2, nota_ej3, notaGlobal, feedback_ej1, feedback_ej2, feedback_ej3 };
     },
   },
 };

@@ -12,7 +12,7 @@
  * es decorativo (readOnly + botón deshabilitado) y el chip de transparencia
  * (THEME_META.tagline) explica que es una interfaz educativa.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { toolChromeFor } from "../themes/toolConfig";
@@ -26,7 +26,9 @@ import NotebookLMWelcome from "./NotebookLMWelcome";
 import GeminiWelcome from "./GeminiWelcome";
 import ChatGPTWelcome from "./ChatGPTWelcome";
 import ArtesanoWelcome from "./ArtesanoWelcome";
-import GuardianWelcome from "./GuardianWelcome";
+import ClaudeWelcome from "./ClaudeWelcome";
+import ClaudeRail from "./ClaudeRail";
+import ToolRail from "./ToolRail";
 
 const CHAT_GLYPH = "M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z";
 // Mismo glifo de casa para los 5 módulos: el botón "Inicio" vuelve a la
@@ -39,7 +41,10 @@ const DEFAULT_MODULE_BRAND = {
     label: "Artesano Digital",
     tagline: "Fundamentos de prompts con precisión artesanal",
   },
-  5: { label: "Guardián Digital", tagline: "Uso ético e inteligente de la IA" },
+  5: {
+    label: "Director de Orquesta",
+    tagline: "Claude: delega trabajo real con criterio",
+  },
 };
 
 export default function ToolWorkspace({
@@ -58,6 +63,21 @@ export default function ToolWorkspace({
   const meta = THEME_META[theme] || { label: "IA", tagline: "" };
   const Logo = TOOL_LOGOS[theme] || null;
   const [railOpen, setRailOpen] = useState(false);
+
+  // El cajón móvil se cierra al navegar (sección o tema nuevo) y con Escape,
+  // para que nunca quede tapando la pantalla después de elegir una opción.
+  useEffect(() => {
+    setRailOpen(false);
+  }, [viewSection, selectedTopicIndex, theme, activeMod]);
+
+  useEffect(() => {
+    if (!railOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key === "Escape") setRailOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [railOpen]);
   const [desktopOpen, setDesktopOpen] = useState(true);
   const shouldReduceMotion = useReducedMotion();
 
@@ -100,7 +120,32 @@ export default function ToolWorkspace({
       : null;
   const RailLogo = DefaultModLogo || Logo;
 
-  const rail = (
+  const railSections = [
+    {
+      id: "objetivos",
+      label: t("ialab.tab_objectives"),
+      glyph:
+        "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
+    },
+    {
+      id: "actividades",
+      label: t("ialab.tab_activities"),
+      glyph: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
+    },
+    {
+      id: "practica",
+      label: t("ialab.tab_practice"),
+      glyph:
+        "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
+    },
+    {
+      id: "guardados",
+      label: t("ialab.tab_bookmarks"),
+      glyph: "M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z",
+    },
+  ];
+
+  const defaultRail = (
     <div
       className="theme-bg-rail theme-border-rail flex h-full w-full flex-col overflow-hidden border"
       data-testid="tool-workspace-rail"
@@ -170,30 +215,7 @@ export default function ToolWorkspace({
         data-tour="tour-tabs-rail"
       >
         {/* Secciones primero — estilo ChatGPT sidebar items */}
-        {[
-          {
-            id: "objetivos",
-            label: t("ialab.tab_objectives"),
-            glyph:
-              "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
-          },
-          {
-            id: "actividades",
-            label: t("ialab.tab_activities"),
-            glyph: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
-          },
-          {
-            id: "practica",
-            label: t("ialab.tab_practice"),
-            glyph:
-              "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
-          },
-          {
-            id: "guardados",
-            label: t("ialab.tab_bookmarks"),
-            glyph: "M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z",
-          },
-        ].map(({ id, label, glyph }) => (
+        {railSections.map(({ id, label, glyph }) => (
           <button
             key={id}
             type="button"
@@ -264,6 +286,46 @@ export default function ToolWorkspace({
     </div>
   );
 
+  const railProps = {
+    newChatLabel,
+    topicsLabel: t("ialab.workspace.topics_label"),
+    tagline: modBrand?.tagline || meta.tagline,
+    sections: railSections,
+    viewSection,
+    onNewChat,
+    onSelectSection,
+    topics,
+    selectedTopicIndex,
+    sequenceByIndex,
+    onSelectTopic,
+    onClose: () => setDesktopOpen(false),
+  };
+
+  const rail =
+    theme === "chatgpt" || theme === "gemini" || theme === "notebooklm" ? (
+      <div className="h-full w-full" data-testid="tool-workspace-rail">
+        <ToolRail variant={theme} {...railProps} />
+      </div>
+    ) : theme === "claude" ? (
+      <ClaudeRail
+        railTitle={railLabel}
+        newChatLabel={newChatLabel}
+        topicsLabel={t("ialab.workspace.topics_label")}
+        tagline={modBrand?.tagline || meta.tagline}
+        sections={railSections}
+        viewSection={viewSection}
+        onNewChat={onNewChat}
+        onSelectSection={onSelectSection}
+        topics={topics}
+        selectedTopicIndex={selectedTopicIndex}
+        sequenceByIndex={sequenceByIndex}
+        onSelectTopic={onSelectTopic}
+        onClose={() => setDesktopOpen(false)}
+      />
+    ) : (
+      defaultRail
+    );
+
   /* El rail desktop se oculta solo cuando la pantalla de bienvenida propia
      de la herramienta ya trae su propia navegación lateral (GeminiWelcome
      con sidebar 260px, NotebookLMWelcome con 3 columnas). En vista de sección
@@ -294,7 +356,7 @@ export default function ToolWorkspace({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={shouldReduceMotion ? { duration: 0 } : undefined}
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            className="fixed inset-x-0 bottom-16 top-16 z-40 bg-black/50 md:bottom-0 lg:hidden"
             onClick={() => setRailOpen(false)}
           >
             <motion.div
@@ -375,11 +437,11 @@ export default function ToolWorkspace({
           />
         )}
 
-        {/* Pantalla de bienvenida M5 — solo cuando no hay sección activa */}
-        {isDefaultWelcome && activeMod === 5 && (
-          <GuardianWelcome
+        {/* Pantalla de bienvenida estilo Claude — módulo 5, sin sección activa */}
+        {theme === "claude" && viewSection === null && (
+          <ClaudeWelcome
             topics={topics}
-            description={overview?.description}
+            locale={locale}
             onSelectSection={onSelectSection}
             onSelectTopic={onSelectTopic}
           />
@@ -394,8 +456,13 @@ export default function ToolWorkspace({
 }
 
 ToolWorkspace.propTypes = {
-  theme: PropTypes.oneOf(["default", "chatgpt", "gemini", "notebooklm"])
-    .isRequired,
+  theme: PropTypes.oneOf([
+    "default",
+    "chatgpt",
+    "gemini",
+    "notebooklm",
+    "claude",
+  ]).isRequired,
   activeMod: PropTypes.number.isRequired,
   viewSection: PropTypes.string,
   selectedTopicIndex: PropTypes.number,

@@ -9,15 +9,21 @@ export const MODULE_1 = [
       },
       {
         id: "m1q1_b",
-        label: "Para obtener respuestas útiles y alineadas con lo que necesito",
+        label: "Respuestas útiles y alineadas con lo que necesito",
       },
-      { id: "m1q1_c", label: "Para que la IA funcione más rápido sin errores" },
-      { id: "m1q1_d", label: "Para que la IA escriba el código por mí" },
+      {
+        id: "m1q1_c",
+        label: "Para que la IA funcione más rápido sin errores",
+      },
+      {
+        id: "m1q1_d",
+        label: "Para que la IA escriba el código por mí",
+      },
     ],
     correctAnswer: "m1q1_b",
     topic: "Ingeniería de Prompts",
     difficulty: "fácil",
-    source: "Video: Cómo Crear Prompts Efectivos",
+    source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
       'Un buen prompt es una instrucción clara. Revisa el video "Cómo Crear Prompts Efectivos" y la "Guía: Anatomía de un Prompt".',
   },
@@ -28,7 +34,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q2_a",
-        label: "Tiene la Tarea, pero le faltan el Rol y el Formato",
+        label: "Tiene la Tarea; le faltan el Rol y el Formato",
       },
       {
         id: "m1q2_b",
@@ -38,12 +44,15 @@ export const MODULE_1 = [
         id: "m1q2_c",
         label: "Tiene el Formato, pero le faltan el Rol y la Tarea",
       },
-      { id: "m1q2_d", label: "Ya incluye los tres componentes de RTF" },
+      {
+        id: "m1q2_d",
+        label: "Ya incluye los tres componentes de RTF",
+      },
     ],
     correctAnswer: "m1q2_a",
     topic: "Método RTF",
     difficulty: "medio",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       'Ese prompt pide "escribir un texto" (Tarea), pero no dice qué rol adopta la IA ni cómo debe entregarse (Formato). Revisa la "Guía: Anatomía de un Prompt".',
   },
@@ -57,8 +66,7 @@ export const MODULE_1 = [
       },
       {
         id: "m1q3_b",
-        label:
-          "Estructura el pedido para obtener una respuesta clara y organizada",
+        label: "Estructura el pedido para obtener una respuesta clara",
       },
       {
         id: "m1q3_c",
@@ -72,9 +80,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q3_b",
     topic: "Método RTF",
     difficulty: "fácil",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
-      'RTF ordena el pedido en Rol, Tarea y Formato. Practica en el OVA "Cómo comunicarte con la IA".',
+      "RTF ordena el pedido en Rol, Tarea y Formato. Practica en el OVA El Cincel.",
   },
   {
     id: "m1q4",
@@ -83,8 +91,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q4_a",
-        label:
-          '"Actúa como profesor de ciencias y resume el ciclo del agua en 4 pasos."',
+        label: '"Actúa como profesor y resume el ciclo del agua en 4 pasos."',
       },
       {
         id: "m1q4_b",
@@ -103,9 +110,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q4_a",
     topic: "Estructura de Prompts",
     difficulty: "medio",
-    source: "Video: Cómo Crear Prompts Efectivos",
+    source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
-      'La opción A define rol, tarea y un formato claro. Las demás son vagas o mezclan temas. Revisa el video "Cómo Crear Prompts Efectivos".',
+      'La respuesta correcta define rol, tarea y un formato claro. Las demás son vagas o mezclan temas. Revisa el video "Cómo Crear Prompts Efectivos".',
   },
   {
     id: "m1q5",
@@ -116,7 +123,10 @@ export const MODULE_1 = [
         id: "m1q5_a",
         label: "Aclarar a quién va dirigido y el estilo del resumen",
       },
-      { id: "m1q5_b", label: "Dividir el artículo en fragmentos más pequeños" },
+      {
+        id: "m1q5_b",
+        label: "Dividir el artículo en fragmentos más pequeños",
+      },
       {
         id: "m1q5_c",
         label: "Cambiar de herramienta porque la IA no entendió el tema",
@@ -129,7 +139,7 @@ export const MODULE_1 = [
     correctAnswer: "m1q5_a",
     topic: "Aplicación RTF",
     difficulty: "medio",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
       'El prompt genérico no indica audiencia ni formato. Agrega rol, público y extensión (p. ej. "resumen en 5 viñetas para directivos no técnicos").',
   },
@@ -139,7 +149,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q6_a",
-        label: "Un sistema que crea contenido nuevo a partir de lo aprendido",
+        label: "Un sistema que crea textos nuevos con lo aprendido",
       },
       {
         id: "m1q6_b",
@@ -149,12 +159,15 @@ export const MODULE_1 = [
         id: "m1q6_c",
         label: "Un programa que solo clasifica imágenes y textos",
       },
-      { id: "m1q6_d", label: "Un buscador que devuelve páginas de internet" },
+      {
+        id: "m1q6_d",
+        label: "Un buscador que devuelve páginas de internet",
+      },
     ],
     correctAnswer: "m1q6_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Video: Qué es la IA y cómo está cambiando el mundo",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
       'La IA generativa produce texto, imágenes u otro contenido nuevo. Mira el video "Qué es la IA y cómo está cambiando el mundo".',
   },
@@ -166,17 +179,23 @@ export const MODULE_1 = [
         id: "m1q7_a",
         label: "La instrucción o mensaje que le escribes a la IA",
       },
-      { id: "m1q7_b", label: "La respuesta automática que genera la IA" },
+      {
+        id: "m1q7_b",
+        label: "La respuesta automática que genera la IA",
+      },
       {
         id: "m1q7_c",
         label: "El diseño visual de la interfaz de la herramienta",
       },
-      { id: "m1q7_d", label: "Un tipo de archivo que la IA puede abrir" },
+      {
+        id: "m1q7_d",
+        label: "Un tipo de archivo que la IA puede abrir",
+      },
     ],
     correctAnswer: "m1q7_a",
     topic: "Fundamentos de Prompts",
     difficulty: "fácil",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
       'Un prompt es lo que le pides a la IA. La "Guía: Anatomía de un Prompt" explica cómo armarlo.',
   },
@@ -187,7 +206,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q8_a",
-        label: "Porque ajusta el estilo y el enfoque de la respuesta",
+        label: "Porque ajusta el estilo, el enfoque y la forma",
       },
       {
         id: "m1q8_b",
@@ -197,12 +216,15 @@ export const MODULE_1 = [
         id: "m1q8_c",
         label: "Porque evita que la IA necesite ver el contexto",
       },
-      { id: "m1q8_d", label: "Porque es obligatorio para que la IA funcione" },
+      {
+        id: "m1q8_d",
+        label: "Porque es obligatorio para que la IA funcione",
+      },
     ],
     correctAnswer: "m1q8_a",
     topic: "Método RTF",
     difficulty: "fácil",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "El rol le da a la IA un enfoque y un tono. Así obtienes respuestas más adecuadas a tu objetivo.",
   },
@@ -213,7 +235,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q9_a",
-        label: "Agregar contexto claro: objetivo, audiencia y formato deseado",
+        label: "Contexto claro: objetivo, audiencia y tono de salida",
       },
       {
         id: "m1q9_b",
@@ -231,9 +253,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q9_a",
     topic: "Refinamiento de Prompts",
     difficulty: "fácil",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      'Refina el prompt agregando contexto. Practica en el "Laboratorio de Prompts en Vivo".',
+      "Refina el prompt agregando contexto. Practica con la guía Anatomía de un Prompt.",
   },
   {
     id: "m1q10",
@@ -242,7 +264,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q10_a",
-        label: '"Explícame con ejemplos simples y un lenguaje cotidiano."',
+        label: '"Explícame con ejemplos sencillos, de la vida real."',
       },
       {
         id: "m1q10_b",
@@ -260,64 +282,68 @@ export const MODULE_1 = [
     correctAnswer: "m1q10_a",
     topic: "Claridad en Prompts",
     difficulty: "medio",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
       "Pedir ejemplos y lenguaje simple ayuda a que la explicación sea más clara y útil.",
   },
   {
     id: "m1q11",
     question:
-      "Una IA generativa produce texto nuevo en lugar de limitarse a clasificar datos. ¿Cuál es la diferencia clave?",
+      "Caso: tu jefe pide un resumen de un informe de 40 páginas para mañana. ¿Qué pedido a la IA da el resultado más útil?",
     options: [
       {
         id: "m1q11_a",
-        label: "Crea contenido original a partir de patrones aprendidos",
+        label: "Resume el informe en 5 viñetas con cifras clave",
       },
       {
         id: "m1q11_b",
-        label: "Solo copia y pega textos ya existentes en internet",
+        label: "Resume el informe completo para hoy",
       },
-      { id: "m1q11_c", label: "Funciona únicamente con hojas de cálculo" },
-      { id: "m1q11_d", label: "No necesita datos para aprender" },
+      {
+        id: "m1q11_c",
+        label: "Haz lo que puedas con el informe, sin límites ni formato",
+      },
+      {
+        id: "m1q11_d",
+        label: "Escribe algo sobre el informe para el jefe",
+      },
     ],
     correctAnswer: "m1q11_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Video: Qué es la IA y cómo está cambiando el mundo",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
-      "La IA generativa produce contenido nuevo (texto, imagen, audio) basado en patrones aprendidos. Mira el video del tema 1.",
+      "Un buen pedido fija formato, extensión y lo que debe incluir. Con 'resume' a secas, la IA improvisa.",
   },
   {
     id: "m1q12",
-    question: "¿Cuál de estas afirmaciones describe MEJOR a la IA generativa?",
+    question:
+      "Caso: una estudiante copia un párrafo de la IA a su trabajo sin revisarlo. ¿Cuál es el error principal?",
     options: [
       {
         id: "m1q12_a",
-        label:
-          "Aprende patrones de grandes volúmenes de datos y genera respuestas nuevas",
+        label: "No verificar datos ni citas antes de usar el texto",
       },
       {
         id: "m1q12_b",
-        label:
-          "Es un buscador que solo devuelve una lista de enlaces de internet",
+        label: "Usar la IA para escribir",
       },
       {
         id: "m1q12_c",
-        label:
-          "Guarda respuestas escritas por personas y las reutiliza tal cual",
+        label: "Escribir demasiado rápido para el tiempo disponible",
       },
       {
         id: "m1q12_d",
         label:
-          "Solo sirve para traducir textos de un idioma a otro sin generar nada",
+          "Usar un tono demasiado formal en un trabajo escolar de investigación",
       },
     ],
     correctAnswer: "m1q12_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Video: Qué es la IA y cómo está cambiando el mundo",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
-      "Aprende de datos y genera contenido nuevo, no recupera respuestas guardadas. Repasa el video del tema 1.",
+      "La IA puede inventar datos con seguridad. Antes de usar un texto, verifica datos y citas en la fuente.",
   },
   {
     id: "m1q13",
@@ -326,18 +352,27 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q13_a",
-        label: "Entender de dónde vienen sus capacidades y límites actuales",
+        label: "Entender sus capacidades y límites actuales",
       },
-      { id: "m1q13_b", label: "Memorizar fechas para aprobar sin comprender" },
-      { id: "m1q13_c", label: "Programar una IA desde cero en una tarde" },
-      { id: "m1q13_d", label: "Nada, la historia no influye en el uso actual" },
+      {
+        id: "m1q13_b",
+        label: "Memorizar fechas para aprobar sin comprender",
+      },
+      {
+        id: "m1q13_c",
+        label: "Programar una IA desde cero en una tarde",
+      },
+      {
+        id: "m1q13_d",
+        label: "Nada, la historia no influye en el uso actual",
+      },
     ],
     correctAnswer: "m1q13_a",
     topic: "Historia de la IA",
     difficulty: "medio",
-    source: "Video: Comienzos de la Inteligencia Artificial",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
-      "La historia explica por qué la IA llegó a generar contenido y dónde están sus límites. Revisa el video 'Comienzos de la Inteligencia Artificial'.",
+      "La historia explica por qué la IA llegó a generar contenido y dónde están sus límites. Revisa el video 'Qué es la IA y cómo está cambiando el mundo'.",
   },
   {
     id: "m1q14",
@@ -366,9 +401,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q14_a",
     topic: "IA Generativa",
     difficulty: "medio",
-    source: "Video: Qué es la IA y cómo está cambiando el mundo",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
-      "Genera y transforma texto, pero no garantiza veracidad ni reemplaza tu criterio. Revisa el tema 1.",
+      "Genera y transforma texto, pero no garantiza veracidad ni reemplaza tu criterio. Revisa el video 'Qué es la IA y cómo está cambiando el mundo'.",
   },
   {
     id: "m1q15",
@@ -378,7 +413,7 @@ export const MODULE_1 = [
       {
         id: "m1q15_a",
         label:
-          "Alucinación: genera información que parece cierta pero no lo es",
+          "Alucinación: genera datos falsos que parecen completamente verdaderos",
       },
       {
         id: "m1q15_b",
@@ -399,49 +434,65 @@ export const MODULE_1 = [
     correctAnswer: "m1q15_a",
     topic: "Límites de la IA",
     difficulty: "medio",
-    source: "Video: Qué es la IA y cómo está cambiando el mundo",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
       "Las alucinaciones son respuestas plausibles pero incorrectas. Verifica siempre datos críticos.",
   },
   {
     id: "m1q16",
-    question:
-      "Antes de usar en un trabajo un dato que dio la IA, ¿qué es lo más responsable?",
+    question: "¿Qué conviene saber sobre los datos recientes que da una IA?",
     options: [
       {
         id: "m1q16_a",
-        label: "Verificarlo en una fuente confiable antes de usarlo",
+        label: "Pueden estar desactualizados: pide fuentes y fechas",
       },
-      { id: "m1q16_b", label: "Usarlo igual porque la IA casi nunca falla" },
-      { id: "m1q16_c", label: "Copiarlo tal cual sin revisar" },
-      { id: "m1q16_d", label: "Pedirle a la misma IA que confirme y confiar" },
+      {
+        id: "m1q16_b",
+        label: "Siempre incluyen lo último que pasó en el mundo",
+      },
+      {
+        id: "m1q16_c",
+        label: "Se actualizan solos cada minuto sin avisar",
+      },
+      {
+        id: "m1q16_d",
+        label: "Solo describen lo que pasó hace diez años, sin fuentes",
+      },
     ],
     correctAnswer: "m1q16_a",
     topic: "Uso responsable",
     difficulty: "fácil",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
-      "Tú eres responsable del resultado: verifica los datos importantes en fuentes confiables.",
+      "Un modelo puede no tener la información más reciente. Para datos actuales, pide fuentes con fecha y verifícalas.",
   },
   {
     id: "m1q17",
-    question:
-      "¿Qué tres elementos básicos conviene incluir en un prompt para obtener buenos resultados?",
+    question: "¿Qué conviene hacer cuando la tarea es muy grande?",
     options: [
       {
         id: "m1q17_a",
-        label: "Rol, tarea y formato (o contexto claro)",
+        label: "Dividirla en pasos y revisar cada parte",
       },
-      { id: "m1q17_b", label: "Saludo, emoji y despedida" },
-      { id: "m1q17_c", label: "Contraseña, usuario y fecha" },
-      { id: "m1q17_d", label: "Tema, opinión y firma" },
+      {
+        id: "m1q17_b",
+        label: "Pedirla toda de una vez, sin pausas",
+      },
+      {
+        id: "m1q17_c",
+        label: "Pedirle que decida sola cuándo terminar",
+      },
+      {
+        id: "m1q17_d",
+        label: "Escribirla en mayúsculas para que no se pierda",
+      },
     ],
     correctAnswer: "m1q17_a",
     topic: "Fundamentos de Prompts",
     difficulty: "fácil",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Rol (quién es la IA), tarea (qué quieres) y formato (cómo lo quieres). Revisa la 'Guía: Anatomía de un Prompt'.",
+      "Dividir en pasos reduce errores y te permite revisar cada parte. Repasa la guía Anatomía de un Prompt.",
   },
   {
     id: "m1q18",
@@ -449,16 +500,25 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q18_a",
-        label: "Para que la respuesta se ajuste a tu situación real",
+        label: "Para ajustarla a tu situación real",
       },
-      { id: "m1q18_b", label: "Para que la IA escriba más texto sin sentido" },
-      { id: "m1q18_c", label: "Para que la IA tarde menos" },
-      { id: "m1q18_d", label: "Para no tener que indicar la tarea" },
+      {
+        id: "m1q18_b",
+        label: "Para que la IA escriba más texto sin sentido",
+      },
+      {
+        id: "m1q18_c",
+        label: "Para que la IA tarde menos",
+      },
+      {
+        id: "m1q18_d",
+        label: "Para no tener que indicar la tarea",
+      },
     ],
     correctAnswer: "m1q18_a",
     topic: "Estructura de Prompts",
     difficulty: "medio",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "El contexto (objetivo, audiencia, situación) dirige la respuesta hacia lo que necesitas.",
   },
@@ -490,9 +550,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q19_a",
     topic: "Claridad en Prompts",
     difficulty: "fácil",
-    source: "Video: Cómo Crear Prompts Efectivos",
+    source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
-      "A define tema, formato y audiencia; los demás son vagos. Revisa 'Cómo Crear Prompts Efectivos'.",
+      "El prompt correcto define tema, formato y audiencia; los demás son vagos. Revisa 'Cómo Crear Prompts Efectivos'.",
   },
   {
     id: "m1q20",
@@ -501,122 +561,169 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q20_a",
-        label: "El formato de salida: tabla con columnas concretas",
+        label: "El formato: una tabla con filas",
       },
-      { id: "m1q20_b", label: "Que responda lo más rápido posible" },
-      { id: "m1q20_c", label: "Solo la primera letra de cada idea" },
-      { id: "m1q20_d", label: "Que no use números ni detalles" },
+      {
+        id: "m1q20_b",
+        label: "Que responda lo más rápido posible",
+      },
+      {
+        id: "m1q20_c",
+        label: "Solo la primera letra de cada idea",
+      },
+      {
+        id: "m1q20_d",
+        label: "Que no use números ni detalles",
+      },
     ],
     correctAnswer: "m1q20_a",
     topic: "Formato de Salida",
     difficulty: "medio",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "Indicar el formato (tabla, viñetas, extensión) hace que la IA entregue justo lo que necesitas.",
   },
   {
     id: "m1q21",
     question:
-      "Vas a compartir la respuesta con estudiantes de primaria. ¿Qué deberías precisar?",
+      "Necesitas una respuesta de tres líneas para un chat del móvil. ¿Qué debes precisar?",
     options: [
       {
         id: "m1q21_a",
-        label: "La audiencia y el nivel de lenguaje adecuado",
+        label: "La extensión máxima que necesitas",
       },
-      { id: "m1q21_b", label: "El color de fondo de la herramienta" },
-      { id: "m1q21_c", label: "La marca de tu computador" },
-      { id: "m1q21_d", label: "El idioma del sistema operativo" },
+      {
+        id: "m1q21_b",
+        label: "El color de fondo de la herramienta",
+      },
+      {
+        id: "m1q21_c",
+        label: "La marca de tu computador",
+      },
+      {
+        id: "m1q21_d",
+        label: "El idioma del sistema operativo",
+      },
     ],
     correctAnswer: "m1q21_a",
     topic: "Audiencia",
     difficulty: "medio",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
-      "Indicar la audiencia (niños) y el nivel de lenguaje ajusta el tono y la complejidad.",
+      "Indicar la extensión (tres líneas) evita respuestas largas que no caben en el chat.",
   },
   {
     id: "m1q22",
     question:
-      "La primera respuesta no es la que quieres. ¿Cuál es la mejor estrategia?",
+      "¿Qué ayuda a obtener mejores resultados cuando la IA tiene poco contexto?",
     options: [
       {
         id: "m1q22_a",
-        label: "Ajustar el prompt con más detalle y volver a pedir",
+        label: "Pedirle que te haga preguntas antes de responder",
       },
-      { id: "m1q22_b", label: "Abandonar porque la IA no sirve para eso" },
-      { id: "m1q22_c", label: "Repetir el mismo prompt muchas veces" },
-      { id: "m1q22_d", label: "Cambiar de herramienta sin cambiar el prompt" },
+      {
+        id: "m1q22_b",
+        label: "Que responda más rápido sin pensar",
+      },
+      {
+        id: "m1q22_c",
+        label: "Que no use ningún dato del pedido",
+      },
+      {
+        id: "m1q22_d",
+        label: "Que cambie de tema para ser más creativa y original",
+      },
     ],
     correctAnswer: "m1q22_a",
     topic: "Refinamiento de Prompts",
     difficulty: "fácil",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Iterar el prompt es parte del trabajo. Practica en el 'Laboratorio de Prompts en Vivo'.",
+      "Si le falta contexto, la IA puede suponer. Pedirle preguntas antes evita respuestas erróneas. Practica en el OVA El Cincel.",
   },
   {
     id: "m1q23",
     question:
       "Quieres una explicación breve: 'en máximo 100 palabras'. ¿Qué estás usando?",
     options: [
-      { id: "m1q23_a", label: "Una restricción de longitud en el prompt" },
-      { id: "m1q23_b", label: "Un error que rompe la IA" },
-      { id: "m1q23_c", label: "Un tipo de archivo" },
-      { id: "m1q23_d", label: "Una contraseña de la herramienta" },
+      {
+        id: "m1q23_a",
+        label: "Un límite de longitud",
+      },
+      {
+        id: "m1q23_b",
+        label: "Un error que rompe la IA",
+      },
+      {
+        id: "m1q23_c",
+        label: "Un tipo de archivo",
+      },
+      {
+        id: "m1q23_d",
+        label: "Una contraseña de la herramienta",
+      },
     ],
     correctAnswer: "m1q23_a",
     topic: "Restricciones",
-    difficulty: "medio",
-    source: "Video: Cómo Crear Prompts Efectivos",
+    difficulty: "fácil",
+    source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
       "Las restricciones (longitud, tono, público) acotan la respuesta al resultado deseado.",
   },
   {
     id: "m1q24",
-    question:
-      "Incluir un ejemplo del resultado esperado dentro del prompt, ¿para qué sirve?",
+    question: "Pides una respuesta en pasos numerados. ¿Qué ventaja tiene?",
     options: [
       {
         id: "m1q24_a",
-        label: "Guía a la IA con el estilo y la estructura que deseas obtener",
+        label: "Permite revisar cada paso con calma",
       },
       {
         id: "m1q24_b",
-        label:
-          "Hace que la IA ignore por completo el ejemplo que le entregaste",
+        label: "Hace que la IA ignore el tema del pedido",
       },
       {
         id: "m1q24_c",
-        label:
-          "Obliga a la IA a responder siempre en un idioma diferente al tuyo",
+        label: "Obliga a la IA a responder en otro idioma",
       },
       {
         id: "m1q24_d",
-        label:
-          "No tiene ningún efecto real sobre el resultado que entrega la IA",
+        label: "No cambia nada en el resultado",
       },
     ],
     correctAnswer: "m1q24_a",
     topic: "Ejemplos en el Prompt",
-    difficulty: "difícil",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    difficulty: "medio",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Dar un ejemplo (pocos disparos) ayuda a la IA a copiar el estilo/formato esperado sin adivinar.",
+      "Los pasos numerados hacen visible el razonamiento y permiten corregir una parte sin rehacer todo.",
   },
   {
     id: "m1q25",
     question:
       "El texto es para un informe formal. ¿Qué debes indicar en el prompt?",
     options: [
-      { id: "m1q25_a", label: "El tono: formal y profesional" },
-      { id: "m1q25_b", label: "Que use emojis y jerga" },
-      { id: "m1q25_c", label: "Que escriba como en un chat de amigos" },
-      { id: "m1q25_d", label: "Que omita todos los detalles" },
+      {
+        id: "m1q25_a",
+        label: "El tono: formal y profesional",
+      },
+      {
+        id: "m1q25_b",
+        label: "Que use emojis y jerga",
+      },
+      {
+        id: "m1q25_c",
+        label: "Que escriba como en un chat de amigos",
+      },
+      {
+        id: "m1q25_d",
+        label: "Que omita todos los detalles",
+      },
     ],
     correctAnswer: "m1q25_a",
     topic: "Tono del Prompt",
     difficulty: "fácil",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "El tono (formal/informal, técnico/cercano) ajusta el registro de la respuesta.",
   },
@@ -627,7 +734,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q26_a",
-        label: "Es ambiguo: no dice tarea, formato ni objetivo",
+        label: "Es ambiguo: no indica la tarea, el formato ni el objetivo",
       },
       {
         id: "m1q26_b",
@@ -645,69 +752,67 @@ export const MODULE_1 = [
     correctAnswer: "m1q26_a",
     topic: "Evitar Ambigüedad",
     difficulty: "medio",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
       "Sin tarea, formato ni objetivo, la IA adivina. Sé específico y acota el resultado.",
   },
   {
     id: "m1q27",
-    question:
-      "¿Cuál es la diferencia entre pedir solo la tarea y pedir rol + tarea?",
+    question: "¿Qué aporta un ejemplo de estilo dentro de un prompt?",
     options: [
       {
         id: "m1q27_a",
-        label: "El rol orienta el enfoque y el estilo de la respuesta",
+        label: "Muestra el tono y la forma que quieres sin copiar el contenido",
       },
       {
         id: "m1q27_b",
         label:
-          "No hay ninguna diferencia real entre pedir rol o pedir solo la tarea",
+          "Obliga a la IA a copiar el ejemplo palabra por palabra, sin cambiar nada",
       },
       {
         id: "m1q27_c",
-        label: "El rol hace que la IA responda con menos detalle que antes",
+        label: "Hace que la IA responda con menos detalle que antes",
       },
       {
         id: "m1q27_d",
-        label: "El rol reemplaza por completo la tarea que le pediste",
+        label: "Reemplaza la tarea que le pediste a la IA",
       },
     ],
     correctAnswer: "m1q27_a",
     topic: "Método RTF",
     difficulty: "medio",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "El rol ('actúa como…') da enfoque; la tarea dice qué hacer. Juntos mejoran el resultado.",
+      "Un ejemplo de estilo transmite tono y forma mejor que una descripción. Úsalo sin pedir que lo copie.",
   },
   {
     id: "m1q28",
-    question: "Quieres un resumen para gerencia. ¿Cuál prompt es MÁS adecuado?",
+    question:
+      "Solo quieres que la IA use el texto que pegas y avise si falta algo. ¿Qué pedido funciona?",
     options: [
       {
         id: "m1q28_a",
-        label:
-          '"Resume este informe en 5 viñetas ejecutivas para gerencia no técnica"',
+        label: "Usa solo el texto que pegué y dime si falta algo",
       },
       {
         id: "m1q28_b",
-        label: '"Resume esto de la manera que mejor te parezca y sin límites"',
+        label: "Completa lo que falte con lo que sepas de internet",
       },
       {
         id: "m1q28_c",
-        label:
-          '"Escribe mucho texto sobre el informe y todos sus detalles técnicos"',
+        label: "Inventa ejemplos parecidos para ilustrar el texto",
       },
       {
         id: "m1q28_d",
-        label: '"Traduce el informe a otro idioma para que quede más claro"',
+        label: "Resume sin leer el texto, con lo que te parezca",
       },
     ],
     correctAnswer: "m1q28_a",
     topic: "Aplicación RTF",
     difficulty: "medio",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
-      "A define formato (viñetas), extensión (5) y audiencia (gerencia). Es la más útil y clara.",
+      "Acotar la IA al texto que das evita que invente datos. Pedirle que avise de lo que falta es clave.",
   },
   {
     id: "m1q29",
@@ -717,7 +822,7 @@ export const MODULE_1 = [
       {
         id: "m1q29_a",
         label:
-          '"Genera 10 ideas de campaña para una cafetería local, tono cercano, en viñetas"',
+          '"Genera 10 ideas de campaña para una cafetería local, en viñetas"',
       },
       {
         id: "m1q29_b",
@@ -738,9 +843,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q29_a",
     topic: "Aplicación de Prompts",
     difficulty: "fácil",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "A precisa cantidad, contexto, tono y formato: eso enfoca las ideas hacia lo que necesitas.",
+      "El prompt correcto precisa cantidad, contexto y formato: eso enfoca las ideas hacia lo que necesitas.",
   },
   {
     id: "m1q30",
@@ -748,48 +853,55 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q30_a",
-        label:
-          '"Explícame paso a paso, con un ejemplo en cada paso y lenguaje sencillo"',
+        label: '"Explícame paso a paso con un ejemplo"',
       },
-      { id: "m1q30_b", label: '"Dame toda la teoría en un párrafo denso"' },
-      { id: "m1q30_c", label: '"Háblame de varios temas a la vez"' },
-      { id: "m1q30_d", label: '"Resume el tema en una sola frase"' },
+      {
+        id: "m1q30_b",
+        label: '"Dame toda la teoría en un párrafo denso"',
+      },
+      {
+        id: "m1q30_c",
+        label: '"Háblame de varios temas a la vez"',
+      },
+      {
+        id: "m1q30_d",
+        label: '"Resume el tema en una sola frase"',
+      },
     ],
     correctAnswer: "m1q30_a",
     topic: "Aplicación de Prompts",
     difficulty: "medio",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "Pedir pasos, ejemplos y lenguaje sencillo produce una explicación más clara y aplicable.",
   },
   {
     id: "m1q31",
-    question: "¿Cuál es un error común al escribir prompts?",
+    question: "¿Qué debes cuidar al compartir un prompt con un colega?",
     options: [
       {
         id: "m1q31_a",
-        label: "Pedir de forma vaga sin objetivo, audiencia ni formato",
+        label: "Quitar datos personales y sensibles antes de compartirlo",
       },
       {
         id: "m1q31_b",
-        label:
-          "Indicar claramente el rol que debe adoptar la inteligencia artificial",
+        label: "Pegar también tus contraseñas y accesos para que lo reproduzca",
       },
       {
         id: "m1q31_c",
-        label: "Aclarar el formato y la extensión exacta que esperas recibir",
+        label: "Compartirlo sin revisar la respuesta que dio",
       },
       {
         id: "m1q31_d",
-        label: "Dar un ejemplo concreto del resultado que quieres obtener",
+        label: "Enviarlo como si la respuesta fuera de tu autoría",
       },
     ],
     correctAnswer: "m1q31_a",
     topic: "Errores Comunes",
     difficulty: "medio",
-    source: "Video: Cómo Crear Prompts Efectivos",
+    source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
-      "La vaguedad es el error más frecuente: sin objetivo, audiencia ni formato la IA adivina.",
+      "Un prompt puede contener datos de otras personas. Anonimízalo antes de compartirlo.",
   },
   {
     id: "m1q32",
@@ -798,7 +910,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q32_a",
-        label: "Confunde a la IA y desvía la respuesta del objetivo",
+        label: "Confunde a la IA y desvía la respuesta de su objetivo",
       },
       {
         id: "m1q32_b",
@@ -815,8 +927,8 @@ export const MODULE_1 = [
     ],
     correctAnswer: "m1q32_a",
     topic: "Estructura de Prompts",
-    difficulty: "difícil",
-    source: "Guía PDF: Anatomía de un Prompt",
+    difficulty: "medio",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "Menos es más: incluye solo lo relevante (tarea, contexto, formato) para no diluir el objetivo.",
   },
@@ -826,16 +938,25 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q33_a",
-        label: "Ahorrar tiempo y mantener resultados consistentes",
+        label: "Ahorrar tiempo y ser consistente",
       },
-      { id: "m1q33_b", label: "Que la IA deje de aprender" },
-      { id: "m1q33_c", label: "Evitar revisar los resultados" },
-      { id: "m1q33_d", label: "Impedir ajustar el prompt después" },
+      {
+        id: "m1q33_b",
+        label: "Que la IA memorice todo lo que escribes",
+      },
+      {
+        id: "m1q33_c",
+        label: "Evitar revisar los resultados",
+      },
+      {
+        id: "m1q33_d",
+        label: "Cambiar el modelo sin avisar al equipo",
+      },
     ],
     correctAnswer: "m1q33_a",
     topic: "Reutilización",
     difficulty: "medio",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "Las plantillas reutilizables ahorran tiempo y hacen consistentes tus resultados; ajústalas según el caso.",
   },
@@ -846,10 +967,16 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q34_a",
-        label: "Comparar y validar la información antes de decidir",
+        label: "Comparar y validar la información",
       },
-      { id: "m1q34_b", label: "Elegir la más larga sin leer" },
-      { id: "m1q34_c", label: "Confiar en la primera que salga" },
+      {
+        id: "m1q34_b",
+        label: "Elegir la más larga sin leer",
+      },
+      {
+        id: "m1q34_c",
+        label: "Confiar en la primera que salga",
+      },
       {
         id: "m1q34_d",
         label: "Preguntarle a otra IA cuál de las dos prefiere",
@@ -857,30 +984,39 @@ export const MODULE_1 = [
     ],
     correctAnswer: "m1q34_a",
     topic: "Evaluación Crítica",
-    difficulty: "difícil",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    difficulty: "medio",
+    source: "El Cincel",
     feedback:
       "Ante respuestas divergentes, valida los datos y usa tu criterio. No toda respuesta es igual de fiable.",
   },
   {
     id: "m1q35",
     question:
-      "Vas a pegar información confidencial de la empresa en la IA. ¿Qué debes hacer?",
+      "Quieres que la IA revise su propia respuesta antes de entregártela. ¿Qué le pides?",
     options: [
       {
         id: "m1q35_a",
-        label: "Evitar datos sensibles o anonimizarlos antes de usarlos",
+        label: "Que critique su respuesta y señale datos dudosos",
       },
-      { id: "m1q35_b", label: "Pegarlos igual sin problema" },
-      { id: "m1q35_c", label: "Pedirle a la IA que los borre" },
-      { id: "m1q35_d", label: "Compartirlos solo por chat privado" },
+      {
+        id: "m1q35_b",
+        label: "Que la reescriba sin cambiar nada",
+      },
+      {
+        id: "m1q35_c",
+        label: "Que la entregue más rápido sin revisarla",
+      },
+      {
+        id: "m1q35_d",
+        label: "Que se la envíe a otra persona sin decirte nada del cambio",
+      },
     ],
     correctAnswer: "m1q35_a",
     topic: "Uso Responsable",
     difficulty: "medio",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "No compartas datos confidenciales: anonimiza o evita información sensible antes de pedir ayuda a la IA.",
+      "Pedir una autocrítica ayuda a detectar supuestos y datos dudosos antes de usar la respuesta.",
   },
   {
     id: "m1q36",
@@ -889,7 +1025,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q36_a",
-        label: "Cuestionar, pedir otras perspectivas y verificar fuentes",
+        label: "Cuestionar, pedir otras perspectivas y verificar las fuentes",
       },
       {
         id: "m1q36_b",
@@ -897,7 +1033,7 @@ export const MODULE_1 = [
       },
       {
         id: "m1q36_c",
-        label: "Publicarlo igual sin revisarlo porque el tema no es sensible",
+        label: "Publicarlo igual porque el tema no es sensible",
       },
       {
         id: "m1q36_d",
@@ -906,8 +1042,8 @@ export const MODULE_1 = [
     ],
     correctAnswer: "m1q36_a",
     topic: "Pensamiento Crítico",
-    difficulty: "difícil",
-    source: "Video: Qué es la IA y cómo está cambiando el mundo",
+    difficulty: "medio",
+    source: "Qué es la IA y cómo está cambiando el mundo",
     feedback:
       "La IA puede sesgarse: contrasta, pide otras perspectivas y valida. Tú aportas el criterio.",
   },
@@ -917,16 +1053,25 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q37_a",
-        label: "Usarla como apoyo y declarar cuándo la utilizaste",
+        label: "Usarla como apoyo y declarar su uso",
       },
-      { id: "m1q37_b", label: "Entregar su salida como propia sin revisar" },
-      { id: "m1q37_c", label: "Copiar sin citar ninguna parte" },
-      { id: "m1q37_d", label: "Usarla para suplantar a otra persona" },
+      {
+        id: "m1q37_b",
+        label: "Entregar su salida como propia sin revisar",
+      },
+      {
+        id: "m1q37_c",
+        label: "Copiar sin citar ninguna parte",
+      },
+      {
+        id: "m1q37_d",
+        label: "Usarla para suplantar a otra persona",
+      },
     ],
     correctAnswer: "m1q37_a",
     topic: "Ética y Uso Responsable",
     difficulty: "fácil",
-    source: "Guía PDF: Anatomía de un Prompt",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "La IA es apoyo: revisa, aporta valor propio y sé transparente sobre su uso.",
   },
@@ -955,7 +1100,7 @@ export const MODULE_1 = [
     correctAnswer: "m1q38_a",
     topic: "Uso Responsable",
     difficulty: "medio",
-    source: "OVA: Cómo comunicarte con la IA (prompts)",
+    source: "El Cincel",
     feedback:
       "La IA acelera el trabajo, pero la revisión y la decisión final son tuyas.",
   },
@@ -966,10 +1111,16 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q39_a",
-        label: "Recomendada: mejora el resultado con cada ajuste",
+        label: "Recomendada: mejora con cada ajuste",
       },
-      { id: "m1q39_b", label: "Incorrecta: hay que acertar a la primera" },
-      { id: "m1q39_c", label: "Prohibida por las herramientas" },
+      {
+        id: "m1q39_b",
+        label: "Incorrecta: hay que acertar a la primera",
+      },
+      {
+        id: "m1q39_c",
+        label: "Prohibida por las herramientas",
+      },
       {
         id: "m1q39_d",
         label: "Opcional, solo si la primera respuesta sale mal",
@@ -978,7 +1129,7 @@ export const MODULE_1 = [
     correctAnswer: "m1q39_a",
     topic: "Refinamiento de Prompts",
     difficulty: "medio",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
       "Iterar es normal y efectivo: cada ajuste del prompt acerca la respuesta a lo que necesitas.",
   },
@@ -990,7 +1141,7 @@ export const MODULE_1 = [
       {
         id: "m1q40_a",
         label:
-          '"Actúa como asistente ejecutivo; redacta un correo formal de recordatorio para la reunión del jueves 10 a.m., tono cordial y asunto incluido"',
+          "Como asistente, redacta un recordatorio formal y cordial de la reunión del jueves 10 a.m.",
       },
       {
         id: "m1q40_b",
@@ -1010,9 +1161,585 @@ export const MODULE_1 = [
     ],
     correctAnswer: "m1q40_a",
     topic: "Aplicación RTF",
-    difficulty: "difícil",
-    source: "OVA: Laboratorio de Prompts en Vivo",
+    difficulty: "medio",
+    source: "Guía: Anatomía de un Prompt",
     feedback:
-      "A reúne rol, tarea, contexto (fecha/hora), tono, formato/extensión y asunto: un prompt completo y profesional.",
+      "El prompt correcto reúne rol, tarea, contexto (fecha y hora) y tono: es el prompt más completo de los cuatro.",
+  },
+  {
+    id: "m1e01",
+    question:
+      "Un sistema de contratación se entrenó con datos de una empresa con mayoría de hombres y penalizaba CVs con ciertos términos. ¿Qué sesgo aparece y dónde se origina?",
+    options: [
+      {
+        id: "m1e01_a",
+        label: "Sesgo histórico de representación en datos pasados",
+      },
+      {
+        id: "m1e01_b",
+        label: "Sesgo de automatización, por falta de supervisión humana",
+      },
+      {
+        id: "m1e01_c",
+        label: "Sesgo de confirmación, por ideas previas del reclutador",
+      },
+      {
+        id: "m1e01_d",
+        label: "Sesgo de etiquetado, por anotadores equivocados",
+      },
+    ],
+    correctAnswer: "m1e01_a",
+    topic: "Sesgos en IA",
+    difficulty: "medio",
+    source: "OVA: El Espejo de la Verdad",
+    feedback:
+      "Los datos históricos reflejaban una contratación pasada mayoritariamente masculina: el sesgo viene de los datos,. Repasa el OVA El Espejo de la Verdad.",
+  },
+  {
+    id: "m1e02",
+    question:
+      "Una IA recomienda una compra y no sabes por qué. ¿Qué te conviene pedir?",
+    options: [
+      {
+        id: "m1e02_a",
+        label: "Que explique los criterios de su recomendación",
+      },
+      {
+        id: "m1e02_b",
+        label: "Que solo muestre el precio más bajo",
+      },
+      {
+        id: "m1e02_c",
+        label: "Que decida por ti sin preguntar nada ni explicarse",
+      },
+      {
+        id: "m1e02_d",
+        label: "Que ignore tus gustos anteriores",
+      },
+    ],
+    correctAnswer: "m1e02_a",
+    topic: "Responsabilidad",
+    difficulty: "medio",
+    source: "Video: IA Ética: Principios y Práctica",
+    feedback:
+      "Pedir los criterios permite evaluar si la recomendación te sirve. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e03",
+    question:
+      "Un chatbot de un banco da tasas de interés inventadas con total seguridad. ¿Qué principio se viola?",
+    options: [
+      {
+        id: "m1e03_a",
+        label: "Veracidad: verificar datos y no inventarlos",
+      },
+      {
+        id: "m1e03_b",
+        label: "La velocidad de respuesta del chatbot",
+      },
+      {
+        id: "m1e03_c",
+        label: "La popularidad del banco entre sus clientes",
+      },
+      {
+        id: "m1e03_d",
+        label: "El costo del servicio de atención al cliente en línea",
+      },
+    ],
+    correctAnswer: "m1e03_a",
+    topic: "Transparencia",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "La veracidad exige verificar cada dato antes de compartirlo. La IA puede inventar con seguridad. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e04",
+    question:
+      "Un conductor distraído confía en el piloto automático y sufre un accidente. ¿Qué sesgo describe esto?",
+    options: [
+      {
+        id: "m1e04_a",
+        label: "Sesgo de automatización: confió sin revisar",
+      },
+      {
+        id: "m1e04_b",
+        label: "Sesgo de muestreo en los datos de entrenamiento",
+      },
+      {
+        id: "m1e04_c",
+        label: "Sesgo algorítmico contra ciertos objetos",
+      },
+      {
+        id: "m1e04_d",
+        label: "Un error humano normal sin sesgo alguno",
+      },
+    ],
+    correctAnswer: "m1e04_a",
+    topic: "Sesgo de Automatización",
+    difficulty: "medio",
+    source: "OVA: El Espejo de la Verdad",
+    feedback:
+      "El sesgo de automatización es confiar demasiado en la máquina. Mantén la supervisión activa. Practica en el OVA El Espejo de la Verdad.",
+  },
+  {
+    id: "m1e05",
+    question:
+      "Un sistema de IA de alto riesgo (por ejemplo, aprobar una hipoteca) según la UE debe cumplir con:",
+    options: [
+      {
+        id: "m1e05_a",
+        label: "Evaluación de conformidad y supervisión",
+      },
+      {
+        id: "m1e05_b",
+        label: "Solo publicar una declaración de uso en la web",
+      },
+      {
+        id: "m1e05_c",
+        label: "Auditoría única al lanzar el producto",
+      },
+      {
+        id: "m1e05_d",
+        label: "Registro en un sitio web sin evaluar riesgos",
+      },
+    ],
+    correctAnswer: "m1e05_a",
+    topic: "Marco Regulatorio",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "Los sistemas de alto riesgo exigen transparencia, documentación y supervisión humana. Revisa la guía de ética. El Reglamento (UE) 2026/1744 está en vigor desde el 27 de julio de 2026; sus obligaciones de alto riesgo para sistemas independientes se aplican desde diciembre de 2027.",
+  },
+  {
+    id: "m1e06",
+    question:
+      "¿Cuáles son los 5 principios éticos clave que guían el uso responsable de la IA?",
+    options: [
+      {
+        id: "m1e06_a",
+        label:
+          "Transparencia, equidad, responsabilidad, privacidad y veracidad",
+      },
+      {
+        id: "m1e06_b",
+        label: "Velocidad, equidad, automatización, privacidad y veracidad",
+      },
+      {
+        id: "m1e06_c",
+        label: "Competencia, equidad, escala, innovación y veracidad",
+      },
+      {
+        id: "m1e06_d",
+        label:
+          "Transparencia, rentabilidad, responsabilidad, privacidad y eficiencia",
+      },
+    ],
+    correctAnswer: "m1e06_a",
+    topic: "Principios Éticos",
+    difficulty: "fácil",
+    source: "Video: IA Ética: Principios y Práctica",
+    feedback:
+      "Transparencia, equidad, responsabilidad, privacidad y veracidad son los cinco pilares. Repasa el video de principios y práctica.",
+  },
+  {
+    id: "m1e07",
+    question: "¿Qué es el sesgo de muestreo en un modelo de IA?",
+    options: [
+      {
+        id: "m1e07_a",
+        label: "Los datos de entrenamiento no representan a todos",
+      },
+      {
+        id: "m1e07_b",
+        label: "El sistema funciona lento con bases de datos grandes",
+      },
+      {
+        id: "m1e07_c",
+        label: "El modelo cambia de idioma sin que se lo pidas",
+      },
+      {
+        id: "m1e07_d",
+        label: "El modelo se reentrena solo con cada consulta del usuario",
+      },
+    ],
+    correctAnswer: "m1e07_a",
+    topic: "Sesgos en IA",
+    difficulty: "medio",
+    source: "OVA: El Espejo de la Verdad",
+    feedback:
+      "El sesgo de muestreo nace de datos no representativos. Practica en el OVA El Espejo de la Verdad.",
+  },
+  {
+    id: "m1e08",
+    question: "¿Qué es el sesgo de etiquetado?",
+    options: [
+      {
+        id: "m1e08_a",
+        label: "Las etiquetas arrastran los prejuicios de quienes las crean",
+      },
+      {
+        id: "m1e08_b",
+        label: "El sistema clasifica los datos de forma automática y neutral",
+      },
+      {
+        id: "m1e08_c",
+        label: "La IA coloca una etiqueta visible a cada respuesta generada",
+      },
+      {
+        id: "m1e08_d",
+        label: "El modelo desactiva las etiquetas cuando hay muchos datos",
+      },
+    ],
+    correctAnswer: "m1e08_a",
+    topic: "Sesgos en IA",
+    difficulty: "medio",
+    source: "OVA: El Espejo de la Verdad",
+    feedback:
+      "Si quien etiqueta tiene sesgos, el modelo los aprende. Repasa el OVA El Espejo de la Verdad.",
+  },
+  {
+    id: "m1e09",
+    question:
+      "Una IA penaliza sistemáticamente a cierto grupo en contratación. ¿Qué haces?",
+    options: [
+      {
+        id: "m1e09_a",
+        label: "Detener el sistema, documentar el sesgo y corregirlo",
+      },
+      {
+        id: "m1e09_b",
+        label: "Ignorarlo porque el modelo funciona rápido y barato",
+      },
+      {
+        id: "m1e09_c",
+        label: "Ocultar los resultados para evitar reclamos legales",
+      },
+      {
+        id: "m1e09_d",
+        label: "Subir más datos históricos iguales al sistema afectado",
+      },
+    ],
+    correctAnswer: "m1e09_a",
+    topic: "Mitigación de Sesgos",
+    difficulty: "medio",
+    source: "OVA: El Espejo de la Verdad",
+    feedback:
+      "Ante un sesgo detectado, detén, documenta y corrige. Practica en el OVA El Espejo de la Verdad.",
+  },
+  {
+    id: "m1e10",
+    question: "¿Qué busca la explicabilidad de un modelo de IA?",
+    options: [
+      {
+        id: "m1e10_a",
+        label: "Que las decisiones automáticas puedan justificarse",
+      },
+      {
+        id: "m1e10_b",
+        label: "Que el modelo explique por qué consume tantos recursos",
+      },
+      {
+        id: "m1e10_c",
+        label: "Que resuma sus respuestas en menos palabras",
+      },
+      {
+        id: "m1e10_d",
+        label: "Que se puedan traducir sus respuestas a otros idiomas",
+      },
+    ],
+    correctAnswer: "m1e10_a",
+    topic: "Explicabilidad",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "La explicabilidad permite justificar decisiones ante las personas afectadas. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e11",
+    question:
+      "¿Qué debe registrar un hospital cuando usa IA para apoyar una decisión clínica?",
+    options: [
+      {
+        id: "m1e11_a",
+        label: "Quién revisó la sugerencia y qué decidió",
+      },
+      {
+        id: "m1e11_b",
+        label: "Solo el nombre comercial del software",
+      },
+      {
+        id: "m1e11_c",
+        label: "La velocidad con que la IA respondió a la consulta",
+      },
+      {
+        id: "m1e11_d",
+        label: "Nada, porque la IA no necesita registro",
+      },
+    ],
+    correctAnswer: "m1e11_a",
+    topic: "Supervisión Humana",
+    difficulty: "medio",
+    source: "Video: IA Ética: Principios y Práctica",
+    feedback:
+      "Registrar quién revisó y decidió permite auditar y atribuir responsabilidad. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e12",
+    question: "¿Qué es la privacidad por diseño?",
+    options: [
+      {
+        id: "m1e12_a",
+        label: "Incorporar la protección de datos desde el diseño inicial",
+      },
+      {
+        id: "m1e12_b",
+        label: "Añadir la privacidad solo si hay una queja de usuarios",
+      },
+      {
+        id: "m1e12_c",
+        label: "Ocultar el uso de datos en la letra pequeña del contrato",
+      },
+      {
+        id: "m1e12_d",
+        label: "Recolectar todo y decidir la privacidad al final del proyecto",
+      },
+    ],
+    correctAnswer: "m1e12_a",
+    topic: "Privacidad por Diseño",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "La privacidad se diseña desde el inicio, no se agrega al final. Repasa la Guía de privacidad.",
+  },
+  {
+    id: "m1e13",
+    question:
+      "Un sistema de IA guarda los datos de un paciente sin consentimiento. ¿Qué principio se incumple?",
+    options: [
+      {
+        id: "m1e13_a",
+        label: "Privacidad: tratar datos solo con consentimiento",
+      },
+      {
+        id: "m1e13_b",
+        label: "Velocidad del servidor y capacidad de almacenamiento",
+      },
+      {
+        id: "m1e13_c",
+        label: "Popularidad del software entre los estudiantes",
+      },
+      {
+        id: "m1e13_d",
+        label: "Costo de la licencia, del soporte y de toda la infraestructura",
+      },
+    ],
+    correctAnswer: "m1e13_a",
+    topic: "Marco Regulatorio",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "Los datos personales requieren consentimiento y protección. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e14",
+    question:
+      "Un sistema puntúa la conducta de ciudadanos y usa esa puntuación para limitar sus servicios públicos. ¿Qué categoría de riesgo tiene?",
+    options: [
+      {
+        id: "m1e14_a",
+        label: "Inaceptable: prohibido por la normativa de la UE",
+      },
+      {
+        id: "m1e14_b",
+        label: "Alto, con evaluación de conformidad",
+      },
+      {
+        id: "m1e14_c",
+        label: "Limitado, solo debe avisar que es IA",
+      },
+      {
+        id: "m1e14_d",
+        label: "Mínimo, sin obligaciones específicas para ningún uso",
+      },
+    ],
+    correctAnswer: "m1e14_a",
+    topic: "Marco Regulatorio",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "La puntuación social de ciudadanos está prohibida: es riesgo inaceptable. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e15",
+    question: "¿Qué es una auditoría de sesgo en un sistema de IA?",
+    options: [
+      {
+        id: "m1e15_a",
+        label: "Revisar sistemáticamente si trata injustamente a un grupo",
+      },
+      {
+        id: "m1e15_b",
+        label: "Medir solo la velocidad de respuesta del sistema completo",
+      },
+      {
+        id: "m1e15_c",
+        label: "Comprobar cuántos usuarios tiene registrados la plataforma",
+      },
+      {
+        id: "m1e15_d",
+        label: "Verificar únicamente el costo mensual de la herramienta",
+      },
+    ],
+    correctAnswer: "m1e15_a",
+    topic: "Auditoría",
+    difficulty: "medio",
+    source: "OVA: El Espejo de la Verdad",
+    feedback:
+      "Auditar el sesgo es revisar si algún grupo resulta perjudicado. Practica en el OVA El Espejo de la Verdad.",
+  },
+  {
+    id: "m1e16",
+    question: "¿Cuál es un uso NO ético de la IA?",
+    options: [
+      {
+        id: "m1e16_a",
+        label: "Suplantar la identidad de alguien con voz o imagen",
+      },
+      {
+        id: "m1e16_b",
+        label: "Resumir un informe propio para una reunión de trabajo",
+      },
+      {
+        id: "m1e16_c",
+        label: "Revisar la ortografía de un texto",
+      },
+      {
+        id: "m1e16_d",
+        label: "Generar ideas para un proyecto personal de aprendizaje",
+      },
+    ],
+    correctAnswer: "m1e16_a",
+    topic: "Uso Responsable",
+    difficulty: "fácil",
+    source: "Video: IA Ética: Principios y Práctica",
+    feedback:
+      "Suplantar identidades con IA es un uso no ético y puede ser ilegal. Repasa el video de principios.",
+  },
+  {
+    id: "m1e17",
+    question:
+      "Un chatbot educativo para niños de primaria debe protegerlos. ¿Qué política es la adecuada?",
+    options: [
+      {
+        id: "m1e17_a",
+        label: "Limitar el contenido por edad y revisar con un adulto",
+      },
+      {
+        id: "m1e17_b",
+        label: "Dejar que responda sin límites para no censurar nada",
+      },
+      {
+        id: "m1e17_c",
+        label: "Recopilar más datos de los menores para personalizar mejor",
+      },
+      {
+        id: "m1e17_d",
+        label: "Ocultar a los padres cómo funciona el sistema",
+      },
+    ],
+    correctAnswer: "m1e17_a",
+    topic: "Salvaguardas",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "Con menores, la política debe limitar el contenido, revisar las respuestas con un adulto y no recopilar datos de más. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e18",
+    question:
+      "La IA sugiere una decisión que afecta a muchas personas. ¿Qué principio exige revisarla?",
+    options: [
+      {
+        id: "m1e18_a",
+        label: "Responsabilidad y transparencia con supervisión humana",
+      },
+      {
+        id: "m1e18_b",
+        label: "Eficiencia, para resolver el caso rápido",
+      },
+      {
+        id: "m1e18_c",
+        label: "Escalabilidad, para que la IA decida el mayor volumen posible",
+      },
+      {
+        id: "m1e18_d",
+        label: "Automatización, para eliminar la intervención de las personas",
+      },
+    ],
+    correctAnswer: "m1e18_a",
+    topic: "Responsabilidad",
+    difficulty: "medio",
+    source: "Video: IA Ética: Principios y Práctica",
+    feedback:
+      "Decisiones con impacto requieren transparencia y supervisión humana. Repasa el video de principios.",
+  },
+  {
+    id: "m1e19",
+    question: "¿Qué caracteriza a los sistemas de IA de riesgo limitado (UE)?",
+    options: [
+      {
+        id: "m1e19_a",
+        label: "Obligaciones de transparencia, como avisar que se usa IA",
+      },
+      {
+        id: "m1e19_b",
+        label: "Prohibición total de su uso en cualquier contexto posible",
+      },
+      {
+        id: "m1e19_c",
+        label: "Exigencia de licencia especial para poder desarrollarlos",
+      },
+      {
+        id: "m1e19_d",
+        label: "Prohibición de publicar que se está usando IA en ellos",
+      },
+    ],
+    correctAnswer: "m1e19_a",
+    topic: "Marco Regulatorio",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "El riesgo limitado exige transparencia, no prohibición. Repasa la guía de ética.",
+  },
+  {
+    id: "m1e20",
+    question:
+      "Un empleado toma decisiones sobre personas con IA sin declararlo ni dejar que nadie revise. ¿Qué principio se incumple?",
+    options: [
+      {
+        id: "m1e20_a",
+        label: "Responsabilidad: una persona debe responder por la decisión",
+      },
+      {
+        id: "m1e20_b",
+        label: "Velocidad: resolver el caso en el menor tiempo",
+      },
+      {
+        id: "m1e20_c",
+        label: "Popularidad: que el sistema guste a los usuarios",
+      },
+      {
+        id: "m1e20_d",
+        label:
+          "Ahorro: reducir el costo operativo de mantener la herramienta activa",
+      },
+    ],
+    correctAnswer: "m1e20_a",
+    topic: "Responsabilidad",
+    difficulty: "medio",
+    source: "PDF: Ética de la Inteligencia artificial",
+    feedback:
+      "Sin una persona que responda por la decisión no hay responsabilidad. Repasa la guía de ética.",
   },
 ];

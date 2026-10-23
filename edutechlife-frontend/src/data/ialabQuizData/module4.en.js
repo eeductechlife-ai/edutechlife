@@ -2,22 +2,31 @@ export const MODULE_4_EN = [
   {
     id: "m4q1",
     question:
-      "You must analyze 15 papers from your research. Why is NotebookLM better than a general chat?",
+      "You must analyze 15 papers from your research. Why is Gemini Notebook better than a general chat?",
     options: [
       {
         id: "m4q1_a",
-        label: "It works only with your documents and cites each source",
+        label: "It works only with your documents",
       },
-      { id: "m4q1_b", label: "It cannot read academic PDFs" },
-      { id: "m4q1_c", label: "It works without an internet connection" },
-      { id: "m4q1_d", label: "It only processes texts in English" },
+      {
+        id: "m4q1_b",
+        label: "It cannot read academic PDFs",
+      },
+      {
+        id: "m4q1_c",
+        label: "It works without an internet connection",
+      },
+      {
+        id: "m4q1_d",
+        label: "It only processes texts in English",
+      },
     ],
     correctAnswer: "m4q1_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
-      "NotebookLM answers from your documents and cites the source. Watch the getting started video.",
+      "Gemini Notebook answers from your documents and cites the source. Watch the getting started video.",
   },
   {
     id: "m4q2",
@@ -26,76 +35,103 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q2_a",
-        label: "Trusted papers and datasets; leave out opinion blogs",
+        label: "Peer-reviewed papers and trusted datasets",
       },
-      { id: "m4q2_b", label: "All the sources because there is space" },
+      {
+        id: "m4q2_b",
+        label: "All the sources because there is space",
+      },
       {
         id: "m4q2_c",
         label: "Only the blogs because of their simple language",
       },
-      { id: "m4q2_d", label: "Only the news because it is the most recent" },
+      {
+        id: "m4q2_d",
+        label: "Only the news because it is the most recent",
+      },
     ],
     correctAnswer: "m4q2_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "Source quality defines answer quality. Choose reliable and relevant sources.",
   },
   {
     id: "m4q3",
     question:
-      "You have a bus trip and want to review 3 PDFs. What is the best option with NotebookLM?",
+      "You have a bus trip and want to review 3 PDFs. What is the best option with Gemini Notebook?",
     options: [
       {
         id: "m4q3_a",
-        label: "Generate an Audio Overview and listen to it on the trip",
+        label: "Generate an Audio Overview for review",
       },
-      { id: "m4q3_b", label: "Read the full PDFs on the bus" },
-      { id: "m4q3_c", label: "Ask another chat for a general summary" },
-      { id: "m4q3_d", label: "Wait until you get home to read them" },
+      {
+        id: "m4q3_b",
+        label: "Read the full PDFs on the bus",
+      },
+      {
+        id: "m4q3_c",
+        label: "Ask another chat for a general summary",
+      },
+      {
+        id: "m4q3_d",
+        label: "Wait until you get home to read them",
+      },
     ],
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
       "Audio Overview turns your documents into a podcast to review without reading.",
   },
   {
     id: "m4q4",
     question:
-      "NotebookLM cites your PDF and you read the original text. What should you do?",
+      "Gemini Notebook cites your PDF and you read the original text. What should you do?",
     options: [
       {
         id: "m4q4_a",
-        label: "Compare the quote with the original and confirm the nuance",
+        label: "Compare the quote with the original document",
       },
-      { id: "m4q4_b", label: "Trust the quote without checking the original" },
+      {
+        id: "m4q4_b",
+        label: "Trust the quote without checking the original",
+      },
       {
         id: "m4q4_c",
         label: "Delete the PDF because the AI already interpreted it",
       },
-      { id: "m4q4_d", label: "Translate the answer to check its quality" },
+      {
+        id: "m4q4_d",
+        label: "Translate the answer to check its quality",
+      },
     ],
     correctAnswer: "m4q4_a",
     topic: "Accuracy",
     difficulty: "hard",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "Always check citations against the original: the AI gives speed and you give accuracy.",
   },
   {
     id: "m4q5",
     question:
-      "How do you best organize your sources in NotebookLM for research?",
+      "How do you best organize your sources in Gemini Notebook for research?",
     options: [
-      { id: "m4q5_a", label: "Upload all the sources without ordering them" },
+      {
+        id: "m4q5_a",
+        label: "Upload all the sources without ordering them",
+      },
       {
         id: "m4q5_b",
         label: "Choose relevant sources and group them by topic",
       },
-      { id: "m4q5_c", label: "Upload only summaries, never full documents" },
+      {
+        id: "m4q5_c",
+        label: "Upload only summaries, never full documents",
+      },
       {
         id: "m4q5_d",
         label: "Mix academic sources with blogs without distinction",
@@ -104,7 +140,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q5_b",
     topic: "Curation",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "Well chosen and organized sources give better answers. Review the curation topic.",
   },
@@ -112,57 +148,87 @@ export const MODULE_4_EN = [
     id: "m4q6",
     question: "If two of your sources contradict each other, what do you do?",
     options: [
-      { id: "m4q6_a", label: "Analyze both and document the difference" },
-      { id: "m4q6_b", label: "Delete both sources and look for others" },
-      { id: "m4q6_c", label: "Keep only the most recent one" },
-      { id: "m4q6_d", label: "Ignore the contradiction and move on" },
+      {
+        id: "m4q6_a",
+        label: "Analyze both sources carefully",
+      },
+      {
+        id: "m4q6_b",
+        label: "Delete both sources and look for others",
+      },
+      {
+        id: "m4q6_c",
+        label: "Keep only the most recent one",
+      },
+      {
+        id: "m4q6_d",
+        label: "Ignore the contradiction and move on",
+      },
     ],
     correctAnswer: "m4q6_a",
     topic: "Critical Analysis",
     difficulty: "hard",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "Contradictions strengthen your research if you analyze them. Review the analysis simulator.",
   },
   {
     id: "m4q7",
     question:
-      "What should you always do when NotebookLM answers with citations?",
+      "What should you always do when Gemini Notebook answers with citations?",
     options: [
-      { id: "m4q7_a", label: "Verify the citations in the original source" },
-      { id: "m4q7_b", label: "Copy the answer without checking it" },
-      { id: "m4q7_c", label: "Delete the original documents" },
-      { id: "m4q7_d", label: "Translate the answer to validate it" },
+      {
+        id: "m4q7_a",
+        label: "Verify citations in the original",
+      },
+      {
+        id: "m4q7_b",
+        label: "Copy the answer without checking it",
+      },
+      {
+        id: "m4q7_c",
+        label: "Delete the original documents",
+      },
+      {
+        id: "m4q7_d",
+        label: "Translate the answer to validate it",
+      },
     ],
     correctAnswer: "m4q7_a",
     topic: "Verification",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
       "The AI is your assistant, but you are the final person in charge. Review the module OVA.",
   },
   {
     id: "m4q8",
     question:
-      "A team wants to work with NotebookLM on the same project. What is the best workflow?",
+      "A team wants to work with Gemini Notebook on the same project. What is the best workflow?",
     options: [
       {
         id: "m4q8_a",
-        label: "Each person creates a notebook and shares the link",
+        label: "One shared notebook the whole team edits",
       },
-      { id: "m4q8_b", label: "Only one asks questions for the whole team" },
+      {
+        id: "m4q8_b",
+        label: "Only one asks questions for the whole team",
+      },
       {
         id: "m4q8_c",
         label: "Each person works apart and compares at the end",
       },
-      { id: "m4q8_d", label: "They take turns using a single computer" },
+      {
+        id: "m4q8_d",
+        label: "They take turns using a single computer",
+      },
     ],
     correctAnswer: "m4q8_a",
     topic: "Collaboration",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
-      "NotebookLM lets you share notebooks like Google Docs. Review the module lab.",
+      "Gemini Notebook lets you share notebooks like Google Docs. Review the module lab.",
   },
   {
     id: "m4q9",
@@ -171,19 +237,25 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q9_a",
-        label: "A concrete question that asks to cite your sources",
+        label: "A concrete question that asks for citations",
       },
-      { id: "m4q9_b", label: "Read the ten full sources by hand" },
+      {
+        id: "m4q9_b",
+        label: "Read the ten full sources by hand",
+      },
       {
         id: "m4q9_c",
         label: "Ask a chat for the analysis without your sources",
       },
-      { id: "m4q9_d", label: "Copy the study guide without filtering" },
+      {
+        id: "m4q9_d",
+        label: "Copy the study guide without filtering",
+      },
     ],
     correctAnswer: "m4q9_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
       "Specific questions with citations save you from reading everything. Review the getting started video.",
   },
@@ -194,12 +266,15 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q10_a",
-        label: "You guide the topics and regenerate it if you dislike it",
+        label: "You guide the topics and regenerate the answer",
       },
-      { id: "m4q10_b", label: "You have no control over the audio" },
+      {
+        id: "m4q10_b",
+        label: "You have no control over the audio",
+      },
       {
         id: "m4q10_c",
-        label: "You choose the voice, tone and write the script",
+        label: "You write the script word by word",
       },
       {
         id: "m4q10_d",
@@ -209,14 +284,14 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q10_a",
     topic: "Audio Overview",
     difficulty: "easy",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "The Audio Overview is conversational and can be regenerated or guided. Review the module video.",
   },
   {
     id: "m4q11",
     question:
-      "What is the key difference between NotebookLM and a general chat?",
+      "What is the key difference between Gemini Notebook and a general chat?",
     options: [
       {
         id: "m4q11_a",
@@ -237,19 +312,19 @@ export const MODULE_4_EN = [
       },
     ],
     correctAnswer: "m4q11_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "easy",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
-      "NotebookLM relies on your sources: if it is not in your documents, it will not answer. Review the video.",
+      "Gemini Notebook relies on your sources: if it is not in your documents, it will not answer. Review the video.",
   },
   {
     id: "m4q12",
-    question: "What does NotebookLM need in order to answer usefully?",
+    question: "What does Gemini Notebook need in order to answer usefully?",
     options: [
       {
         id: "m4q12_a",
-        label: "Quality sources loaded and organized inside the notebook",
+        label: "Quality sources uploaded, checked and well organized",
       },
       {
         id: "m4q12_b",
@@ -265,11 +340,11 @@ export const MODULE_4_EN = [
       },
     ],
     correctAnswer: "m4q12_a",
-    topic: "NotebookLM",
+    topic: "Gemini Notebook",
     difficulty: "easy",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
-      "The quality of your sources determines the quality of the answers. Review the NotebookLM guide.",
+      "The quality of your sources determines the quality of the answers. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q13",
@@ -277,11 +352,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q13_a",
-        label: "Peer-reviewed papers and reliable datasets on the topic",
+        label: "Peer-reviewed papers and reliable datasets",
       },
       {
         id: "m4q13_b",
-        label: "Loose social media comments with no clear author",
+        label: "Loose comments",
       },
       {
         id: "m4q13_c",
@@ -295,7 +370,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q13_a",
     topic: "Curation",
     difficulty: "easy",
-    source: "OVA: Lab: Create Your Notebook",
+    source: "The Grimoire",
     feedback:
       "Prioritize reliable, verifiable sources. Practice in the notebook creation lab.",
   },
@@ -306,12 +381,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q14_a",
-        label:
-          "Select the most relevant and highly reliable ones for the topic",
+        label: "Select the most relevant, reliable ones",
       },
       {
         id: "m4q14_b",
-        label: "Upload all 50 without filtering because more data is better",
+        label: "Upload all 50 without filtering",
       },
       {
         id: "m4q14_c",
@@ -325,19 +399,18 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q14_a",
     topic: "Curation",
     difficulty: "medium",
-    source: "Image: Smart Summaries with NotebookLM",
+    source: "Smart Summaries with Gemini Notebook",
     feedback:
       "Less noise, better answers: prioritize relevance and reliability. Review the summaries infographic.",
   },
   {
     id: "m4q15",
     question:
-      "NotebookLM answers only from your documents. What does this imply?",
+      "Gemini Notebook answers only from your documents. What does this imply?",
     options: [
       {
         id: "m4q15_a",
-        label:
-          "If a data point is not in your sources, it will not appear in the answer",
+        label: "If a fact is not in your sources, it will not appear",
       },
       {
         id: "m4q15_b",
@@ -355,18 +428,17 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q15_a",
     topic: "Scope",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
-      "NotebookLM is faithful to your sources: that is why curation matters. Review the video.",
+      "Gemini Notebook is faithful to your sources: that is why curation matters. Review the video.",
   },
   {
     id: "m4q16",
-    question: "What is asking NotebookLM for a summary useful for?",
+    question: "What is asking Gemini Notebook for a summary useful for?",
     options: [
       {
         id: "m4q16_a",
-        label:
-          "Condensing the essentials of the documents and guiding your reading",
+        label: "Condensing the essentials and guiding your overall reading",
       },
       {
         id: "m4q16_b",
@@ -385,7 +457,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q16_a",
     topic: "Summaries",
     difficulty: "easy",
-    source: "PDF: NotebookLM, the Notebook of the Future",
+    source: "Gemini Notebook: the notebook of the future",
     feedback:
       "Summaries guide your reading; they do not replace the original source. Review the PDF.",
   },
@@ -396,8 +468,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q17_a",
-        label:
-          "A synthesis that integrates several sources and cites each contribution",
+        label: "A synthesis where each contribution carries its citation",
       },
       {
         id: "m4q17_b",
@@ -416,18 +487,18 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q17_a",
     topic: "Synthesis",
     difficulty: "medium",
-    source: "OVA: Simulator: Document Analysis",
+    source: "The Crucible",
     feedback:
       "A synthesis connects sources and cites them. Practice in the document analysis simulator.",
   },
   {
     id: "m4q18",
-    question: "What do NotebookLM's grounding/citations add to your research?",
+    question:
+      "What do Gemini Notebook's grounding/citations add to your research?",
     options: [
       {
         id: "m4q18_a",
-        label:
-          "They show you which document each statement came from so you can verify",
+        label: "They show which document each individual claim came from",
       },
       {
         id: "m4q18_b",
@@ -445,39 +516,38 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q18_a",
     topic: "Verification",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
-      "Citations let you go back to the original document and check. Review the NotebookLM guide.",
+      "Citations let you go back to the original document and check. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q19",
     question:
-      "NotebookLM cites a source, but the nuance does not match the original. What do you do?",
+      "Gemini Notebook gives a figure that appears in none of your documents. What do you do?",
     options: [
       {
         id: "m4q19_a",
-        label:
-          "Correct the nuance with the original text and adjust your conclusion",
+        label: "Check your documents; if it is missing, do not use it",
       },
       {
         id: "m4q19_b",
-        label: "Keep the AI answer and not check the original at all",
+        label: "Use it, because it sounds credible and came from AI",
       },
       {
         id: "m4q19_c",
-        label: "Delete the document from the notebook to avoid conflicts",
+        label: "Cite the notebook as the source and publish it that way",
       },
       {
         id: "m4q19_d",
-        label: "Ask again until it says what you were expecting",
+        label: "Ask it to round the number so it looks more precise",
       },
     ],
     correctAnswer: "m4q19_a",
     topic: "Accuracy",
     difficulty: "hard",
-    source: "OVA: Lab: Create Your Notebook",
+    source: "The Grimoire",
     feedback:
-      "The source rules: correct the nuance and adjust the conclusion. Practice in the notebook lab.",
+      "A figure missing from your sources cannot be verified: do not use it until you confirm it. Practice in the notebook lab.",
   },
   {
     id: "m4q20",
@@ -486,8 +556,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q20_a",
-        label:
-          "Analyze both, document the difference and look for a third source",
+        label: "Analyze both sources and document the key difference",
       },
       {
         id: "m4q20_b",
@@ -505,17 +574,17 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q20_a",
     topic: "Critical Analysis",
     difficulty: "hard",
-    source: "OVA: Simulator: Document Analysis",
+    source: "The Crucible",
     feedback:
       "Document the contradiction and look for additional evidence. Practice in the simulator.",
   },
   {
     id: "m4q21",
-    question: "What is an Audio Overview in NotebookLM?",
+    question: "What is an Audio Overview in Gemini Notebook?",
     options: [
       {
         id: "m4q21_a",
-        label: "An audio conversation generated from your documents",
+        label: "An audio conversation based on your documents",
       },
       {
         id: "m4q21_b",
@@ -525,12 +594,15 @@ export const MODULE_4_EN = [
         id: "m4q21_c",
         label: "A written summary that you then print to read later",
       },
-      { id: "m4q21_d", label: "An automatic phone call to technical support" },
+      {
+        id: "m4q21_d",
+        label: "An automatic phone call to technical support",
+      },
     ],
     correctAnswer: "m4q21_a",
     topic: "Audio Overview",
     difficulty: "easy",
-    source: "Video: Create Your Own Podcast",
+    source: "Create Your Own Podcast",
     feedback:
       "The Audio Overview is an audio conversation generated from your sources. Review the podcast video.",
   },
@@ -542,7 +614,10 @@ export const MODULE_4_EN = [
         id: "m4q22_a",
         label: "For reviewing while you commute and cannot read screens",
       },
-      { id: "m4q22_b", label: "For completely replacing reading and analysis" },
+      {
+        id: "m4q22_b",
+        label: "For completely replacing reading and analysis",
+      },
       {
         id: "m4q22_c",
         label: "For uploading more documents to the notebook in less time",
@@ -555,7 +630,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q22_a",
     topic: "Audio Overview",
     difficulty: "easy",
-    source: "OVA: Lab: Create Your AI Podcast",
+    source: "The Alchemical Studio",
     feedback:
       "Audio helps you learn on the move; it does not replace analysis. Practice in the podcast lab.",
   },
@@ -566,12 +641,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q23_a",
-        label:
-          "You guide the angle and can regenerate the result if it does not convince",
+        label: "You guide the angle and regenerate it",
       },
       {
         id: "m4q23_b",
-        label: "You have no control and it always comes out random",
+        label: "No control at all",
       },
       {
         id: "m4q23_c",
@@ -585,7 +659,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q23_a",
     topic: "Audio Overview",
     difficulty: "medium",
-    source: "OVA: Lab: Create Your AI Podcast",
+    source: "The Alchemical Studio",
     feedback:
       "You can guide the angle and regenerate. Practice in the AI podcast creation lab.",
   },
@@ -613,7 +687,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q24_a",
     topic: "Audio Overview",
     difficulty: "medium",
-    source: "OVA: Document Mastery: From Paper to Podcast",
+    source: "The Transmutation",
     feedback:
       "Better sources and organization, better audio. Review document mastery to podcast.",
   },
@@ -642,7 +716,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q25_a",
     topic: "Verification",
     difficulty: "medium",
-    source: "OVA: Lab: Create Your AI Podcast",
+    source: "The Alchemical Studio",
     feedback:
       "Listen and verify before sharing: responsibility for the content is yours.",
   },
@@ -652,8 +726,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q26_a",
-        label:
-          "Only the people you grant access to when you share the notebook",
+        label: "Only the people you grant access to when sharing it",
       },
       {
         id: "m4q26_b",
@@ -661,7 +734,7 @@ export const MODULE_4_EN = [
       },
       {
         id: "m4q26_c",
-        label: "All NotebookLM users automatically and by default",
+        label: "All Gemini Notebook users automatically and by default",
       },
       {
         id: "m4q26_d",
@@ -671,18 +744,18 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q26_a",
     topic: "Collaboration",
     difficulty: "easy",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "You share with whomever you decide, like a collaborative document. Review the guide.",
   },
   {
     id: "m4q27",
     question:
-      "You want to ask NotebookLM a precise question. Which one works best?",
+      "You want to ask Gemini Notebook a precise question. Which one works best?",
     options: [
       {
         id: "m4q27_a",
-        label: "A concrete question that asks it to cite the notebook sources",
+        label: "A concrete question that asks for citations from sources",
       },
       {
         id: "m4q27_b",
@@ -698,9 +771,9 @@ export const MODULE_4_EN = [
       },
     ],
     correctAnswer: "m4q27_a",
-    topic: "NotebookLM Prompting",
+    topic: "Gemini Notebook Prompting",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
       "Concrete questions asking for citations give better results. Review the getting started video.",
   },
@@ -711,8 +784,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q28_a",
-        label:
-          "Review the source and adjust your conclusion based on the evidence",
+        label: "Review the source again and adjust your conclusion",
       },
       {
         id: "m4q28_b",
@@ -730,7 +802,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q28_a",
     topic: "Critical Analysis",
     difficulty: "hard",
-    source: "OVA: Simulator: Document Analysis",
+    source: "The Crucible",
     feedback:
       "Evidence rules: adjust your conclusion if the source warrants it. Practice in the simulator.",
   },
@@ -741,8 +813,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q29_a",
-        label:
-          "The notebook sticks to your sources; the general chat uses its training",
+        label: "The notebook sticks strictly to the sources you uploaded",
       },
       {
         id: "m4q29_b",
@@ -760,7 +831,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q29_a",
     topic: "Scope",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
       "The notebook is anchored to your sources; the general chat uses prior knowledge. Review the guide.",
   },
@@ -770,8 +841,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q30_a",
-        label:
-          "More reliable answers by starting from relevant, reliable sources",
+        label: "More reliable answers, grounded in relevant sources",
       },
       {
         id: "m4q30_b",
@@ -789,7 +859,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q30_a",
     topic: "Curation",
     difficulty: "easy",
-    source: "Image: Smart Summaries with NotebookLM",
+    source: "Smart Summaries with Gemini Notebook",
     feedback:
       "Curating is choosing well: better sources, better answers. Review the summaries infographic.",
   },
@@ -800,8 +870,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q31_a",
-        label:
-          "A comparative analysis that cites each source and notes differences",
+        label: "A comparative analysis that cites each source it uses",
       },
       {
         id: "m4q31_b",
@@ -819,18 +888,17 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q31_a",
     topic: "Synthesis",
     difficulty: "medium",
-    source: "OVA: Simulator: Document Analysis",
+    source: "The Crucible",
     feedback:
       "A comparative analysis with citations reveals agreements and tensions between sources.",
   },
   {
     id: "m4q32",
-    question: "What is a well-designed complete flow in NotebookLM?",
+    question: "What is a well-designed complete flow in Gemini Notebook?",
     options: [
       {
         id: "m4q32_a",
-        label:
-          "Curate sources, analyze and synthesize, and generate audio to review",
+        label: "Curate the sources, analyze them and generate the audio",
       },
       {
         id: "m4q32_b",
@@ -848,7 +916,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q32_a",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "OVA: Document Mastery: From Paper to Podcast",
+    source: "The Transmutation",
     feedback:
       "The ideal flow: curate → analyze/synthesize → audio to review. Review document mastery to podcast.",
   },
@@ -858,8 +926,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q33_a",
-        label:
-          "That it contains no sensitive data and that access is appropriate",
+        label: "That it holds no sensitive data and has appropriate access",
       },
       {
         id: "m4q33_b",
@@ -877,9 +944,9 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q33_a",
     topic: "Privacy",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
-      "Before sharing, protect sensitive data and limit access. Review the NotebookLM guide.",
+      "Before sharing, protect sensitive data and limit access. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q34",
@@ -888,7 +955,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q34_a",
-        label: "Remove them so the notebook stays focused on what is relevant",
+        label: "Remove them so the notebook stays focused and clean",
       },
       {
         id: "m4q34_b",
@@ -906,23 +973,22 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q34_a",
     topic: "Curation",
     difficulty: "medium",
-    source: "OVA: Lab: Create Your Notebook",
+    source: "The Grimoire",
     feedback:
       "A focused notebook answers better: remove what does not add. Practice in the lab.",
   },
   {
     id: "m4q35",
     question:
-      "NotebookLM cannot find something you ask about in your sources. What does it mean?",
+      "Gemini Notebook cannot find something you ask about in your sources. What does it mean?",
     options: [
       {
         id: "m4q35_a",
-        label:
-          "That data is not in your documents and you must find another source",
+        label: "That the data does not appear anywhere in your documents",
       },
       {
         id: "m4q35_b",
-        label: "That the document has a format NotebookLM cannot read",
+        label: "That the document has a format Gemini Notebook cannot read",
       },
       {
         id: "m4q35_c",
@@ -936,18 +1002,18 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q35_a",
     topic: "Scope",
     difficulty: "medium",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
       "If it is not in your sources, it does not answer: add the source or search elsewhere.",
   },
   {
     id: "m4q36",
     question:
-      "What does a student gain by using NotebookLM to study their notes?",
+      "What does a student gain by using Gemini Notebook to study their notes?",
     options: [
       {
         id: "m4q36_a",
-        label: "Asking and getting cited answers from their own materials",
+        label: "Asking questions and getting answers with citations",
       },
       {
         id: "m4q36_b",
@@ -965,18 +1031,18 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q36_a",
     topic: "Learning",
     difficulty: "easy",
-    source: "Video: Getting Started with NotebookLM",
+    source: "First Steps with Gemini Notebook",
     feedback:
       "Study from your own materials and with citations to verify. Review the getting started video.",
   },
   {
     id: "m4q37",
     question:
-      "You are about to base a decision on a NotebookLM synthesis. What do you do first?",
+      "You are about to base a decision on a Gemini Notebook synthesis. What do you do first?",
     options: [
       {
         id: "m4q37_a",
-        label: "Open the cited sources and confirm the key points",
+        label: "Open the cited sources and double-check the key points",
       },
       {
         id: "m4q37_b",
@@ -994,22 +1060,21 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q37_a",
     topic: "Verification",
     difficulty: "medium",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
-      "Before deciding, verify the key points in the cited sources. Review the NotebookLM guide.",
+      "Before deciding, verify the key points in the cited sources. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q38",
-    question: "What characteristic defines a good NotebookLM notebook?",
+    question: "What characteristic defines a good Gemini Notebook notebook?",
     options: [
       {
         id: "m4q38_a",
-        label:
-          "Relevant sources, well organized and aligned with the work goal",
+        label: "Relevant sources, well organized",
       },
       {
         id: "m4q38_b",
-        label: "The greatest possible number of documents on any topic",
+        label: "Many documents",
       },
       {
         id: "m4q38_c",
@@ -1023,9 +1088,9 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q38_a",
     topic: "Curation",
     difficulty: "easy",
-    source: "NotebookLM Guide",
+    source: "Gemini Notebook Guide",
     feedback:
-      "A focused, reliable notebook answers better. Review the NotebookLM guide.",
+      "A focused, reliable notebook answers better. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q39",
@@ -1034,8 +1099,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q39_a",
-        label:
-          "It turns the conclusions of your documents into audio for review",
+        label: "It turns your conclusions into audio you can review",
       },
       {
         id: "m4q39_b",
@@ -1053,7 +1117,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q39_a",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "OVA: Document Mastery: From Paper to Podcast",
+    source: "The Transmutation",
     feedback:
       "Audio turns your conclusions into a listenable review. Review document mastery to podcast.",
   },
@@ -1064,13 +1128,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q40_a",
-        label:
-          "Curate sources, synthesize with citations, verify and generate the Audio Overview",
+        label: "Curate sources, synthesize and generate audio",
       },
       {
         id: "m4q40_b",
-        label:
-          "Upload the papers unordered and publish the first available audio",
+        label: "Upload the papers unordered",
       },
       {
         id: "m4q40_c",
@@ -1086,7 +1148,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q40_a",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "OVA: Document Mastery: From Paper to Podcast",
+    source: "The Transmutation",
     feedback:
       "Curate → synthesize with citations → verify → audio: the complete, verifiable flow. Review the OVA.",
   },

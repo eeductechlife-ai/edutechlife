@@ -4,8 +4,8 @@ import { MODULE_5 } from "../module5.js";
 const words = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
 
 describe("MODULE_5 (examen / mi reto)", () => {
-  it("tiene exactamente 10 preguntas", () => {
-    expect(MODULE_5).toHaveLength(40);
+  it("tiene un banco de 30 preguntas (se sortean 10 por intento)", () => {
+    expect(MODULE_5).toHaveLength(30);
   });
 
   it("tiene ids únicos y estructura válida", () => {

@@ -7,7 +7,7 @@
  * Pantallas:
  *   welcome → OVAIntro con learningObjectives
  *   m1      → Framework: El flujo ideal (entrada→orquestación→salida)
- *   m2      → Caso 1: Marketero (Búsqueda Web + DALL-E para contenido)
+ *   m2      → Caso 1: Marketero (Búsqueda Web + generación de imágenes para contenido)
  *   m3      → Caso 2: Educador (Canvas para cursos + GPT para tutoría)
  *   m4      → Caso 3: Emprendedor (Múltiples GPTs en cadena)
  *   m5      → Tu flujo (usuario diseña su propio workflow)

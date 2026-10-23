@@ -9,7 +9,7 @@ const MODULE_NAMES = {
   2: 'Arquitecto Digital: ChatGPT',
   3: 'Detective de Datos: Gemini',
   4: 'Alquimista Digital: NotebookLM',
-  5: 'Guardián Digital: Ética IA',
+  5: 'Director de Orquesta: Claude',
 };
 
 const MODULE_ICONS = {

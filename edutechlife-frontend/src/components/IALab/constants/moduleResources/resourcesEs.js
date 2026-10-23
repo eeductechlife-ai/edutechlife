@@ -1,5 +1,5 @@
+// Contenido del curso IALab (generado desde el parche del rediseño 2026-10).
 const RESOURCES_ES = {
-  // MÓDULO 1: EL ARTESANO DIGITAL — INGENIERÍA DE PROMPTS
   "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?": {
     title: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
     description:
@@ -36,9 +36,21 @@ const RESOURCES_ES = {
         thumbnailType: "premium",
         fullscreen: true,
       },
+      {
+        id: "fundamentals-guide-1",
+        type: "pdf",
+        title: "Guía: Qué es la IA generativa",
+        url: "/ialab-resources/modulo1/guia-fundamentos-es.pdf",
+        pages: 6,
+        format: "PDF",
+        size: "1.24 MB",
+        description:
+          "Cómo funciona, qué puede y qué no puede hacer, y cómo usarla con criterio. Lectura para repasar después del video.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
     ],
   },
-
   "El Cincel del Artesano: ¿Qué es un Prompt?": {
     title: "El Cincel del Artesano: ¿Qué es un Prompt?",
     description:
@@ -66,10 +78,10 @@ const RESOURCES_ES = {
         id: "prompt-guide-1",
         type: "pdf",
         title: "Guía: Anatomía de un Prompt",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
-        pages: 12,
+        url: "/ialab-resources/modulo1/guia-prompt-es.pdf",
+        pages: 8,
         format: "PDF",
-        size: "249 KB",
+        size: "1.36 MB",
         description:
           "Tu manual de referencia del artesano: técnicas comprobadas, ejemplos listos para usar y secretos del oficio que transformarán tu forma de trabajar con IA.",
         thumbnailType: "premium",
@@ -85,13 +97,51 @@ const RESOURCES_ES = {
         difficulty: "Principiante",
         fullscreen: true,
       },
+    ],
+  },
+  "El Escudo del Guardián: Lo que No Debes Compartir": {
+    title: "El Escudo del Guardián: Lo que No Debes Compartir",
+    description:
+      "Cada texto que pegas sale de tu computador. Aprende qué datos nunca compartes y cómo anonimizar antes de pegar.",
+    learningObjectives: [
+      "Identificar datos personales y sensibles",
+      "Anonimizar un texto antes de pegarlo",
+      "Saber qué hacer si ya compartiste un dato sensible",
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Principiante",
+    resources: [
       {
-        id: "prompt-lab-ova-1",
-        type: "ova_interactive",
-        title: "El Martillo",
+        id: "privacy-video-1",
+        type: "video",
+        title: "Privacidad y IA: Lo que Debes Saber",
+        url: "https://www.youtube.com/embed/BoR5KjsRK9U",
+        duration: "9:20",
+        thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
+        provider: "youtube",
         description:
-          "El banco de trabajo del artesano digital: escribe prompts reales, ejecútalos contra el modelo y refina hasta lograr el resultado exacto. Cuatro técnicas comprobadas más un reto final.",
-        estimatedTime: "15 minutos",
+          "9:20 que pueden salvar tu reputación. Descubre los riesgos de privacidad que acechan en cada herramienta de IA y cómo neutralizarlos.",
+      },
+      {
+        id: "privacy-guide-1",
+        type: "pdf",
+        title: "Manual de Privacidad en IA",
+        url: "/ialab-resources/modulo1/guia-privacidad-es.pdf",
+        pages: 5,
+        format: "PDF",
+        size: "0.63 MB",
+        description:
+          "Checklist práctico: 4 preguntas antes de compartir y 5 pasos si ya compartiste algo sensible, para proteger tu privacidad mientras aprovechas la inteligencia artificial. Tu manual de supervivencia digital.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
+      {
+        id: "privacy-ova-1",
+        type: "ova_interactive",
+        title: "La Brújula de Riesgos",
+        description:
+          "Enfréntate a escenarios reales de riesgo y aprende a proteger tus datos como un guardián. Incluye el juego de estrellas éticas que pondrá a prueba tus decisiones.",
+        estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
         thumbnailType: "premium",
@@ -99,10 +149,56 @@ const RESOURCES_ES = {
       },
     ],
   },
-
-  // ============================================================================
-  // MÓDULO 2: EL ARQUITECTO DE AUTOMATIZACIÓN — POTENCIA CHATGPT
-  // ============================================================================
+  "El Juramento del Guardián: Ética y Sesgos": {
+    title: "El Juramento del Guardián: Ética y Sesgos",
+    description:
+      "La ética se practica decidiendo. Aprenderás a detectar sesgos, a aplicar tres preguntas y a declarar tu uso de IA.",
+    learningObjectives: [
+      "Aplicar las tres preguntas: ¿es cierto?, ¿es justo?, ¿lo declaro?",
+      "Declarar cuándo y cómo usaste IA",
+      "Mantener a una persona responsable en las decisiones que afectan a otros",
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Principiante",
+    resources: [
+      {
+        id: "ethics-video-1",
+        type: "video",
+        title: "IA Ética: Principios y Práctica",
+        url: "https://www.youtube.com/embed/idplIgnLStI",
+        duration: "6:05",
+        thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
+        provider: "youtube",
+        description:
+          "6:05 que condensan todo lo que necesitas saber para implementar IA ética en el mundo real. La guía definitiva para guardianes.",
+      },
+      {
+        id: "bias-guide-1",
+        type: "pdf",
+        title: "Etica de la Inteligencia artificial",
+        url: "/ialab-resources/modulo1/guia-etica-es.pdf",
+        pages: 5,
+        format: "PDF",
+        size: "0.64 MB",
+        description:
+          "5 páginas que condensan todo lo que necesitas saber para blindar éticamente tu relación con la IA. Lectura obligatoria para guardianes.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
+      {
+        id: "bias-ova-1",
+        type: "ova_interactive",
+        title: "El Espejo de la Verdad",
+        description:
+          "Pon a prueba tu ojo de guardián: analiza respuestas de IA reales y descubre los sesgos que la mayoría de la gente nunca notaría. 6 desafíos que agudizarán tu instinto.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+    ],
+  },
   "Los Planos del Arquitecto: Guía Completa de ChatGPT": {
     title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
     description:
@@ -131,10 +227,10 @@ const RESOURCES_ES = {
         id: "chatgpt-guide-modulo2",
         type: "pdf",
         title: "Guía Completa de ChatGPT",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/Las-Herramientas-Integradas-de-ChatGPT.pdf/guia_edutechlife_modulo2.pdf",
-        pages: 12,
+        url: "/ialab-resources/modulo2/guia-chatgpt-es.pdf",
+        pages: 10,
         format: "PDF",
-        size: "4.2 MB",
+        size: "1.46 MB",
         description:
           "El manual del arquitecto: tips, trucos y ejemplos prácticos organizados para construir cualquier proyecto con ChatGPT. Consulta rápida para profesionales de la construcción digital.",
         thumbnailType: "premium",
@@ -154,7 +250,6 @@ const RESOURCES_ES = {
       },
     ],
   },
-
   "El Andamio del Arquitecto: Herramientas Integradas": {
     title: "El Andamio del Arquitecto: Herramientas Integradas",
     description:
@@ -172,12 +267,12 @@ const RESOURCES_ES = {
         id: "workflow-pdf-modulo2",
         type: "pdf",
         title: "Las Herramientas Integradas de ChatGPT",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%202%20guia%20de%20intro/Las-Herramientas-Integradas-de-ChatGPT.pdf",
-        pages: 10,
+        url: "/ialab-resources/modulo2/guia-herramientas-chatgpt-es.pdf",
+        pages: 6,
         format: "PDF",
-        size: "4.8 MB",
+        size: "1.23 MB",
         description:
-          "Descubre cómo Búsqueda Web, Análisis de Datos, DALL-E 3 y Canvas trabajan juntos como un equipo de construcción para resolver problemas complejos.",
+          "Descubre cómo Búsqueda Web, Análisis de Datos, la generación de imágenes y Canvas trabajan juntos como un equipo de construcción para resolver problemas complejos.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -193,28 +288,15 @@ const RESOURCES_ES = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-      {
-        id: "automation-flows-ova-1",
-        type: "ova_interactive",
-        title: "La Línea de Montaje",
-        description:
-          "Framework + 3 casos prácticos: cómo un marketero, educador y emprendedor usan las herramientas integradas de ChatGPT en flujos que multiplican su productividad.",
-        estimatedTime: "22 minutos",
-        difficulty: "Intermedio",
-        interactiveElements: 5,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
     ],
   },
-
-  "La Fachada del Edificio: GPTs y Function Calling": {
-    title: "La Fachada del Edificio: GPTs y Function Calling",
+  "La Fachada del Edificio: GPTs, Proyectos y Agentes": {
+    title: "La Fachada del Edificio: GPTs, Proyectos y Agentes",
     description:
-      "La fachada es lo que el mundo ve — pero detrás hay una estructura compleja que la sostiene. Construye GPTs personalizados con conexiones a APIs externas que funcionan como la infraestructura invisible de tu obra maestra.",
+      "La fachada es lo que el mundo ve. Construye GPTs personalizados con tus instrucciones y tu conocimiento, organiza tu trabajo en Proyectos y delega tareas de varios pasos al agente de ChatGPT, siempre bajo tu supervisión.",
     learningObjectives: [
       "Crear GPTs personalizados como módulos de construcción reutilizables",
-      "Configurar acciones Function Calling para conectar con APIs externas",
+      "Organizar un Proyecto con archivos e instrucciones de un mismo trabajo",
       "Compartir tus creaciones y aprender de la comunidad de arquitectos digitales",
       "Evaluar cuándo usar un GPT personalizado vs. la construcción estándar de ChatGPT",
     ],
@@ -222,14 +304,15 @@ const RESOURCES_ES = {
     difficulty: "Avanzado",
     resources: [
       {
-        id: "gpts-guide-1",
-        type: "image",
-        title: "Guía de GPTs y Acciones",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%20de%20aplicaciones/WhatsApp%20Image%202026-05-07%20at%2020.35.40.jpeg",
-        format: "JPEG",
-        size: "2.1 MB",
+        id: "facade-guide-1",
+        type: "pdf",
+        title: "Guía: GPTs, Proyectos y agentes",
+        url: "/ialab-resources/modulo2/guia-fachada-es.pdf",
+        pages: 5,
+        format: "PDF",
+        size: "1.18 MB",
         description:
-          "Guía visual rápida para construir, configurar y publicar tu primer GPT personalizado. Los planos ejecutivos del arquitecto digital.",
+          "Cuándo usar un Proyecto, un GPT o un agente, y cómo probar un GPT antes de compartirlo.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -247,10 +330,6 @@ const RESOURCES_ES = {
       },
     ],
   },
-
-  // ============================================================================
-  // MÓDULO 3: EL DETECTIVE DE DATOS — GEMINI
-  // ============================================================================
   "El Despertar del Detective Multimodal": {
     title: "El Despertar del Detective Multimodal",
     description:
@@ -279,18 +358,28 @@ const RESOURCES_ES = {
         id: "gemini-guide-1",
         type: "pdf",
         title: "Manual de Campo: Introducción a Gemini",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/2-%20guia_edutechlife_modulo3_gemini.pdf",
-        pages: 11,
+        url: "/ialab-resources/modulo3/guia-gemini-es.pdf",
+        pages: 8,
         format: "PDF",
-        size: "2.8 MB",
+        size: "2.84 MB",
         description:
           "El manual de campo del detective: aprende a usar Gemini para estudiar, trabajar y crear contenido con la precisión de un investigador profesional.",
         thumbnailType: "premium",
         immersiveView: true,
       },
+      {
+        id: "gemini-multimodal-ova-1",
+        type: "ova_interactive",
+        title: "La Lupa a Prueba",
+        description: null,
+        estimatedTime: "15 minutes",
+        difficulty: "Intermediate",
+        interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
     ],
   },
-
   "Grounding: Cuando la Evidencia Toca Tierra": {
     title: "Grounding: Cuando la Evidencia Toca Tierra",
     description:
@@ -308,10 +397,10 @@ const RESOURCES_ES = {
         id: "workspace-template-1",
         type: "pdf",
         title: "Gemini a la Práctica: Ejercicios de Campo",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/3%20Gemini_Research_Mastery.pdf",
-        pages: 10,
+        url: "/ialab-resources/modulo3/practica-gemini-es.pdf",
+        pages: 5,
         format: "PDF",
-        size: "3.2 MB",
+        size: "2.70 MB",
         description:
           "El cuaderno de ejercicios del detective: domina Gemini con casos prácticos y aplicaciones reales que multiplican tu productividad.",
         thumbnailType: "premium",
@@ -331,7 +420,6 @@ const RESOURCES_ES = {
       },
     ],
   },
-
   "Deep Research: La Caja de Herramientas Forenses": {
     title: "Deep Research: La Caja de Herramientas Forenses",
     description:
@@ -357,28 +445,17 @@ const RESOURCES_ES = {
           "Empresas y profesionales revelan cómo Gemini transformó su forma de investigar. Resultados que parecen magia — pero son método.",
       },
       {
-        id: "gemini-cases-guide-1",
-        type: "image",
-        title: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/3-infografia.png",
-        format: "PNG",
-        size: "1.2 MB",
+        id: "deep-research-guide-1",
+        type: "pdf",
+        title: "Guía: Deep Research paso a paso",
+        url: "/ialab-resources/modulo3/guia-deep-research-es.pdf",
+        pages: 4,
+        format: "PDF",
+        size: "2.62 MB",
         description:
-          "Mapa visual completo del arsenal del detective: herramientas, capacidades y casos de uso en una sola infografía. Imprime, pega en tu pared, conviértete en un experto.",
+          "Cuatro etapas para investigar con evidencia: pregunta, plan, verificación y redacción con límites.",
         thumbnailType: "premium",
         immersiveView: true,
-      },
-      {
-        id: "gemini-cases-ova-1",
-        type: "ova_interactive",
-        title: "El Caso Abierto",
-        description:
-          "Enfréntate a 6 casos reales — desde analizar un contrato hasta verificar una noticia falsa — y resuélvelos usando Gemini como tu asistente de investigación.",
-        estimatedTime: "25 minutos",
-        difficulty: "Avanzado",
-        interactiveElements: 6,
-        thumbnailType: "premium",
-        fullscreen: true,
       },
       {
         id: "gemini-deep-research-ova-1",
@@ -394,12 +471,8 @@ const RESOURCES_ES = {
       },
     ],
   },
-
-  // ============================================================================
-  // MÓDULO 4: EL ALQUIMISTA DEL CONOCIMIENTO — NOTEBOOKLM
-  // ============================================================================
-  "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM": {
-    title: "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM",
+  "El Alquimista de Documentos: Tu Primer Hechizo con Gemini Notebook": {
+    title: "El Alquimista de Documentos: Tu Primer Hechizo con Gemini Notebook",
     description:
       "La herramienta secreta de Google para alquimistas digitales: sube tus PDFs y obtén respuestas precisas con citas textuales. Tu bibliotecario personal con superpoderes de IA.",
     learningObjectives: [
@@ -414,7 +487,7 @@ const RESOURCES_ES = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "Primeros Pasos con NotebookLM",
+        title: "Primeros Pasos con Gemini Notebook",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
@@ -425,13 +498,13 @@ const RESOURCES_ES = {
       {
         id: "notebooklm-guide-1",
         type: "pdf",
-        title: "Guía de NotebookLM",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/guia_edutechlife_modulo3%20.pdf",
-        pages: 10,
+        title: "Guía de Gemini Notebook",
+        url: "/ialab-resources/modulo4/guia-gemini-notebook-es.pdf",
+        pages: 7,
         format: "PDF",
-        size: "2.3 MB",
+        size: "2.32 MB",
         description:
-          "El grimorio del alquimista: 10 páginas para dominar NotebookLM desde tu primer cuaderno hasta técnicas avanzadas de investigación.",
+          "El grimorio del alquimista: 10 páginas para dominar Gemini Notebook desde tu primer cuaderno hasta técnicas avanzadas de investigación.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -440,7 +513,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "El Grimorio",
         description:
-          "7 preguntas que te convertirán en experto en NotebookLM. Completa el desafío con MAX como tu guía personal en este viaje alquímico.",
+          "7 preguntas que te convertirán en experto en Gemini Notebook. Completa el desafío con MAX como tu guía personal en este viaje alquímico.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 7,
@@ -449,7 +522,6 @@ const RESOURCES_ES = {
       },
     ],
   },
-
   "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes": {
     title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
     description:
@@ -464,25 +536,13 @@ const RESOURCES_ES = {
     difficulty: "Intermedio",
     resources: [
       {
-        id: "notebook-summary-video-1",
-        type: "image",
-        title: "Resúmenes Inteligentes con NotebookLM",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/3-INFOGRAFIA.jpeg",
-        format: "JPEG",
-        size: "2.5 MB",
-        description:
-          "Infografía sobre técnicas avanzadas de resumen y análisis con NotebookLM. El mapa del tesoro del alquimista documental.",
-        thumbnailType: "premium",
-        immersiveView: true,
-      },
-      {
         id: "notebook-summary-template-1",
         type: "pdf",
-        title: "Notebook LM cuaderno del futuro",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/6-%20NotebookLM_El_Cuaderno_del_Futuro.pdf",
-        pages: 15,
+        title: "Gemini Notebook: el cuaderno del futuro",
+        url: "/ialab-resources/modulo4/plantillas-cuaderno-del-futuro-es.pdf",
+        pages: 6,
         format: "PDF",
-        size: "2.5 MB",
+        size: "2.18 MB",
         description:
           "Plantillas profesionales de resumen para cada tipo de documento: académico, empresarial, técnico y más. El kit de herramientas del alquimista.",
       },
@@ -500,7 +560,6 @@ const RESOURCES_ES = {
       },
     ],
   },
-
   "La Fórmula Secreta: Audio Overviews y Gestión Documental": {
     title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
     description:
@@ -526,16 +585,17 @@ const RESOURCES_ES = {
           "Descubre cómo crear podcasts a partir de tus PDFs. Ideal para aprender mientras viajas, haces ejercicio o descansas. El sonido de la alquimia.",
       },
       {
-        id: "notebook-audio-guide-1",
-        type: "ova_interactive",
-        title: "La Fórmula Sonora",
+        id: "notebook-audio-pdf-1",
+        type: "pdf",
+        title: "Guía: Audio y documentos con orden",
+        url: "/ialab-resources/modulo4/guia-audio-documentos-es.pdf",
+        pages: 5,
+        format: "PDF",
+        size: "2.19 MB",
         description:
-          "Curso completo de NotebookLM: 6 módulos interactivos con ejercicios prácticos y un desafío final para convertirte en un maestro alquimista.",
-        estimatedTime: "30 minutos",
-        difficulty: "Intermedio",
-        interactiveElements: 6,
+          "Usa los audios para repasar sin reemplazar la verificación, y organiza tus fuentes con fechas y sin datos personales.",
         thumbnailType: "premium",
-        fullscreen: true,
+        immersiveView: true,
       },
       {
         id: "notebook-audio-ova-1",
@@ -549,175 +609,153 @@ const RESOURCES_ES = {
         thumbnailType: "premium",
         fullscreen: true,
       },
+    ],
+  },
+  "Conoce a Claude: la IA que trabaja contigo": {
+    title: "Conoce a Claude: la IA que trabaja contigo",
+    description:
+      "Antes de dar instrucciones, conoce el instrumento. Qué es Claude, en qué se diferencia de un buscador, cómo escribir un pedido con objetivo, audiencia y formato, cómo funciona la memoria y cuándo elegir un modelo más rápido o uno más capaz.",
+    learningObjectives: [
+      "Escribir un pedido con objetivo, audiencia, formato y tono",
+      "Controlar qué recuerda Claude entre conversaciones",
+      "Elegir el modelo adecuado para cada tipo de tarea",
+    ],
+    estimatedTime: "20 min",
+    difficulty: "Principiante",
+    resources: [
       {
-        id: "document-mastery-ova-1",
-        type: "ova_interactive",
-        title: "La Transmutación",
+        id: "claude-video-intro-1",
+        type: "video",
+        url: "https://www.youtube.com/embed/0vZ_UVLhSQQ",
+        duration: "5:19",
+        thumbnail: "https://img.youtube.com/vi/0vZ_UVLhSQQ/maxresdefault.jpg",
+        provider: "youtube",
+        title: "Introducción a Claude.ai",
         description:
-          "Framework + 3 casos prácticos: investigador, educador, empresa. Cómo transformar documentos complejos en podcasts escuchables sin perder profundidad.",
-        estimatedTime: "24 minutos",
-        difficulty: "Avanzado",
-        interactiveElements: 5,
+          "Video oficial de Anthropic, en inglés (título original: «Getting started with Claude.ai»): cómo empezar con Claude.ai y tener tu primera conversación útil. Si lo necesitas, activa los subtítulos de YouTube.",
+      },
+      {
+        id: "claude-guide-es",
+        type: "pdf",
+        title: "Guía del Director: Claude paso a paso",
+        url: "/ialab-resources/modulo5/guia-claude-es.pdf",
+        pages: 7,
+        format: "PDF",
+        size: "1.36 MB",
+        description:
+          "Guía del módulo: cómo pedir bien, controlar la memoria, elegir modelo y revisar cada resultado.",
+        thumbnailType: "premium",
+        immersiveView: true,
+      },
+      {
+        id: "claude-first-request-ova-1",
+        type: "ova_interactive",
+        title: "El Primer Pedido",
+        description:
+          "Claude responde a lo que lee. Aprende cómo procesa tu pedido y escribe uno completo a la primera.",
+        estimatedTime: "15 min",
+        difficulty: "Intermedio",
+        interactiveElements: 3,
         thumbnailType: "premium",
         fullscreen: true,
       },
     ],
   },
-
-  // ============================================================================
-  // MÓDULO 5: ÉTICA Y PRIVACIDAD
-  // ============================================================================
-  "El Voto del Guardián: Los 4 Principios Sagrados": {
-    title: "El Voto del Guardián: Los 4 Principios Sagrados",
+  "Crea con Claude: Artifacts, documentos y presentaciones": {
+    title: "Crea con Claude: Artifacts, documentos y presentaciones",
     description:
-      "Los 4 pilares que separan a los profesionales responsables de los imprudentes. Transparencia, equidad, responsabilidad y privacidad — tu armadura ética completa.",
+      "Los Artifacts son piezas que ves y editas al lado de la conversación: documentos, gráficos, presentaciones y pequeñas aplicaciones. Aprende a describir el resultado, iterar con ajustes pequeños, comparar versiones y revisar antes de compartir.",
     learningObjectives: [
-      "Reconocer los 7 tipos de sesgos que acechan en cada modelo de IA",
-      "Desarrollar un sexto sentido para detectar sesgos en respuestas de IA",
-      "Aplicar estrategias de justicia algorítmica como un guardián experto",
-      "Evaluar la equidad de resultados con precisión forense",
+      "Describir el resultado final antes de pedir el contenido",
+      "Iterar con ajustes pequeños en lugar de rehacer todo",
+      "Verificar cifras, nombres y fechas antes de presentar",
     ],
-    estimatedTime: "17 minutos",
+    estimatedTime: "25 min",
     difficulty: "Intermedio",
     resources: [
       {
-        id: "bias-video-1",
+        id: "claude-artifacts-video-1",
         type: "video",
-        title: "Los Pilares de la IA",
-        url: "https://www.youtube.com/embed/QAyIrImVUx8",
-        duration: "1:56",
-        thumbnail: "https://img.youtube.com/vi/QAyIrImVUx8/maxresdefault.jpg",
-        provider: "youtube",
+        title: "Crea con Claude: tu primer Artifact",
+        url: "/videos/curso/modulo5-artifacts.mp4",
+        duration: "3 min",
         description:
-          "En solo 1:56, descubre los 4 pilares que todo guardián de IA debe conocer. Un video corto que cambiará tu perspectiva para siempre.",
+          "Mira cómo pedir un documento y revisarlo antes de compartirlo.",
+        thumbnailType: "premium",
       },
       {
-        id: "bias-guide-1",
+        id: "claude-artifacts-guide-1",
         type: "pdf",
-        title: "Etica de la Inteligencia artificial",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/2-guia_edutechlife_modulo5.pdf",
-        pages: 9,
+        title: "Guía: Crea con Claude, Artifacts paso a paso",
+        url: "/ialab-resources/modulo5/guia-artifacts-es.pdf",
+        pages: 6,
         format: "PDF",
-        size: "2.6 MB",
+        size: "1.27 MB",
         description:
-          "9 páginas que condensan todo lo que necesitas saber para blindar éticamente tu relación con la IA. Lectura obligatoria para guardianes.",
+          "Qué puedes crear con un Artifact, las 5 partes de un buen pedido y cómo mejorarlo con cambios pequeños antes de compartirlo.",
         thumbnailType: "premium",
         immersiveView: true,
       },
       {
-        id: "bias-ova-1",
+        id: "claude-artifacts-ova-1",
         type: "ova_interactive",
-        title: "El Espejo de la Verdad",
+        title: "El Taller de Artifacts",
         description:
-          "Pon a prueba tu ojo de guardián: analiza respuestas de IA reales y descubre los sesgos que la mayoría de la gente nunca notaría. 6 desafíos que agudizarán tu instinto.",
+          "Arma el pedido perfecto para un documento o una presentación: elige objetivo, público, formato y restricciones, y mira el resultado antes de pedirlo.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 4,
+        fullscreen: true,
+        thumbnailType: "premium",
+      },
+    ],
+  },
+  "Delega con Claude: Proyectos, conectores y Skills": {
+    title: "Delega con Claude: Proyectos, conectores y Skills",
+    description:
+      "Un Proyecto guarda el contexto de un trabajo; los conectores dan acceso a tus herramientas con permisos que apruebas; una Skill reutiliza un procedimiento; las tareas programadas automatizan lo recurrente. Delegar es definir el objetivo, los límites y la revisión: la decisión final sigue siendo tuya.",
+    learningObjectives: [
+      "Crear un Proyecto con instrucciones y archivos de referencia",
+      "Conectar una herramienta revisando los permisos que concedes",
+      "Convertir un procedimiento repetido en una Skill reutilizable",
+    ],
+    estimatedTime: "30 min",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "claude-video-proyectos-1",
+        type: "video",
+        title: "Proyectos en Claude: tu espacio de trabajo",
+        url: "/videos/curso/modulo5-proyectos.mp4",
+        duration: "3 min",
+        description:
+          "Cómo crear un Proyecto, guardar instrucciones y archivos. Compartirlo con tu equipo requiere planes Team o Enterprise.",
+        thumbnailType: "premium",
+      },
+      {
+        id: "claude-delegation-ova-1",
+        type: "ova_interactive",
+        title: "El Tablero de Delegación",
+        description:
+          "Clasifica tareas reales: qué delegar, qué delegar con revisión y qué nunca delegar. Recibe retroalimentación en cada decisión.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 6,
-        thumbnailType: "premium",
         fullscreen: true,
-      },
-    ],
-  },
-
-  "El Espejo de la Verdad: ¿Tu IA es Justa?": {
-    title: "El Espejo de la Verdad: ¿Tu IA es Justa?",
-    description:
-      "¿Sabías que tu IA puede estar discriminando sin que lo sepas? Aprende a blindar tus datos y tus algoritmos contra los sesgos más peligrosos.",
-    learningObjectives: [
-      "Descifrar el viaje oculto de tus datos dentro de los sistemas de IA",
-      "Detectar vulnerabilidades de privacidad que otros pasan por alto",
-      "Implementar blindajes de protección nivel guardián",
-      "Configurar herramientas de IA con la seguridad de un experto en ciberseguridad",
-    ],
-    estimatedTime: "29 minutos",
-    difficulty: "Intermedio",
-    resources: [
-      {
-        id: "privacy-video-1",
-        type: "video",
-        title: "Privacidad y IA: Lo que Debes Saber",
-        url: "https://www.youtube.com/embed/BoR5KjsRK9U",
-        duration: "9:20",
-        thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
-        provider: "youtube",
-        description:
-          "9:20 que pueden salvar tu reputación. Descubre los riesgos de privacidad que acechan en cada herramienta de IA y cómo neutralizarlos.",
+        thumbnailType: "premium",
       },
       {
-        id: "privacy-guide-1",
+        id: "claude-guide-es-plantillas",
         type: "pdf",
-        title: "Manual de Privacidad en IA",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/7-Ethical_AI_Mastery.pdf",
-        pages: 13,
+        title: "Plantillas: pedidos, Proyectos y protocolo de revisión",
+        url: "/ialab-resources/modulo5/guia-claude-plantillas-es.pdf",
+        pages: 6,
         format: "PDF",
-        size: "3.8 MB",
+        size: "1.20 MB",
         description:
-          "Checklist práctico de 7 pasos para blindar tu privacidad mientras aprovechas al máximo la inteligencia artificial. Tu manual de supervivencia digital.",
+          "Plantillas listas para usar: pedido para Claude, instrucciones de Proyecto y lista de revisión antes de compartir.",
         thumbnailType: "premium",
         immersiveView: true,
-      },
-      {
-        id: "privacy-ova-1",
-        type: "ova_interactive",
-        title: "La Brújula de Riesgos",
-        description:
-          "Enfréntate a escenarios reales de riesgo y aprende a proteger tus datos como un guardián. Incluye el juego de estrellas éticas que pondrá a prueba tus decisiones.",
-        estimatedTime: "20 minutos",
-        difficulty: "Intermedio",
-        interactiveElements: 5,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
-    ],
-  },
-
-  "El Legado del Guardián: Navegando la Ley": {
-    title: "El Legado del Guardián: Navegando la Ley",
-    description:
-      "Las leyes de IA están cambiando el mundo. Desde el AI Act de la UE hasta las regulaciones locales, conoce las reglas del juego y conviértete en un referente de gobernanza ética.",
-    learningObjectives: [
-      "Aplicar principios éticos con la autoridad de un guardián certificado",
-      "Detectar y detener usos inapropiados de IA antes de que escalen",
-      "Liderar con transparencia: convertir la divulgación ética en tu sello personal",
-      "Diseñar políticas de uso responsable que protejan a toda tu organización",
-    ],
-    estimatedTime: "31 minutos",
-    difficulty: "Avanzado",
-    resources: [
-      {
-        id: "ethics-video-1",
-        type: "video",
-        title: "IA Ética: Principios y Práctica",
-        url: "https://www.youtube.com/embed/idplIgnLStI",
-        duration: "6:05",
-        thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
-        provider: "youtube",
-        description:
-          "6:05 que condensan todo lo que necesitas saber para implementar IA ética en el mundo real. La guía definitiva para guardianes.",
-      },
-      {
-        id: "ethics-ova-1",
-        type: "ova_interactive",
-        title: "El Tribunal Ético",
-        description:
-          "Enfréntate a 8 dilemas éticos reales donde no hay respuestas fáciles. Cada decisión que tomes tendrá consecuencias. ¿Estás listo para ser guardián?",
-        estimatedTime: "25 minutos",
-        difficulty: "Avanzado",
-        interactiveElements: 8,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
-      {
-        id: "ethics-cases-ova-1",
-        type: "ova_interactive",
-        title: "Casos del Guardián",
-        description:
-          "Un framework de 5 preguntas más 3 casos reales de IA en el mundo: contratación, salud y derechos de autor. Toma decisiones y descubre cómo piensa un guardián ético.",
-        estimatedTime: "20 minutos",
-        difficulty: "Avanzado",
-        interactiveElements: 6,
-        thumbnailType: "premium",
-        fullscreen: true,
       },
     ],
   },
