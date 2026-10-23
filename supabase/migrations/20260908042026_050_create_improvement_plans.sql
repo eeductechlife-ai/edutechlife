@@ -1,0 +1,2 @@
+-- Registro de historial: esta migración ya está aplicada en producción
+-- (proyecto srirrwpgswlnuqfgtule) con esta versión. No contiene SQL.
