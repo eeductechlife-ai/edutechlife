@@ -10,8 +10,38 @@ const { parseReference } = require('../../services/wompi');
 
 const supabasePath = require.resolve('../../db/supabase');
 const USUARIO_ID = '6f1c2a3b-1111-4222-8333-944455556666';
-const USUARIOS = [{ id: USUARIO_ID, email: 'familia@ejemplo.co', app_metadata: {} }];
+const PADRE_ID = '7a2d3c4b-2222-4333-8444-955566667777';
+const HIJO_ID = '8b3e4d5c-3333-4444-8555-a66677778888';
+const USUARIOS = [
+  { id: USUARIO_ID, email: 'familia@ejemplo.co', app_metadata: {} },
+  { id: PADRE_ID, email: 'papa@ejemplo.co', app_metadata: {} },
+];
+// Tablas simuladas: USUARIO_ID es un estudiante; PADRE_ID tiene un hijo vinculado.
+const TABLAS = {
+  students: [{ auth_id: USUARIO_ID }, { auth_id: HIJO_ID }],
+  parent_student_links: [{ parent_user_id: PADRE_ID, student_user_id: HIJO_ID, is_active: true }],
+};
+function fromMock(table) {
+  const filtros = [];
+  const filas = () =>
+    (TABLAS[table] || []).filter((f) => filtros.every(([c, v]) => (Array.isArray(v) ? v.includes(f[c]) : f[c] === v)));
+  const chain = {
+    select: () => chain,
+    eq: (col, val) => {
+      filtros.push([col, val]);
+      return chain;
+    },
+    in: (col, vals) => {
+      filtros.push([col, vals]);
+      return chain;
+    },
+    maybeSingle: async () => ({ data: filas()[0] ?? null, error: null }),
+    then: (resolve, reject) => Promise.resolve({ data: filas(), error: null }).then(resolve, reject),
+  };
+  return chain;
+}
 const mockSupabase = {
+  from: fromMock,
   auth: {
     getUser: vi.fn(),
     admin: {
@@ -116,6 +146,14 @@ describe('POST /api/payments/wompi/link-cobro: envío', () => {
     expect(texto).toMatch(/Your assessment is complete/);
     expect(texto).toMatch(/Sua avaliação terminou/);
     expect(html).toContain('href="');
+  });
+
+  it('si el correo es del padre, el enlace activa el plan del hijo vinculado', async () => {
+    const res = await enviar({ email: 'papa@ejemplo.co', planId: 'base' });
+
+    expect(res.status).toBe(200);
+    expect(parseReference(new URL(res.body.url).searchParams.get('reference')).userId).toBe(HIJO_ID);
+    expect(mockEmail.sendEmail.mock.calls[0][0]).toBe('papa@ejemplo.co');
   });
 
   it('acepta los nombres cortos del equipo (fundador, acompanamiento, intensivo, base)', async () => {
