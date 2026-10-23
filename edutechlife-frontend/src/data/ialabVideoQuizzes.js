@@ -7,7 +7,7 @@ const ES = {
     {
       q: "¿Qué caracteriza a la IA generativa?",
       options: [
-        "Crea contenido nuevo (texto, imagen, audio) a partir de patrones aprendidos",
+        "Crea texto, imagen o audio nuevos",
         "Solo clasifica datos en categorías fijas",
         "Reemplaza toda decisión humana",
       ],
@@ -19,7 +19,7 @@ const ES = {
       q: "Si un prompt es vago y genérico, ¿qué suele faltar?",
       options: [
         "Más velocidad del servidor",
-        "Contexto y especificidad en la instrucción",
+        "Dar contexto específico",
         "Cambiar de idioma",
       ],
       correct: 1,
@@ -30,8 +30,8 @@ const ES = {
       q: "¿Cuál es el rol del estudiante frente a la IA?",
       options: [
         "Aceptar siempre la primera respuesta",
-        "Delegar por completo las decisiones",
-        "Revisar y validar la información antes de usarla",
+        "Delegar todo en la IA",
+        "Revisar y validar antes de usar",
       ],
       correct: 2,
       feedback:
@@ -41,7 +41,11 @@ const ES = {
   "prompt-video-1": [
     {
       q: "¿Qué fórmula estructura un prompt claro?",
-      options: ["RTF: Rol + Tarea + Formato", "HTML", "SQL"],
+      options: [
+        "RTF: Rol + Tarea + Formato",
+        "HTML",
+        "SQL, lenguaje de bases de datos",
+      ],
       correct: 0,
       feedback:
         "RTF (Rol, Tarea, Formato) ordena la instrucción para obtener respuestas claras.",
@@ -50,7 +54,7 @@ const ES = {
       q: "¿Por qué conviene iterar el prompt?",
       options: [
         "Porque hay que acertar a la primera",
-        "Porque cada ajuste acerca el resultado al objetivo",
+        "Porque cada ajuste ayuda a mejorar",
         "Porque la IA se cansa si no",
       ],
       correct: 1,
@@ -60,7 +64,7 @@ const ES = {
       q: "¿Qué define mejor la 'claridad' de un prompt?",
       options: [
         "Usar el mayor número de palabras posible",
-        "Menos ambigüedad y más precisión en lo que pides",
+        "Menos ambigüedad y más precisión",
         "Escribir en mayúsculas",
       ],
       correct: 1,
@@ -73,7 +77,7 @@ const ES = {
       q: "¿Qué es ChatGPT?",
       options: [
         "Un motor de búsqueda de enlaces",
-        "Un asistente conversacional que genera y transforma texto",
+        "Un asistente que genera texto",
         "Una hoja de cálculo",
       ],
       correct: 1,
@@ -107,7 +111,7 @@ const ES = {
       q: "¿Qué significa 'multimodal' en Gemini?",
       options: [
         "Que solo procesa texto",
-        "Que entiende texto, imágenes, audio y video",
+        "Entiende varios formatos",
         "Que funciona sin internet",
       ],
       correct: 1,
@@ -117,8 +121,8 @@ const ES = {
     {
       q: "¿Cómo se conecta Gemini con el trabajo diario?",
       options: [
-        "Solo con Google Chrome",
-        "Integrado en Gmail, Docs, Sheets y Meet",
+        "Solo con Google Chrome instalado instalado",
+        "Integrado en Docs y Sheets",
         "No tiene integración",
       ],
       correct: 1,
@@ -128,7 +132,7 @@ const ES = {
     {
       q: "¿Para qué sirve Deep Research en Gemini?",
       options: [
-        "Buscar en tiempo real y entregar informes con fuentes",
+        "Buscar datos actuales",
         "Inventar datos verosímiles",
         "Solo traducir textos",
       ],
@@ -142,7 +146,7 @@ const ES = {
       q: "¿Cuál es la ventaja principal de Deep Research?",
       options: [
         "Responde con datos de entrenamiento",
-        "Analiza cientos de fuentes y cita las referencias",
+        "Analiza cientos de fuentes",
         "Evita leer documentos",
       ],
       correct: 1,
@@ -153,7 +157,7 @@ const ES = {
       q: "Ante dos respuestas distintas, ¿qué es lo más crítico?",
       options: [
         "Elegir la más larga",
-        "Contrastar con fuentes y decidir con evidencia",
+        "Contrastar y decidir",
         "Quedarte con la primera",
       ],
       correct: 1,
@@ -162,7 +166,7 @@ const ES = {
     {
       q: "¿Qué mejora un informe de investigación?",
       options: [
-        "Delimitar la pregunta y citar cada fuente",
+        "Delimitar y citar fuentes",
         "Evitar las fuentes",
         "Copiar y pegar sin revisar",
       ],
@@ -173,29 +177,21 @@ const ES = {
   "notebooklm-video-1": [
     {
       q: "¿En qué se basa Gemini Notebook para responder?",
-      options: [
-        "En todo el internet",
-        "En las fuentes que tú cargas",
-        "En el azar",
-      ],
+      options: ["En todo el internet", "En tus documentos", "En el azar"],
       correct: 1,
       feedback:
         "Gemini Notebook responde estrictamente sobre los documentos que tú subes.",
     },
     {
       q: "¿Qué hace especial a sus respuestas?",
-      options: [
-        "Trae citas de tus propios documentos",
-        "Ignora tus archivos",
-        "Genera imágenes",
-      ],
+      options: ["Cita tus fuentes", "Ignora tus archivos", "Genera imágenes"],
       correct: 0,
       feedback: "Cita tus fuentes, lo que facilita verificar cada dato.",
     },
     {
       q: "Si no encuentra un dato que preguntas, ¿qué significa?",
       options: [
-        "Que el dato no está en tus documentos",
+        "Que el dato no está en el texto",
         "Que la herramienta está dañada",
         "Que debes pedirle que lo invente",
       ],
@@ -208,9 +204,9 @@ const ES = {
     {
       q: "¿Qué es un Audio Overview en Gemini Notebook?",
       options: [
-        "Un resumen en formato de conversación de audio",
+        "Un resumen en audio",
         "Un documento PDF",
-        "Una tabla de datos",
+        "Una tabla de datos completa completa",
       ],
       correct: 0,
       feedback:
@@ -219,7 +215,7 @@ const ES = {
     {
       q: "¿Cuándo resulta más útil el audio?",
       options: [
-        "Para repasar mientras te desplazas",
+        "Para estudiar en ruta",
         "Para editar imágenes",
         "Para instalar software",
       ],
@@ -229,7 +225,7 @@ const ES = {
     {
       q: "¿Qué debes hacer antes de generar el audio?",
       options: [
-        "Cargar y curar fuentes relevantes",
+        "Cargar fuentes clave",
         "No cargar nada",
         "Subir archivos al azar",
       ],
@@ -238,45 +234,11 @@ const ES = {
         "La calidad del audio depende de la calidad y curaduría de tus fuentes.",
     },
   ],
-  "bias-video-1": [
-    {
-      q: "¿Qué es el sesgo de muestreo?",
-      options: [
-        "Los datos de entrenamiento no representan a toda la población",
-        "El sistema funciona lento",
-        "El modelo cambia de idioma",
-      ],
-      correct: 0,
-      feedback:
-        "Ocurre cuando la muestra de entrenamiento no representa a la población real.",
-    },
-    {
-      q: "¿Por qué importa auditar sesgos?",
-      options: [
-        "Para que la IA sea más rápida",
-        "Para evitar decisiones injustas y discriminatorias",
-        "Para gastar menos",
-      ],
-      correct: 1,
-      feedback: "Auditar sesgos protege la equidad de las decisiones.",
-    },
-    {
-      q: "¿Cuál es una buena práctica ante un posible sesgo?",
-      options: [
-        "Ignorarlo si la IA es rápida",
-        "Revisar los datos y la supervisión humana",
-        "Confiar ciegamente en el modelo",
-      ],
-      correct: 1,
-      feedback:
-        "Revisar datos y mantener supervisión humana reduce el riesgo de sesgo.",
-    },
-  ],
   "privacy-video-1": [
     {
       q: "¿Qué dato NO conviene compartir con una IA pública?",
       options: [
-        "Información personal o confidencial sensible",
+        "Info confidencial",
         "Una pregunta general",
         "Un texto público",
       ],
@@ -286,9 +248,9 @@ const ES = {
     {
       q: "¿Qué implica la minimización de datos?",
       options: [
-        "Recoger y compartir solo lo necesario",
+        "Recoger solo lo necesario",
         "Recoger todo lo posible",
-        "Guardar datos sin límite",
+        "Guardar datos sin ningún límite",
       ],
       correct: 0,
       feedback: "Minimizar = usar solo los datos estrictamente necesarios.",
@@ -296,9 +258,9 @@ const ES = {
     {
       q: "¿Quién es responsable de proteger los datos del estudiante?",
       options: [
-        "Nadie",
+        "Nadie, nunca",
         "La institución y el usuario con buenas prácticas",
-        "Solo la IA",
+        "Solo la IA, sin control humano ni ninguna revisión posible",
       ],
       correct: 1,
       feedback:
@@ -310,7 +272,7 @@ const ES = {
       q: "¿Qué implica el principio de transparencia?",
       options: [
         "Ocultar que se usa IA",
-        "Informar claramente cuándo y cómo se usa la IA",
+        "Informar cuándo y cómo",
         "Esconder las decisiones",
       ],
       correct: 1,
@@ -320,7 +282,7 @@ const ES = {
       q: "¿Qué significa 'accountability' (responsabilidad)?",
       options: [
         "Que la IA es la única responsable",
-        "Que hay personas y procesos que responden por los resultados",
+        "Que hay personas que responden",
         "Que nadie responde",
       ],
       correct: 1,
@@ -330,7 +292,7 @@ const ES = {
     {
       q: "¿Qué busca la explicabilidad?",
       options: [
-        "Que las decisiones se puedan entender y justificar",
+        "Que se puedan justificar",
         "Que el sistema nunca falle",
         "Que sea más rápido",
       ],
@@ -344,7 +306,7 @@ const ES = {
       q: "¿Qué es Claude en el día a día?",
       options: [
         "Un buscador que solo devuelve enlaces",
-        "Un asistente que escribe, analiza y crea piezas de trabajo a partir de tus instrucciones",
+        "Un asistente que escribe, analiza y crea",
         "Un programa que reemplaza la revisión humana",
       ],
       correct: 1,
@@ -355,7 +317,7 @@ const ES = {
       q: "¿Qué mejora más el resultado de un pedido?",
       options: [
         "Escribir todo en mayúsculas",
-        "Dar contexto: objetivo, audiencia y formato",
+        "Dar contexto y objetivo",
         "Pedirlo más rápido",
       ],
       correct: 1,
@@ -366,7 +328,7 @@ const ES = {
       q: "¿Cuándo conviene revisar con más cuidado lo que entrega Claude?",
       options: [
         "Cuando es un borrador de estilo",
-        "Cuando contiene cifras, nombres o decisiones importantes",
+        "Cuando trae cifras o nombres",
         "Nunca hace falta revisarlo",
       ],
       correct: 1,
@@ -374,12 +336,46 @@ const ES = {
         "Las cifras, los nombres y las decisiones deben verificarse siempre contra la fuente.",
     },
   ],
+  "claude-artifacts-video-1": [
+    {
+      q: "¿Qué es un Artifact?",
+      options: [
+        "Una pieza que Claude crea junto al chat",
+        "Un archivo que se borra al cerrar el chat",
+        "Una contraseña para compartir chats",
+      ],
+      correct: 0,
+      feedback:
+        "Un Artifact vive al lado del chat: lo ves, lo editas y lo compartes.",
+    },
+    {
+      q: "¿Cuál es el mejor pedido para una guía de docentes?",
+      options: [
+        "Haz algo para docentes.",
+        "Guía para docentes nuevos",
+        "Hazlo bonito, largo y completo.",
+      ],
+      correct: 1,
+      feedback: "Un pedido completo dice formato, audiencia, tono y límites.",
+    },
+    {
+      q: "Claude te da una cifra. ¿Qué haces antes de compartirla?",
+      options: [
+        "La comparto tal cual, Claude la calculó",
+        "La verifico con su fuente original",
+        "La cambio para que se vea mejor",
+      ],
+      correct: 1,
+      feedback:
+        "Las cifras se comprueban con una fuente antes de compartirlas.",
+    },
+  ],
   "claude-video-proyectos-1": [
     {
       q: "¿Para qué sirve un Proyecto?",
       options: [
-        "Para guardar instrucciones y archivos de un mismo trabajo",
-        "Para subir archivos sin ningún límite",
+        "Para guardar instrucciones y archivos de un trabajo",
+        "Para subir archivos sin ningún límite de tamaño ni de tipo de tamaño ni de tipo",
         "Para reemplazar la memoria de Claude",
       ],
       correct: 0,
@@ -389,7 +385,7 @@ const ES = {
       q: "¿Qué debes revisar antes de conectar una herramienta?",
       options: [
         "Solo que tenga un logo bonito",
-        "Qué permisos pide",
+        "Qué permisos y accesos pide",
         "Nada: siempre es seguro",
       ],
       correct: 1,
@@ -399,9 +395,9 @@ const ES = {
     {
       q: "¿Qué puede ser una Skill?",
       options: [
-        "Un procedimiento repetido guardado con instrucciones y plantillas",
+        "Un procedimiento que se repite",
         "Una contraseña de respaldo",
-        "Un modelo distinto de Claude",
+        "Un modelo distinto de Claude para tareas para tareas",
       ],
       correct: 0,
       feedback:
@@ -415,7 +411,7 @@ const EN = {
     {
       q: "What characterizes generative AI?",
       options: [
-        "It creates new content (text, image, audio) from learned patterns",
+        "It creates new text, image or audio",
         "It only sorts data into fixed categories",
         "It replaces all human decisions",
       ],
@@ -426,8 +422,8 @@ const EN = {
     {
       q: "If a prompt is vague and generic, what is usually missing?",
       options: [
-        "More server speed",
-        "Context and specificity in the instruction",
+        "More server speed available",
+        "Context and specificity",
         "Changing language",
       ],
       correct: 1,
@@ -438,7 +434,7 @@ const EN = {
       options: [
         "Always accept the first answer",
         "Fully delegate decisions",
-        "Review and validate information before using it",
+        "Review and validate the facts",
       ],
       correct: 2,
       feedback:
@@ -448,7 +444,11 @@ const EN = {
   "prompt-video-1": [
     {
       q: "Which formula structures a clear prompt?",
-      options: ["RTF: Role + Task + Format", "HTML", "SQL"],
+      options: [
+        "RTF: Role + Task + Format",
+        "HTML",
+        "SQL, a language for databases",
+      ],
       correct: 0,
       feedback:
         "RTF (Role, Task, Format) orders the instruction for clear answers.",
@@ -457,7 +457,7 @@ const EN = {
       q: "Why iterate on the prompt?",
       options: [
         "Because you must be right the first time",
-        "Because each adjustment gets closer to the goal",
+        "Because each adjustment gets you closer",
         "Because the AI gets tired otherwise",
       ],
       correct: 1,
@@ -468,7 +468,7 @@ const EN = {
       q: "What best defines prompt 'clarity'?",
       options: [
         "Using as many words as possible",
-        "Less ambiguity and more precision in what you ask",
+        "Less ambiguity, more precision",
         "Writing in capitals",
       ],
       correct: 1,
@@ -479,11 +479,7 @@ const EN = {
   "chatgpt-video-1": [
     {
       q: "What is ChatGPT?",
-      options: [
-        "A link search engine",
-        "A conversational assistant that generates and transforms text",
-        "A spreadsheet",
-      ],
+      options: ["A link search engine", "A text assistant", "A spreadsheet"],
       correct: 1,
       feedback:
         "ChatGPT is a conversational assistant based on a language model.",
@@ -502,7 +498,7 @@ const EN = {
       q: "What is a good security practice with ChatGPT?",
       options: [
         "Sharing confidential data without checking",
-        "Not uploading unnecessary sensitive information",
+        "Not uploading any unneeded sensitive info",
         "Trusting critical data without verifying",
       ],
       correct: 1,
@@ -515,7 +511,7 @@ const EN = {
       q: "What does 'multimodal' mean in Gemini?",
       options: [
         "It only processes text",
-        "It understands text, images, audio and video",
+        "It reads text and images",
         "It works without internet",
       ],
       correct: 1,
@@ -524,8 +520,8 @@ const EN = {
     {
       q: "How does Gemini connect to daily work?",
       options: [
-        "Only with Google Chrome",
-        "Integrated into Gmail, Docs, Sheets and Meet",
+        "Only with Google Chrome installed",
+        "Integrated into Docs and Meet",
         "It has no integration",
       ],
       correct: 1,
@@ -534,7 +530,7 @@ const EN = {
     {
       q: "What is Deep Research in Gemini for?",
       options: [
-        "Searching in real time and delivering reports with sources",
+        "Real-time search, cited",
         "Inventing plausible data",
         "Only translating texts",
       ],
@@ -547,8 +543,8 @@ const EN = {
       q: "What is the main advantage of Deep Research?",
       options: [
         "It answers from training data",
-        "It analyzes hundreds of sources and cites references",
-        "It avoids reading documents",
+        "It analyzes many sources",
+        "It avoids reading",
       ],
       correct: 1,
       feedback:
@@ -558,8 +554,8 @@ const EN = {
       q: "Facing two different answers, what is most critical?",
       options: [
         "Choosing the longest",
-        "Cross-checking sources and deciding with evidence",
-        "Keeping the first one",
+        "Cross-checking sources",
+        "Keeping only the first one",
       ],
       correct: 1,
       feedback: "Cross-checking with evidence is what gives rigor.",
@@ -567,7 +563,7 @@ const EN = {
     {
       q: "What improves a research report?",
       options: [
-        "Delimiting the question and citing each source",
+        "Delimiting and citing each source",
         "Avoiding sources",
         "Copying and pasting without reviewing",
       ],
@@ -579,20 +575,17 @@ const EN = {
   "notebooklm-video-1": [
     {
       q: "What does Gemini Notebook base its answers on?",
-      options: [
-        "The whole internet",
-        "The sources you upload",
-        "Random chance",
-      ],
+      options: ["The whole internet", "The files you add", "Random chance"],
       correct: 1,
-      feedback: "Gemini Notebook answers strictly from the documents you upload.",
+      feedback:
+        "Gemini Notebook answers strictly from the documents you upload.",
     },
     {
       q: "What makes its answers special?",
       options: [
-        "It cites your own documents",
+        "It quotes your own docs",
         "It ignores your files",
-        "It generates images",
+        "It generates images, too",
       ],
       correct: 0,
       feedback: "It cites your sources, which makes each fact easy to verify.",
@@ -600,7 +593,7 @@ const EN = {
     {
       q: "If it can't find a fact you ask for, what does it mean?",
       options: [
-        "The fact isn't in your documents",
+        "It is not in your documents",
         "The tool is broken",
         "You should ask it to make it up",
       ],
@@ -612,29 +605,21 @@ const EN = {
   "notebook-audio-video-1": [
     {
       q: "What is an Audio Overview in Gemini Notebook?",
-      options: [
-        "A summary in audio conversation format",
-        "A PDF document",
-        "A data table",
-      ],
+      options: ["An audio summary", "A PDF document", "A detailed data table"],
       correct: 0,
       feedback:
         "It turns your sources into a conversational summary to listen to.",
     },
     {
       q: "When is the audio most useful?",
-      options: [
-        "To review while commuting",
-        "To edit images",
-        "To install software",
-      ],
+      options: ["To study on the go", "To edit images", "To install software"],
       correct: 0,
       feedback: "It's ideal for passive review during commutes or chores.",
     },
     {
       q: "What should you do before generating the audio?",
       options: [
-        "Upload and curate relevant sources",
+        "Curate good sources",
         "Upload nothing",
         "Upload files at random",
       ],
@@ -643,54 +628,17 @@ const EN = {
         "Audio quality depends on the quality and curation of your sources.",
     },
   ],
-  "bias-video-1": [
-    {
-      q: "What is sampling bias?",
-      options: [
-        "Training data does not represent the whole population",
-        "The system runs slowly",
-        "The model changes language",
-      ],
-      correct: 0,
-      feedback:
-        "It happens when the training sample doesn't represent the real population.",
-    },
-    {
-      q: "Why audit for bias?",
-      options: [
-        "To make AI faster",
-        "To avoid unfair and discriminatory decisions",
-        "To spend less",
-      ],
-      correct: 1,
-      feedback: "Auditing bias protects the fairness of decisions.",
-    },
-    {
-      q: "Good practice for a possible bias?",
-      options: [
-        "Ignore it if AI is fast",
-        "Review the data and keep human oversight",
-        "Trust the model blindly",
-      ],
-      correct: 1,
-      feedback: "Reviewing data and keeping human oversight reduces bias risk.",
-    },
-  ],
   "privacy-video-1": [
     {
       q: "What data should NOT be shared with a public AI?",
-      options: [
-        "Sensitive personal or confidential information",
-        "A general question",
-        "A public text",
-      ],
+      options: ["Sensitive data", "A general question", "A public text"],
       correct: 0,
       feedback: "Avoid exposing sensitive personal or confidential data.",
     },
     {
       q: "What does data minimization mean?",
       options: [
-        "Collect and share only what's needed",
+        "Collect only what's needed",
         "Collect as much as possible",
         "Store data without limits",
       ],
@@ -702,7 +650,7 @@ const EN = {
       options: [
         "Nobody",
         "The institution and the user with good practices",
-        "Only the AI",
+        "Only the AI, with no human control or review at all",
       ],
       correct: 1,
       feedback:
@@ -714,7 +662,7 @@ const EN = {
       q: "What does the transparency principle imply?",
       options: [
         "Hiding that AI is used",
-        "Clearly informing when and how AI is used",
+        "Clearly disclosing AI",
         "Hiding decisions",
       ],
       correct: 1,
@@ -724,7 +672,7 @@ const EN = {
       q: "What does 'accountability' mean?",
       options: [
         "That AI is solely responsible",
-        "That there are people and processes accountable for outcomes",
+        "That humans are accountable",
         "That nobody is responsible",
       ],
       correct: 1,
@@ -733,7 +681,7 @@ const EN = {
     {
       q: "What does explainability seek?",
       options: [
-        "That decisions can be understood and justified",
+        "Explainable decisions",
         "That the system never fails",
         "That it is faster",
       ],
@@ -747,7 +695,7 @@ const EN = {
       q: "What is Claude in everyday use?",
       options: [
         "A search engine that only returns links",
-        "An assistant that writes, analyzes and creates work pieces from your instructions",
+        "An assistant that writes and analyzes",
         "A program that replaces human review",
       ],
       correct: 1,
@@ -758,7 +706,7 @@ const EN = {
       q: "What improves a request's result the most?",
       options: [
         "Writing everything in capitals",
-        "Giving context: goal, audience and format",
+        "Give context and goals",
         "Asking faster",
       ],
       correct: 1,
@@ -769,7 +717,7 @@ const EN = {
       q: "When should you review what Claude delivers most carefully?",
       options: [
         "When it is a style draft",
-        "When it contains figures, names or important decisions",
+        "When it has figures, names",
         "Never; review is not needed",
       ],
       correct: 1,
@@ -777,11 +725,44 @@ const EN = {
         "Figures, names and decisions must always be checked against the source.",
     },
   ],
+  "claude-artifacts-video-1": [
+    {
+      q: "What is an Artifact?",
+      options: [
+        "A piece Claude makes next to the chat",
+        "A file that is deleted when you close the chat",
+        "A password to share chats",
+      ],
+      correct: 0,
+      feedback:
+        "An Artifact lives next to the chat: you see it, edit it and share it.",
+    },
+    {
+      q: "Which is the best request for a teacher guide?",
+      options: [
+        "Make something for teachers.",
+        "A 2-page guide for new teachers",
+        "Make it nice, long and complete.",
+      ],
+      correct: 1,
+      feedback: "A complete request states format, audience, tone and limits.",
+    },
+    {
+      q: "Claude gives you a figure. What do you do before sharing it?",
+      options: [
+        "I share it as it is, Claude calculated it",
+        "I check it against its original source",
+        "I change it so it looks better",
+      ],
+      correct: 1,
+      feedback: "Figures must be checked against a source before sharing.",
+    },
+  ],
   "claude-video-proyectos-1": [
     {
       q: "What is a Project for?",
       options: [
-        "Keeping instructions and files for one piece of work",
+        "Save instructions and files",
         "Uploading files with no limit",
         "Replacing Claude's memory",
       ],
@@ -792,8 +773,8 @@ const EN = {
       q: "What should you check before connecting a tool?",
       options: [
         "Only that it has a nice logo",
-        "What permissions it asks for",
-        "Nothing: it is always safe",
+        "What permissions it asks you for",
+        "Nothing: it is always safe to use",
       ],
       correct: 1,
       feedback:
@@ -802,7 +783,7 @@ const EN = {
     {
       q: "What can a Skill be?",
       options: [
-        "A repeated procedure saved with instructions and templates",
+        "A saved repeated process",
         "A backup password",
         "A model other than Claude",
       ],
@@ -817,7 +798,7 @@ const PT = {
     {
       q: "O que caracteriza a IA generativa?",
       options: [
-        "Cria conteúdo novo (texto, imagem, áudio) a partir de padrões aprendidos",
+        "Cria texto, imagem ou áudio novos",
         "Apenas classifica dados em categorias fixas",
         "Substitui toda decisão humana",
       ],
@@ -828,7 +809,7 @@ const PT = {
       q: "Se um prompt é vago e genérico, o que costuma faltar?",
       options: [
         "Mais velocidade do servidor",
-        "Contexto e especificidade na instrução",
+        "Dar contexto específico",
         "Mudar de idioma",
       ],
       correct: 1,
@@ -839,7 +820,7 @@ const PT = {
       options: [
         "Aceitar sempre a primeira resposta",
         "Delegar totalmente as decisões",
-        "Revisar e validar a informação antes de usá-la",
+        "Revisar e validar antes de usar",
       ],
       correct: 2,
       feedback: "A revisão e a decisão final são suas.",
@@ -848,7 +829,11 @@ const PT = {
   "prompt-video-1": [
     {
       q: "Qual fórmula estrutura um prompt claro?",
-      options: ["RTF: Papel + Tarefa + Formato", "HTML", "SQL"],
+      options: [
+        "RTF: Papel + Tarefa + Formato",
+        "HTML",
+        "SQL, linguagem para bancos de dados",
+      ],
       correct: 0,
       feedback: "RTF (Papel, Tarefa, Formato) organiza a instrução.",
     },
@@ -856,7 +841,7 @@ const PT = {
       q: "Por que iterar o prompt?",
       options: [
         "Porque é preciso acertar de primeira",
-        "Porque cada ajuste aproxima do objetivo",
+        "Porque cada ajuste aproxima da meta",
         "Porque a IA se cansa",
       ],
       correct: 1,
@@ -866,7 +851,7 @@ const PT = {
       q: "O que define melhor a 'clareza' de um prompt?",
       options: [
         "Usar o máximo de palavras",
-        "Menos ambiguidade e mais precisão no pedido",
+        "Mais precisão no pedido",
         "Escrever em maiúsculas",
       ],
       correct: 1,
@@ -876,11 +861,7 @@ const PT = {
   "chatgpt-video-1": [
     {
       q: "O que é o ChatGPT?",
-      options: [
-        "Um buscador de links",
-        "Um assistente conversacional que gera e transforma texto",
-        "Uma planilha",
-      ],
+      options: ["Um buscador de links", "Um redator digital", "Uma planilha"],
       correct: 1,
       feedback: "ChatGPT é um assistente conversacional.",
     },
@@ -898,7 +879,7 @@ const PT = {
       q: "Boa prática de segurança com ChatGPT?",
       options: [
         "Compartilhar dados confidenciais sem revisar",
-        "Não enviar informação sensível desnecessária",
+        "Não enviar dados sensíveis sem necessidade",
         "Confiar sem verificar dados críticos",
       ],
       correct: 1,
@@ -910,7 +891,7 @@ const PT = {
       q: "O que significa 'multimodal' no Gemini?",
       options: [
         "Só processa texto",
-        "Entende texto, imagens, áudio e vídeo",
+        "Lê texto e imagens",
         "Funciona sem internet",
       ],
       correct: 1,
@@ -920,8 +901,8 @@ const PT = {
       q: "Como o Gemini se conecta ao trabalho diário?",
       options: [
         "Só com o Google Chrome",
-        "Integrado ao Gmail, Docs, Sheets e Meet",
-        "Não tem integração",
+        "Integrado ao Docs e Meet",
+        "Não tem nenhuma integração",
       ],
       correct: 1,
       feedback: "Integra-se nativamente ao Google Workspace.",
@@ -929,7 +910,7 @@ const PT = {
     {
       q: "Para que serve o Deep Research no Gemini?",
       options: [
-        "Buscar em tempo real e entregar relatórios com fontes",
+        "Buscar ao vivo com fontes",
         "Inventar dados verossímeis",
         "Apenas traduzir textos",
       ],
@@ -942,7 +923,7 @@ const PT = {
       q: "Qual é a principal vantagem do Deep Research?",
       options: [
         "Responde com dados de treinamento",
-        "Analisa centenas de fontes e cita referências",
+        "Analisa centenas de fontes",
         "Evita ler documentos",
       ],
       correct: 1,
@@ -952,8 +933,8 @@ const PT = {
       q: "Diante de duas respostas distintas, o que é mais crítico?",
       options: [
         "Escolher a mais longa",
-        "Contrastar com fontes e decidir com evidência",
-        "Ficar com a primeira",
+        "Contrastar com a fonte",
+        "Ficar só com a primeira",
       ],
       correct: 1,
       feedback: "Contrastar com evidência dá rigor à decisão.",
@@ -961,7 +942,7 @@ const PT = {
     {
       q: "O que melhora um relatório de pesquisa?",
       options: [
-        "Delimitar a pergunta e citar cada fonte",
+        "Delimitar e citar fontes",
         "Evitar fontes",
         "Copiar e colar sem revisar",
       ],
@@ -972,26 +953,22 @@ const PT = {
   "notebooklm-video-1": [
     {
       q: "Em que o Gemini Notebook baseia suas respostas?",
-      options: ["Em toda a internet", "Nas fontes que você envia", "No acaso"],
+      options: ["Em toda a internet", "Nas suas fontes", "No acaso"],
       correct: 1,
       feedback: "Responde estritamente sobre os documentos que você envia.",
     },
     {
       q: "O que há de especial nas respostas?",
-      options: [
-        "Traz citações dos seus próprios documentos",
-        "Ignora seus arquivos",
-        "Gera imagens",
-      ],
+      options: ["Cita seus textos", "Ignora seus arquivos", "Gera imagens"],
       correct: 0,
       feedback: "Cita suas fontes, facilitando verificar cada dado.",
     },
     {
       q: "Se não encontra um dado, o que significa?",
       options: [
-        "Que o dado não está nos seus documentos",
+        "Que o dado não aparece no texto",
         "Que a ferramenta está quebrada",
-        "Que deve pedir para inventar",
+        "Que deve pedir para inventar algo",
       ],
       correct: 0,
       feedback:
@@ -1002,7 +979,7 @@ const PT = {
     {
       q: "O que é um Audio Overview no Gemini Notebook?",
       options: [
-        "Um resumo em formato de conversa em áudio",
+        "Um resumo em áudio",
         "Um documento PDF",
         "Uma tabela de dados",
       ],
@@ -1013,7 +990,7 @@ const PT = {
     {
       q: "Quando o áudio é mais útil?",
       options: [
-        "Para revisar durante deslocamentos",
+        "Para ouvir no trajeto",
         "Para editar imagens",
         "Para instalar software",
       ],
@@ -1023,7 +1000,7 @@ const PT = {
     {
       q: "O que fazer antes de gerar o áudio?",
       options: [
-        "Carregar e curar fontes relevantes",
+        "Curar fontes relevantes",
         "Não carregar nada",
         "Enviar arquivos aleatórios",
       ],
@@ -1031,44 +1008,12 @@ const PT = {
       feedback: "A qualidade do áudio depende da curadoria das fontes.",
     },
   ],
-  "bias-video-1": [
-    {
-      q: "O que é o viés de amostragem?",
-      options: [
-        "Os dados de treino não representam toda a população",
-        "O sistema fica lento",
-        "O modelo muda de idioma",
-      ],
-      correct: 0,
-      feedback: "Ocorre quando a amostra não representa a população real.",
-    },
-    {
-      q: "Por que auditar vieses?",
-      options: [
-        "Para a IA ser mais rápida",
-        "Para evitar decisões injustas e discriminatórias",
-        "Para gastar menos",
-      ],
-      correct: 1,
-      feedback: "Auditar vieses protege a equidade das decisões.",
-    },
-    {
-      q: "Boa prática diante de um possível viés?",
-      options: [
-        "Ignorar se a IA for rápida",
-        "Revisar os dados e manter supervisão humana",
-        "Confiar cegamente no modelo",
-      ],
-      correct: 1,
-      feedback: "Revisar dados e manter supervisão reduz o risco.",
-    },
-  ],
   "privacy-video-1": [
     {
       q: "Qual dado NÃO se deve compartilhar com uma IA pública?",
       options: [
-        "Informação pessoal ou confidencial sensível",
-        "Uma pergunta geral",
+        "Dados pessoais sensíveis",
+        "Uma pergunta geral e aberta",
         "Um texto público",
       ],
       correct: 0,
@@ -1077,7 +1022,7 @@ const PT = {
     {
       q: "O que significa minimização de dados?",
       options: [
-        "Coletar e compartilhar só o necessário",
+        "Coletar só o necessário",
         "Coletar o máximo possível",
         "Guardar sem limites",
       ],
@@ -1087,9 +1032,9 @@ const PT = {
     {
       q: "Quem é responsável por proteger os dados do estudante?",
       options: [
-        "Ninguém",
+        "Ninguém, nunca",
         "A instituição e o usuário com boas práticas",
-        "Só a IA",
+        "Só a IA, sem nenhum controle humano ou revisão possível",
       ],
       correct: 1,
       feedback: "A proteção é corresponsabilidade.",
@@ -1100,8 +1045,8 @@ const PT = {
       q: "O que implica o princípio de transparência?",
       options: [
         "Ocultar que se usa IA",
-        "Informar claramente quando e como se usa a IA",
-        "Esconder as decisões",
+        "Avisar quando se usa IA",
+        "Esconder as decisões da IA",
       ],
       correct: 1,
       feedback: "Transparência é informar claramente o uso de IA.",
@@ -1110,7 +1055,7 @@ const PT = {
       q: "O que significa 'accountability' (responsabilidade)?",
       options: [
         "Que a IA é a única responsável",
-        "Que há pessoas e processos que respondem pelos resultados",
+        "Que há pessoas que respondem",
         "Que ninguém responde",
       ],
       correct: 1,
@@ -1119,7 +1064,7 @@ const PT = {
     {
       q: "O que busca a explicabilidade?",
       options: [
-        "Que as decisões possam ser entendidas e justificadas",
+        "Que sejam justificáveis",
         "Que o sistema nunca falhe",
         "Que seja mais rápido",
       ],
@@ -1132,7 +1077,7 @@ const PT = {
       q: "O que é o Claude no dia a dia?",
       options: [
         "Um buscador que só devolve links",
-        "Um assistente que escreve, analisa e cria peças de trabalho a partir das suas instruções",
+        "Um assistente que escreve e analisa",
         "Um programa que substitui a revisão humana",
       ],
       correct: 1,
@@ -1143,7 +1088,7 @@ const PT = {
       q: "O que mais melhora o resultado de um pedido?",
       options: [
         "Escrever tudo em maiúsculas",
-        "Dar contexto: objetivo, público e formato",
+        "Dar contexto e objetivo",
         "Pedir mais rápido",
       ],
       correct: 1,
@@ -1154,7 +1099,7 @@ const PT = {
       q: "Quando convém revisar com mais cuidado o que o Claude entrega?",
       options: [
         "Quando é um rascunho de estilo",
-        "Quando traz números, nomes ou decisões importantes",
+        "Quando traz números ou nomes",
         "Nunca precisa revisar",
       ],
       correct: 1,
@@ -1162,12 +1107,46 @@ const PT = {
         "Números, nomes e decisões devem ser sempre conferidos na fonte.",
     },
   ],
+  "claude-artifacts-video-1": [
+    {
+      q: "O que é um Artifact?",
+      options: [
+        "Uma peça ao lado do chat, para editar",
+        "Um arquivo que é apagado ao fechar o chat",
+        "Uma senha para compartilhar chats",
+      ],
+      correct: 0,
+      feedback:
+        "Um Artifact fica ao lado do chat: você vê, edita e compartilha.",
+    },
+    {
+      q: "Qual é o melhor pedido para um guia de professores?",
+      options: [
+        "Faça algo para professores.",
+        "Guia de 2 páginas para docentes",
+        "Faça bonito, longo e bem completo.",
+      ],
+      correct: 1,
+      feedback: "Um pedido completo diz formato, público, tom e limites.",
+    },
+    {
+      q: "O Claude te dá um número. O que você faz antes de compartilhar?",
+      options: [
+        "Compartilho como está, o Claude calculou",
+        "Confiro o dado na fonte original",
+        "Mudo para que pareça melhor",
+      ],
+      correct: 1,
+      feedback:
+        "Números devem ser conferidos em uma fonte antes de compartilhar.",
+    },
+  ],
   "claude-video-proyectos-1": [
     {
       q: "Para que serve um Projeto?",
       options: [
-        "Para guardar instruções e arquivos de um mesmo trabalho",
-        "Para subir arquivos sem nenhum limite",
+        "Para guardar instruções e arquivos do trabalho",
+        "Para subir arquivos sem nenhum limite de tamanho",
         "Para substituir a memória do Claude",
       ],
       correct: 0,
@@ -1177,7 +1156,7 @@ const PT = {
       q: "O que revisar antes de conectar uma ferramenta?",
       options: [
         "Só se tem um logo bonito",
-        "Quais permissões ela pede",
+        "Que permissões ela pede",
         "Nada: é sempre seguro",
       ],
       correct: 1,
@@ -1187,7 +1166,7 @@ const PT = {
     {
       q: "O que pode ser uma Skill?",
       options: [
-        "Um procedimento repetido guardado com instruções e modelos",
+        "Um processo que se repete",
         "Uma senha de backup",
         "Um modelo diferente do Claude",
       ],
@@ -1198,12 +1177,122 @@ const PT = {
   ],
 };
 
+// Cuestionarios de videos que salieron de un tema (regla 1 video + 1 PDF + 1 OVA); se conservan para reasignarlos.
+export const VIDEO_QUIZZES_RESERVA = {
+  es: {
+    "bias-video-1": [
+      {
+        q: "¿Qué es el sesgo de muestreo?",
+        options: [
+          "Los datos no representan a todos",
+          "El sistema funciona lento",
+          "El modelo cambia de idioma sin aviso sin aviso",
+        ],
+        correct: 0,
+        feedback:
+          "Ocurre cuando la muestra de entrenamiento no representa a la población real.",
+      },
+      {
+        q: "¿Por qué importa auditar sesgos?",
+        options: [
+          "Para que la IA sea más rápida",
+          "Para evitar injusticias",
+          "Para gastar menos",
+        ],
+        correct: 1,
+        feedback: "Auditar sesgos protege la equidad de las decisiones.",
+      },
+      {
+        q: "¿Cuál es una buena práctica ante un posible sesgo?",
+        options: [
+          "Ignorarlo si la IA es rápida",
+          "Revisar datos con supervisión",
+          "Confiar ciegamente en el modelo",
+        ],
+        correct: 1,
+        feedback:
+          "Revisar datos y mantener supervisión humana reduce el riesgo de sesgo.",
+      },
+    ],
+  },
+  en: {
+    "bias-video-1": [
+      {
+        q: "What is sampling bias?",
+        options: [
+          "Training data is biased",
+          "The system runs slowly",
+          "The model changes language",
+        ],
+        correct: 0,
+        feedback:
+          "It happens when the training sample doesn't represent the real population.",
+      },
+      {
+        q: "Why audit for bias?",
+        options: ["To make AI faster", "To prevent bias", "To spend less"],
+        correct: 1,
+        feedback: "Auditing bias protects the fairness of decisions.",
+      },
+      {
+        q: "Good practice for a possible bias?",
+        options: [
+          "Ignore it if AI is fast",
+          "Review data and keep oversight",
+          "Trust the model blindly, always",
+        ],
+        correct: 1,
+        feedback:
+          "Reviewing data and keeping human oversight reduces bias risk.",
+      },
+    ],
+  },
+  pt: {
+    "bias-video-1": [
+      {
+        q: "O que é o viés de amostragem?",
+        options: [
+          "Os dados não são representativos",
+          "O sistema fica lento",
+          "O modelo muda de idioma sem aviso",
+        ],
+        correct: 0,
+        feedback: "Ocorre quando a amostra não representa a população real.",
+      },
+      {
+        q: "Por que auditar vieses?",
+        options: [
+          "Para a IA ser mais rápida",
+          "Para evitar injustiças",
+          "Para gastar menos",
+        ],
+        correct: 1,
+        feedback: "Auditar vieses protege a equidade das decisões.",
+      },
+      {
+        q: "Boa prática diante de um possível viés?",
+        options: [
+          "Ignorar se a IA for muito rápida",
+          "Revisar dados com supervisão",
+          "Confiar cegamente no modelo",
+        ],
+        correct: 1,
+        feedback: "Revisar dados e manter supervisão reduz o risco.",
+      },
+    ],
+  },
+};
+
 export const VIDEO_QUIZZES = { es: ES, en: EN, pt: PT };
 
 export function getVideoQuiz(videoId, locale = "es") {
   const lang = String(locale || "es").slice(0, 2);
   const pack = VIDEO_QUIZZES[lang] || VIDEO_QUIZZES.es;
-  return pack[videoId] || null;
+  return (
+    pack[videoId] ||
+    (VIDEO_QUIZZES_RESERVA[lang] || VIDEO_QUIZZES_RESERVA.es)[videoId] ||
+    null
+  );
 }
 
 export default VIDEO_QUIZZES;

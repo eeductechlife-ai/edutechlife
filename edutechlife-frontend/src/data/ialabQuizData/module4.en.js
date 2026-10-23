@@ -6,11 +6,20 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q1_a",
-        label: "It works only with your documents and cites each source",
+        label: "It works only with your documents",
       },
-      { id: "m4q1_b", label: "It cannot read academic PDFs" },
-      { id: "m4q1_c", label: "It works without an internet connection" },
-      { id: "m4q1_d", label: "It only processes texts in English" },
+      {
+        id: "m4q1_b",
+        label: "It cannot read academic PDFs",
+      },
+      {
+        id: "m4q1_c",
+        label: "It works without an internet connection",
+      },
+      {
+        id: "m4q1_d",
+        label: "It only processes texts in English",
+      },
     ],
     correctAnswer: "m4q1_a",
     topic: "Gemini Notebook",
@@ -26,14 +35,20 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q2_a",
-        label: "Trusted papers and datasets; leave out opinion blogs",
+        label: "Peer-reviewed papers and trusted datasets",
       },
-      { id: "m4q2_b", label: "All the sources because there is space" },
+      {
+        id: "m4q2_b",
+        label: "All the sources because there is space",
+      },
       {
         id: "m4q2_c",
         label: "Only the blogs because of their simple language",
       },
-      { id: "m4q2_d", label: "Only the news because it is the most recent" },
+      {
+        id: "m4q2_d",
+        label: "Only the news because it is the most recent",
+      },
     ],
     correctAnswer: "m4q2_a",
     topic: "Gemini Notebook",
@@ -49,11 +64,20 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q3_a",
-        label: "Generate an Audio Overview and listen to it on the trip",
+        label: "Generate an Audio Overview for review",
       },
-      { id: "m4q3_b", label: "Read the full PDFs on the bus" },
-      { id: "m4q3_c", label: "Ask another chat for a general summary" },
-      { id: "m4q3_d", label: "Wait until you get home to read them" },
+      {
+        id: "m4q3_b",
+        label: "Read the full PDFs on the bus",
+      },
+      {
+        id: "m4q3_c",
+        label: "Ask another chat for a general summary",
+      },
+      {
+        id: "m4q3_d",
+        label: "Wait until you get home to read them",
+      },
     ],
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
@@ -69,14 +93,20 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q4_a",
-        label: "Compare the quote with the original and confirm the nuance",
+        label: "Compare the quote with the original document",
       },
-      { id: "m4q4_b", label: "Trust the quote without checking the original" },
+      {
+        id: "m4q4_b",
+        label: "Trust the quote without checking the original",
+      },
       {
         id: "m4q4_c",
         label: "Delete the PDF because the AI already interpreted it",
       },
-      { id: "m4q4_d", label: "Translate the answer to check its quality" },
+      {
+        id: "m4q4_d",
+        label: "Translate the answer to check its quality",
+      },
     ],
     correctAnswer: "m4q4_a",
     topic: "Accuracy",
@@ -90,12 +120,18 @@ export const MODULE_4_EN = [
     question:
       "How do you best organize your sources in Gemini Notebook for research?",
     options: [
-      { id: "m4q5_a", label: "Upload all the sources without ordering them" },
+      {
+        id: "m4q5_a",
+        label: "Upload all the sources without ordering them",
+      },
       {
         id: "m4q5_b",
         label: "Choose relevant sources and group them by topic",
       },
-      { id: "m4q5_c", label: "Upload only summaries, never full documents" },
+      {
+        id: "m4q5_c",
+        label: "Upload only summaries, never full documents",
+      },
       {
         id: "m4q5_d",
         label: "Mix academic sources with blogs without distinction",
@@ -112,10 +148,22 @@ export const MODULE_4_EN = [
     id: "m4q6",
     question: "If two of your sources contradict each other, what do you do?",
     options: [
-      { id: "m4q6_a", label: "Analyze both and document the difference" },
-      { id: "m4q6_b", label: "Delete both sources and look for others" },
-      { id: "m4q6_c", label: "Keep only the most recent one" },
-      { id: "m4q6_d", label: "Ignore the contradiction and move on" },
+      {
+        id: "m4q6_a",
+        label: "Analyze both sources carefully",
+      },
+      {
+        id: "m4q6_b",
+        label: "Delete both sources and look for others",
+      },
+      {
+        id: "m4q6_c",
+        label: "Keep only the most recent one",
+      },
+      {
+        id: "m4q6_d",
+        label: "Ignore the contradiction and move on",
+      },
     ],
     correctAnswer: "m4q6_a",
     topic: "Critical Analysis",
@@ -129,10 +177,22 @@ export const MODULE_4_EN = [
     question:
       "What should you always do when Gemini Notebook answers with citations?",
     options: [
-      { id: "m4q7_a", label: "Verify the citations in the original source" },
-      { id: "m4q7_b", label: "Copy the answer without checking it" },
-      { id: "m4q7_c", label: "Delete the original documents" },
-      { id: "m4q7_d", label: "Translate the answer to validate it" },
+      {
+        id: "m4q7_a",
+        label: "Verify citations in the original",
+      },
+      {
+        id: "m4q7_b",
+        label: "Copy the answer without checking it",
+      },
+      {
+        id: "m4q7_c",
+        label: "Delete the original documents",
+      },
+      {
+        id: "m4q7_d",
+        label: "Translate the answer to validate it",
+      },
     ],
     correctAnswer: "m4q7_a",
     topic: "Verification",
@@ -148,14 +208,20 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q8_a",
-        label: "Each person creates a notebook and shares the link",
+        label: "One shared notebook the whole team edits",
       },
-      { id: "m4q8_b", label: "Only one asks questions for the whole team" },
+      {
+        id: "m4q8_b",
+        label: "Only one asks questions for the whole team",
+      },
       {
         id: "m4q8_c",
         label: "Each person works apart and compares at the end",
       },
-      { id: "m4q8_d", label: "They take turns using a single computer" },
+      {
+        id: "m4q8_d",
+        label: "They take turns using a single computer",
+      },
     ],
     correctAnswer: "m4q8_a",
     topic: "Collaboration",
@@ -171,14 +237,20 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q9_a",
-        label: "A concrete question that asks to cite your sources",
+        label: "A concrete question that asks for citations",
       },
-      { id: "m4q9_b", label: "Read the ten full sources by hand" },
+      {
+        id: "m4q9_b",
+        label: "Read the ten full sources by hand",
+      },
       {
         id: "m4q9_c",
         label: "Ask a chat for the analysis without your sources",
       },
-      { id: "m4q9_d", label: "Copy the study guide without filtering" },
+      {
+        id: "m4q9_d",
+        label: "Copy the study guide without filtering",
+      },
     ],
     correctAnswer: "m4q9_a",
     topic: "Gemini Notebook",
@@ -194,12 +266,15 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q10_a",
-        label: "You guide the topics and regenerate it if you dislike it",
+        label: "You guide the topics and regenerate the answer",
       },
-      { id: "m4q10_b", label: "You have no control over the audio" },
+      {
+        id: "m4q10_b",
+        label: "You have no control over the audio",
+      },
       {
         id: "m4q10_c",
-        label: "You choose the voice, tone and write the script",
+        label: "You write the script word by word",
       },
       {
         id: "m4q10_d",
@@ -249,7 +324,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q12_a",
-        label: "Quality sources loaded and organized inside the notebook",
+        label: "Quality sources uploaded, checked and well organized",
       },
       {
         id: "m4q12_b",
@@ -277,11 +352,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q13_a",
-        label: "Peer-reviewed papers and reliable datasets on the topic",
+        label: "Peer-reviewed papers and reliable datasets",
       },
       {
         id: "m4q13_b",
-        label: "Loose social media comments with no clear author",
+        label: "Loose comments",
       },
       {
         id: "m4q13_c",
@@ -306,12 +381,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q14_a",
-        label:
-          "Select the most relevant and highly reliable ones for the topic",
+        label: "Select the most relevant, reliable ones",
       },
       {
         id: "m4q14_b",
-        label: "Upload all 50 without filtering because more data is better",
+        label: "Upload all 50 without filtering",
       },
       {
         id: "m4q14_c",
@@ -336,8 +410,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q15_a",
-        label:
-          "If a data point is not in your sources, it will not appear in the answer",
+        label: "If a fact is not in your sources, it will not appear",
       },
       {
         id: "m4q15_b",
@@ -365,8 +438,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q16_a",
-        label:
-          "Condensing the essentials of the documents and guiding your reading",
+        label: "Condensing the essentials and guiding your overall reading",
       },
       {
         id: "m4q16_b",
@@ -396,8 +468,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q17_a",
-        label:
-          "A synthesis that integrates several sources and cites each contribution",
+        label: "A synthesis where each contribution carries its citation",
       },
       {
         id: "m4q17_b",
@@ -422,12 +493,12 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q18",
-    question: "What do Gemini Notebook's grounding/citations add to your research?",
+    question:
+      "What do Gemini Notebook's grounding/citations add to your research?",
     options: [
       {
         id: "m4q18_a",
-        label:
-          "They show you which document each statement came from so you can verify",
+        label: "They show which document each individual claim came from",
       },
       {
         id: "m4q18_b",
@@ -452,24 +523,23 @@ export const MODULE_4_EN = [
   {
     id: "m4q19",
     question:
-      "Gemini Notebook cites a source, but the nuance does not match the original. What do you do?",
+      "Gemini Notebook gives a figure that appears in none of your documents. What do you do?",
     options: [
       {
         id: "m4q19_a",
-        label:
-          "Correct the nuance with the original text and adjust your conclusion",
+        label: "Check your documents; if it is missing, do not use it",
       },
       {
         id: "m4q19_b",
-        label: "Keep the AI answer and not check the original at all",
+        label: "Use it, because it sounds credible and came from AI",
       },
       {
         id: "m4q19_c",
-        label: "Delete the document from the notebook to avoid conflicts",
+        label: "Cite the notebook as the source and publish it that way",
       },
       {
         id: "m4q19_d",
-        label: "Ask again until it says what you were expecting",
+        label: "Ask it to round the number so it looks more precise",
       },
     ],
     correctAnswer: "m4q19_a",
@@ -477,7 +547,7 @@ export const MODULE_4_EN = [
     difficulty: "hard",
     source: "The Grimoire",
     feedback:
-      "The source rules: correct the nuance and adjust the conclusion. Practice in the notebook lab.",
+      "A figure missing from your sources cannot be verified: do not use it until you confirm it. Practice in the notebook lab.",
   },
   {
     id: "m4q20",
@@ -486,8 +556,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q20_a",
-        label:
-          "Analyze both, document the difference and look for a third source",
+        label: "Analyze both sources and document the key difference",
       },
       {
         id: "m4q20_b",
@@ -515,7 +584,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q21_a",
-        label: "An audio conversation generated from your documents",
+        label: "An audio conversation based on your documents",
       },
       {
         id: "m4q21_b",
@@ -525,7 +594,10 @@ export const MODULE_4_EN = [
         id: "m4q21_c",
         label: "A written summary that you then print to read later",
       },
-      { id: "m4q21_d", label: "An automatic phone call to technical support" },
+      {
+        id: "m4q21_d",
+        label: "An automatic phone call to technical support",
+      },
     ],
     correctAnswer: "m4q21_a",
     topic: "Audio Overview",
@@ -542,7 +614,10 @@ export const MODULE_4_EN = [
         id: "m4q22_a",
         label: "For reviewing while you commute and cannot read screens",
       },
-      { id: "m4q22_b", label: "For completely replacing reading and analysis" },
+      {
+        id: "m4q22_b",
+        label: "For completely replacing reading and analysis",
+      },
       {
         id: "m4q22_c",
         label: "For uploading more documents to the notebook in less time",
@@ -566,12 +641,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q23_a",
-        label:
-          "You guide the angle and can regenerate the result if it does not convince",
+        label: "You guide the angle and regenerate it",
       },
       {
         id: "m4q23_b",
-        label: "You have no control and it always comes out random",
+        label: "No control at all",
       },
       {
         id: "m4q23_c",
@@ -652,8 +726,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q26_a",
-        label:
-          "Only the people you grant access to when you share the notebook",
+        label: "Only the people you grant access to when sharing it",
       },
       {
         id: "m4q26_b",
@@ -682,7 +755,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q27_a",
-        label: "A concrete question that asks it to cite the notebook sources",
+        label: "A concrete question that asks for citations from sources",
       },
       {
         id: "m4q27_b",
@@ -711,8 +784,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q28_a",
-        label:
-          "Review the source and adjust your conclusion based on the evidence",
+        label: "Review the source again and adjust your conclusion",
       },
       {
         id: "m4q28_b",
@@ -741,8 +813,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q29_a",
-        label:
-          "The notebook sticks to your sources; the general chat uses its training",
+        label: "The notebook sticks strictly to the sources you uploaded",
       },
       {
         id: "m4q29_b",
@@ -770,8 +841,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q30_a",
-        label:
-          "More reliable answers by starting from relevant, reliable sources",
+        label: "More reliable answers, grounded in relevant sources",
       },
       {
         id: "m4q30_b",
@@ -800,8 +870,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q31_a",
-        label:
-          "A comparative analysis that cites each source and notes differences",
+        label: "A comparative analysis that cites each source it uses",
       },
       {
         id: "m4q31_b",
@@ -829,8 +898,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q32_a",
-        label:
-          "Curate sources, analyze and synthesize, and generate audio to review",
+        label: "Curate the sources, analyze them and generate the audio",
       },
       {
         id: "m4q32_b",
@@ -858,8 +926,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q33_a",
-        label:
-          "That it contains no sensitive data and that access is appropriate",
+        label: "That it holds no sensitive data and has appropriate access",
       },
       {
         id: "m4q33_b",
@@ -888,7 +955,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q34_a",
-        label: "Remove them so the notebook stays focused on what is relevant",
+        label: "Remove them so the notebook stays focused and clean",
       },
       {
         id: "m4q34_b",
@@ -917,8 +984,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q35_a",
-        label:
-          "That data is not in your documents and you must find another source",
+        label: "That the data does not appear anywhere in your documents",
       },
       {
         id: "m4q35_b",
@@ -947,7 +1013,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q36_a",
-        label: "Asking and getting cited answers from their own materials",
+        label: "Asking questions and getting answers with citations",
       },
       {
         id: "m4q36_b",
@@ -976,7 +1042,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q37_a",
-        label: "Open the cited sources and confirm the key points",
+        label: "Open the cited sources and double-check the key points",
       },
       {
         id: "m4q37_b",
@@ -1004,12 +1070,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q38_a",
-        label:
-          "Relevant sources, well organized and aligned with the work goal",
+        label: "Relevant sources, well organized",
       },
       {
         id: "m4q38_b",
-        label: "The greatest possible number of documents on any topic",
+        label: "Many documents",
       },
       {
         id: "m4q38_c",
@@ -1034,8 +1099,7 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q39_a",
-        label:
-          "It turns the conclusions of your documents into audio for review",
+        label: "It turns your conclusions into audio you can review",
       },
       {
         id: "m4q39_b",
@@ -1064,13 +1128,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q40_a",
-        label:
-          "Curate sources, synthesize with citations, verify and generate the Audio Overview",
+        label: "Curate sources, synthesize and generate audio",
       },
       {
         id: "m4q40_b",
-        label:
-          "Upload the papers unordered and publish the first available audio",
+        label: "Upload the papers unordered",
       },
       {
         id: "m4q40_c",

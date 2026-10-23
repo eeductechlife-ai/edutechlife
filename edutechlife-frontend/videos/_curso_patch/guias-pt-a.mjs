@@ -215,7 +215,7 @@ export const PT_M1_ETICA = {
   edition: "Guia didático 2026",
   art: null,
   lead: "Usar bem a IA não é só obter bons resultados: é saber quando confiar, quando verificar e quando dizer que a usou. Este guia reúne os princípios que sustentam o uso responsável na escola, no trabalho e no dia a dia.",
-  kpis: [["5", "princípios de uso responsável"], ["3", "perguntas antes de publicar"], ["1998", "lei de direitos autorais no Brasil (Lei 9.610)"]],
+  kpis: [["5", "princípios de uso responsável"], ["5", "perguntas antes de publicar"], ["1998", "lei de direitos autorais no Brasil (Lei 9.610)"]],
   sections: [
     {
       h: "Por que a ética importa na IA",
@@ -284,6 +284,7 @@ ${box("tip", "Caso 1 · A redação perfeita", "<p>Uma estudante entrega uma red
 ${box("tip", "Caso 2 · O filtro de currículos", "<p>Uma empresa usa IA para ordenar candidatos e descobre que o sistema penaliza nomes de certas regiões. O que a empresa deve fazer? Quem responde pela decisão?</p>")}
 ${box("tip", "Caso 3 · A foto que não existiu", "<p>Circula nas redes uma imagem de um evento que nunca aconteceu, criada com IA. O que você verificaria antes de compartilhar? O que diria a quem já a compartilhou?</p>")}`,
     },
+    { h: "Anexo: risco, explicabilidade, privacidade e viés", html: "<p><strong>1. Classificação de risco (União Europeia):</strong> inaceitável (proibido, como a pontuação social de pessoas), alto (contratação, crédito, educação ou saúde: exige avaliação de conformidade e supervisão humana), limitado (deve avisar que é IA) e mínimo (sem obrigações específicas). <em>Status:</em> o Regulamento (UE) 2026/1744 (ômnibus digital) entrou em vigor em 27 de julho de 2026. As obrigações de alto risco se aplicam a partir de dezembro de 2027 para sistemas independentes e de agosto de 2028 para sistemas integrados em produtos.</p><p><strong>2. Explicabilidade:</strong> quando uma IA decide sobre uma pessoa, ela deve poder entender a decisão e contestá-la.</p><p><strong>3. Privacidade desde a concepção:</strong> decida quais dados precisa antes de coletá-los; minimize, anonimize e limite o acesso.</p><p><strong>4. Tipos de viés:</strong> de amostragem (dados não representativos), histórico (dados que refletem discriminação passada), de rotulagem (preconceitos de quem rotula) e de automação (confiar sem revisar).</p>" },
   ],
   closing: `${checks([
     "Declaro quando uso IA e o que revisei eu mesmo.",

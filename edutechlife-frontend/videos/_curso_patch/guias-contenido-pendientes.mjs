@@ -19,11 +19,11 @@ export const M1_PROMPT = {
   edition: "Guía didáctica 2026",
   art: null,
   lead: "Un prompt es la instrucción que le das a la IA. La diferencia entre una respuesta mediocre y una útil casi siempre está en <strong>cuánto contexto</strong> le das y en <strong>cómo pides el resultado</strong>. Esta guía te enseña a escribir prompts que funcionan desde el primer intento.",
-  kpis: [["RTF", "Rol, Tarea y Formato"], ["4", "elementos que completan el prompt"], ["3", "intentos para mejorarlo"]],
+  kpis: [["RTF", "Rol, Tarea y Formato"], ["5", "piezas de un prompt completo"], ["3", "intentos para mejorarlo"]],
   sections: [
     {
       h: "Qué es un prompt",
-      html: `<p>Un prompt es cualquier instrucción que escribes para un modelo de IA. Puede ser una pregunta corta o un encargo detallado. El modelo no sabe lo que tienes en mente: solo tiene lo que escribes. Por eso, lo que no dices, lo adivina.</p>
+      html: `<p>Puede ser una pregunta corta o un encargo detallado. La IA no sabe lo que tienes en mente: solo tiene lo que escribes. Por eso, lo que no dices, lo adivina.</p>
 ${box("tip", "Idea central", "<p>Un prompt es un encargo a un colaborador muy rápido que no conoce tu contexto. Cuanto mejor le expliques el trabajo, menos tendrás que corregir.</p>")}`,
     },
     {
@@ -38,13 +38,13 @@ ${cards([
     },
     {
       h: "Débil frente a sólido",
-      html: `<p>Compara estos dos prompts pidiendo lo mismo. La diferencia está en el detalle:</p>
-${box("warn", "Débil", `<div class="prompt">Explícame la Revolución Industrial.</div>`)}
+      html: `<p>Otro ejemplo, esta vez de historia. Pedido débil: «Explícame la Revolución Industrial». El mismo pedido, pero sólido:</p>
 ${box("tip", "Sólido", `<div class="prompt">Eres un profesor de historia de bachillerato.
 Contexto: mis alumnos tienen 15 años y es su primer contacto con el tema.
 Tarea: explica las causas de la Revolución Industrial en Inglaterra.
 Formato: tres párrafos cortos y una tabla con las 4 causas principales.
-Restricciones: no uses fechas que no estés seguro de recordar bien; si dudas, dilo.</div>`)}`,
+Restricciones: no uses fechas que no estés seguro de recordar bien; si dudas, dilo.</div>`)}
+<p class="muted">Esto reduce el riesgo de errores, no lo elimina: igual verifica las fechas.</p>`,
     },
     {
       h: "Mejorar un prompt iterando",
@@ -81,24 +81,15 @@ Conserva todos los datos y avísame si cambiaste alguno.</div>
 Dime tres fortalezas, tres problemas concretos y una mejora por cada problema.</div>`,
     },
     {
-      h: "Una regla para cerrar: lo que no debes pegar",
+      h: "Una regla para cerrar: lo que NO debes pegar",
       html: `<p>Un prompt es un documento que viaja a un servicio externo. Antes de pegar información, pregúntate si la compartirías con un desconocido.</p>
-${checks([
+<ul class="check nocheck">${[
   "Documentos de identidad, contraseñas o datos bancarios.",
   "Historias clínicas o información de salud de otras personas.",
   "Datos personales de estudiantes o de menores de edad.",
   "Información confidencial de tu empresa o de tus clientes.",
-])}
+].map((x) => `<li>${x}</li>`).join("")}</ul>
 <p class="muted">En Colombia, el tratamiento de datos personales se rige por la Ley 1581 de 2012.</p>`,
-    },
-    {
-      h: "Ejercicio de práctica",
-      html: `${steps([
-  "Escoge una tarea real de tu semana (un correo, un resumen, una idea).",
-  "Escribe un prompt con RTF y contexto. Anota la respuesta.",
-  "Diagnostica qué falta y mejora el prompt en dos intentos.",
-  "Guarda la versión final como plantilla con espacios para reemplazar.",
-])}`,
     },
     {
       h: "Registro de iteración: un ejemplo real",
@@ -127,29 +118,19 @@ export const M1_PRIVACIDAD = {
   edition: "Manual 2026",
   art: null,
   lead: "La IA es útil cuando sabes qué le entregas, cómo verificas lo que recibes y a quién le debes explicar que la usaste. Este manual reúne los principios que todo estudiante y profesional debería aplicar.",
-  kpis: [["1581", "ley de protección de datos en Colombia (2012)"], ["4", "principios de uso responsable"], ["3", "preguntas antes de compartir"]],
+  kpis: [["1581", "ley de protección de datos en Colombia (2012)"], ["4", "principios de la ley que más usarás"], ["4", "preguntas antes de compartir"]],
   sections: [
     {
       h: "Por qué la privacidad importa",
-      html: `<p>Cada texto que pegas en una herramienta de IA es información que sale de tu computador. Muchas veces no sabes cómo se guarda, quién puede verla o si se usa para mejorar servicios. Tratar la privacidad como un hábito, y no como un trámite, es lo que la protege.</p>`,
+      html: `<p>Cada texto que pegas en una herramienta de IA es información que sale de tu computador. Muchas veces no sabes cómo se guarda, quién puede verla o si se usa para mejorar servicios. Tratar la privacidad como un hábito, y no como un trámite, es lo que la protege.</p>
+<p><strong>Un primer paso:</strong> revisa en los ajustes de tu herramienta si tus conversaciones se usan para mejorar el servicio y desactívalo si puedes.</p>`,
     },
     {
       h: "El dilema práctico",
-      html: `<p>Un caso que se repite en aulas y oficinas: alguien debe escribir un ensayo y le pide a la IA que lo haga completo. ¿Qué pasa con su aprendizaje, su honestidad y la calidad de lo que entrega?</p>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0">
-  <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px 14px">
-    <b style="color:#9a3412;font-size:10pt">Opción A · Entregar sin leer</b>
-    <p style="margin:6px 0 6px">Pide a la IA que escriba todo el ensayo y lo entrega tal cual.</p>
-    <ul style="margin:0 0 0 16px;font-size:9.5pt"><li>Deshonestidad académica</li><li>Riesgo de difundir información no verificada</li><li>Pérdida de aprendizaje y de pensamiento crítico</li></ul>
-  </div>
-  <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:12px 14px">
-    <b style="color:#065f46;font-size:10pt">Opción B · Usar la IA como andamio</b>
-    <p style="margin:6px 0 6px">Usa la IA para estructurar ideas y revisar gramática, pero redacta ella misma.</p>
-    <ul style="margin:0 0 0 16px;font-size:9.5pt"><li>Mantiene la autoría intelectual</li><li>Comprende el tema que escribe</li><li>Mejora su texto con criterio propio</li></ul>
-  </div>
-</div>
-<p class="muted">Caso: una estudiante debe escribir 1.500 palabras sobre un tema de historia.</p>
-${box("tip", "Lo que sí se puede hacer", "<p>Usar la IA para entender el tema, organizar ideas y revisar gramática, mientras tú escribes y tomas las decisiones. La autoría intelectual sigue siendo tuya.</p>")}`,
+      html: `<p>Una profesora quiere que la IA le ayude a redactar los comentarios de los boletines. ¿Qué hace?</p>
+${box("warn", "Opción A · Pegar la lista tal cual", "<p>Copia la lista de notas con nombres, apellidos y colegio de cada estudiante y pide los comentarios.</p><p>Esos datos quedan en un servicio externo: si la conversación se guarda o se comparte, se filtran datos de menores.</p>")}
+${box("tip", "Opción B · Anonimizar primero", "<p>Cambia los nombres por «Estudiante A, B, C», quita el colegio y el documento, y pide solo el formato del comentario. Después ella personaliza cada texto.</p><p>La IA ayuda con la estructura y los datos de los estudiantes no salen de su control.</p>")}
+<p><strong>¿Cuál protege mejor?</strong> La B: la IA puede ayudarte sin conocer a nadie. Más sobre honestidad académica en la guía de Ética.</p>`,
     },
     {
       h: "Qué datos no compartir",
@@ -163,14 +144,14 @@ ${box("tip", "Lo que sí se puede hacer", "<p>Usar la IA para entender el tema, 
     },
     {
       h: "La Ley 1581 de 2012",
-      html: `<p>En Colombia, la <strong>Ley 1581 de 2012</strong> regula el tratamiento de datos personales. Sus principios son la base del uso responsable:</p>
+      html: `<p>En Colombia, la <strong>Ley 1581 de 2012</strong> regula el tratamiento de datos personales. Algunos de sus principios, los que más usarás:</p>
 ${cards([
   ["Finalidad", "Los datos se usan para un propósito claro e informado a la persona."],
   ["Seguridad y confidencialidad", "Quien trata los datos debe protegerlos y limitar su acceso."],
   ["Veracidad", "Los datos deben ser exactos, completos y actualizados."],
   ["Libertad", "Nadie puede usar tus datos sin tu autorización previa."],
 ])}
-<p>Como titular, puedes conocer, actualizar, rectificar y suprimir tus datos, y revocar la autorización que diste.</p>`,
+<p>La ley incluye otros principios (legalidad, transparencia, acceso y circulación restringida). Como titular, puedes conocer, actualizar, rectificar y suprimir tus datos, y revocar la autorización que diste.</p>`,
     },
     {
       h: "Anonimizar antes de subir",
@@ -182,31 +163,18 @@ ${cards([
 ])}`,
     },
     {
-      h: "Sesgos: cómo detectarlos",
-      html: `<p>Un modelo aprende de datos creados por personas y puede repetir sus desigualdades: estereotipos de género, de región, de edad o de nivel socioeconómico. Un sesgo no siempre es evidente; a veces aparece en lo que la respuesta omite.</p>
-${checks([
-  "Pide la misma tarea con datos de perfiles distintos y compara.",
-  "Pregunta qué perspectivas faltan en la respuesta.",
-  "Verifica con fuentes diversas antes de tomar una decisión sobre personas.",
-])}`,
-    },
-    {
-      h: "Transparencia: declarar el uso de IA",
-      html: `<p>Decir cuándo usaste IA genera confianza y evita malentendidos. Declara el uso cuando la IA participó en un texto, una imagen, un análisis o una decisión, y explica qué parte revisaste tú.</p>
-${box("tip", "Frase sugerida", "<p>«Este borrador fue elaborado con apoyo de IA y revisado y ajustado por mí. Las cifras fueron verificadas con las fuentes citadas.»</p>")}`,
+      h: "Sesgos y transparencia, en breve",
+      html: `<p>Un modelo aprende de datos creados por personas y puede repetir sus desigualdades; a veces el sesgo aparece en lo que la respuesta <strong>omite</strong>. Pide la misma tarea con perfiles distintos y compara.</p>
+${box("tip", "Frase para declarar el uso de IA", "<p>«Este borrador fue elaborado con apoyo de IA y revisado y ajustado por mí. Las cifras fueron verificadas con las fuentes citadas.»</p>")}
+<p class="muted">Más sobre sesgos y transparencia en la guía de Ética.</p>`,
     },
     {
       h: "Menores de edad",
-      html: `<p>Cuando la IA se usa con niños o adolescentes, el adulto responsable supervisa el uso, elige las herramientas y evita que se compartan datos del menor. Los datos de menores tienen protección reforzada.</p>`,
+      html: `<p>Cuando la IA se usa con niños o adolescentes, un adulto responsable decide qué se comparte, elige las herramientas y supervisa el uso. La ley restringe el tratamiento de datos de niñas, niños y adolescentes y exige proteger sus derechos.</p>`,
     },
     {
       h: "Protocolo antes de compartir",
-      html: `${checks([
-  "¿Verifiqué cada cifra, cita y nombre en la fuente original?",
-  "¿Eliminé datos personales o confidenciales que no debían estar?",
-  "¿Una persona responsable revisó la decisión?",
-  "¿Declaré el uso de IA cuando corresponde?",
-])}`,
+      html: `<p>Antes de compartir cualquier resultado hecho con IA, responde «sí» a las cuatro preguntas: verifiqué cada cifra, cita y nombre en la fuente original; eliminé los datos personales o confidenciales; una persona responsable revisó la decisión; y declaré el uso de IA cuando corresponde.</p>`,
     },
     {
       h: "Si ya compartiste un dato sensible",
@@ -235,37 +203,40 @@ export const M3_PRACTICA = {
   edition: "Plantillas 2026",
   art: null,
   lead: "Investigar bien es comprobar. Estas plantillas te permiten llevar a Gemini a casos reales, pedir fuentes en cada respuesta y dejar un registro de lo que verificaste.",
-  kpis: [["4", "ejercicios de campo"], ["5", "columnas en la tabla de evidencia"], ["3", "fuentes antes de concluir"]],
+  kpis: [["5", "ejercicios de campo"], ["5", "columnas en la tabla de evidencia"], ["3", "fuentes antes de concluir"]],
   sections: [
     {
       h: "Antes de empezar",
-      html: `<figure style="width:34%;margin:12px auto"><img src="/ialab-resources/modulo3/ilustraciones/cerebro-ia.jpg"><figcaption>Antes de investigar, revisa qué modelo y qué plan tienes.</figcaption></figure><p>Gemini cambia con frecuencia. Antes de cada ejercicio, revisa qué modelo ofrece tu cuenta y qué funciones incluye tu plan. Anota la fecha de tu investigación: una fuente de hace dos años puede no servir hoy.</p>`,
+      html: `<p>Gemini cambia con frecuencia. Antes de cada ejercicio, revisa qué modelo ofrece tu cuenta y qué funciones incluye tu plan. Anota la fecha de tu investigación: una fuente de hace dos años puede no servir hoy.</p>
+${box("key", "¿Qué es «anclar» una respuesta (grounding)?", "<p>Es cuando la IA apoya lo que dice en fuentes reales que puedes abrir, en lugar de responder solo de memoria.</p><p><strong>Suena bien, pero no se puede comprobar:</strong> «El 70 % de los colegios ya usa IA» (sin fuente).<br><strong>Anclada:</strong> «Según [nombre del informe], página X, [dato]» con enlace y fecha. Tu trabajo: abrir el enlace y confirmar que el dato está ahí.</p>")}
+<h3>Ejercicio 0 · La misma pregunta dos veces</h3><p>Haz la misma pregunta dos veces: la primera sin pedir fuentes y la segunda con «cita cada dato con enlace y fecha». ¿Con cuál puedes comprobar lo que dice?</p>`,
     },
     {
       h: "Ejercicio 1: mapa local de competidores",
       html: `<p>Identifica tres competidores de tu ciudad o sector y compáralos con fuentes públicas.</p>
 <div class="prompt">Investiga los tres principales [servicio] en [ciudad].
 Para cada uno entrega: propuesta de valor, precio publicado, canal de contacto y la fuente de cada dato.
-Si un dato no aparece en una fuente pública, escribe «no verificado».</div>`,
+Si un dato no aparece en una fuente pública, escribe «no verificado».</div>
+<p class="muted">Variante cotidiana: compara tres opciones de un producto o servicio que quieras comprar en tu ciudad, con precio publicado, fuente y fecha.</p>`,
     },
     {
       h: "Ejercicio 2: verificar una noticia",
       html: `${steps([
   "Copia el titular y la frase que más te llamó la atención.",
   "Pide a Gemini que busque fuentes que la confirmen y fuentes que la desmientan.",
-  "Abre al menos dos fuentes primarias (organismos oficiales, medios con autoría).",
+  "Para una noticia, abre al menos dos fuentes primarias (organismos oficiales, medios con autoría); para un informe, tres.",
   "Clasifica la noticia: confirmada, parcial, no verificada o falsa.",
 ])}`,
     },
     {
       h: "Ejercicio 3: informe con Deep Research",
-      html: `<figure style="width:45%;margin:12px auto"><img src="/ialab-resources/modulo3/ilustraciones/robot-deep-research.jpg"><figcaption>Un informe bueno es un informe verificado.</figcaption></figure><div class="prompt">Investiga [tema] para [público], con fuentes de los últimos [años] años.
+      html: `<div class="prompt">Investiga [tema] para [público], con fuentes de los últimos [número] años.
 Entrega: 1) resumen de 5 líneas, 2) hallazgos con su fuente, 3) contradicciones entre fuentes, 4) qué no pudiste verificar.</div>
 ${box("warn", "Antes de usar el informe", "<p>Abre tres fuentes que sostengan las conclusiones clave. Si una cifra no aparece en la fuente citada, no la uses.</p>")}`,
     },
     {
       h: "Ejercicio 4: resumir tu correo",
-      html: `<p>Si tienes un hilo de correo largo, puedes pedir un resumen con las decisiones pendientes. Revisa siempre el resumen contra el hilo original antes de responder.</p>
+      html: `<p>Si tienes un hilo de correo largo, puedes pedir un resumen con las decisiones pendientes. Antes de resumir, quita o ignora datos personales de terceros (cédulas, teléfonos, datos de menores); si el hilo es confidencial, practica con uno inventado. Revisa siempre el resumen contra el hilo original antes de responder.</p>
 <div class="prompt">Resume este hilo de correo en: 1) contexto en dos líneas, 2) decisiones tomadas, 3) pendientes con responsable y fecha si aparece.
 No inventes fechas ni responsables: si no están en el hilo, escribe «no aparece».</div>`,
     },
@@ -273,9 +244,9 @@ No inventes fechas ni responsables: si no están en el hilo, escribe «no aparec
       h: "Tabla de evidencia",
       html: `<p>Lleva un registro de lo que investigaste. Cada afirmación importante debe tener una fila.</p>
 ${table(["Afirmación", "Fuente", "Fecha", "Verificada (sí / no)", "Notas"], [
-  ["Ej.: el precio subió 10 %", "Enlace o documento oficial", "Fecha de publicación", "Sí", "Revisada en el original"],
-  ["", "", "", "", ""],
-  ["", "", "", "", ""],
+  ["Ej. 1: «el precio subió 10 %»", "Informe oficial (enlace)", "12-sep-2026", "Sí", "Lo encontré en la página 4 del original"],
+  ["Ej. 2: «el 70 % de colegios usa IA»", "Ninguna encontrada", "—", "No", "Cifra sin fuente: no la uso"],
+  ["<span class=\"muted\">Tu afirmación…</span>", "<span class=\"muted\">Enlace…</span>", "<span class=\"muted\">Fecha…</span>", "<span class=\"muted\">Sí / no</span>", "<span class=\"muted\">Qué comprobaste</span>"],
 ])}`,
     },
     {

@@ -5,11 +5,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q1_a",
-        label: "Pesquisa a fundo e monta relatórios com fontes citadas",
+        label: "Pesquisa a fundo e monta relatórios",
       },
-      { id: "m3q1_b", label: "Faz buscas rápidas e superficiais no Google" },
-      { id: "m3q1_c", label: "Transforma qualquer pergunta em um jogo" },
-      { id: "m3q1_d", label: "Instala novas extensões no seu navegador" },
+      {
+        id: "m3q1_b",
+        label: "Faz buscas rápidas e superficiais no Google",
+      },
+      {
+        id: "m3q1_c",
+        label: "Transforma perguntas em jogo",
+      },
+      {
+        id: "m3q1_d",
+        label: "Instala novas extensões no seu navegador",
+      },
     ],
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
@@ -24,11 +33,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q2_a",
-        label: "Para confirmar que cada fonte é real e o dado está correto",
+        label: "Para confirmar fontes e dados",
       },
-      { id: "m3q2_b", label: "Porque as citações do Gemini são sempre falsas" },
-      { id: "m3q2_c", label: "Porque o Gemini quase nunca mostra as fontes" },
-      { id: "m3q2_d", label: "Porque as fontes só funcionam em outro idioma" },
+      {
+        id: "m3q2_b",
+        label: "Porque as citações do Gemini são sempre falsas",
+      },
+      {
+        id: "m3q2_c",
+        label: "Porque o Gemini não cita",
+      },
+      {
+        id: "m3q2_d",
+        label: "Porque as fontes só funcionam em outro idioma",
+      },
     ],
     correctAnswer: "m3q2_a",
     topic: "Verificação de Fontes",
@@ -43,13 +61,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q3_a",
-        label: "Conectar as respostas a informações atuais da Busca do Google",
+        label: "Conectar respostas a informações atuais",
       },
       {
         id: "m3q3_b",
         label: "Fazer a IA funcionar sem conexão com a internet",
       },
-      { id: "m3q3_c", label: "Salvar as conversas no dispositivo" },
+      {
+        id: "m3q3_c",
+        label: "Salvar as conversas no dispositivo",
+      },
       {
         id: "m3q3_d",
         label: "Traduzir automaticamente tudo para outro idioma",
@@ -68,11 +89,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q4_a",
-        label: "Que entende texto, imagem, áudio e vídeo ao mesmo tempo",
+        label: "Que entende texto, imagem, áudio e vídeo",
       },
-      { id: "m3q4_b", label: "Que só funciona com texto escrito" },
-      { id: "m3q4_c", label: "Que precisa de um modem de alta velocidade" },
-      { id: "m3q4_d", label: "Que usa vários idiomas ao mesmo tempo" },
+      {
+        id: "m3q4_b",
+        label: "Que só funciona com texto escrito",
+      },
+      {
+        id: "m3q4_c",
+        label: "Que precisa de um modem de alta velocidade",
+      },
+      {
+        id: "m3q4_d",
+        label: "Que usa vários idiomas ao mesmo tempo",
+      },
     ],
     correctAnswer: "m3q4_a",
     topic: "Multimodalidade",
@@ -88,11 +118,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q5_a",
-        label: "Resumir e-mails e escrever no Docs direto do app",
+        label: "Resumir e-mails e escrever no Docs",
       },
-      { id: "m3q5_b", label: "Só gerar imagens para apresentações" },
-      { id: "m3q5_c", label: "Usar o Gemini somente dentro do Google Slides" },
-      { id: "m3q5_d", label: "Instalar um programa separado no computador" },
+      {
+        id: "m3q5_b",
+        label: "Só gerar imagens",
+      },
+      {
+        id: "m3q5_c",
+        label: "Usar o Gemini somente dentro do Google Slides",
+      },
+      {
+        id: "m3q5_d",
+        label: "Instalar um programa separado no computador",
+      },
     ],
     correctAnswer: "m3q5_a",
     topic: "Google Workspace",
@@ -108,11 +147,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q6_a",
-        label: "Com o Gemini Live compartilhando a tela em tempo real",
+        label: "Com o Gemini Live compartilhando a tela",
       },
-      { id: "m3q6_b", label: "Fotografando o gráfico para enviar depois" },
-      { id: "m3q6_c", label: "Desenhando o gráfico de memória para explicar" },
-      { id: "m3q6_d", label: "Esperando receber o arquivo por e-mail" },
+      {
+        id: "m3q6_b",
+        label: "Pedindo a um colega que explique depois",
+      },
+      {
+        id: "m3q6_c",
+        label: "Desenhando o gráfico de memória para explicar",
+      },
+      {
+        id: "m3q6_d",
+        label: "Esperando receber o arquivo por e-mail",
+      },
     ],
     correctAnswer: "m3q6_a",
     topic: "Gemini Live",
@@ -128,14 +176,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q7_a",
-        label: "Deep Research e depois verificar cada fonte citada",
+        label: "Deep Research e depois verificar cada fonte",
       },
       {
         id: "m3q7_b",
         label: "Perguntar uma vez e aceitar a primeira resposta",
       },
-      { id: "m3q7_c", label: "Copiar os primeiros resultados do Google" },
-      { id: "m3q7_d", label: "Pedir um resumo sem solicitar fontes" },
+      {
+        id: "m3q7_c",
+        label: "Copiar os primeiros resultados do Google",
+      },
+      {
+        id: "m3q7_d",
+        label: "Pedir um resumo sem solicitar fontes",
+      },
     ],
     correctAnswer: "m3q7_a",
     topic: "Pesquisa Profissional",
@@ -151,11 +205,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q8_a",
-        label: "Usa Deep Research com palavras-chave e confere as citações",
+        label: "Deep Research e checagem de citações",
       },
-      { id: "m3q8_b", label: "Lê vinte artigos à mão antes de escrever" },
-      { id: "m3q8_c", label: "Pede um resumo do tema sem fontes" },
-      { id: "m3q8_d", label: "Pesquisa no Google e escreve sem conferir" },
+      {
+        id: "m3q8_b",
+        label: "Lê vinte artigos à mão antes de escrever",
+      },
+      {
+        id: "m3q8_c",
+        label: "Pede um resumo do tema sem fontes",
+      },
+      {
+        id: "m3q8_d",
+        label: "Pesquisa no Google e escreve sem conferir",
+      },
     ],
     correctAnswer: "m3q8_a",
     topic: "Deep Research",
@@ -171,11 +234,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q9_a",
-        label: "Como tutor: perguntar, pedir exemplos e praticar",
+        label: "Como tutor: perguntar e praticar",
       },
-      { id: "m3q9_b", label: "Pedir o texto completo e entregar sem ler" },
-      { id: "m3q9_c", label: "Usá-lo só para traduzir os textos" },
-      { id: "m3q9_d", label: "Evitá-lo porque complica o estudo" },
+      {
+        id: "m3q9_b",
+        label: "Pedir o texto completo e entregar sem ler",
+      },
+      {
+        id: "m3q9_c",
+        label: "Só para traduzir",
+      },
+      {
+        id: "m3q9_d",
+        label: "Evitá-lo porque complica o estudo",
+      },
     ],
     correctAnswer: "m3q9_a",
     topic: "Aprendizagem Guiada",
@@ -191,11 +263,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q10_a",
-        label: "Dados atuais dos serviços do Google dentro do chat",
+        label: "Dados atuais dos serviços Google",
       },
-      { id: "m3q10_b", label: "Substituem por completo os sites do Google" },
-      { id: "m3q10_c", label: "Servem só para reservar voos e nada mais" },
-      { id: "m3q10_d", label: "Exigem pagar uma assinatura extra" },
+      {
+        id: "m3q10_b",
+        label: "Substituem por completo os sites do Google",
+      },
+      {
+        id: "m3q10_c",
+        label: "Servem só para reservar voos e nada mais",
+      },
+      {
+        id: "m3q10_d",
+        label: "Exigem assinatura",
+      },
     ],
     correctAnswer: "m3q10_a",
     topic: "Extensões Gemini",
@@ -207,22 +288,31 @@ export const MODULE_3_PT = [
   {
     id: "m3q11",
     question:
-      "Qual destes NÃO é um tipo de conteúdo que o Gemini pode analisar?",
+      "O que o Gemini Live faz quando você aponta a câmera para um objeto?",
     options: [
       {
         id: "m3q11_a",
-        label: "Um objeto físico real que não foi digitalizado nem fotografado",
+        label: "Identificá-lo e tirar dúvidas sobre ele",
       },
-      { id: "m3q11_b", label: "Uma fotografia carregada dentro da conversa" },
-      { id: "m3q11_c", label: "Um arquivo PDF com várias páginas de conteúdo" },
-      { id: "m3q11_d", label: "Um trecho de áudio com uma entrevista gravada" },
+      {
+        id: "m3q11_b",
+        label: "Convertê-lo em um PDF automaticamente",
+      },
+      {
+        id: "m3q11_c",
+        label: "Enviá-lo ao seu e-mail sem você ver",
+      },
+      {
+        id: "m3q11_d",
+        label: "Apagá-lo da tela do celular por completo",
+      },
     ],
     correctAnswer: "m3q11_a",
     topic: "Multimodalidade",
     difficulty: "médio",
     source: "Manual de Campo: Introdução ao Gemini",
     feedback:
-      "O Gemini processa conteúdo digital (texto, imagem, áudio, vídeo, PDF), não objetos físicos.",
+      "O Gemini Live usa a câmera para identificar o que você aponta e responder perguntas sobre isso.",
   },
   {
     id: "m3q12",
@@ -231,8 +321,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q12_a",
-        label:
-          "Compreende a sua pergunta e elabora uma resposta, não apenas links",
+        label: "Compreende a pergunta e elabora uma resposta",
       },
       {
         id: "m3q12_b",
@@ -244,7 +333,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q12_d",
-        label: "Substitui por completo todas as fontes originais",
+        label: "Substitui todas as fontes originais",
       },
     ],
     correctAnswer: "m3q12_a",
@@ -260,8 +349,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q13_a",
-        label:
-          "Para ancorar a resposta em informação atual e mostrar as fontes",
+        label: "Para ancorar a resposta em dados atuais",
       },
       {
         id: "m3q13_b",
@@ -271,7 +359,10 @@ export const MODULE_3_PT = [
         id: "m3q13_c",
         label: "Para traduzir automaticamente tudo para o seu idioma natal",
       },
-      { id: "m3q13_d", label: "Para guardar as conversas na nuvem do Google" },
+      {
+        id: "m3q13_d",
+        label: "Para guardar as conversas na nuvem",
+      },
     ],
     correctAnswer: "m3q13_a",
     topic: "Grounding",
@@ -287,7 +378,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q14_a",
-        label: "Abrir a fonte citada e comprovar se ela sustenta o dado",
+        label: "Abrir a fonte citada e comprovar o dado",
       },
       {
         id: "m3q14_b",
@@ -295,7 +386,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q14_c",
-        label: "Assumir que a fonte existe só por ver o formato",
+        label: "Assumir que a fonte existe",
       },
       {
         id: "m3q14_d",
@@ -315,14 +406,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q15_a",
-        label:
-          "Explora muitas fontes, analisa e redige um relatório com citações",
+        label: "Explora fontes e redige relatório",
       },
       {
         id: "m3q15_b",
         label: "Devolve o primeiro resultado e encerra a busca",
       },
-      { id: "m3q15_c", label: "Gera imagens para ilustrar o tema investigado" },
+      {
+        id: "m3q15_c",
+        label: "Gera imagens",
+      },
       {
         id: "m3q15_d",
         label: "Só responde perguntas simples de cultura geral",
@@ -370,7 +463,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q17_a",
-        label: "Contrastar um dado com pelo menos duas fontes independentes",
+        label: "Contrastar um dado com duas fontes",
       },
       {
         id: "m3q17_b",
@@ -378,7 +471,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q17_c",
-        label: "Desenhar um triângulo para organizar as ideias",
+        label: "Desenhar um triângulo",
       },
       {
         id: "m3q17_d",
@@ -427,7 +520,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q19_a",
-        label: "Compartilhar a tela e perguntar ao vivo sobre o que é mostrado",
+        label: "Compartilhar a tela e perguntar ao vivo",
       },
       {
         id: "m3q19_b",
@@ -435,7 +528,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q19_c",
-        label: "Assumir o controle do computador e responder por você",
+        label: "Assumir o controle do computador",
       },
       {
         id: "m3q19_d",
@@ -456,9 +549,12 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q20_a",
-        label: "Pedir fontes ou descartar o dado até poder verificá-lo",
+        label: "Pedir fontes ou descartar o dado",
       },
-      { id: "m3q20_b", label: "Publicá-lo igual se o número parecer razoável" },
+      {
+        id: "m3q20_b",
+        label: "Publicá-lo igual sem checar",
+      },
       {
         id: "m3q20_c",
         label: "Acrescentar um gráfico gerado para dar credibilidade",
@@ -481,13 +577,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q21_a",
-        label: "Resumir e-mails, redigir no Docs e ajudar no Sheets",
+        label: "Resumir e-mails e redigir no Docs",
       },
       {
         id: "m3q21_b",
         label: "Funcionar só dentro do Docs e em nenhum outro lugar",
       },
-      { id: "m3q21_c", label: "Substituir por completo o e-mail tradicional" },
+      {
+        id: "m3q21_c",
+        label: "Substituir o e-mail",
+      },
       {
         id: "m3q21_d",
         label: "Editar apresentações sem que você revise o conteúdo",
@@ -515,7 +614,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q22_c",
-        label: "Converter a tabela em imagens para depois enviá-las",
+        label: "Converter a tabela em imagens",
       },
       {
         id: "m3q22_d",
@@ -535,7 +634,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q23_a",
-        label: "Trazer dados atuais desses serviços para dentro da conversa",
+        label: "Trazer dados atuais desses serviços ao chat",
       },
       {
         id: "m3q23_b",
@@ -547,7 +646,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q23_d",
-        label: "Baixar esses serviços para usá-los sem conexão",
+        label: "Baixar esses serviços para uso offline",
       },
     ],
     correctAnswer: "m3q23_a",
@@ -564,11 +663,11 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q24_a",
-        label: "Uma pergunta específica, delimitada e verificável com fontes",
+        label: "Uma pergunta específica e verificável",
       },
       {
         id: "m3q24_b",
-        label: "Um tema amplo sem enfoque, para ver o que a IA diz",
+        label: "Um tema amplo",
       },
       {
         id: "m3q24_c",
@@ -593,9 +692,12 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q25_a",
-        label: "Não usar esse dado até encontrar uma fonte verificável",
+        label: "Não usar esse dado até achar fonte verificável",
       },
-      { id: "m3q25_b", label: "Usar o dado igual porque a IA o deu por certo" },
+      {
+        id: "m3q25_b",
+        label: "Usar o dado igual porque a IA o deu por certo",
+      },
       {
         id: "m3q25_c",
         label: "Inventar uma citação parecida para respaldar o dado",
@@ -647,7 +749,8 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q27_a",
-        label: "Carregá-lo e pedir respostas com as páginas ou seções citadas",
+        label:
+          "Carregá-lo e pedir respostas ancoradas em seções específicas que você possa verificar",
       },
       {
         id: "m3q27_b",
@@ -659,7 +762,8 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q27_d",
-        label: "Pedir um resumo sem citar de onde veio a informação",
+        label:
+          "Pedir um resumo rápido sem indicar de qual seção veio a informação, para economizar tempo",
       },
     ],
     correctAnswer: "m3q27_a",
@@ -675,15 +779,20 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q28_a",
-        label:
-          "Pode descrevê-la, extrair texto ou responder sobre o conteúdo dela",
+        label: "Pode descrevê-la ou extrair texto",
       },
       {
         id: "m3q28_b",
         label: "Só a guarda sem analisar nada do conteúdo dela",
       },
-      { id: "m3q28_c", label: "Substitui-a por uma imagem gerada parecida" },
-      { id: "m3q28_d", label: "Publica-a na internet na hora sem permissão" },
+      {
+        id: "m3q28_c",
+        label: "Substitui-a por imagem",
+      },
+      {
+        id: "m3q28_d",
+        label: "Publica-a na internet na hora sem permissão",
+      },
     ],
     correctAnswer: "m3q28_a",
     topic: "Multimodalidade",
@@ -699,7 +808,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q29_a",
-        label: "Revisar algumas fontes citadas para confirmar achados-chave",
+        label: "Revisar algumas fontes citadas para confirmar",
       },
       {
         id: "m3q29_b",
@@ -711,7 +820,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q29_d",
-        label: "Mudar os dados que não combinam com a sua opinião",
+        label: "Mudar os dados",
       },
     ],
     correctAnswer: "m3q29_a",
@@ -727,7 +836,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q30_a",
-        label: "Indicar que dados você tem, o que quer obter e em que formato",
+        label: "Indicar seus dados, seu objetivo e o formato",
       },
       {
         id: "m3q30_b",
@@ -735,7 +844,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q30_c",
-        label: "Pedir 'analisa isto' e aceitar o que ele responder",
+        label: "Pedir 'analisa isto' e aceitar a resposta",
       },
       {
         id: "m3q30_d",
@@ -756,7 +865,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q31_a",
-        label: "Contrastar as duas com fontes e decidir com evidência",
+        label: "Contrastar as duas com fontes e decidir",
       },
       {
         id: "m3q31_b",
@@ -768,7 +877,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q31_d",
-        label: "Usar a primeira e apagar a segunda do histórico",
+        label: "Usar a primeira resposta sem revisar",
       },
     ],
     correctAnswer: "m3q31_a",
@@ -814,14 +923,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q33_a",
-        label:
-          "O Deep Research faz uma análise profunda e extensa com relatório",
+        label: "Deep Research faz análise profunda e extensa",
       },
       {
         id: "m3q33_b",
         label: "O Deep Research só busca imagens em vez de páginas",
       },
-      { id: "m3q33_c", label: "São idênticos e só muda a cor do botão" },
+      {
+        id: "m3q33_c",
+        label: "São idênticos e só muda a cor do botão",
+      },
       {
         id: "m3q33_d",
         label: "O Deep Research responde mais rápido que uma busca normal",
@@ -841,13 +952,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q34_a",
-        label: "Revisar o texto antes de enviá-lo ou compartilhá-lo",
+        label: "Revisar o texto antes de enviá-lo",
       },
       {
         id: "m3q34_b",
         label: "Enviar de imediato porque a IA raramente falha",
       },
-      { id: "m3q34_c", label: "Confiar que o destinatário corrija os erros" },
+      {
+        id: "m3q34_c",
+        label: "Confiar no destinatário",
+      },
       {
         id: "m3q34_d",
         label: "Apagar os dados que não combinam com a mensagem",
@@ -867,14 +981,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q35_a",
-        label:
-          "Como apoio para compreender, respeitando as normas da sua instituição",
+        label: "Como apoio para compreender, seguindo as normas",
       },
       {
         id: "m3q35_b",
         label: "Para produzir todo o trabalho sem declarar nunca",
       },
-      { id: "m3q35_c", label: "Para responder a prova em tempo real por você" },
+      {
+        id: "m3q35_c",
+        label: "Para responder a prova em tempo real por você",
+      },
       {
         id: "m3q35_d",
         label: "Para copiar textos completos sem citar a autoria",
@@ -893,7 +1009,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q36_a",
-        label: "Uma que depende de dados recentes, como preços ou notícias",
+        label: "Uma que depende de dados recentes",
       },
       {
         id: "m3q36_b",
@@ -903,7 +1019,10 @@ export const MODULE_3_PT = [
         id: "m3q36_c",
         label: "Uma tarefa criativa de ficção sem dados externos",
       },
-      { id: "m3q36_d", label: "Uma operação matemática simples sem contexto" },
+      {
+        id: "m3q36_d",
+        label: "Uma conta simples",
+      },
     ],
     correctAnswer: "m3q36_a",
     topic: "Grounding",
@@ -919,13 +1038,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q37_a",
-        label: "Perguntar por seções concretas e pedir que cite a página",
+        label: "Perguntar por seções e verificar as respostas",
       },
       {
         id: "m3q37_b",
         label: "Repetir a mesma pergunta até ele responder rápido",
       },
-      { id: "m3q37_c", label: "Eliminar o documento e adivinhar o conteúdo" },
+      {
+        id: "m3q37_c",
+        label: "Eliminar o documento e adivinhar o conteúdo",
+      },
       {
         id: "m3q37_d",
         label: "Pedir um resumo inventado para economizar tempo",
@@ -944,13 +1066,16 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q38_a",
-        label: "Consultar voos ou lugares com dados atuais dentro do chat",
+        label: "Consultar voos ou lugares com dados atuais",
       },
       {
         id: "m3q38_b",
         label: "Substituir todas as suas decisões de viagem sem revisar",
       },
-      { id: "m3q38_c", label: "Evitar usar qualquer outro site para sempre" },
+      {
+        id: "m3q38_c",
+        label: "Evitar outros sites da internet",
+      },
       {
         id: "m3q38_d",
         label: "Compartilhar seus dados pessoais com todos os serviços",
@@ -970,11 +1095,11 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q39_a",
-        label: "Buscar uma fonte mais confiável que o respalde ou descartá-lo",
+        label: "Buscar fonte mais confiável ou descartá-lo",
       },
       {
         id: "m3q39_b",
-        label: "Citá-lo igual porque o dado parece muito convincente",
+        label: "Citá-lo igual, sem verificar",
       },
       {
         id: "m3q39_c",
@@ -999,8 +1124,7 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q40_a",
-        label:
-          "Deep Research com enfoque e fontes, e depois verificação das citações",
+        label: "Deep Research com foco e checagem das citações",
       },
       {
         id: "m3q40_b",
@@ -1012,7 +1136,7 @@ export const MODULE_3_PT = [
       },
       {
         id: "m3q40_d",
-        label: "Gerar imagens do tema em vez de investigar os dados",
+        label: "Gerar imagens do tema",
       },
     ],
     correctAnswer: "m3q40_a",

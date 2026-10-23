@@ -3,10 +3,22 @@ export const MODULE_1_EN = [
     id: "m1q1",
     question: "Why is it useful to give good prompts to a generative AI?",
     options: [
-      { id: "m1q1_a", label: "To make the answers longer and more detailed" },
-      { id: "m1q1_b", label: "To get useful answers that match what I need" },
-      { id: "m1q1_c", label: "To make the AI run faster without errors" },
-      { id: "m1q1_d", label: "To make the AI write the code for me" },
+      {
+        id: "m1q1_a",
+        label: "To make the answers longer and more detailed",
+      },
+      {
+        id: "m1q1_b",
+        label: "Useful answers that match what I need",
+      },
+      {
+        id: "m1q1_c",
+        label: "To make the AI run faster without errors",
+      },
+      {
+        id: "m1q1_d",
+        label: "To make the AI write the code for me",
+      },
     ],
     correctAnswer: "m1q1_b",
     topic: "Prompt Engineering",
@@ -22,7 +34,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q2_a",
-        label: "It has the Task, but it is missing the Role and Format",
+        label: "It has the Task but lacks the Role and Format",
       },
       {
         id: "m1q2_b",
@@ -32,7 +44,10 @@ export const MODULE_1_EN = [
         id: "m1q2_c",
         label: "It has the Format, but it is missing the Role and Task",
       },
-      { id: "m1q2_d", label: "It already includes all three RTF components" },
+      {
+        id: "m1q2_d",
+        label: "It already includes all three RTF components",
+      },
     ],
     correctAnswer: "m1q2_a",
     topic: "RTF Method",
@@ -45,20 +60,29 @@ export const MODULE_1_EN = [
     id: "m1q3",
     question: "What does the RTF method (Role, Task, Format) achieve?",
     options: [
-      { id: "m1q3_a", label: "It turns the instruction into a shorter prompt" },
+      {
+        id: "m1q3_a",
+        label: "It turns the instruction into a shorter prompt",
+      },
       {
         id: "m1q3_b",
-        label: "It structures the request to get a clear, organized answer",
+        label: "It structures the request for a clear answer",
       },
-      { id: "m1q3_c", label: "It removes the need for any extra context" },
-      { id: "m1q3_d", label: "It guarantees the AI answers without review" },
+      {
+        id: "m1q3_c",
+        label: "It removes the need for any extra context",
+      },
+      {
+        id: "m1q3_d",
+        label: "It guarantees the AI answers without review",
+      },
     ],
     correctAnswer: "m1q3_b",
     topic: "RTF Method",
     difficulty: "easy",
     source: "The Chisel",
     feedback:
-      "RTF orders the request into Role, Task and Format. Practice in the OVA.",
+      "RTF orders the request into Role, Task and Format. Practice in the OVA The Chisel.",
   },
   {
     id: "m1q4",
@@ -88,7 +112,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
-      "Option A defines role, task and format. The others are vague or mix topics.",
+      "The correct answer defines role, task and format. The others are vague or mix topics.",
   },
   {
     id: "m1q5",
@@ -97,14 +121,20 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q5_a",
-        label: "To state who it is for and the style of the summary",
+        label: "To state the audience and summary style",
       },
-      { id: "m1q5_b", label: "To split the article into smaller pieces" },
+      {
+        id: "m1q5_b",
+        label: "To split the article into smaller pieces",
+      },
       {
         id: "m1q5_c",
         label: "To change tools because the AI missed the topic",
       },
-      { id: "m1q5_d", label: "To use synonyms for the word summary" },
+      {
+        id: "m1q5_d",
+        label: "To use synonyms for the word summary",
+      },
     ],
     correctAnswer: "m1q5_a",
     topic: "RTF in Practice",
@@ -119,14 +149,20 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q6_a",
-        label: "A system that creates new content from what it has learned",
+        label: "A system that creates new content from data",
       },
-      { id: "m1q6_b", label: "A database that stores already written answers" },
+      {
+        id: "m1q6_b",
+        label: "A database that stores already written answers",
+      },
       {
         id: "m1q6_c",
         label: "A program that only classifies images and texts",
       },
-      { id: "m1q6_d", label: "A search engine that returns web pages" },
+      {
+        id: "m1q6_d",
+        label: "A search engine that returns web pages",
+      },
     ],
     correctAnswer: "m1q6_a",
     topic: "Generative AI",
@@ -139,10 +175,22 @@ export const MODULE_1_EN = [
     id: "m1q7",
     question: "What is a prompt?",
     options: [
-      { id: "m1q7_a", label: "The instruction or message you write to the AI" },
-      { id: "m1q7_b", label: "The automatic answer that the AI generates" },
-      { id: "m1q7_c", label: "The visual design of the tool interface" },
-      { id: "m1q7_d", label: "A type of file that the AI can open" },
+      {
+        id: "m1q7_a",
+        label: "The prompt you write to instruct the AI",
+      },
+      {
+        id: "m1q7_b",
+        label: "The automatic answer that the AI generates",
+      },
+      {
+        id: "m1q7_c",
+        label: "The visual design of the tool interface",
+      },
+      {
+        id: "m1q7_d",
+        label: "A type of file that the AI can open",
+      },
     ],
     correctAnswer: "m1q7_a",
     topic: "Prompt Basics",
@@ -158,11 +206,20 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q8_a",
-        label: "Because it adjusts the style and focus of the answer",
+        label: "Because it adjusts the style and the focus",
       },
-      { id: "m1q8_b", label: "Because it makes the AI always answer shorter" },
-      { id: "m1q8_c", label: "Because it stops the AI from needing context" },
-      { id: "m1q8_d", label: "Because it is required for the AI to work" },
+      {
+        id: "m1q8_b",
+        label: "Because it makes the AI always answer shorter",
+      },
+      {
+        id: "m1q8_c",
+        label: "Because it stops the AI from needing context",
+      },
+      {
+        id: "m1q8_d",
+        label: "Because it is required for the AI to work",
+      },
     ],
     correctAnswer: "m1q8_a",
     topic: "RTF Method",
@@ -188,14 +245,17 @@ export const MODULE_1_EN = [
         id: "m1q9_c",
         label: "Choose another AI tool without understanding the issue",
       },
-      { id: "m1q9_d", label: "Ask again until the answer improves on its own" },
+      {
+        id: "m1q9_d",
+        label: "Ask again until the answer improves on its own",
+      },
     ],
     correctAnswer: "m1q9_a",
     topic: "Prompt Refinement",
     difficulty: "easy",
-    source: "The Hammer",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Refine the prompt by adding context. Practice in the Live Prompt Lab.",
+      "Refine the prompt by adding context. Practice with the guide Prompt Anatomy.",
   },
   {
     id: "m1q10",
@@ -204,7 +264,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q10_a",
-        label: '"Explain it with simple examples and everyday language."',
+        label: '"Explain with simple examples and everyday words."',
       },
       {
         id: "m1q10_b",
@@ -214,7 +274,10 @@ export const MODULE_1_EN = [
         id: "m1q10_c",
         label: '"Tell me about this topic and also about similar ones."',
       },
-      { id: "m1q10_d", label: '"Explain it as an advanced expert would."' },
+      {
+        id: "m1q10_d",
+        label: '"Explain it as an advanced expert would."',
+      },
     ],
     correctAnswer: "m1q10_a",
     topic: "Prompt Clarity",
@@ -226,48 +289,52 @@ export const MODULE_1_EN = [
   {
     id: "m1q11",
     question:
-      "A generative AI produces new text instead of only classifying data. What is the key difference?",
+      "Case: your boss asks for a summary of a 40-page report by tomorrow. Which request to the AI gives the most useful result?",
     options: [
       {
         id: "m1q11_a",
-        label: "It creates original content from learned patterns",
+        label: "Summarize the report in 5 bullets with key figures",
       },
       {
         id: "m1q11_b",
-        label: "It only copies and pastes texts that already exist online",
+        label: "Summarize the full report for today",
       },
-      { id: "m1q11_c", label: "It works only with spreadsheets" },
-      { id: "m1q11_d", label: "It does not need data to learn" },
+      {
+        id: "m1q11_c",
+        label: "Do what you can with the report, no limits or format",
+      },
+      {
+        id: "m1q11_d",
+        label: "Write something about the report for the boss",
+      },
     ],
     correctAnswer: "m1q11_a",
     topic: "Generative AI",
     difficulty: "easy",
     source: "What is AI and how it is changing the world",
     feedback:
-      "Generative AI produces new content (text, image, audio) based on learned patterns. Watch the topic video.",
+      "A good request sets format, length and what to include. 'Summarize' alone leaves the AI to improvise.",
   },
   {
     id: "m1q12",
-    question: "Which statement BEST describes generative AI?",
+    question:
+      "Case: a student copies a paragraph from AI into their assignment without checking it. What is the main mistake?",
     options: [
       {
         id: "m1q12_a",
-        label:
-          "It learns patterns from large volumes of data and generates new answers",
+        label: "Not verifying data or citations before using the text",
       },
       {
         id: "m1q12_b",
-        label:
-          "It is a search engine that only returns a list of internet links",
+        label: "Using AI to write at all",
       },
       {
         id: "m1q12_c",
-        label:
-          "It stores answers written by people and reuses them as they are",
+        label: "Writing too fast for the time available",
       },
       {
         id: "m1q12_d",
-        label: "It only translates texts from one language to another",
+        label: "Using too formal a tone in a school research assignment",
       },
     ],
     correctAnswer: "m1q12_a",
@@ -275,7 +342,7 @@ export const MODULE_1_EN = [
     difficulty: "easy",
     source: "What is AI and how it is changing the world",
     feedback:
-      "It learns from data and generates new content; it does not retrieve stored answers. Review the topic video.",
+      "AI can invent data with confidence. Before using a text, verify data and citations in the source.",
   },
   {
     id: "m1q13",
@@ -284,8 +351,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q13_a",
-        label:
-          "Understanding where its current capabilities and limits come from",
+        label: "Understanding its current capabilities and limits",
       },
       {
         id: "m1q13_b",
@@ -305,7 +371,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "What is AI and how it is changing the world",
     feedback:
-      "History explains why AI came to generate content and where its limits are. Review 'Beginnings of Artificial Intelligence'.",
+      "History explains why AI came to generate content and where its limits are. Review the video 'What is AI and how it is changing the world'.",
   },
   {
     id: "m1q14",
@@ -334,7 +400,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "What is AI and how it is changing the world",
     feedback:
-      "It generates and transforms text, but it does not guarantee truth or replace your judgment. Review topic 1.",
+      "It generates and transforms text, but it does not guarantee truth or replace your judgment. Review the video 'What is AI and how it is changing the world'.",
   },
   {
     id: "m1q15",
@@ -370,21 +436,23 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q16",
-    question:
-      "Before using a piece of data the AI gave you in a job, what is the most responsible step?",
+    question: "What should you know about recent data an AI gives you?",
     options: [
       {
         id: "m1q16_a",
-        label: "Verify it in a reliable source before using it",
+        label: "It may be outdated: ask for sources and dates",
       },
       {
         id: "m1q16_b",
-        label: "Use it anyway because the AI is almost never wrong",
+        label: "It always includes the latest events in the world",
       },
-      { id: "m1q16_c", label: "Copy it as is without reviewing it at all" },
+      {
+        id: "m1q16_c",
+        label: "It updates itself every minute",
+      },
       {
         id: "m1q16_d",
-        label: "Ask the same AI to confirm it and then trust it",
+        label: "It only describes what happened ten years ago, with no sources",
       },
     ],
     correctAnswer: "m1q16_a",
@@ -392,27 +460,35 @@ export const MODULE_1_EN = [
     difficulty: "easy",
     source: "The Chisel",
     feedback:
-      "You are responsible for the result: verify important data in reliable sources.",
+      "A model may not have the most recent information. For current data, ask for dated sources and verify them.",
   },
   {
     id: "m1q17",
-    question:
-      "Which three basic elements should a prompt include to get good results?",
+    question: "What should you do when the task is very large?",
     options: [
       {
         id: "m1q17_a",
-        label: "Role, task and format (or clear context)",
+        label: "Split it into steps and review each part",
       },
-      { id: "m1q17_b", label: "Greeting, emoji and farewell" },
-      { id: "m1q17_c", label: "Password, username and date" },
-      { id: "m1q17_d", label: "Topic, opinion and signature" },
+      {
+        id: "m1q17_b",
+        label: "Ask for it all at once, with no pauses",
+      },
+      {
+        id: "m1q17_c",
+        label: "Ask it to decide when to stop",
+      },
+      {
+        id: "m1q17_d",
+        label: "Write it in capitals so it does not get lost",
+      },
     ],
     correctAnswer: "m1q17_a",
     topic: "Prompt Fundamentals",
     difficulty: "easy",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Role (who the AI is), task (what you want) and format (how you want it). Review the Prompt Anatomy guide.",
+      "Splitting into steps reduces errors and lets you review each part. Review the Prompt Anatomy guide.",
   },
   {
     id: "m1q18",
@@ -426,8 +502,14 @@ export const MODULE_1_EN = [
         id: "m1q18_b",
         label: "So the AI writes more text without any meaning",
       },
-      { id: "m1q18_c", label: "So the AI takes less time to respond" },
-      { id: "m1q18_d", label: "So you do not have to state the task at all" },
+      {
+        id: "m1q18_c",
+        label: "So the AI takes less time to respond",
+      },
+      {
+        id: "m1q18_d",
+        label: "So you do not have to state the task at all",
+      },
     ],
     correctAnswer: "m1q18_a",
     topic: "Prompt Structure",
@@ -466,7 +548,7 @@ export const MODULE_1_EN = [
     difficulty: "easy",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
-      "A defines topic, format and audience; the others are vague. Review 'How to Create Effective Prompts'.",
+      "The correct prompt defines topic, format and audience; the others are vague. Review 'How to Create Effective Prompts'.",
   },
   {
     id: "m1q20",
@@ -475,11 +557,20 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q20_a",
-        label: "The output format: a table with specific columns",
+        label: "The output format: a table with columns",
       },
-      { id: "m1q20_b", label: "That it should respond as fast as possible" },
-      { id: "m1q20_c", label: "Only the first letter of each idea" },
-      { id: "m1q20_d", label: "That it should not use numbers or details" },
+      {
+        id: "m1q20_b",
+        label: "That it should respond as fast as possible",
+      },
+      {
+        id: "m1q20_c",
+        label: "Only the first letter of each idea",
+      },
+      {
+        id: "m1q20_d",
+        label: "That it should not use numbers or details",
+      },
     ],
     correctAnswer: "m1q20_a",
     topic: "Output Format",
@@ -491,56 +582,85 @@ export const MODULE_1_EN = [
   {
     id: "m1q21",
     question:
-      "You will share the answer with elementary school students. What should you specify?",
+      "You need a three-line answer for a mobile chat. What should you specify?",
     options: [
       {
         id: "m1q21_a",
-        label: "The audience and the appropriate language level",
+        label: "The maximum length you need",
       },
-      { id: "m1q21_b", label: "The background color of the tool" },
-      { id: "m1q21_c", label: "The brand of your computer" },
-      { id: "m1q21_d", label: "The language of the operating system" },
+      {
+        id: "m1q21_b",
+        label: "The background color of the tool",
+      },
+      {
+        id: "m1q21_c",
+        label: "The brand of your computer",
+      },
+      {
+        id: "m1q21_d",
+        label: "The language of the operating system",
+      },
     ],
     correctAnswer: "m1q21_a",
     topic: "Audience",
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "Stating the audience (children) and language level adjusts tone and complexity.",
+      "Stating the length (three lines) avoids long answers that do not fit the chat.",
   },
   {
     id: "m1q22",
-    question:
-      "The first answer is not what you want. What is the best strategy?",
+    question: "What helps get better results when the AI has little context?",
     options: [
       {
         id: "m1q22_a",
-        label: "Adjust the prompt with more detail and ask again",
+        label: "Ask it to ask you questions before answering",
       },
-      { id: "m1q22_b", label: "Give up because the AI is not good for this" },
-      { id: "m1q22_c", label: "Repeat the same prompt many times in a row" },
-      { id: "m1q22_d", label: "Switch tools without changing the prompt" },
+      {
+        id: "m1q22_b",
+        label: "Have it answer faster without thinking",
+      },
+      {
+        id: "m1q22_c",
+        label: "Have it leave out any data from the request",
+      },
+      {
+        id: "m1q22_d",
+        label: "Have it change topic to be more creative and original",
+      },
     ],
     correctAnswer: "m1q22_a",
     topic: "Prompt Refinement",
     difficulty: "easy",
-    source: "The Hammer",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Iterating the prompt is part of the work. Practice in the Live Prompt Lab.",
+      "If it lacks context, the AI may guess. Asking it questions first avoids wrong answers. Practice in the OVA The Chisel.",
   },
   {
     id: "m1q23",
     question:
       "You want a short explanation: 'in no more than 100 words'. What are you using?",
     options: [
-      { id: "m1q23_a", label: "A length constraint in the prompt" },
-      { id: "m1q23_b", label: "An error that breaks the AI" },
-      { id: "m1q23_c", label: "A type of file" },
-      { id: "m1q23_d", label: "A password for the tool" },
+      {
+        id: "m1q23_a",
+        label: "A length constraint",
+      },
+      {
+        id: "m1q23_b",
+        label: "An error that breaks the AI",
+      },
+      {
+        id: "m1q23_c",
+        label: "A type of file",
+      },
+      {
+        id: "m1q23_d",
+        label: "A password for the tool",
+      },
     ],
     correctAnswer: "m1q23_a",
     topic: "Constraints",
-    difficulty: "medium",
+    difficulty: "easy",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
       "Constraints (length, tone, audience) narrow the answer to the desired result.",
@@ -548,41 +668,53 @@ export const MODULE_1_EN = [
   {
     id: "m1q24",
     question:
-      "Including an example of the expected result inside the prompt serves to…",
+      "You ask for the answer in numbered steps. What is the advantage?",
     options: [
       {
         id: "m1q24_a",
-        label: "Guide the AI with the style and structure you want to get",
+        label: "It makes each step easy to follow",
       },
       {
         id: "m1q24_b",
-        label: "Make the AI completely ignore the example you gave it",
+        label: "It makes the AI ignore the topic of the request",
       },
       {
         id: "m1q24_c",
-        label: "Force the AI to answer in a different language than yours",
+        label: "It forces the AI to answer in another language",
       },
       {
         id: "m1q24_d",
-        label: "Have no real effect on the result the AI delivers",
+        label: "It changes nothing in the result",
       },
     ],
     correctAnswer: "m1q24_a",
     topic: "Examples in Prompts",
-    difficulty: "hard",
-    source: "The Hammer",
+    difficulty: "medium",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Giving an example (few-shot) helps the AI copy the expected style/format without guessing.",
+      "Numbered steps make the reasoning visible and let you fix one part without redoing everything.",
   },
   {
     id: "m1q25",
     question:
       "The text is for a formal report. What should you state in the prompt?",
     options: [
-      { id: "m1q25_a", label: "The tone: formal and professional" },
-      { id: "m1q25_b", label: "That it should use emojis and slang" },
-      { id: "m1q25_c", label: "That it should write like in a friends' chat" },
-      { id: "m1q25_d", label: "That it should omit all the details" },
+      {
+        id: "m1q25_a",
+        label: "The tone: formal, clear and professional",
+      },
+      {
+        id: "m1q25_b",
+        label: "That it should use emojis and slang",
+      },
+      {
+        id: "m1q25_c",
+        label: "That it should write like in a friends' chat",
+      },
+      {
+        id: "m1q25_d",
+        label: "That it should omit all the details",
+      },
     ],
     correctAnswer: "m1q25_a",
     topic: "Prompt Tone",
@@ -622,25 +754,25 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q27",
-    question:
-      "What is the difference between asking only the task and asking role + task?",
+    question: "What does a style example add inside a prompt?",
     options: [
       {
         id: "m1q27_a",
-        label: "The role guides the focus and style of the answer",
+        label:
+          "It shows the tone and form you want without copying the content",
       },
       {
         id: "m1q27_b",
         label:
-          "There is no real difference between asking role or only the task",
+          "It forces the AI to copy the example word for word, changing nothing",
       },
       {
         id: "m1q27_c",
-        label: "The role makes the AI answer with less detail than before",
+        label: "It makes the AI answer with less detail than before",
       },
       {
         id: "m1q27_d",
-        label: "The role completely replaces the task you asked for",
+        label: "It replaces the task you asked the AI for",
       },
     ],
     correctAnswer: "m1q27_a",
@@ -648,31 +780,29 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "The role ('act as…') gives focus; the task says what to do. Together they improve the result.",
+      "A style example conveys tone and form better than a description. Use it without asking for copying.",
   },
   {
     id: "m1q28",
     question:
-      "You want a summary for management. Which prompt is MOST appropriate?",
+      "You want the AI to use only the text you paste and tell you if something is missing. Which request works?",
     options: [
       {
         id: "m1q28_a",
-        label:
-          '"Summarize this report in 5 executive bullets for non-technical management"',
+        label: "Use only the text I pasted and tell me if anything is missing",
       },
       {
         id: "m1q28_b",
         label:
-          '"Summarize this in whatever way you think is best and with no limits"',
+          "Fill in what is missing with whatever you know from the internet",
       },
       {
         id: "m1q28_c",
-        label:
-          '"Write a lot of text about the report and all its technical details"',
+        label: "Invent similar examples to illustrate the text",
       },
       {
         id: "m1q28_d",
-        label: '"Translate the report into another language so it is clearer"',
+        label: "Summarize without reading the text, however you like",
       },
     ],
     correctAnswer: "m1q28_a",
@@ -680,7 +810,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "A defines format (bullets), length (5) and audience (management). It is the most useful and clear.",
+      "Limiting the AI to the text you give prevents invented data. Asking it to flag what is missing is key.",
   },
   {
     id: "m1q29",
@@ -689,8 +819,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q29_a",
-        label:
-          '"Generate 10 campaign ideas for a local coffee shop, close tone, in bullets"',
+        label: '"Generate 10 campaign ideas for a coffee shop, in bullets"',
       },
       {
         id: "m1q29_b",
@@ -709,9 +838,9 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q29_a",
     topic: "Prompt Application",
     difficulty: "easy",
-    source: "The Hammer",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
-      "A specifies amount, context, tone and format: that focuses the ideas on what you need.",
+      "The correct prompt specifies amount, context and format: that focuses the ideas on what you need.",
   },
   {
     id: "m1q30",
@@ -720,8 +849,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q30_a",
-        label:
-          '"Explain it step by step, with an example in each step and simple language"',
+        label: '"Explain step by step, with one example per step"',
       },
       {
         id: "m1q30_b",
@@ -739,30 +867,30 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q30_a",
     topic: "Prompt Application",
     difficulty: "medium",
-    source: "The Hammer",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Asking for steps, examples and simple language produces a clearer, more applicable explanation.",
   },
   {
     id: "m1q31",
-    question: "What is a common mistake when writing prompts?",
+    question: "What should you watch when sharing a prompt with a colleague?",
     options: [
       {
         id: "m1q31_a",
-        label: "Asking vaguely without goal, audience or format",
+        label: "Removing personal and sensitive data before sharing it",
       },
       {
         id: "m1q31_b",
         label:
-          "Clearly stating the role the artificial intelligence should take",
+          "Also pasting your passwords and access details so they can reproduce it",
       },
       {
         id: "m1q31_c",
-        label: "Clarifying the exact format and length you expect to receive",
+        label: "Sharing it without reviewing the answer it gave",
       },
       {
         id: "m1q31_d",
-        label: "Giving a concrete example of the result you want to get",
+        label: "Sending it as if the answer were your own work",
       },
     ],
     correctAnswer: "m1q31_a",
@@ -770,7 +898,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
-      "Vagueness is the most common mistake: without goal, audience or format the AI guesses.",
+      "A prompt may contain other people's data. Anonymize it before sharing.",
   },
   {
     id: "m1q32",
@@ -796,7 +924,7 @@ export const MODULE_1_EN = [
     ],
     correctAnswer: "m1q32_a",
     topic: "Prompt Structure",
-    difficulty: "hard",
+    difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
       "Less is more: include only what is relevant (task, context, format) to keep the goal clear.",
@@ -809,14 +937,23 @@ export const MODULE_1_EN = [
         id: "m1q33_a",
         label: "Save time and keep results consistent",
       },
-      { id: "m1q33_b", label: "Make the AI stop learning over time" },
-      { id: "m1q33_c", label: "Avoid having to review the results at all" },
-      { id: "m1q33_d", label: "Prevent adjusting the prompt afterwards" },
+      {
+        id: "m1q33_b",
+        label: "Make the AI memorize everything you write",
+      },
+      {
+        id: "m1q33_c",
+        label: "Avoid reviewing results",
+      },
+      {
+        id: "m1q33_d",
+        label: "Change the model without telling the team",
+      },
     ],
     correctAnswer: "m1q33_a",
     topic: "Reuse",
     difficulty: "medium",
-    source: "The Hammer",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Reusable templates save time and make results consistent; adjust them for each case.",
   },
@@ -827,15 +964,24 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q34_a",
-        label: "Compare and validate the information before deciding",
+        label: "Compare and validate the information",
       },
-      { id: "m1q34_b", label: "Choose the longest one without reading it" },
-      { id: "m1q34_c", label: "Trust the first one that comes out" },
-      { id: "m1q34_d", label: "Ask another AI which of the two it prefers" },
+      {
+        id: "m1q34_b",
+        label: "Choose the longest one without reading it",
+      },
+      {
+        id: "m1q34_c",
+        label: "Trust the first one that comes out",
+      },
+      {
+        id: "m1q34_d",
+        label: "Ask another AI which of the two it prefers",
+      },
     ],
     correctAnswer: "m1q34_a",
     topic: "Critical Evaluation",
-    difficulty: "hard",
+    difficulty: "medium",
     source: "The Chisel",
     feedback:
       "When answers diverge, validate the data and use your judgment. Not every answer is equally reliable.",
@@ -843,22 +989,31 @@ export const MODULE_1_EN = [
   {
     id: "m1q35",
     question:
-      "You are about to paste confidential company information into the AI. What should you do?",
+      "You want the AI to review its own answer before giving it to you. What do you ask?",
     options: [
       {
         id: "m1q35_a",
-        label: "Avoid sensitive data or anonymize it before using it",
+        label: "Critique its answer and point out doubtful data",
       },
-      { id: "m1q35_b", label: "Paste it anyway without any problem" },
-      { id: "m1q35_c", label: "Ask the AI to delete it afterwards" },
-      { id: "m1q35_d", label: "Share it only through a private chat" },
+      {
+        id: "m1q35_b",
+        label: "Rewrite it without changing anything at all",
+      },
+      {
+        id: "m1q35_c",
+        label: "Deliver it faster without reviewing it",
+      },
+      {
+        id: "m1q35_d",
+        label: "Send it to another person without telling you about the change",
+      },
     ],
     correctAnswer: "m1q35_a",
     topic: "Responsible Use",
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Do not share confidential data: anonymize or avoid sensitive information before asking the AI for help.",
+      "Asking for self-critique helps detect assumptions and doubtful data before you use the answer.",
   },
   {
     id: "m1q36",
@@ -885,7 +1040,7 @@ export const MODULE_1_EN = [
     ],
     correctAnswer: "m1q36_a",
     topic: "Critical Thinking",
-    difficulty: "hard",
+    difficulty: "medium",
     source: "What is AI and how it is changing the world",
     feedback:
       "AI can be biased: contrast, ask for other perspectives and validate. You bring the judgment.",
@@ -902,8 +1057,14 @@ export const MODULE_1_EN = [
         id: "m1q37_b",
         label: "Submit its output as your own without reviewing it",
       },
-      { id: "m1q37_c", label: "Copy it without citing any part of it" },
-      { id: "m1q37_d", label: "Use it to impersonate another person" },
+      {
+        id: "m1q37_c",
+        label: "Copy it without citing any part of it",
+      },
+      {
+        id: "m1q37_d",
+        label: "Use it to impersonate another person",
+      },
     ],
     correctAnswer: "m1q37_a",
     topic: "Ethics and Responsible Use",
@@ -949,14 +1110,16 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q39_a",
-        label:
-          "Recommended practice: it improves the result with each adjustment",
+        label: "Recommended: it improves with each adjustment",
       },
       {
         id: "m1q39_b",
         label: "Wrong practice: you have to get it right the first time",
       },
-      { id: "m1q39_c", label: "Forbidden practice in the tools" },
+      {
+        id: "m1q39_c",
+        label: "Forbidden practice in the tools",
+      },
       {
         id: "m1q39_d",
         label: "Optional, only if the first answer comes out wrong",
@@ -965,7 +1128,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1q39_a",
     topic: "Prompt Refinement",
     difficulty: "medium",
-    source: "The Hammer",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
       "Iterating is normal and effective: each prompt adjustment brings the answer closer to what you need.",
   },
@@ -977,7 +1140,7 @@ export const MODULE_1_EN = [
       {
         id: "m1q40_a",
         label:
-          '"Act as an executive assistant; write a formal reminder email for the meeting on Thursday at 10 a.m., cordial tone and subject included"',
+          "As an assistant, write a formal, friendly reminder email for Thursday's 10 a.m. meeting",
       },
       {
         id: "m1q40_b",
@@ -997,12 +1160,11 @@ export const MODULE_1_EN = [
     ],
     correctAnswer: "m1q40_a",
     topic: "RTF Application",
-    difficulty: "hard",
-    source: "The Hammer",
+    difficulty: "medium",
+    source: "Guide: Anatomy of a Prompt",
     feedback:
-      "A gathers role, task, context (date/time), tone, format/length and subject: a complete, professional prompt.",
+      "The correct prompt gathers role, task, context (date and time) and tone: the most complete of the four.",
   },
-
   {
     id: "m1e01",
     question:
@@ -1010,7 +1172,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e01_a",
-        label: "Sampling bias, starting in the training data",
+        label: "Historical representation bias in the data",
       },
       {
         id: "m1e01_b",
@@ -1028,30 +1190,30 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e01_a",
     topic: "AI Bias",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "OVA: The Mirror of Truth",
     feedback:
-      "The historical data did not represent the population, so the bias began in collection. Review the bias lab.",
+      "Historical data reflected a mostly male hiring history: the bias comes from the data, not the algorithm. Review the bias lab.",
   },
   {
     id: "m1e02",
     question:
-      "An AI gives a diagnosis that contradicts your professional judgment. How do you act?",
+      "An AI recommends a purchase and you don't know why. What should you ask for?",
     options: [
       {
         id: "m1e02_a",
-        label: "I question the AI and consult other experts",
+        label: "That it explains the criteria behind its recommendation",
       },
       {
         id: "m1e02_b",
-        label: "I accept the AI because it is smarter",
+        label: "That it only shows the lowest price",
       },
       {
         id: "m1e02_c",
-        label: "I let the AI decide the treatment",
+        label: "That it decides for you without asking or explaining anything",
       },
       {
         id: "m1e02_d",
-        label: "I restart the system and ask again",
+        label: "That it ignores your previous preferences",
       },
     ],
     correctAnswer: "m1e02_a",
@@ -1059,36 +1221,36 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "Video: Ethical AI: Principles and Practice",
     feedback:
-      "Do not fall for automation bias: your professional judgment is irreplaceable.",
+      "Asking for the criteria lets you judge whether the recommendation suits you. Review the ethics guide.",
   },
   {
     id: "m1e03",
     question:
-      "A bank rejects a loan with AI and does not explain why. Which principle is violated?",
+      "A bank's chatbot gives invented interest rates with full confidence. Which principle is violated?",
     options: [
       {
         id: "m1e03_a",
-        label: "Transparency and explainability of the decision",
+        label: "Truthfulness: verify data and do not invent it",
       },
       {
         id: "m1e03_b",
-        label: "Privacy, by hiding the use of the AI",
+        label: "The chatbot's response speed",
       },
       {
         id: "m1e03_c",
-        label: "The speed of the decision process",
+        label: "The bank's popularity among its customers",
       },
       {
         id: "m1e03_d",
-        label: "Efficiency, by using human analysts",
+        label: "The cost of the customer service line, all day long",
       },
     ],
     correctAnswer: "m1e03_a",
     topic: "Transparency",
     difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "People have the right to understand automatic decisions that affect them. Review the code of ethics.",
+      "Truthfulness requires verifying every figure before sharing it. AI can invent with confidence. Review the ethics guide.",
   },
   {
     id: "m1e04",
@@ -1097,7 +1259,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e04_a",
-        label: "Automation bias: they trusted without critical review",
+        label: "Automation bias: trusted without review",
       },
       {
         id: "m1e04_b",
@@ -1115,9 +1277,9 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e04_a",
     topic: "Automation Bias",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "OVA: The Mirror of Truth",
     feedback:
-      "Automation bias is trusting the machine too much. Keep active supervision.",
+      "Automation bias is trusting the machine too much. Keep active supervision. Practice in the OVA The Mirror of Truth.",
   },
   {
     id: "m1e05",
@@ -1126,48 +1288,50 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e05_a",
-        label: "Conformity assessment and human supervision",
+        label: "Conformity assessment and human oversight",
       },
       {
         id: "m1e05_b",
-        label: "A total ban on using AI in that case",
+        label: "Publishing a usage statement on the website only",
       },
       {
         id: "m1e05_c",
-        label: "Voluntary registration with no obligations",
+        label: "A single audit at product launch",
       },
       {
         id: "m1e05_d",
-        label: "Paying an annual fee to use it",
+        label: "Registering on a website without assessing risks",
       },
     ],
     correctAnswer: "m1e05_a",
     topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    difficulty: "medium",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "High-risk systems require transparency, documentation and human supervision. Review the regulatory framework.",
+      "High-risk systems require transparency, documentation and human supervision. Review the ethics guide. Regulation (EU) 2026/1744 has been in force since 27 July 2026; its high-risk obligations for standalone systems apply from December 2027.",
   },
   {
     id: "m1e06",
     question:
-      "What are the 4 key ethical principles that guide the responsible use of AI?",
+      "What are the 5 key ethical principles that guide the responsible use of AI?",
     options: [
       {
         id: "m1e06_a",
-        label: "Transparency, fairness, accountability and privacy",
+        label:
+          "Transparency, fairness, accountability, privacy and truthfulness",
       },
       {
         id: "m1e06_b",
-        label: "Speed, savings, automation and efficiency",
+        label: "Speed, fairness, automation, privacy and truthfulness",
       },
       {
         id: "m1e06_c",
-        label: "Popularity, profit, scale and competition",
+        label: "Competition, fairness, scale, innovation and truthfulness",
       },
       {
         id: "m1e06_d",
-        label: "Innovation, investment, patent and ownership",
+        label:
+          "Transparency, profitability, accountability, privacy and efficiency",
       },
     ],
     correctAnswer: "m1e06_a",
@@ -1175,7 +1339,7 @@ export const MODULE_1_EN = [
     difficulty: "easy",
     source: "Video: Ethical AI: Principles and Practice",
     feedback:
-      "Transparency, fairness, accountability and privacy are the pillars. Review the principles video.",
+      "Transparency, fairness, accountability, privacy and truthfulness are the five pillars. Review the principles video.",
   },
   {
     id: "m1e07",
@@ -1183,7 +1347,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e07_a",
-        label: "The training data does not represent the whole population",
+        label: "Training data does not represent every person well",
       },
       {
         id: "m1e07_b",
@@ -1201,7 +1365,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e07_a",
     topic: "Bias in AI",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "OVA: The Mirror of Truth",
     feedback:
       "Sampling bias comes from unrepresentative data. Practice in the bias lab.",
   },
@@ -1211,8 +1375,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e08_a",
-        label:
-          "Training labels carry the prejudices of the people who create them",
+        label: "Training labels carry the prejudices of their creators",
       },
       {
         id: "m1e08_b",
@@ -1230,7 +1393,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e08_a",
     topic: "Bias in AI",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "OVA: The Mirror of Truth",
     feedback:
       "If the labeler has biases, the model learns them. Review the bias lab.",
   },
@@ -1258,8 +1421,8 @@ export const MODULE_1_EN = [
     ],
     correctAnswer: "m1e09_a",
     topic: "Bias Mitigation",
-    difficulty: "hard",
-    source: "OVA: Lab: Detect the Bias",
+    difficulty: "medium",
+    source: "OVA: The Mirror of Truth",
     feedback:
       "When bias is detected, stop, document and correct. Practice in the bias lab.",
   },
@@ -1269,7 +1432,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e10_a",
-        label: "That automatic decisions can be justified to people",
+        label: "That automatic decisions can be justified to any person",
       },
       {
         id: "m1e10_b",
@@ -1287,31 +1450,30 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e10_a",
     topic: "Explainability",
     difficulty: "medium",
-    source: "PDF: Code of Ethics for AI Use",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Explainability lets you justify decisions to the people affected. Review the code of ethics.",
+      "Explainability lets you justify decisions to the people affected. Review the ethics guide.",
   },
   {
     id: "m1e11",
     question:
-      "A medical AI suggests a treatment. What is the best supervision practice?",
+      "What should a hospital record when it uses AI to support a clinical decision?",
     options: [
       {
         id: "m1e11_a",
-        label:
-          "A professional validates the suggestion before applying it to the patient",
+        label: "Who reviewed the suggestion and what they decided",
       },
       {
         id: "m1e11_b",
-        label: "Applying the recommended treatment without any review at all",
+        label: "Only the software's commercial name",
       },
       {
         id: "m1e11_c",
-        label: "Discarding the AI because it can never be useful in health",
+        label: "How fast the AI responded",
       },
       {
         id: "m1e11_d",
-        label: "Letting the patient decide without consulting anyone",
+        label: "Nothing, because the AI system needs no record of any kind",
       },
     ],
     correctAnswer: "m1e11_a",
@@ -1319,7 +1481,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "Video: Ethical AI: Principles and Practice",
     feedback:
-      "In critical areas, a professional validates the final decision. Review the principles video.",
+      "Recording who reviewed and decided allows auditing and assigns responsibility. Review the ethics guide.",
   },
   {
     id: "m1e12",
@@ -1327,7 +1489,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e12_a",
-        label: "Building data protection in from the very start of the system",
+        label: "Building data protection in from the design stage",
       },
       {
         id: "m1e12_b",
@@ -1345,65 +1507,67 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e12_a",
     topic: "Privacy by Design",
     difficulty: "medium",
-    source: "PDF: AI Privacy Manual",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Privacy is designed in from the start, not added at the end. Review the privacy manual.",
+      "Privacy is designed in from the start, not added at the end. Review the Privacy guide.",
   },
   {
     id: "m1e13",
-    question: "How are AI systems classified by risk level (EU)?",
+    question:
+      "An AI system stores a patient's data without consent. Which principle is breached?",
     options: [
       {
         id: "m1e13_a",
-        label: "Unacceptable, high, limited and minimal risk",
+        label: "Privacy: processing data only with consent",
       },
       {
         id: "m1e13_b",
-        label: "Small, medium, large and gigantic risk",
+        label: "Server speed and storage capacity",
       },
       {
         id: "m1e13_c",
-        label: "Technical, human and financial risk only",
+        label: "Software popularity among students",
       },
       {
         id: "m1e13_d",
-        label: "Public, private and confidential risk only",
+        label: "License, support and full infrastructure cost",
       },
     ],
     correctAnswer: "m1e13_a",
     topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    difficulty: "medium",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "The EU distinguishes unacceptable, high, limited and minimal risk. Review the code of ethics.",
+      "Personal data requires consent and protection. Review the ethics guide.",
   },
   {
     id: "m1e14",
-    question: "A high-risk AI system must, among other things…",
+    question:
+      "A system scores citizens' behavior and uses that score to limit their public services. What risk category does it fall into?",
     options: [
       {
         id: "m1e14_a",
-        label: "Be documented, evaluated and have human supervision",
+        label: "Unacceptable: prohibited under EU rules",
       },
       {
         id: "m1e14_b",
-        label: "Work with no registration or evaluation of any kind",
+        label: "High, with a conformity assessment",
       },
       {
         id: "m1e14_c",
-        label: "Operate only at night to consume less energy",
+        label: "Limited, it only has to disclose it is AI",
       },
       {
         id: "m1e14_d",
-        label: "Publish all of its code openly as a mandatory rule",
+        label: "Minimal, with no specific obligations",
       },
     ],
     correctAnswer: "m1e14_a",
     topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    difficulty: "medium",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "High risk requires documentation, evaluation and human supervision. Review the framework.",
+      "Social scoring of citizens is prohibited: it is unacceptable risk. Review the ethics guide.",
   },
   {
     id: "m1e15",
@@ -1411,8 +1575,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e15_a",
-        label:
-          "Systematically checking whether the model treats any group unfairly",
+        label: "Checking whether the model treats any group unfairly",
       },
       {
         id: "m1e15_b",
@@ -1430,7 +1593,7 @@ export const MODULE_1_EN = [
     correctAnswer: "m1e15_a",
     topic: "Audit",
     difficulty: "medium",
-    source: "OVA: Lab: Detect the Bias",
+    source: "OVA: The Mirror of Truth",
     feedback:
       "Auditing bias means checking whether any group ends up harmed. Practice in the bias lab.",
   },
@@ -1440,8 +1603,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e16_a",
-        label:
-          "Impersonating a person's identity with generated voice or image",
+        label: "Impersonating someone's voice, image or identity",
       },
       {
         id: "m1e16_b",
@@ -1466,31 +1628,31 @@ export const MODULE_1_EN = [
   {
     id: "m1e17",
     question:
-      "An educational chatbot starts giving inappropriate answers to minors. What do you do?",
+      "An educational chatbot for primary school children must protect them. Which policy is appropriate?",
     options: [
       {
         id: "m1e17_a",
-        label: "Pause the system, investigate and add content safeguards",
+        label: "Limit content by age and review with an adult",
       },
       {
         id: "m1e17_b",
-        label: "Let it keep running and warn only if someone complains",
+        label: "Let it answer without limits so it censors nothing",
       },
       {
         id: "m1e17_c",
-        label: "Remove moderation so that it answers with more freedom",
+        label: "Collect more data about minors to personalize better",
       },
       {
         id: "m1e17_d",
-        label: "Blame the minors for the way they use the system",
+        label: "Hide from parents how the system works",
       },
     ],
     correctAnswer: "m1e17_a",
     topic: "Safeguards",
-    difficulty: "hard",
-    source: "OVA: Lab: Ethical Dilemmas",
+    difficulty: "medium",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "With minors, pause, investigate and strengthen content safeguards. Review the dilemmas lab.",
+      "With minors, the policy must limit content, review answers with an adult and not collect extra data. Review the ethics guide.",
   },
   {
     id: "m1e18",
@@ -1527,7 +1689,7 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1e19_a",
-        label: "Transparency obligations, without being high risk",
+        label: "Transparency obligations, like telling users it's AI",
       },
       {
         id: "m1e19_b",
@@ -1544,38 +1706,39 @@ export const MODULE_1_EN = [
     ],
     correctAnswer: "m1e19_a",
     topic: "Regulatory Framework",
-    difficulty: "hard",
-    source: "PDF: Code of Ethics for AI Use",
+    difficulty: "medium",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Limited risk requires transparency, not prohibition. Review the code of ethics.",
+      "Limited risk requires transparency, not prohibition. Review the ethics guide.",
   },
   {
     id: "m1e20",
     question:
-      "An employee uses AI to decide about people without leaving a trace. What is breached?",
+      "An employee makes decisions about people with AI without declaring it or letting anyone review them. Which principle is breached?",
     options: [
       {
         id: "m1e20_a",
-        label: "The traceability and the accountability of the decisions",
+        label: "Accountability: a person must answer for the decision",
       },
       {
         id: "m1e20_b",
-        label: "The speed of the process for settling that single case",
+        label: "Speed: settling the case in the least time",
       },
       {
         id: "m1e20_c",
-        label: "The popularity of the system among the internal users",
+        label: "Popularity: the system being liked by users",
       },
       {
         id: "m1e20_d",
-        label: "The operating cost of keeping that tool active",
+        label:
+          "Savings: reducing the operating cost of keeping the tool active",
       },
     ],
     correctAnswer: "m1e20_a",
     topic: "Accountability",
-    difficulty: "hard",
-    source: "OVA: Lab: Ethical Dilemmas",
+    difficulty: "medium",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Without traceability there is no possible accountability. Review the ethical dilemmas lab.",
+      "Without a person answering for the decision there is no accountability. Review the ethics guide.",
   },
 ];

@@ -215,7 +215,7 @@ export const EN_M1_ETICA = {
   edition: "Teaching guide 2026",
   art: null,
   lead: "Using AI well is not only about getting good results: it is about knowing when to trust, when to verify, and when to say you used it. This guide gathers the principles that support responsible use at school, at work and in everyday life.",
-  kpis: [["5", "principles of responsible use"], ["3", "questions before publishing"], ["1982", "copyright law in Colombia (Law 23)"]],
+  kpis: [["5", "principles of responsible use"], ["5", "questions before publishing"], ["1982", "copyright law in Colombia (Law 23)"]],
   sections: [
     {
       h: "Why ethics matters in AI",
@@ -277,6 +277,7 @@ ${box("warn", "Before you share something", "<ul><li>Can I open the original sou
   "A responsible person reviewed and approved the final decision.",
 ])}`,
     },
+    { h: "Annex: risk, explainability, privacy and bias", html: "<p><strong>1. Risk classification (European Union):</strong> unacceptable (prohibited, such as social scoring of people), high (hiring, credit, education or health: requires conformity assessment and human oversight), limited (must disclose that it is AI) and minimal (no specific obligations). <em>Status:</em> Regulation (EU) 2026/1744 (digital omnibus) entered into force on 27 July 2026. High-risk obligations apply from December 2027 for standalone systems and from August 2028 for systems embedded in products.</p><p><strong>2. Explainability:</strong> when an AI decides about a person, that person must be able to understand the decision and challenge it.</p><p><strong>3. Privacy by design:</strong> decide which data you need before collecting it; minimize, anonymize and limit access.</p><p><strong>4. Types of bias:</strong> sampling (unrepresentative data), historical (data that reflects past discrimination), labeling (prejudices of whoever labels) and automation (trusting without review).</p>" },
   ],
   closing: `${checks([
     "I declare when I use AI and what I reviewed myself.",

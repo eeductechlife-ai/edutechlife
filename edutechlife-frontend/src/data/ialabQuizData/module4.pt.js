@@ -6,11 +6,20 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q1_a",
-        label: "Trabalha só com seus documentos e cita cada fonte",
+        label: "Trabalha só com os seus documentos",
       },
-      { id: "m4q1_b", label: "Não consegue ler PDFs acadêmicos" },
-      { id: "m4q1_c", label: "Funciona sem conexão com a internet" },
-      { id: "m4q1_d", label: "Processa somente textos em inglês" },
+      {
+        id: "m4q1_b",
+        label: "Não consegue ler PDFs acadêmicos",
+      },
+      {
+        id: "m4q1_c",
+        label: "Funciona sem conexão com a internet",
+      },
+      {
+        id: "m4q1_d",
+        label: "Processa somente textos em inglês",
+      },
     ],
     correctAnswer: "m4q1_a",
     topic: "Gemini Notebook",
@@ -26,11 +35,20 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q2_a",
-        label: "Artigos e dados confiáveis; deixo de fora blogs de opinião",
+        label: "Artigos revisados e dados confiáveis",
       },
-      { id: "m4q2_b", label: "Todas as fontes porque há espaço de sobra" },
-      { id: "m4q2_c", label: "Só os blogs pela linguagem simples" },
-      { id: "m4q2_d", label: "Só as notícias por serem as mais recentes" },
+      {
+        id: "m4q2_b",
+        label: "Todas as fontes porque há espaço de sobra",
+      },
+      {
+        id: "m4q2_c",
+        label: "Só os blogs pela linguagem simples",
+      },
+      {
+        id: "m4q2_d",
+        label: "Só as notícias por serem as mais recentes",
+      },
     ],
     correctAnswer: "m4q2_a",
     topic: "Gemini Notebook",
@@ -44,10 +62,22 @@ export const MODULE_4_PT = [
     question:
       "Você tem uma viagem de ônibus e quer revisar 3 PDFs. Qual é a melhor opção com o Gemini Notebook?",
     options: [
-      { id: "m4q3_a", label: "Gerar um Audio Overview e ouvi-lo na viagem" },
-      { id: "m4q3_b", label: "Ler os PDFs completos no ônibus" },
-      { id: "m4q3_c", label: "Pedir um resumo geral a outro chat" },
-      { id: "m4q3_d", label: "Esperar chegar em casa para ler" },
+      {
+        id: "m4q3_a",
+        label: "Gerar um Audio Overview em áudio",
+      },
+      {
+        id: "m4q3_b",
+        label: "Ler os PDFs completos no ônibus",
+      },
+      {
+        id: "m4q3_c",
+        label: "Pedir um resumo geral a outro chat",
+      },
+      {
+        id: "m4q3_d",
+        label: "Esperar chegar em casa para ler",
+      },
     ],
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
@@ -63,11 +93,20 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q4_a",
-        label: "Comparar a citação com o original e confirmar a nuance",
+        label: "Comparar a citação com o original",
       },
-      { id: "m4q4_b", label: "Confiar na citação sem conferir o original" },
-      { id: "m4q4_c", label: "Apagar o PDF porque a IA já o interpretou" },
-      { id: "m4q4_d", label: "Traduzir a resposta para conferir a qualidade" },
+      {
+        id: "m4q4_b",
+        label: "Confiar na citação sem conferir o original",
+      },
+      {
+        id: "m4q4_c",
+        label: "Apagar o PDF",
+      },
+      {
+        id: "m4q4_d",
+        label: "Traduzir a resposta para conferir a qualidade",
+      },
     ],
     correctAnswer: "m4q4_a",
     topic: "Precisão",
@@ -81,12 +120,18 @@ export const MODULE_4_PT = [
     question:
       "Como você organiza melhor as fontes no Gemini Notebook para pesquisar?",
     options: [
-      { id: "m4q5_a", label: "Enviar todas as fontes sem ordená-las" },
+      {
+        id: "m4q5_a",
+        label: "Enviar todas as fontes sem ordená-las",
+      },
       {
         id: "m4q5_b",
         label: "Escolher fontes relevantes e agrupá-las por tema",
       },
-      { id: "m4q5_c", label: "Enviar só resumos, nunca documentos completos" },
+      {
+        id: "m4q5_c",
+        label: "Enviar só resumos, nunca documentos completos",
+      },
       {
         id: "m4q5_d",
         label: "Misturar fontes acadêmicas com blogs sem distinção",
@@ -103,10 +148,22 @@ export const MODULE_4_PT = [
     id: "m4q6",
     question: "Se duas das suas fontes se contradizem, o que você faz?",
     options: [
-      { id: "m4q6_a", label: "Analisa as duas e documenta a diferença" },
-      { id: "m4q6_b", label: "Apaga as duas fontes e procura outras" },
-      { id: "m4q6_c", label: "Fica só com a mais recente" },
-      { id: "m4q6_d", label: "Ignora a contradição e segue adiante" },
+      {
+        id: "m4q6_a",
+        label: "Analise as duas fontes com cuidado",
+      },
+      {
+        id: "m4q6_b",
+        label: "Apaga as duas fontes e procura outras",
+      },
+      {
+        id: "m4q6_c",
+        label: "Fica só com a mais recente",
+      },
+      {
+        id: "m4q6_d",
+        label: "Ignora a contradição e segue adiante",
+      },
     ],
     correctAnswer: "m4q6_a",
     topic: "Análise Crítica",
@@ -120,10 +177,22 @@ export const MODULE_4_PT = [
     question:
       "O que você deve sempre fazer quando o Gemini Notebook responde com citações?",
     options: [
-      { id: "m4q7_a", label: "Verificar as citações na fonte original" },
-      { id: "m4q7_b", label: "Copiar a resposta sem conferir" },
-      { id: "m4q7_c", label: "Apagar os documentos originais" },
-      { id: "m4q7_d", label: "Traduzir a resposta para validá-la" },
+      {
+        id: "m4q7_a",
+        label: "Verificar as citações na original",
+      },
+      {
+        id: "m4q7_b",
+        label: "Copiar a resposta sem conferir",
+      },
+      {
+        id: "m4q7_c",
+        label: "Apagar os documentos originais",
+      },
+      {
+        id: "m4q7_d",
+        label: "Traduzir a resposta para validá-la",
+      },
     ],
     correctAnswer: "m4q7_a",
     topic: "Verificação",
@@ -137,10 +206,22 @@ export const MODULE_4_PT = [
     question:
       "Uma equipe quer trabalhar com o Gemini Notebook no mesmo projeto. Qual é o melhor fluxo?",
     options: [
-      { id: "m4q8_a", label: "Cada um cria seu caderno e compartilha o link" },
-      { id: "m4q8_b", label: "Apenas um pergunta por toda a equipe" },
-      { id: "m4q8_c", label: "Cada um trabalha separado e compara no final" },
-      { id: "m4q8_d", label: "Eles se revezam usando um único computador" },
+      {
+        id: "m4q8_a",
+        label: "Um caderno compartilhado que a equipe edita",
+      },
+      {
+        id: "m4q8_b",
+        label: "Apenas um pergunta por toda a equipe",
+      },
+      {
+        id: "m4q8_c",
+        label: "Cada um trabalha separado e compara no final",
+      },
+      {
+        id: "m4q8_d",
+        label: "Eles se revezam usando um único computador",
+      },
     ],
     correctAnswer: "m4q8_a",
     topic: "Colaboração",
@@ -156,11 +237,20 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q9_a",
-        label: "Uma pergunta concreta que peça para citar suas fontes",
+        label: "Uma pergunta que peça citar fontes",
       },
-      { id: "m4q9_b", label: "Ler as dez fontes completas à mão" },
-      { id: "m4q9_c", label: "Pedir a análise a um chat sem suas fontes" },
-      { id: "m4q9_d", label: "Copiar o guia de estudos sem filtrar" },
+      {
+        id: "m4q9_b",
+        label: "Ler as dez fontes completas à mão",
+      },
+      {
+        id: "m4q9_c",
+        label: "Pedir a análise a um chat sem suas fontes",
+      },
+      {
+        id: "m4q9_d",
+        label: "Copiar o guia de estudos sem filtrar",
+      },
     ],
     correctAnswer: "m4q9_a",
     topic: "Gemini Notebook",
@@ -174,10 +264,22 @@ export const MODULE_4_PT = [
     question:
       "Ao gerar um Audio Overview, qual controle você tem sobre o resultado?",
     options: [
-      { id: "m4q10_a", label: "Orienta os temas e regera se não gostar" },
-      { id: "m4q10_b", label: "Não tem nenhum controle sobre o áudio" },
-      { id: "m4q10_c", label: "Escolhe a voz, o tom e escreve o roteiro" },
-      { id: "m4q10_d", label: "Só decide se coloca ou não música de fundo" },
+      {
+        id: "m4q10_a",
+        label: "Orienta os temas e regera se não gostar",
+      },
+      {
+        id: "m4q10_b",
+        label: "Não tem nenhum controle sobre o áudio",
+      },
+      {
+        id: "m4q10_c",
+        label: "Escreve o roteiro palavra por palavra",
+      },
+      {
+        id: "m4q10_d",
+        label: "Só decide se coloca ou não música de fundo",
+      },
     ],
     correctAnswer: "m4q10_a",
     topic: "Audio Overview",
@@ -205,7 +307,7 @@ export const MODULE_4_PT = [
       },
       {
         id: "m4q11_d",
-        label: "Traduz os documentos para outro idioma automaticamente",
+        label: "Traduz os documentos para outro idioma",
       },
     ],
     correctAnswer: "m4q11_a",
@@ -221,7 +323,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q12_a",
-        label: "Fontes de qualidade carregadas e organizadas no caderno",
+        label: "Fontes de qualidade carregadas e organizadas por tema",
       },
       {
         id: "m4q12_b",
@@ -250,13 +352,16 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q13_a",
-        label: "Artigos revisados por pares e datasets confiáveis do tema",
+        label: "Artigos revisados por pares e dados confiáveis",
       },
       {
         id: "m4q13_b",
         label: "Comentários soltos de redes sociais sem autor claro",
       },
-      { id: "m4q13_c", label: "Memes e publicações engraçadas sobre o tema" },
+      {
+        id: "m4q13_c",
+        label: "Memes e publicações engraçadas sobre o tema",
+      },
       {
         id: "m4q13_d",
         label: "Opiniões anônimas sem fonte nem data declarada",
@@ -276,8 +381,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q14_a",
-        label:
-          "Selecionar as mais relevantes e altamente confiáveis para o tema",
+        label: "Selecionar as fontes mais relevantes e mais confiáveis",
       },
       {
         id: "m4q14_b",
@@ -306,7 +410,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q15_a",
-        label: "Se um dado não está nas suas fontes, não aparecerá na resposta",
+        label: "Se um dado não está nas suas fontes, ele não aparece",
       },
       {
         id: "m4q15_b",
@@ -334,7 +438,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q16_a",
-        label: "Para condensar o essencial dos documentos e orientar a leitura",
+        label: "Para condensar o essencial e orientar a leitura completa",
       },
       {
         id: "m4q16_b",
@@ -363,7 +467,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q17_a",
-        label: "Uma síntese que integre várias fontes e cite cada contribuição",
+        label: "Uma síntese que cite a fonte exata de cada contribuição",
       },
       {
         id: "m4q17_b",
@@ -392,7 +496,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q18_a",
-        label: "Indica de qual documento saiu cada afirmação para verificar",
+        label: "Indica de qual documento foi tirada cada afirmação",
       },
       {
         id: "m4q18_b",
@@ -417,24 +521,23 @@ export const MODULE_4_PT = [
   {
     id: "m4q19",
     question:
-      "O Gemini Notebook cita uma fonte, mas a nuance não coincide com o original. O que faz?",
+      "O Gemini Notebook dá um número que não aparece em nenhum dos seus documentos. O que faz?",
     options: [
       {
         id: "m4q19_a",
-        label:
-          "Corrigir a nuance com o texto original e ajustar a sua conclusão",
+        label: "Buscar nos documentos e, sem fonte, não usar",
       },
       {
         id: "m4q19_b",
-        label: "Manter a resposta da IA e não revisar o original",
+        label: "Usar, porque parece confiável e veio de uma IA",
       },
       {
         id: "m4q19_c",
-        label: "Eliminar o documento do caderno para evitar conflitos",
+        label: "Citar o caderno como fonte e publicar assim",
       },
       {
         id: "m4q19_d",
-        label: "Perguntar de novo até ele dizer o que você esperava",
+        label: "Pedir que arredonde para parecer mais precisa",
       },
     ],
     correctAnswer: "m4q19_a",
@@ -442,7 +545,7 @@ export const MODULE_4_PT = [
     difficulty: "difícil",
     source: "O Grimório",
     feedback:
-      "A fonte manda: corrija a nuance e ajuste a conclusão. Pratique no laboratório.",
+      "Um número que não está nas suas fontes não é verificável: não o use até confirmar. Pratique no laboratório.",
   },
   {
     id: "m4q20",
@@ -451,12 +554,11 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q20_a",
-        label:
-          "Analisar as duas, documentar a diferença e buscar uma terceira fonte",
+        label: "Analisar as duas e documentar a diferença",
       },
       {
         id: "m4q20_b",
-        label: "Ficar com a mais recente e descartar a outra sem mais",
+        label: "Ficar com a mais recente",
       },
       {
         id: "m4q20_c",
@@ -480,7 +582,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q21_a",
-        label: "Uma conversa de áudio gerada a partir dos seus documentos",
+        label: "Uma conversa em áudio baseada nos seus documentos",
       },
       {
         id: "m4q21_b",
@@ -536,7 +638,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q23_a",
-        label: "Orienta o enfoque e pode regerar o resultado se não convencer",
+        label: "Orienta o foco e pode regerar a resposta, se quiser",
       },
       {
         id: "m4q23_b",
@@ -546,7 +648,10 @@ export const MODULE_4_PT = [
         id: "m4q23_c",
         label: "Escreve palavra por palavra o roteiro final do áudio",
       },
-      { id: "m4q23_d", label: "Só escolhe a música de fundo da introdução" },
+      {
+        id: "m4q23_d",
+        label: "Só escolhe a música de fundo da introdução",
+      },
     ],
     correctAnswer: "m4q23_a",
     topic: "Audio Overview",
@@ -561,8 +666,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q24_a",
-        label:
-          "Com fontes de qualidade e bem organizadas no caderno de trabalho",
+        label: "Com fontes de qualidade e bem organizadas",
       },
       {
         id: "m4q24_b",
@@ -570,7 +674,7 @@ export const MODULE_4_PT = [
       },
       {
         id: "m4q24_c",
-        label: "Com muitos documentos desordenados e sem relação ao tema",
+        label: "Com muitos documentos sem ordem",
       },
       {
         id: "m4q24_d",
@@ -591,7 +695,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q25_a",
-        label: "Ouvir e verificar que o conteúdo coincide com as suas fontes",
+        label: "Ouvir e verificar se coincide com suas fontes",
       },
       {
         id: "m4q25_b",
@@ -599,7 +703,7 @@ export const MODULE_4_PT = [
       },
       {
         id: "m4q25_c",
-        label: "Enviá-lo sem ouvir para não perder tempo revisando",
+        label: "Enviá-lo sem ouvir nem conferir",
       },
       {
         id: "m4q25_d",
@@ -619,8 +723,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q26_a",
-        label:
-          "Só as pessoas para quem você dá acesso ao compartilhar o caderno",
+        label: "Somente quem você autoriza ao compartilhar o caderno",
       },
       {
         id: "m4q26_b",
@@ -649,7 +752,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q27_a",
-        label: "Uma pergunta concreta que peça citar as fontes do caderno",
+        label: "Uma pergunta concreta que peça citar as fontes exatas",
       },
       {
         id: "m4q27_b",
@@ -678,7 +781,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q28_a",
-        label: "Revisar a fonte e ajustar a sua conclusão segundo a evidência",
+        label: "Revisar a fonte original e ajustar sua conclusão",
       },
       {
         id: "m4q28_b",
@@ -707,8 +810,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q29_a",
-        label:
-          "O caderno se limita às suas fontes; o chat geral usa o treinamento dele",
+        label: "O caderno se limita somente às fontes que você enviou",
       },
       {
         id: "m4q29_b",
@@ -736,8 +838,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q30_a",
-        label:
-          "Respostas mais confiáveis ao partir de fontes relevantes e seguras",
+        label: "Respostas mais confiáveis com fontes mais relevantes",
       },
       {
         id: "m4q30_b",
@@ -766,8 +867,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q31_a",
-        label:
-          "Uma análise comparativa que cite cada fonte e aponte diferenças",
+        label: "Análise comparativa que cite cada uma das fontes",
       },
       {
         id: "m4q31_b",
@@ -795,8 +895,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q32_a",
-        label:
-          "Curar fontes, analisar e sintetizar, e gerar um áudio para revisar",
+        label: "Curar as fontes, analisá-las e gerar um áudio resumido",
       },
       {
         id: "m4q32_b",
@@ -826,8 +925,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q33_a",
-        label:
-          "Que não contenha dados sensíveis e que o acesso seja o adequado",
+        label: "Que não contenha dados sensíveis e acesso adequado",
       },
       {
         id: "m4q33_b",
@@ -885,8 +983,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q35_a",
-        label:
-          "Que esse dado não está nos seus documentos e você deve buscar outra fonte",
+        label: "Que esse dado não está em nenhum dos seus documentos enviados",
       },
       {
         id: "m4q35_b",
@@ -951,7 +1048,7 @@ export const MODULE_4_PT = [
       },
       {
         id: "m4q37_b",
-        label: "Decidir de uma vez porque a IA quase nunca se engana",
+        label: "Decidir de uma vez",
       },
       {
         id: "m4q37_c",
@@ -975,8 +1072,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q38_a",
-        label:
-          "Fontes relevantes, bem organizadas e alinhadas ao objetivo do trabalho",
+        label: "Fontes relevantes, bem organizadas e atualizadas para o tema",
       },
       {
         id: "m4q38_b",
@@ -1004,8 +1100,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q39_a",
-        label:
-          "Converte as conclusões dos seus documentos num áudio para revisar",
+        label: "Converte as conclusões em áudio para você revisar",
       },
       {
         id: "m4q39_b",
@@ -1034,8 +1129,7 @@ export const MODULE_4_PT = [
     options: [
       {
         id: "m4q40_a",
-        label:
-          "Curar fontes, sintetizar com citações, verificar e gerar o Audio Overview",
+        label: "Selecionar fontes, sintetizar as ideias e gerar o áudio final",
       },
       {
         id: "m4q40_b",

@@ -34,18 +34,32 @@ const CONTENT_PT = {
           icon: "fa-brain",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Explicar com suas palavras o que é a IA generativa, o que ela faz bem e por que às vezes erra.",
         },
         {
           title: "O Cinzel do Artesão: O que é um Prompt?",
           icon: "fa-comments",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Escrever um pedido claro com a fórmula Papel + Tarefa + Formato e melhorá-lo até que sirva para você.",
         },
         {
-          title: "O Juramento do Guardião: Uso Responsável da IA",
+          title: "O Escudo do Guardião: O Que Você Não Deve Compartilhar",
+          icon: "fa-lock",
+          resources: 3,
+          duration: "20 min",
+          outcome:
+            "Decidir quais dados você nunca compartilha com uma IA e anonimizar um texto antes de colá-lo.",
+        },
+        {
+          title: "O Juramento do Guardião: Ética e Vieses",
           icon: "fa-shield-halved",
-          resources: 9,
-          duration: "30 min",
+          resources: 3,
+          duration: "20 min",
+          outcome:
+            "Identificar um viés em uma resposta de IA, aplicar três perguntas (é verdade? é justo? eu declaro?) e declarar quando usou IA.",
         },
       ],
     },
@@ -55,7 +69,7 @@ const CONTENT_PT = {
         title: "Os Fundamentos do Artesão: O que é IA Generativa?",
         description: "Entenda a ferramenta antes de usá-la",
         detailedDescription:
-          "Antes de pedir algo à IA, vale saber como ela funciona. Você verá o que é a IA generativa, por que ela responde com segurança mesmo quando erra, o que faz bem e quais são seus limites. Com essa base, você poderá usá-la com critério desde o primeiro dia, mesmo que nunca a tenha usado.",
+          "Antes de pedir algo à IA, vale saber como ela funciona. Você verá o que é a IA generativa, por que ela responde com segurança mesmo quando erra, o que faz bem e quais são seus limites. Com essa base, você poderá usá-la com critério desde o primeiro dia, mesmo que nunca a tenha usado. Você também verá como a IA começou, dos primeiros modelos até hoje, para entender de onde vêm seus limites.",
         duration: "20 min",
         format: "Video",
         icon: "fa-brain",
@@ -76,12 +90,25 @@ const CONTENT_PT = {
       },
       {
         id: 3,
-        title: "O Juramento do Guardião: Uso Responsável da IA",
-        description: "Verifique, proteja e declare",
+        title: "O Escudo do Guardião: O Que Você Não Deve Compartilhar",
+        description: "Proteja seus dados e os de outras pessoas",
         detailedDescription:
-          "Usar bem a IA também é saber quando não confiar nela. Você vai aprender a identificar vieses, conferir citações e números antes de usá-los, decidir quais dados pessoais nunca compartilha e declarar quando usou IA. São os hábitos que distinguem quem usa a IA de quem a usa com responsabilidade.",
-        duration: "30 min",
+          "Tudo o que você cola em uma IA sai do seu computador. Você vai aprender quais dados nunca compartilha (identidade, saúde, menores, senhas), como anonimizar um texto antes de colá-lo e o que fazer se já compartilhou algo sensível. Assim você protege a sua privacidade e a de outras pessoas.",
+        duration: "20 min",
         format: "Reading",
+        icon: "fa-lock",
+        badgeColor: "bg-emerald-100 text-emerald-800",
+        themeColor: "#0E7490",
+      },
+      {
+        id: 4,
+        title: "O Juramento do Guardião: Ética e Vieses",
+        description:
+          "Decida com critério, identifique vieses e declare seu uso",
+        detailedDescription:
+          "Ética é decidir bem mesmo quando ninguém obriga você. Você vai aprender três das cinco perguntas para cada resultado (é verdade? é justo? eu declaro?), a identificar viés em uma resposta e a declarar seu uso de IA. No fim, verá como a União Europeia classifica os sistemas de IA por risco. Você também aprenderá que se passar por alguém com IA é um uso não ético, e como proteger menores quando um sistema responde mal.",
+        duration: "20 min",
+        format: "Lab",
         icon: "fa-shield-halved",
         badgeColor: "bg-emerald-100 text-emerald-800",
         themeColor: "#0E7490",
@@ -99,31 +126,70 @@ const CONTENT_PT = {
           "Um prompt bem forjado é sua ferramenta mais poderosa: aprenda a escrever instruções que a IA entende de primeira.",
       },
       3: {
-        objective: "🛡️ O Juramento do Guardião",
+        objective: "🔒 O Escudo do Guardião",
         objectiveDesc:
-          "Antes de confiar em um resultado, verifique-o: revise vieses, proteja os dados e declare como usou a IA.",
+          "Antes de colar algo em uma IA, decida o que entra e o que fica com você.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Verificar cada citação, número ou nome antes de usá-lo",
+            text: "Identificar dados pessoais: documentos, telefones, saúde e dados de menores",
           },
           {
             icon: "fa-check",
-            text: "Identificar dados pessoais e decidir o que nunca entra em uma ferramenta de IA",
+            text: "Anonimizar um texto antes de colá-lo (papéis em vez de nomes)",
           },
           {
             icon: "fa-check",
-            text: "Declarar quando e como usou IA em um trabalho ou entrega",
+            text: "Saber o que fazer se já compartilhou um dado sensível",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Copiar uma citação que ninguém verificou: a IA pode inventar fontes com total segurança",
+            text: "Colar dados de outras pessoas sem autorização",
           },
           {
             icon: "fa-times",
-            text: "Subir dados pessoais de terceiros em qualquer ferramenta",
+            text: "Enviar informações de menores de idade",
+          },
+          {
+            icon: "fa-times",
+            text: "Compartilhar senhas ou códigos de verificação",
+          },
+        ],
+        example: {
+          label: "O Guardião vs. O Imprudente",
+          weak: "❌ O imprudente: Colou a lista de notas com nome e sobrenome dos estudantes para pedir os comentários do boletim.",
+          strong:
+            "✅ O guardião: Trocou os nomes por “Estudante A, B, C”, tirou a escola e o documento e pediu só o formato do comentário.",
+        },
+      },
+      4: {
+        objective: "🛡️ O Juramento do Guardião",
+        objectiveDesc:
+          "Antes de confiar em um resultado, olhe-o no espelho: identifique vieses, decida com critério, proteja as pessoas e declare como usou a IA.",
+        achievements: [
+          {
+            icon: "fa-check",
+            text: "Reconhecer quais pessoas ou perspectivas ficam de fora de uma resposta",
+          },
+          {
+            icon: "fa-check",
+            text: "Aplicar as três perguntas: é verdade? é justo? eu declaro?",
+          },
+          {
+            icon: "fa-check",
+            text: "Declarar quando e como usou IA e deixar uma pessoa responsável pelas decisões",
+          },
+        ],
+        warnings: [
+          {
+            icon: "fa-times",
+            text: "Acreditar numa resposta só porque soa segura: pode ter vieses ou citações inventadas",
+          },
+          {
+            icon: "fa-times",
+            text: "Deixar a IA decidir sozinha sobre contratar, avaliar ou punir",
           },
           {
             icon: "fa-times",
@@ -132,9 +198,9 @@ const CONTENT_PT = {
         ],
         example: {
           label: "O Guardião vs. O Imprudente",
-          weak: "❌ O imprudente: Um estudante entregou um ensaio gerado por IA com citações inventadas. O professor descobriu e ele perdeu a credibilidade.",
+          weak: "❌ O imprudente: Um estudante entregou um ensaio gerado por IA com citações inventadas e exemplos de um só tipo de pessoa. O professor descobriu e ele perdeu a credibilidade.",
           strong:
-            "✅ O guardião: Usou a IA como assistente, verificou cada fonte na biblioteca, declarou o uso e entregou um trabalho sólido e honesto.",
+            "✅ O guardião: Usou a IA como assistente, pediu a mesma tarefa com perfis diferentes para ver o viés, verificou cada fonte, declarou o uso e entregou um trabalho sólido e honesto.",
         },
       },
     },
@@ -173,18 +239,24 @@ const CONTENT_PT = {
           icon: "fa-book-open",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Pedir ao ChatGPT uma tarefa do seu dia a dia e obter uma resposta útil de primeira.",
         },
         {
           title: "O Andaime do Arquiteto: Ferramentas Integradas",
           icon: "fa-layer-group",
-          resources: 3,
+          resources: 2,
           duration: "30 min",
+          outcome:
+            "Escolher a ferramenta certa do ChatGPT (pesquisa, arquivos, imagens ou voz) e conferir o que ela entrega.",
         },
         {
           title: "A Fachada do Edifício: GPTs, Projetos e Agentes",
           icon: "fa-code",
-          resources: 3,
+          resources: 2,
           duration: "20 min",
+          outcome:
+            "Organizar um trabalho repetido em um Projeto e decidir quando vale um GPT ou um agente.",
         },
       ],
     },
@@ -194,7 +266,7 @@ const CONTENT_PT = {
         title: "As Plantas do Arquiteto: Guia Completo do ChatGPT",
         description: "Os alicerces de toda grande construção digital",
         detailedDescription:
-          "Todo edifício começa com uma planta. Nesta lição, você conhecerá a arquitetura completa do ChatGPT: desde os modelos disponíveis até as melhores práticas de prompt engineering. Aprenda a selecionar a ferramenta certa para cada fase da sua construção e sente as bases dos seus projetos de automação.",
+          "Todo edifício começa com uma planta. Nesta lição, você conhecerá a arquitetura completa do ChatGPT: desde os modelos disponíveis até as melhores práticas de prompt engineering. Aprenda a selecionar a ferramenta certa para cada fase da sua construção e sente as bases dos seus projetos de automação. Nota de atualização: a OpenAI retira os GPTs personalizados em 11 de dezembro de 2026 e os substitui por plugins. Comece já com Projetos e com os plugins conectados à sua conta.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -379,18 +451,24 @@ const CONTENT_PT = {
           icon: "fa-google",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Pedir ao Gemini que leia uma foto, um documento ou um áudio e conferir o que ele entendeu.",
         },
         {
           title: "Grounding: Quando a Evidência Toca o Chão",
           icon: "fa-layer-group",
           resources: 2,
           duration: "20 min",
+          outcome:
+            "Distinguir uma resposta com fontes de uma que só parece boa, e abrir as fontes para conferir.",
         },
         {
           title: "Deep Research: A Caixa de Ferramentas Forenses",
           icon: "fa-search",
-          resources: 5,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Encomendar uma pesquisa ao Gemini e revisar o relatório fonte por fonte.",
         },
       ],
     },
@@ -590,18 +668,24 @@ const CONTENT_PT = {
           icon: "fa-microphone",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Criar seu primeiro caderno com seus documentos e fazer perguntas que ele responde com citações.",
         },
         {
           title: "A Arte da Curadoria: Como Escolher e Sintetizar Fontes",
           icon: "fa-book-open",
-          resources: 3,
+          resources: 2,
           duration: "20 min",
+          outcome:
+            "Escolher boas fontes e transformá-las em um resumo ou guia de estudo que você possa verificar.",
         },
         {
           title: "A Fórmula Secreta: Audio Overviews e Gestão Documental",
           icon: "fa-podcast",
-          resources: 5,
+          resources: 3,
           duration: "30 min",
+          outcome:
+            "Gerar um resumo em áudio dos seus documentos e organizar seus cadernos para encontrar tudo.",
         },
       ],
     },
@@ -797,18 +881,24 @@ const CONTENT_PT = {
           icon: "fa-comments",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Escrever um primeiro pedido completo para o Claude, com objetivo, público, formato e limites.",
         },
         {
           title: "Crie com o Claude: Artifacts, documentos e apresentações",
           icon: "fa-pen-nib",
-          resources: 1,
+          resources: 3,
           duration: "25 min",
+          outcome:
+            "Pedir ao Claude um documento ou uma apresentação, ajustá-lo com mudanças pequenas e conferir os dados antes de compartilhar.",
         },
         {
           title: "Delegue com o Claude: Projetos, conectores e Skills",
           icon: "fa-diagram-project",
           resources: 3,
           duration: "30 min",
+          outcome:
+            "Decidir o que delegar ao Claude, o que você revisa e o que nunca delega, e montar um Projeto para o trabalho recorrente.",
         },
       ],
     },

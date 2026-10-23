@@ -34,18 +34,32 @@ const CONTENT_EN = {
           icon: "fa-brain",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Explain in your own words what generative AI is, what it does well and why it sometimes gets things wrong.",
         },
         {
           title: "The Artisan's Chisel: What is a Prompt?",
           icon: "fa-comments",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Write a clear request with the Role + Task + Format formula and improve it until it works for you.",
         },
         {
-          title: "The Guardian's Oath: Responsible Use of AI",
+          title: "The Guardian's Shield: What You Should Not Share",
+          icon: "fa-lock",
+          resources: 3,
+          duration: "20 min",
+          outcome:
+            "Decide which data you never share with an AI and anonymize a text before pasting it.",
+        },
+        {
+          title: "The Guardian's Oath: Ethics and Bias",
           icon: "fa-shield-halved",
-          resources: 9,
-          duration: "30 min",
+          resources: 3,
+          duration: "20 min",
+          outcome:
+            "Spot a bias in an AI answer, apply three questions (is it true? is it fair? do I disclose it?) and disclose when you used AI.",
         },
       ],
     },
@@ -55,7 +69,7 @@ const CONTENT_EN = {
         title: "The Artisan's Foundations: What is Generative AI?",
         description: "Understand the tool before you use it",
         detailedDescription:
-          "Before you ask AI for anything, it helps to know how it works. You will see what generative AI is, why it answers confidently even when it is wrong, what it does well and where its limits are. With that foundation you can use it with judgment from day one, even if you have never used it before.",
+          "Before you ask AI for anything, it helps to know how it works. You will see what generative AI is, why it answers confidently even when it is wrong, what it does well and where its limits are. With that foundation you can use it with judgment from day one, even if you have never used it before. You will also review how AI began, from its first models to today, to understand where its limits come from.",
         duration: "20 min",
         format: "Video",
         icon: "fa-brain",
@@ -76,12 +90,24 @@ const CONTENT_EN = {
       },
       {
         id: 3,
-        title: "The Guardian's Oath: Responsible Use of AI",
-        description: "Verify, protect and disclose",
+        title: "The Guardian's Shield: What You Should Not Share",
+        description: "Protect your data and other people's data",
         detailedDescription:
-          "Using AI well also means knowing when not to trust it. You will learn to spot bias, check quotes and figures before using them, decide which personal data you never share, and disclose when you used AI. These habits separate people who use AI from people who use it responsibly.",
-        duration: "30 min",
+          "Everything you paste into an AI leaves your computer. You will learn which data you never share (identity, health, minors, passwords), how to anonymize a text before pasting it and what to do if you already shared something sensitive. That protects your privacy and other people's.",
+        duration: "20 min",
         format: "Reading",
+        icon: "fa-lock",
+        badgeColor: "bg-emerald-100 text-emerald-800",
+        themeColor: "#0E7490",
+      },
+      {
+        id: 4,
+        title: "The Guardian's Oath: Ethics and Bias",
+        description: "Decide with judgment, spot bias and disclose your use",
+        detailedDescription:
+          "Ethics is deciding well even when nobody forces you to. You will learn three of the five questions for every result (is it true? is it fair? do I disclose it?), how to spot bias in an answer and how to declare your AI use. At the end, you will see how the European Union classifies AI systems by risk. You will also learn that impersonating someone with AI is unethical, and how to protect minors when a system answers badly.",
+        duration: "20 min",
+        format: "Lab",
         icon: "fa-shield-halved",
         badgeColor: "bg-emerald-100 text-emerald-800",
         themeColor: "#0E7490",
@@ -99,31 +125,70 @@ const CONTENT_EN = {
           "A well-crafted prompt is your most powerful tool: learn to write instructions AI understands the first time.",
       },
       3: {
-        objective: "🛡️ The Guardian's Oath",
+        objective: "🔒 The Guardian's Shield",
         objectiveDesc:
-          "Before you trust a result, verify it: check for bias, protect data and disclose how you used AI.",
+          "Before you paste anything into an AI, decide what goes in and what stays with you.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Verify every citation, figure or name before using it",
+            text: "Identify personal data: ID numbers, phones, health and minors' data",
           },
           {
             icon: "fa-check",
-            text: "Identify personal data and decide what never goes into an AI tool",
+            text: "Anonymize a text before pasting it (roles instead of names)",
           },
           {
             icon: "fa-check",
-            text: "Disclose when and how you used AI in a piece of work",
+            text: "Know what to do if you already shared a sensitive piece of data",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Copying a citation nobody verified: AI can invent sources with complete confidence",
+            text: "Pasting other people's data without their permission",
           },
           {
             icon: "fa-times",
-            text: "Uploading third parties' personal data to any tool",
+            text: "Uploading information about minors",
+          },
+          {
+            icon: "fa-times",
+            text: "Sharing passwords or verification codes",
+          },
+        ],
+        example: {
+          label: "The Guardian vs. The Reckless",
+          weak: "❌ The reckless: Pasted the grade list with students' full names to ask for report-card comments.",
+          strong:
+            "✅ The guardian: Replaced the names with “Student A, B, C”, removed the school and ID numbers, and asked only for the comment format.",
+        },
+      },
+      4: {
+        objective: "🛡️ The Guardian's Oath",
+        objectiveDesc:
+          "Before you trust a result, look at it in the mirror: spot bias, decide with judgment, protect people and disclose how you used AI.",
+        achievements: [
+          {
+            icon: "fa-check",
+            text: "Recognize which people or perspectives an answer leaves out",
+          },
+          {
+            icon: "fa-check",
+            text: "Apply the three questions: is it true? is it fair? do I disclose it?",
+          },
+          {
+            icon: "fa-check",
+            text: "Disclose when and how you used AI and keep a person responsible for decisions",
+          },
+        ],
+        warnings: [
+          {
+            icon: "fa-times",
+            text: "Believing an answer just because it sounds sure: it may be biased or carry invented citations",
+          },
+          {
+            icon: "fa-times",
+            text: "Letting AI decide alone about hiring, grading or sanctioning",
           },
           {
             icon: "fa-times",
@@ -132,9 +197,9 @@ const CONTENT_EN = {
         ],
         example: {
           label: "The Guardian vs. The Reckless",
-          weak: "❌ The reckless: A student handed in an AI-generated essay with invented citations. The professor found out and the student lost credibility.",
+          weak: "❌ The reckless: A student handed in an AI-generated essay with invented citations and examples of only one kind of person. The professor found out and the student lost credibility.",
           strong:
-            "✅ The guardian: Used AI as an assistant, checked every source in the library, disclosed the use and handed in solid, honest work.",
+            "✅ The guardian: Used AI as an assistant, asked for the same task with different profiles to see the bias, checked every source, disclosed the use and handed in solid, honest work.",
         },
       },
     },
@@ -173,18 +238,24 @@ const CONTENT_EN = {
           icon: "fa-book-open",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Ask ChatGPT for an everyday task and get a useful answer on the first try.",
         },
         {
           title: "The Architect's Scaffolding: Integrated Tools",
           icon: "fa-layer-group",
-          resources: 3,
+          resources: 2,
           duration: "30 min",
+          outcome:
+            "Choose the right ChatGPT tool (search, files, images or voice) and check what it gives you.",
         },
         {
           title: "The Building's Facade: GPTs, Projects and Agents",
           icon: "fa-code",
-          resources: 3,
+          resources: 2,
           duration: "20 min",
+          outcome:
+            "Organize a repeated task in a Project and decide when a GPT or an agent makes sense.",
         },
       ],
     },
@@ -194,7 +265,7 @@ const CONTENT_EN = {
         title: "The Architect's Blueprints: Complete ChatGPT Guide",
         description: "The foundations of every great digital construction",
         detailedDescription:
-          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects.",
+          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects. Currency note: OpenAI retires custom GPTs on December 11, 2026 and replaces them with plugins. Start now with Projects and with the plugins connected to your account.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -379,18 +450,24 @@ const CONTENT_EN = {
           icon: "fa-google",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Ask Gemini to read a photo, a document or an audio recording and check what it understood.",
         },
         {
           title: "Grounding: When Evidence Touches the Real World",
           icon: "fa-layer-group",
           resources: 2,
           duration: "20 min",
+          outcome:
+            "Tell an answer with sources from one that only sounds good, and open the sources to check it.",
         },
         {
           title: "Deep Research: The Forensic Toolkit",
           icon: "fa-search",
-          resources: 5,
+          resources: 3,
           duration: "20 min",
+          outcome:
+            "Commission a research task from Gemini and review its report source by source.",
         },
       ],
     },
@@ -590,18 +667,24 @@ const CONTENT_EN = {
           icon: "fa-microphone",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Create your first notebook with your documents and ask it questions it answers with citations.",
         },
         {
           title: "The Art of Curation: How to Choose and Synthesize Sources",
           icon: "fa-book-open",
-          resources: 3,
+          resources: 2,
           duration: "20 min",
+          outcome:
+            "Choose good sources and turn them into a summary or study guide you can verify.",
         },
         {
           title: "The Secret Formula: Audio Overviews and Document Management",
           icon: "fa-podcast",
-          resources: 5,
+          resources: 3,
           duration: "30 min",
+          outcome:
+            "Generate an audio summary of your documents and organize your notebooks so you can find everything.",
         },
       ],
     },
@@ -796,18 +879,24 @@ const CONTENT_EN = {
           icon: "fa-comments",
           resources: 3,
           duration: "20 min",
+          outcome:
+            "Write a first complete request for Claude, with goal, audience, format and limits.",
         },
         {
           title: "Create with Claude: Artifacts, Documents and Presentations",
           icon: "fa-pen-nib",
-          resources: 1,
+          resources: 3,
           duration: "25 min",
+          outcome:
+            "Ask Claude for a document or a presentation, adjust it with small changes and check the facts before sharing it.",
         },
         {
           title: "Delegate with Claude: Projects, Connectors and Skills",
           icon: "fa-diagram-project",
           resources: 3,
           duration: "30 min",
+          outcome:
+            "Decide what to delegate to Claude, what you review and what you never delegate, and set up a Project for recurring work.",
         },
       ],
     },

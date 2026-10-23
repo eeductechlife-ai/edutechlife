@@ -1,33 +1,37 @@
-// Banco del módulo 5 (Claude). Opciones equilibradas: la correcta no se distingue por longitud.
+// Banco del módulo 5 (Claude), en inglés: mismo contenido, ids, orden de opciones y correctAnswer que module5.js.
+// La correcta nunca es la opción más larga ni la más corta. La clave vive en src/data/ialab.js.
 export const MODULE_5_EN = [
   {
     id: "m5q1",
     question:
-      "You want Claude to help you prepare a proposal for a client. What information do you give it first to get a good result?",
+      "You are going to ask Claude for a proposal for a client. Which request keeps Claude from having to guess key details?",
     options: [
       {
         id: "m5q1_a",
-        label: "Only the word 'proposal', so it has creative freedom",
+        label:
+          "Goal, the client who reads it, format, tone and what not to promise",
       },
       {
         id: "m5q1_b",
-        label: "The goal, the client, the tone and the result you expect",
+        label:
+          "The goal and the format; Claude can decide the tone and the limits on its own",
       },
       {
         id: "m5q1_c",
-        label: "A paragraph copied from the internet with no context",
+        label: "A previous proposal and the line 'make one like this'",
       },
       {
         id: "m5q1_d",
-        label: "Let it decide everything without asking you anything",
+        label:
+          "A list of adjectives: professional, creative, complete and persuasive",
       },
     ],
-    correctAnswer: "m5q1_b",
+    correctAnswer: "m5q1_a",
     topic: "Getting to know Claude",
     difficulty: "easy",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "Claude works better when it knows the goal, the audience and the format. Without context, it guesses.",
+      "A complete request has five parts: goal, audience, format, tone and limits. Every missing part is an assumption Claude makes for you.",
   },
   {
     id: "m5q2",
@@ -35,49 +39,51 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q2_a",
-        label: "Store your password securely in the app",
+        label: "Store fixed instructions that apply to every chat",
       },
       {
         id: "m5q2_b",
-        label: "Create and edit documents or pieces in the chat",
+        label: "Connect Claude to Gmail or Drive so it can read your files",
       },
       {
         id: "m5q2_c",
-        label: "Connect Claude to the company bank account settings",
+        label: "See and improve a piece next to the chat, step by step",
       },
       {
         id: "m5q2_d",
-        label: "Delete the history of all your past conversations",
+        label: "Remember your preferred tone from one chat to the next",
       },
     ],
-    correctAnswer: "m5q2_b",
+    correctAnswer: "m5q2_c",
     topic: "Creating with Claude",
     difficulty: "easy",
     source: "Lesson 2: Create with Claude",
     feedback:
-      "Artifacts are pieces you can see and edit next to the conversation: documents, charts or small applications.",
+      "An Artifact is a piece (document, table or small app) that lives next to the chat: you see it, improve it step by step and export it. Fixed instructions go in a Project, preferences in memory and access to your apps in connectors.",
   },
   {
     id: "m5q3",
     question:
-      "Claude gives you a table of sales figures. What should you do before presenting it to the team?",
+      "Claude gives you a table with sales figures. What do you do before presenting it to the team?",
     options: [
       {
         id: "m5q3_a",
-        label: "Present it as is, because Claude never gets numbers wrong",
+        label: "Ask Claude to check its own figures and trust its answer",
       },
       {
         id: "m5q3_b",
         label:
-          "Check the figures against the original source and review the calculations",
+          "Compare each figure with the original source and redo one calculation",
       },
       {
         id: "m5q3_c",
-        label: "Ask it to change the figures so they match the target",
+        label:
+          "Check spelling and format, since the figures come from the file",
       },
       {
         id: "m5q3_d",
-        label: "Hide that an AI made the table",
+        label:
+          "Ask it to add the source for each figure and present the table like that",
       },
     ],
     correctAnswer: "m5q3_b",
@@ -85,7 +91,7 @@ export const MODULE_5_EN = [
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Claude can make mistakes with figures and calculations. Human judgment verifies the data before it is used.",
+      "Claude can get figures wrong and still sound sure, even when it checks itself. Citing a source is not checking it: compare with the original data before presenting.",
   },
   {
     id: "m5q4",
@@ -93,110 +99,116 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q4_a",
-        label: "Mix unrelated topics in the same Project",
+        label:
+          "One single Project for all your work, so Claude has all the context",
       },
       {
         id: "m5q4_b",
         label:
-          "Create one Project per topic and keep instructions and reference files there",
+          "Paste the same instructions at the start of every chat in the Project",
       },
       {
         id: "m5q4_c",
-        label:
-          "Don't use Projects, because starting from scratch is always better",
+        label: "Upload all the company's files in case one is needed",
       },
       {
         id: "m5q4_d",
-        label: "Upload all your personal files to every Project",
+        label: "One Project per recurring job, with its own rules and files",
       },
     ],
-    correctAnswer: "m5q4_b",
+    correctAnswer: "m5q4_d",
     topic: "Projects and memory",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "A Project gathers the context of one piece of work: instructions and reference documents. You don't have to repeat everything in every chat.",
+      "A Project stores the instructions and files for a specific job that repeats, so you do not repeat them in every chat. Mixing topics or uploading extra files gives it useless context and can expose data.",
   },
   {
     id: "m5q5",
     question:
-      "You want Claude to review your Gmail before you reply to a client. What should you keep in mind?",
+      "You want Claude to read your correo to prepare a reply to a client. What do you do?",
     options: [
       {
         id: "m5q5_a",
         label:
-          "Connect Gmail without checking what permissions it asks for, because it's automatic",
+          "Connect only correo, check its permissions and approve the reply yourself",
       },
       {
         id: "m5q5_b",
         label:
-          "Connect the account through a connector, review the permissions it grants and decide what to share",
+          "Connect email, files and calendar at once so you do not repeat the process",
       },
       {
         id: "m5q5_c",
-        label: "Give your password in the chat so Claude can log in for you",
+        label:
+          "Copy the client's full emails into the chat, with their details",
       },
       {
         id: "m5q5_d",
-        label: "Ask it to send the reply without you reviewing it",
+        label: "Connect correo and let Claude send the reply",
       },
     ],
-    correctAnswer: "m5q5_b",
+    correctAnswer: "m5q5_a",
     topic: "Connectors and Skills",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Connectors give access to your apps with permissions you approve. Never give passwords in the chat, and always review before sending.",
+      "With a connector you give access only to what the task needs and you approve its permissions. You can disconnect it when you finish, and you review and send the reply yourself.",
   },
   {
     id: "m5q6",
-    question: "What is a Skill in Claude?",
+    question: "What is the difference between a Skill and a Project?",
     options: [
       {
         id: "m5q6_a",
-        label: "A type of password to protect your files",
+        label:
+          "A Skill keeps the files of a job; a Project keeps the steps of a procedure",
       },
       {
         id: "m5q6_b",
         label:
-          "A package of instructions, templates and references that Claude reuses for a task",
+          "A Skill keeps the conversations of a job; a Project keeps your tone and preferences",
       },
       {
         id: "m5q6_c",
-        label: "An AI model different from Opus, Sonnet or Haiku",
+        label:
+          "A Skill keeps a procedure with steps and templates; a Project, the context of a job",
       },
       {
         id: "m5q6_d",
-        label: "A function that turns off chat memory",
+        label:
+          "They are the same thing with another name: both keep instructions and files for one job",
       },
     ],
-    correctAnswer: "m5q6_b",
+    correctAnswer: "m5q6_c",
     topic: "Connectors and Skills",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "A Skill turns a procedure you repeat into something reusable: instructions, templates and examples.",
+      "A Skill stores a procedure you always do the same way: steps, templates and examples. A Project stores the context of a job that repeats, with its instructions and files. Connectors give access to your apps.",
   },
   {
     id: "m5q7",
     question:
-      "You want a weekly summary of your pending tasks. Which Claude mode suits you best?",
+      "Every Monday you prepare the same to-do report and always explain the same steps to Claude. What should you do?",
     options: [
       {
         id: "m5q7_a",
-        label: "Ask for it by hand every Monday, with no automation",
+        label:
+          "Keep writing out the full steps in every chat so that none of them get lost",
       },
       {
         id: "m5q7_b",
-        label: "Schedule a recurring task in Cowork, with the sources it needs",
+        label:
+          "Save those steps in a Skill, use it every Monday and review the report",
       },
       {
         id: "m5q7_c",
-        label: "Paste your whole email history into every conversation",
+        label: "Use an incognito chat so Claude always starts clean",
       },
       {
         id: "m5q7_d",
-        label: "Create a new account every week",
+        label: "Create a new Project every Monday with the same steps",
       },
     ],
     correctAnswer: "m5q7_b",
@@ -204,7 +216,7 @@ export const MODULE_5_EN = [
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Scheduled tasks in Cowork run recurring work. You define which sources it uses and you review the result.",
+      "A procedure you always do the same way is saved as a Skill: Claude applies the same steps each time and you only review the result. Incognito does not keep the procedure for the following week, and creating a Project every week repeats the work.",
   },
   {
     id: "m5q8",
@@ -212,85 +224,93 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q8_a",
-        label: "Let it decide and execute everything without human review",
+        label: "Delegate only easy tasks and do the important ones yourself",
       },
       {
         id: "m5q8_b",
-        label: "Set the goal and limits, then review it",
+        label:
+          "Delegate everything Claude does well and review only if something fails",
       },
       {
         id: "m5q8_c",
-        label: "Ask for anything without specifying anything",
+        label:
+          "Hand over the task and the decision if the request has all five parts",
       },
       {
         id: "m5q8_d",
-        label: "Use it only for tasks that don't matter",
+        label:
+          "Hand over the draft, review what goes out and keep the decision",
       },
     ],
-    correctAnswer: "m5q8_b",
+    correctAnswer: "m5q8_d",
     topic: "Delegating with Claude",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Delegating doesn't mean walking away: you set the goal, the limits and the review. The final responsibility is still yours.",
+      "Delegating is not walking away: you hand over the form and the draft, review what goes to third parties and keep the decision. A good request improves the result, but it does not transfer responsibility.",
   },
   {
     id: "m5q9",
     question:
-      "Claude seems to remember details from earlier conversations. What should you do if you want to control that information?",
+      "Claude seems to remember details from earlier conversations. What do you do if you want to control that information?",
     options: [
       {
         id: "m5q9_a",
-        label: "Nothing: memory can't be reviewed",
+        label:
+          "Review memory in the settings and edit or delete what you do not want",
       },
       {
         id: "m5q9_b",
-        label: "Review what Claude remembers, and edit or delete it",
+        label: "Create a Project, because Projects erase the general memory",
       },
       {
         id: "m5q9_c",
-        label: "Share your password so Claude stores it",
+        label:
+          "Always write in incognito, even if you need it to remember your tone",
       },
       {
         id: "m5q9_d",
-        label: "Ask it to keep your clients' data forever",
+        label:
+          "Ask it to save everything, because more memory always gives better answers in every chat",
       },
     ],
-    correctAnswer: "m5q9_b",
+    correctAnswer: "m5q9_a",
     topic: "Privacy and data",
     difficulty: "medium",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "Memory is a feature you can review and adjust. Decide what is useful for it to remember and what not.",
+      "Memory is reviewed and adjusted in the settings: you decide what it should remember. Incognito is for a one-off chat you do not want kept in memory, not for all your work.",
   },
   {
     id: "m5q10",
     question:
-      "You are going to upload a contract that contains clients' personal data to Claude. What is the most prudent step?",
+      "You are going to upload to Claude a contract that contains clients' personal data. What is the most prudent step?",
     options: [
       {
         id: "m5q10_a",
-        label: "Upload it in full, because Claude never stores anything",
+        label: "Upload it in full, because it is an internal company document",
       },
       {
         id: "m5q10_b",
-        label: "Anonymize personal data and share only what is necessary",
+        label: "Upload it in full and delete the chat as soon as you finish",
       },
       {
         id: "m5q10_c",
-        label: "Publish it on a blog so others can review it",
+        label:
+          "Anonymize the personal data and share only the clauses you need",
       },
       {
         id: "m5q10_d",
-        label: "Send it by WhatsApp to a stranger to translate it",
+        label:
+          "Upload it in full and ask Claude not to take the names or phone numbers into account",
       },
     ],
-    correctAnswer: "m5q10_b",
+    correctAnswer: "m5q10_c",
     topic: "Privacy and data",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Minimize the data you share and follow your organization's policy and the data protection law that applies to you (in Colombia, Law 1581 of 2012).",
+      "Minimize the data you share: anonymize it or get authorization before uploading, and follow your organization's policy and the law (in Colombia, Law 1581 of 2012). Deleting the chat afterwards or asking it to ignore the names does not undo the fact that you already shared them.",
   },
   {
     id: "m5q11",
@@ -298,20 +318,22 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q11_a",
-        label: "There is no difference between them",
+        label:
+          "The Project remembers your preferences in every chat; memory, only inside a single one",
       },
       {
         id: "m5q11_b",
         label:
-          "A Project keeps instructions for a topic; memory, useful details",
+          "The Project stores a job's rules and files; memory, details across chats",
       },
       {
         id: "m5q11_c",
-        label: "Memory is used to upload 10 GB files",
+        label: "None: both store the same thing, only where you see it changes",
       },
       {
         id: "m5q11_d",
-        label: "A Project is a type of password",
+        label:
+          "Memory stores reference files; the Project, your preferred tone",
       },
     ],
     correctAnswer: "m5q11_b",
@@ -319,94 +341,97 @@ export const MODULE_5_EN = [
     difficulty: "medium",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "A Project is the context of one piece of work. Memory recalls preferences and useful details across conversations.",
+      "The Project is the context of a specific job: instructions and files. Memory remembers preferences and useful details across conversations. For example, your brand goes in a Project and your tone preference, in memory.",
   },
   {
     id: "m5q12",
     question:
-      "Claude gives you a figure with a citation to a study. What is the right step?",
+      "Claude offers you a fact with a citation to a study. What is the right step?",
     options: [
       {
         id: "m5q12_a",
-        label: "Cite it as is without looking up the study",
+        label: "Ask it for the study's link and cite it if Claude provides one",
       },
       {
         id: "m5q12_b",
-        label: "Find the original study and confirm it says what Claude claims",
+        label: "Cite it if the author and journal sound famous",
       },
       {
         id: "m5q12_c",
-        label: "Change the year of the citation so it sounds more recent",
+        label:
+          "Ask Claude if it is sure about the fact and cite it if it confirms",
       },
       {
         id: "m5q12_d",
-        label: "Assume it's correct because it sounds professional",
+        label: "Find the original study and confirm it says the same thing",
       },
     ],
-    correctAnswer: "m5q12_b",
+    correctAnswer: "m5q12_d",
     topic: "Limits and errors",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "A citation can look real and not exist, or say something else. Always verify against the primary source.",
+      "A citation can look real and not exist or say something else; a link or a confirmation from Claude does not prove it. Always check the primary source.",
   },
   {
     id: "m5q13",
     question:
-      "Which task is most suitable to delegate to Claude with minimal review?",
+      "Which task is best suited to delegate to Claude with minimal review?",
     options: [
       {
         id: "m5q13_a",
-        label: "Sign a contract on behalf of your company",
+        label: "Format a minutes template that you already approved",
       },
       {
         id: "m5q13_b",
-        label: "Format a draft that you later review",
+        label: "Write and send the reply to a client's complaint",
       },
       {
         id: "m5q13_c",
-        label: "Decide on the dismissal of a person",
+        label: "Sort 200 client emails that include names and phone numbers",
       },
       {
         id: "m5q13_d",
-        label: "Make a medical diagnosis of a patient",
+        label: "Summarize a report with figures for the board",
       },
     ],
-    correctAnswer: "m5q13_b",
+    correctAnswer: "m5q13_a",
     topic: "Delegating with Claude",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Drafting and formatting tasks are ideal to delegate. Legal, medical or people decisions require human judgment.",
+      "Form tasks with no underlying decision are ideal to delegate. Whatever goes to third parties, contains personal data or figures for decisions is delegated and reviewed.",
   },
   {
     id: "m5q14",
     question:
-      "You want Claude to generate a presentation for your board of directors. What do you give it first?",
+      "You want Claude to create a presentation for your board. What do you provide first?",
     options: [
       {
         id: "m5q14_a",
-        label: "Nothing: Claude can infer the message by itself",
+        label: "The topic and the number of slides; Claude decides the message",
       },
       {
         id: "m5q14_b",
-        label: "The core idea, audience, verified figures and the slides",
+        label: "The quarter's figures so Claude chooses what to highlight",
       },
       {
         id: "m5q14_c",
-        label: "Only the word 'presentation', with no details",
+        label:
+          "The main message, who will see it, the checked figures and the length",
       },
       {
         id: "m5q14_d",
-        label: "A video from another company to copy word for word",
+        label:
+          "A previous presentation from another company so it copies the design and the content",
       },
     ],
-    correctAnswer: "m5q14_b",
+    correctAnswer: "m5q14_c",
     topic: "Creating with Claude",
     difficulty: "medium",
     source: "Lesson 2: Create with Claude",
     feedback:
-      "A good presentation starts with the message and the audience. Figures must be verified before they go on a slide.",
+      "A good presentation starts with the message and the audience. If Claude chooses what to highlight, the decision is its own, not yours; and the figures are checked before they go on a slide.",
   },
   {
     id: "m5q15",
@@ -415,230 +440,242 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q15_a",
-        label: "Accept everything without reading it, to save time",
+        label:
+          "Accept the new version, because every change improves the last one",
       },
       {
         id: "m5q15_b",
-        label:
-          "Compare the change, accept what improves it and revert the rest",
+        label: "Compare it with the previous version and keep what improves",
       },
       {
         id: "m5q15_c",
-        label: "Delete the document and start over, without reviewing",
+        label: "Ask it to redo everything from scratch with a longer request",
       },
       {
         id: "m5q15_d",
-        label: "Ask it to change your colleague's version too",
+        label: "Go back to your version without checking what changed",
       },
     ],
     correctAnswer: "m5q15_b",
     topic: "Creating with Claude",
     difficulty: "medium",
     source: "Lesson 2: Create with Claude",
-    feedback: "Co-editing requires review. You decide which version stays.",
+    feedback:
+      "Each change leaves a different version: compare before and after and decide what stays. Starting over or discarding without looking wastes what already worked.",
   },
   {
     id: "m5q16",
     question:
-      "Which Claude model suits a simple, repetitive task such as sorting emails?",
+      "You write to Claude: “Write an email to the families about Saturday’s meeting, in a warm tone and without student names.” Which part of the request is missing?",
     options: [
       {
         id: "m5q16_a",
-        label: "Always the largest model, even when the task is simple",
+        label: "Nothing: the request already has all five parts complete",
       },
       {
         id: "m5q16_b",
-        label:
-          "A fast model for simple work and a capable one for complex work",
+        label: "The tone: how the email should sound and which words to avoid",
       },
       {
         id: "m5q16_c",
-        label: "None: it should always be done by hand",
+        label:
+          "The limits: which data the email must not include and what to avoid in its writing",
       },
       {
         id: "m5q16_d",
-        label: "The one with the longest name, with no other criteria",
+        label: "The format: how the email looks and how long it should be",
       },
     ],
-    correctAnswer: "m5q16_b",
+    correctAnswer: "m5q16_d",
     topic: "Limits and errors",
     difficulty: "medium",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "Choose the model based on the task: fast and low-cost for simple work, more capable for complex work. This saves time and cost.",
+      "A complete request has five parts: goal, audience, format, tone and limits. This one leaves out the format, so Claude would decide the length and structure on its own.",
   },
   {
     id: "m5q17",
     question:
-      "What is the best practice when writing instructions for a Project?",
+      "What is the best practice when writing a Project's instructions?",
     options: [
       {
         id: "m5q17_a",
-        label: "Write a single generic sentence about the topic",
+        label: "State Claude's role, purpose, tone and what it must never do",
       },
       {
         id: "m5q17_b",
-        label: "Describe the role, goal, rules, tone and examples",
+        label: "Paste the company's full manual instead of instructions",
       },
       {
         id: "m5q17_c",
-        label: "Paste the company's full manual without summarizing",
+        label:
+          "Write only the tone, because Claude infers the rest from the files you upload",
       },
       {
         id: "m5q17_d",
-        label: "Ask it to 'do whatever it wants' with the topic",
+        label: "Include the clients' phone numbers to personalize each reply",
       },
     ],
-    correctAnswer: "m5q17_b",
+    correctAnswer: "m5q17_a",
     topic: "Projects and memory",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Good instructions combine role, goal, rules and examples. They are the base for every conversation in the Project to be consistent.",
+      "A Project's instructions say who Claude is, what it is for, how it sounds and what it must never do. Files complement them, and personal data is not uploaded without authorization.",
   },
   {
     id: "m5q18",
     question:
-      "A colleague asks you to share a report generated with Claude that contains confidential company data. What do you do?",
+      "A colleague asks you for a report made with Claude that contains confidential company data. What do you do?",
     options: [
       {
         id: "m5q18_a",
-        label: "Send it in full because it's my colleague",
+        label:
+          "Publish it with an open link, because only my colleague will have it",
       },
       {
         id: "m5q18_b",
-        label: "Check the data's classification and share only what is allowed",
+        label:
+          "Share it in full, because an AI made it and it is not an official document",
       },
       {
         id: "m5q18_c",
-        label: "Post it on social media so everyone can see it",
+        label: "Check whether they may see it and share only what is allowed",
       },
       {
         id: "m5q18_d",
-        label: "Give them my password so they can open the folder",
+        label: "Ask Claude for a summary and send it without reviewing it",
       },
     ],
-    correctAnswer: "m5q18_b",
+    correctAnswer: "m5q18_c",
     topic: "Privacy and data",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "A tool generating a document doesn't change its confidentiality. Share only what the policy allows.",
+      "A tool generating a document does not change how confidential it is. Anyone who receives an open link can see it: share only what the policy allows and only with the right people.",
   },
   {
     id: "m5q19",
     question:
-      "What role does an 'agent' play in a multi-step task, such as organizing files and writing a summary?",
+      "You have spent weeks working in a school's Project and you are asked for a text for an unrelated client. Where do you do it?",
     options: [
       {
         id: "m5q19_a",
-        label: "It executes steps toward your goal, under supervision",
+        label:
+          "In the same Project, because Claude already knows your style well",
       },
       {
         id: "m5q19_b",
-        label: "It acts without anyone knowing or reviewing it",
+        label: "Outside that Project, so its rules and files do not carry over",
       },
       {
         id: "m5q19_c",
-        label: "It replaces your email account",
+        label: "In the same Project, asking it to ignore its instructions",
       },
       {
         id: "m5q19_d",
-        label: "It doesn't exist in Claude; it is just an idea",
+        label:
+          "In the Project, after deleting its instructions and writing them again when you finish",
       },
     ],
-    correctAnswer: "m5q19_a",
+    correctAnswer: "m5q19_b",
     topic: "Delegating with Claude",
     difficulty: "hard",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "An agent executes steps toward a goal. Good practice is to define the scope, ask for confirmation on important actions and review the result.",
+      "Each Project applies its instructions and files to all its chats. Unrelated work goes in another Project or a separate chat, so you do not carry over rules or data that do not apply.",
   },
   {
     id: "m5q20",
     question:
-      "Why is it useful for Claude to explain its steps before carrying out an important action?",
+      "Claude compared the résumés for a job opening and recommends one candidate. What do you do with that recommendation?",
     options: [
       {
         id: "m5q20_a",
-        label: "To increase waiting time for no reason",
+        label:
+          "Hire her if the analysis quotes the data from each résumé correctly",
       },
       {
         id: "m5q20_b",
-        label: "To catch misunderstandings before they have consequences",
+        label: "Ask Claude to confirm its choice and then follow it",
       },
       {
         id: "m5q20_c",
-        label: "Because Claude can't execute anything",
+        label: "Accept it, because the request had all five parts",
       },
       {
         id: "m5q20_d",
-        label: "To keep the user from reading the answer",
+        label: "Review the analysis as input and decide yourself whom to hire",
       },
     ],
-    correctAnswer: "m5q20_b",
+    correctAnswer: "m5q20_d",
     topic: "Oversight",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Reviewing the plan before acting prevents costly mistakes. It is part of delegating with judgment.",
+      "Choosing whom to hire is a decision about a person: that decision is not delegated. Claude can sort and compare; you review the analysis and decide. Neither a confirmation from Claude nor a good request transfers the responsibility.",
   },
   {
     id: "m5q21",
-    question: "What kind of information is riskiest to share with any AI tool?",
+    question:
+      "You are going to ask Claude for an attendance report for a course. Which version of the data do you share?",
     options: [
       {
         id: "m5q21_a",
-        label: "A list of blog topics",
+        label: "Attendance by student code, without names or phone numbers",
       },
       {
         id: "m5q21_b",
-        label: "Passwords, bank details and other people's identities",
+        label: "The full list with names, because the report is internal",
       },
       {
         id: "m5q21_c",
-        label: "A sample text with no real data",
+        label:
+          "The full list in an incognito chat, because that way it is not saved",
       },
       {
         id: "m5q21_d",
-        label: "A class outline with general topics",
+        label: "The full list inside a private Project",
       },
     ],
-    correctAnswer: "m5q21_b",
+    correctAnswer: "m5q21_a",
     topic: "Privacy and data",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Never share passwords or sensitive data about third parties. Use fictitious data whenever you can.",
+      "Share only what is needed: with codes instead of names the report comes out the same. Neither incognito nor a private Project authorizes you to share personal data (in Colombia, Law 1581 of 2012).",
   },
   {
     id: "m5q22",
     question:
-      "Claude gives you a correct answer about a topic that changed after its last update. What should you do?",
+      "You ask Claude to 'write me an email for a client' and the result comes out long and too formal. What best explains what happened?",
     options: [
       {
         id: "m5q22_a",
-        label: "Always trust what the AI says",
+        label: "Claude writes long by default and you must always trim it",
       },
       {
         id: "m5q22_b",
-        label: "Ask for current data or check a recent source",
+        label:
+          "You used a fast model; a more powerful one would have written it short and warm",
       },
       {
         id: "m5q22_c",
-        label: "Ignore any recent data completely",
+        label:
+          "The request gave no audience, format or tone, so Claude assumed them",
       },
       {
         id: "m5q22_d",
-        label: "Change the document's date so it looks recent",
+        label:
+          "Claude imitates formal emails from the internet and that style cannot be changed",
       },
     ],
-    correctAnswer: "m5q22_b",
+    correctAnswer: "m5q22_c",
     topic: "Limits and errors",
     difficulty: "medium",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "Models don't always know the latest information. For data that changes, use search or a current source.",
+      "Every part missing from the request is something Claude assumes for you. If you do not say what it is for, who reads it, how long it is and what tone to use, Claude chooses, and it may not be what you wanted. A complete request has a goal, audience, format, tone and limits.",
   },
   {
     id: "m5q23",
@@ -646,20 +683,21 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q23_a",
-        label: "Ask for 'something nice' without describing what it should do",
+        label:
+          "Ask for every feature in one very long message so you never have to iterate",
       },
       {
         id: "m5q23_b",
         label:
-          "Describe the use, the input data and the expected result, then iterate",
+          "Say what it is for, what data it takes and what it shows; then iterate",
       },
       {
         id: "m5q23_c",
-        label: "Copy the code of another company's app",
+        label: "Ask for 'an interactive app' and let Claude choose the rest",
       },
       {
         id: "m5q23_d",
-        label: "Never test it before sharing it with the team",
+        label: "Share it with the team as soon as it appears and fix it later",
       },
     ],
     correctAnswer: "m5q23_b",
@@ -667,37 +705,38 @@ export const MODULE_5_EN = [
     difficulty: "medium",
     source: "Lesson 2: Create with Claude",
     feedback:
-      "Describe the use and the result, ask for small adjustments and test the piece before sharing it.",
+      "Describe the use, the input data and the result, improve it with small changes and test the piece before sharing it.",
   },
   {
     id: "m5q24",
     question:
-      "What is good practice when reviewing a document Claude wrote for your client?",
+      "What is a good practice when reviewing a document Claude wrote for your client?",
     options: [
       {
         id: "m5q24_a",
-        label: "Skim it, because it's already well written",
+        label:
+          "Check only the spelling, because you already asked for the content well",
       },
       {
         id: "m5q24_b",
-        label:
-          "Check data, tone, names, dates and that it says what you really mean",
+        label: "Ask Claude to review it and send it if it finds no errors",
       },
       {
         id: "m5q24_c",
-        label: "Send it without changing the previous client's name",
+        label:
+          "Read the introduction and the closing, which is what the client looks at",
       },
       {
         id: "m5q24_d",
-        label: "Remove the signature so it looks neutral",
+        label: "Check data, names, dates and tone against what you want to say",
       },
     ],
-    correctAnswer: "m5q24_b",
+    correctAnswer: "m5q24_d",
     topic: "Oversight",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "A well-written text can still have wrong data or the wrong name. Human review is mandatory.",
+      "A well-written text can contain wrong data or a wrong name, and Claude does not always catch its own mistakes. A full human review is a must.",
   },
   {
     id: "m5q25",
@@ -706,19 +745,21 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q25_a",
-        label: "A Skill with instructions, a template and a minutes example",
+        label:
+          "A Skill with the steps, the template and a sample set of minutes",
       },
       {
         id: "m5q25_b",
-        label: "A new chat each time, asking for everything again",
+        label:
+          "A new Project for each meeting, with the procedure pasted into the instructions",
       },
       {
         id: "m5q25_c",
-        label: "A password to protect the document",
+        label: "Nothing: let memory remember it and apply it on its own",
       },
       {
         id: "m5q25_d",
-        label: "An email to Claude with the full procedure",
+        label: "An Artifact with the previous minutes to copy each time",
       },
     ],
     correctAnswer: "m5q25_a",
@@ -726,35 +767,37 @@ export const MODULE_5_EN = [
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "What you repeat becomes a Skill: the procedure stays the same each time and you save time.",
+      "What you repeat becomes a Skill: the procedure stays the same every time, works in any job and saves time.",
   },
   {
     id: "m5q26",
-    question: "Which statement about AI and work is the most responsible?",
+    question:
+      "Which of these statements about AI and work is the most responsible?",
     options: [
       {
         id: "m5q26_a",
-        label: "AI completely replaces human review",
+        label: "If the request is well written, human review is unnecessary",
       },
       {
         id: "m5q26_b",
-        label: "AI speeds up work, but people own the decisions",
+        label: "AI is useful for ideas, but not for professional work",
       },
       {
         id: "m5q26_c",
-        label: "Using AI is always cheating",
+        label: "AI speeds up work, but the decision still remains human",
       },
       {
         id: "m5q26_d",
-        label: "You should never say that AI was used",
+        label:
+          "If Claude makes a mistake, the tool is responsible for the error",
       },
     ],
-    correctAnswer: "m5q26_b",
+    correctAnswer: "m5q26_c",
     topic: "Delegating with Claude",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "AI speeds up work. The decision and its consequences still belong to the person.",
+      "AI speeds up work, professional work included. The decision and its consequences still belong to the person, however good the request is.",
   },
   {
     id: "m5q27",
@@ -763,20 +806,19 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q27_a",
-        label: "Ask for a conclusion without checking the method",
+        label: "Ask directly for the final conclusion to save time",
       },
       {
         id: "m5q27_b",
-        label:
-          "Ask for the steps and validate a sample with your own calculation",
+        label: "Ask for the analysis steps and check a sample by hand",
       },
       {
         id: "m5q27_c",
-        label: "Use only the first result that appears",
+        label: "Ask Claude to confirm the result twice",
       },
       {
         id: "m5q27_d",
-        label: "Change the data so it gives a nice result",
+        label: "Ask for a chart: if it looks consistent, the data is right",
       },
     ],
     correctAnswer: "m5q27_b",
@@ -784,94 +826,98 @@ export const MODULE_5_EN = [
     difficulty: "hard",
     source: "Lesson 2: Create with Claude",
     feedback:
-      "Ask for the method and validate a sample with an independent calculation. That way you catch errors before deciding.",
+      "Ask for the method and check a sample with an independent calculation. Claude confirming or a chart looking good does not prove the data is right.",
   },
   {
     id: "m5q28",
     question:
-      "What should you define first before giving Claude a complex task?",
+      "Claude drafted a report for a client and you reviewed and adjusted it. What do you do about the use of AI when you deliver it?",
     options: [
       {
         id: "m5q28_a",
-        label: "The color and typography of the document",
+        label:
+          "Nothing: I reviewed and adjusted it, so the report is now only mine",
       },
       {
         id: "m5q28_b",
-        label: "The result, the success criteria and what it must not do",
+        label: "I mention it only if the client asks how it was made",
       },
       {
         id: "m5q28_c",
-        label: "The number of emojis in the text",
+        label: "I credit Claude as author, since it wrote most of it",
       },
       {
         id: "m5q28_d",
-        label: "Nothing: the less said, the better",
+        label: "I disclose how I used AI and who answers for the content",
       },
     ],
-    correctAnswer: "m5q28_b",
+    correctAnswer: "m5q28_d",
     topic: "Delegating with Claude",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Defining the result, the success criteria and the limits is the step that adds the most quality.",
+      "Disclosing your use of AI is part of delivering honestly: you say what it helped with and who reviewed and answers for the result. Reviewing it does not erase that you used AI, and responsibility belongs to a person, not to the tool.",
   },
   {
     id: "m5q29",
     question:
-      "You receive an email from 'Claude support' asking for your password to 'verify your account'. What do you do?",
+      "You want to ask Claude a one-off question that stays out of your history and its memory. What do you do?",
     options: [
       {
         id: "m5q29_a",
-        label: "Reply with my password so I don't lose the account",
+        label: "Open an incognito chat and share only the data that is needed",
       },
       {
         id: "m5q29_b",
         label:
-          "Don't reply: I check directly in the official app and report the email",
+          "Ask it in your work Project, since it already has all your instructions",
       },
       {
         id: "m5q29_c",
-        label: "Forward the email to all my contacts",
+        label: "Ask it in a normal chat, because memory is private",
       },
       {
         id: "m5q29_d",
-        label: "Click the email link and enter my password there",
+        label:
+          "Use incognito and paste client data, since that is allowed there",
       },
     ],
-    correctAnswer: "m5q29_b",
+    correctAnswer: "m5q29_a",
     topic: "Privacy and data",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "No legitimate company asks for your password by email. Always access through the official app or site.",
+      "Incognito is for a one-off chat: it is not saved to your history or used for memory. Anthropic may still keep those conversations for a period for safety reasons, and incognito does not authorize you to share personal data: share only what is needed. A normal chat or a Project does keep that context.",
   },
   {
     id: "m5q30",
     question:
-      "When you finish a project with Claude, which practice gives the best foundation for the next one?",
+      "When you finish a project with Claude, which practice leaves a better base for the next one?",
     options: [
       {
         id: "m5q30_a",
-        label: "Delete everything and keep no record",
+        label: "Delete the Project to start the next one without context",
       },
       {
         id: "m5q30_b",
-        label: "Save instructions, templates and lessons in a Project or Skill",
+        label: "Leave everything in memory so Claude remembers it on its own",
       },
       {
         id: "m5q30_c",
-        label: "Share the full history with anyone",
+        label:
+          "Save instructions, examples and lessons learned in a Project or Skill",
       },
       {
         id: "m5q30_d",
-        label: "Forget what worked to avoid repeating mistakes",
+        label:
+          "Keep the full chat history and reread all of it the next time you start",
       },
     ],
-    correctAnswer: "m5q30_b",
+    correctAnswer: "m5q30_c",
     topic: "Projects and memory",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "What works should be saved in a Project or a Skill. That way every new piece of work starts from what you have learned.",
+      "What works should be saved in a Project or a Skill: that way every new job starts from what you learned, without rereading chats or relying on what memory keeps.",
   },
 ];
