@@ -264,6 +264,16 @@ const RESOURCES_EN = {
     difficulty: "Intermediate",
     resources: [
       {
+        id: "herramientas-video-1",
+        type: "video",
+        title: "ChatGPT's Integrated Tools",
+        url: "/videos/curso/modulo2-herramientas-chatgpt.mp4",
+        duration: "3:36",
+        description:
+          "MAX shows what each tool is for, which questions to ask before turning it on, and how to check what it returns. (Narrated in Spanish.)",
+        thumbnailType: "premium",
+      },
+      {
         id: "workflow-pdf-modulo2",
         type: "pdf",
         title: "Integrated ChatGPT Tools",
@@ -303,6 +313,16 @@ const RESOURCES_EN = {
     estimatedTime: "25 minutes",
     difficulty: "Advanced",
     resources: [
+      {
+        id: "fachada-video-1",
+        type: "video",
+        title: "GPTs, Projects and Agents: Choose the Structure",
+        url: "/videos/curso/modulo2-gpts-proyectos-agentes.mp4",
+        duration: "3:22",
+        description:
+          "When to use a Project, a GPT or an agent, how to set up a Project in four steps, and how to test and supervise what you build. (Narrated in Spanish.)",
+        thumbnailType: "premium",
+      },
       {
         id: "facade-guide-1",
         type: "pdf",
@@ -393,6 +413,16 @@ const RESOURCES_EN = {
     estimatedTime: "40 minutes",
     difficulty: "Intermediate",
     resources: [
+      {
+        id: "grounding-video-1",
+        type: "video",
+        title: "Grounding: Answers You Can Check",
+        url: "/videos/curso/modulo3-grounding-gemini.mp4",
+        duration: "2:27",
+        description:
+          "What it means to ground an answer, where Gemini's live data comes from, and a four-step method to research and verify. (Narrated in Spanish.)",
+        thumbnailType: "premium",
+      },
       {
         id: "workspace-template-1",
         type: "pdf",
@@ -533,6 +563,16 @@ const RESOURCES_EN = {
     estimatedTime: "20 minutes",
     difficulty: "Intermediate",
     resources: [
+      {
+        id: "curaduria-video-1",
+        type: "video",
+        title: "The Art of Source Curation",
+        url: "/videos/curso/modulo4-curaduria-fuentes.mp4",
+        duration: "2:55",
+        description:
+          "Why a notebook is not a general chat, how to choose quality sources, and how to ask with citations and transform what you read. (Narrated in Spanish.)",
+        thumbnailType: "premium",
+      },
       {
         id: "notebook-summary-template-1",
         type: "pdf",

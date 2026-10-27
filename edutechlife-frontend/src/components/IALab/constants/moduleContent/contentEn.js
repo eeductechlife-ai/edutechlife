@@ -244,7 +244,7 @@ const CONTENT_EN = {
         {
           title: "The Architect's Scaffolding: Integrated Tools",
           icon: "fa-layer-group",
-          resources: 2,
+          resources: 3,
           duration: "30 min",
           outcome:
             "Choose the right ChatGPT tool (search, files, images or voice) and check what it gives you.",
@@ -252,7 +252,7 @@ const CONTENT_EN = {
         {
           title: "The Building's Facade: GPTs, Projects and Agents",
           icon: "fa-code",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Organize a repeated task in a Project and decide when a GPT or an agent makes sense.",
@@ -456,7 +456,7 @@ const CONTENT_EN = {
         {
           title: "Grounding: When Evidence Touches the Real World",
           icon: "fa-layer-group",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Tell an answer with sources from one that only sounds good, and open the sources to check it.",
@@ -673,7 +673,7 @@ const CONTENT_EN = {
         {
           title: "The Art of Curation: How to Choose and Synthesize Sources",
           icon: "fa-book-open",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Choose good sources and turn them into a summary or study guide you can verify.",

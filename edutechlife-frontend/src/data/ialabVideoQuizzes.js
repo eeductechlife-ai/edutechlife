@@ -404,6 +404,136 @@ const ES = {
         "Una Skill convierte un procedimiento repetido en algo reutilizable.",
     },
   ],
+  "herramientas-video-1": [
+    {
+      q: "¿Qué haces con una cifra que entrega el análisis de datos?",
+      options: [
+        "La uso directo, es un cálculo automático",
+        "Recalculo a mano unas pocas filas y comparo",
+        "Pido otra cifra hasta que me guste",
+      ],
+      correct: 1,
+      feedback:
+        "Recalcular a mano unas pocas filas confirma que el análisis es correcto.",
+    },
+    {
+      q: "¿Qué pregunta conviene hacerte antes de activar una herramienta?",
+      options: [
+        "¿Cuántas herramientas puedo activar a la vez?",
+        "¿Cuál es la más nueva del menú?",
+        "¿Cómo voy a verificar el resultado?",
+      ],
+      correct: 2,
+      feedback:
+        "Si no tienes cómo comprobar el resultado, replantea la herramienta o la tarea.",
+    },
+    {
+      q: "¿Qué datos conviene subir a una herramienta?",
+      options: [
+        "Solo lo que mostrarías en un documento público",
+        "Todo lo que dé más contexto",
+        "Datos personales, para personalizar",
+      ],
+      correct: 0,
+      feedback: "Quita antes los datos personales y confidenciales.",
+    },
+  ],
+  "fachada-video-1": [
+    {
+      q: "¿Con qué conviene empezar en un trabajo que se repite?",
+      options: [
+        "Con un agente que lo haga solo",
+        "Con un Proyecto con tus instrucciones y archivos",
+        "Con un GPT, sin revisar tu cuenta",
+      ],
+      correct: 1,
+      feedback:
+        "El Proyecto guarda instrucciones y archivos; además, OpenAI planea retirar los GPTs personalizados.",
+    },
+    {
+      q: "¿Qué prueba verifica que un GPT no repita datos de menores?",
+      options: ["Coherencia", "Caso normal", "Dato sensible"],
+      correct: 2,
+      feedback:
+        "En la prueba de dato sensible, el GPT no debe pedir ni repetir datos personales o de menores.",
+    },
+    {
+      q: "¿Cuál es tu papel cuando un agente ejecuta varios pasos?",
+      options: [
+        "Revisar el plan y aprobar las acciones importantes",
+        "Aprobar el resultado final sin mirar los pasos",
+        "Dejarlo solo para ahorrar tiempo",
+      ],
+      correct: 0,
+      feedback:
+        "Un error temprano se propaga a todo el resultado: supervisa el plan y los pasos.",
+    },
+  ],
+  "grounding-video-1": [
+    {
+      q: "¿Qué significa anclar una respuesta (grounding)?",
+      options: [
+        "Que la IA responde más rápido",
+        "Que la IA apoya lo que dice en fuentes reales que puedes abrir",
+        "Que la IA guarda tus preguntas",
+      ],
+      correct: 1,
+      feedback:
+        "Anclar es apoyar la respuesta en fuentes reales que puedes abrir y comprobar.",
+    },
+    {
+      q: "Una respuesta trae una cifra sin fuente. ¿Qué haces?",
+      options: [
+        "La uso si suena segura",
+        "La redondeo para que parezca exacta",
+        "Pido la fuente y abro el enlace antes de usarla",
+      ],
+      correct: 2,
+      feedback:
+        "Una cifra sin fuente no es evidencia: pide la fuente y ábrela.",
+    },
+    {
+      q: "¿Cuántas fuentes conviene abrir para respaldar las conclusiones clave?",
+      options: ["Al menos tres", "Solo una", "Ninguna, si suena segura"],
+      correct: 0,
+      feedback:
+        "Abre al menos tres fuentes que respalden las conclusiones clave.",
+    },
+  ],
+  "curaduria-video-1": [
+    {
+      q: "¿Qué cuaderno suele responder mejor?",
+      options: [
+        "Uno con cincuenta documentos desordenados",
+        "Uno con cinco fuentes bien elegidas",
+        "Uno con fuentes de fechas mezcladas",
+      ],
+      correct: 1,
+      feedback:
+        "Pocas fuentes bien elegidas dan mejores respuestas que muchas desordenadas.",
+    },
+    {
+      q: "¿Cuál es una buena fuente para tu cuaderno?",
+      options: [
+        "Un texto anónimo sin fecha",
+        "Notas sueltas que se contradicen",
+        "Un informe oficial con fecha y autor",
+      ],
+      correct: 2,
+      feedback: "Una buena fuente tiene autor, fecha y respaldo verificable.",
+    },
+    {
+      q: "Una respuesta del cuaderno trae citas. ¿Qué haces?",
+      options: [
+        "Abro al menos una para comprobar el fragmento",
+        "Las ignoro, ya son confiables",
+        "Las borro para que se vea limpio",
+      ],
+      correct: 0,
+      feedback:
+        "Una respuesta con citas sigue necesitando tu criterio: abre una y confirma.",
+    },
+  ],
 };
 
 const EN = {
@@ -791,6 +921,133 @@ const EN = {
       feedback: "A Skill turns a repeated procedure into something reusable.",
     },
   ],
+  "herramientas-video-1": [
+    {
+      q: "What do you do with a figure from data analysis?",
+      options: [
+        "Use it directly; it is an automatic calculation",
+        "Recalculate a few rows by hand and compare",
+        "Ask for another figure until I like it",
+      ],
+      correct: 1,
+      feedback:
+        "Recalculating a few rows by hand confirms the analysis is correct.",
+    },
+    {
+      q: "Which question should you ask before turning on a tool?",
+      options: [
+        "How many tools can I turn on at once?",
+        "Which one is newest in the menu?",
+        "How will I verify the result?",
+      ],
+      correct: 2,
+      feedback: "If you cannot check the result, rethink the tool or the task.",
+    },
+    {
+      q: "What data is OK to upload to a tool?",
+      options: [
+        "Only what you would show in a public document",
+        "Everything that adds more context",
+        "Personal data, to personalize",
+      ],
+      correct: 0,
+      feedback: "Remove personal and confidential data first.",
+    },
+  ],
+  "fachada-video-1": [
+    {
+      q: "What should you start with for work that repeats?",
+      options: [
+        "An agent that does it alone",
+        "A Project with your instructions and files",
+        "A GPT, without checking your account",
+      ],
+      correct: 1,
+      feedback:
+        "A Project stores instructions and files; also, OpenAI plans to retire custom GPTs.",
+    },
+    {
+      q: "Which test checks that a GPT does not repeat data about minors?",
+      options: ["Consistency", "Normal case", "Sensitive data"],
+      correct: 2,
+      feedback:
+        "In the sensitive-data test, the GPT must not ask for or repeat personal data or data about minors.",
+    },
+    {
+      q: "What is your role when an agent runs several steps?",
+      options: [
+        "Review the plan and approve the important actions",
+        "Approve the final result without checking the steps",
+        "Leave it alone to save time",
+      ],
+      correct: 0,
+      feedback:
+        "An early error spreads to the whole result: supervise the plan and the steps.",
+    },
+  ],
+  "grounding-video-1": [
+    {
+      q: "What does grounding an answer mean?",
+      options: [
+        "The AI answers faster",
+        "The AI backs what it says with real sources you can open",
+        "The AI saves your questions",
+      ],
+      correct: 1,
+      feedback:
+        "Grounding means backing the answer with real sources you can open and check.",
+    },
+    {
+      q: "An answer includes a figure with no source. What do you do?",
+      options: [
+        "Use it if it sounds confident",
+        "Round it so it looks exact",
+        "Ask for the source and open the link before using it",
+      ],
+      correct: 2,
+      feedback:
+        "A figure without a source is not evidence: ask for the source and open it.",
+    },
+    {
+      q: "How many sources should you open to back the key conclusions?",
+      options: ["At least three", "Only one", "None, if it sounds confident"],
+      correct: 0,
+      feedback: "Open at least three sources that support the key conclusions.",
+    },
+  ],
+  "curaduria-video-1": [
+    {
+      q: "Which notebook usually answers better?",
+      options: [
+        "One with fifty messy documents",
+        "One with five well-chosen sources",
+        "One with sources from mixed dates",
+      ],
+      correct: 1,
+      feedback: "A few well-chosen sources beat many messy ones.",
+    },
+    {
+      q: "Which is a good source for your notebook?",
+      options: [
+        "An anonymous text with no date",
+        "Loose notes that contradict each other",
+        "An official report with a date and author",
+      ],
+      correct: 2,
+      feedback: "A good source has an author, a date and verifiable backing.",
+    },
+    {
+      q: "A notebook answer includes citations. What do you do?",
+      options: [
+        "Open at least one to check the passage",
+        "Ignore them; they are already reliable",
+        "Delete them so it looks clean",
+      ],
+      correct: 0,
+      feedback:
+        "An answer with citations still needs your judgment: open one and confirm.",
+    },
+  ],
 };
 
 const PT = {
@@ -1173,6 +1430,135 @@ const PT = {
       correct: 0,
       feedback:
         "Uma Skill transforma um procedimento repetido em algo reutilizável.",
+    },
+  ],
+  "herramientas-video-1": [
+    {
+      q: "O que você faz com um número da análise de dados?",
+      options: [
+        "Uso direto, é um cálculo automático",
+        "Recalculo à mão algumas linhas e comparo",
+        "Peço outro número até gostar",
+      ],
+      correct: 1,
+      feedback:
+        "Recalcular à mão algumas linhas confirma que a análise está correta.",
+    },
+    {
+      q: "Qual pergunta convém fazer antes de ativar uma ferramenta?",
+      options: [
+        "Quantas ferramentas posso ativar ao mesmo tempo?",
+        "Qual é a mais nova do menu?",
+        "Como vou verificar o resultado?",
+      ],
+      correct: 2,
+      feedback:
+        "Se você não tem como conferir o resultado, repense a ferramenta ou a tarefa.",
+    },
+    {
+      q: "Que dados convém enviar a uma ferramenta?",
+      options: [
+        "Só o que você mostraria em um documento público",
+        "Tudo que der mais contexto",
+        "Dados pessoais, para personalizar",
+      ],
+      correct: 0,
+      feedback: "Remova antes os dados pessoais e confidenciais.",
+    },
+  ],
+  "fachada-video-1": [
+    {
+      q: "Com o que convém começar em um trabalho que se repete?",
+      options: [
+        "Com um agente que faça sozinho",
+        "Com um Projeto com suas instruções e arquivos",
+        "Com um GPT, sem checar sua conta",
+      ],
+      correct: 1,
+      feedback:
+        "O Projeto guarda instruções e arquivos; além disso, a OpenAI planeja aposentar os GPTs personalizados.",
+    },
+    {
+      q: "Qual teste verifica que um GPT não repete dados de menores?",
+      options: ["Coerência", "Caso normal", "Dado sensível"],
+      correct: 2,
+      feedback:
+        "No teste de dado sensível, o GPT não deve pedir nem repetir dados pessoais ou de menores.",
+    },
+    {
+      q: "Qual é o seu papel quando um agente executa vários passos?",
+      options: [
+        "Revisar o plano e aprovar as ações importantes",
+        "Aprovar o resultado final sem olhar os passos",
+        "Deixá-lo sozinho para ganhar tempo",
+      ],
+      correct: 0,
+      feedback:
+        "Um erro inicial se propaga a todo o resultado: supervisione o plano e os passos.",
+    },
+  ],
+  "grounding-video-1": [
+    {
+      q: "O que significa ancorar uma resposta (grounding)?",
+      options: [
+        "A IA responde mais rápido",
+        "A IA apoia o que diz em fontes reais que você pode abrir",
+        "A IA guarda suas perguntas",
+      ],
+      correct: 1,
+      feedback:
+        "Ancorar é apoiar a resposta em fontes reais que você pode abrir e conferir.",
+    },
+    {
+      q: "Uma resposta traz um número sem fonte. O que você faz?",
+      options: [
+        "Uso se parecer seguro",
+        "Arredondo para parecer exato",
+        "Peço a fonte e abro o link antes de usar",
+      ],
+      correct: 2,
+      feedback: "Um número sem fonte não é evidência: peça a fonte e abra.",
+    },
+    {
+      q: "Quantas fontes convém abrir para sustentar as conclusões-chave?",
+      options: ["Pelo menos três", "Só uma", "Nenhuma, se parecer seguro"],
+      correct: 0,
+      feedback:
+        "Abra pelo menos três fontes que sustentem as conclusões-chave.",
+    },
+  ],
+  "curaduria-video-1": [
+    {
+      q: "Qual caderno costuma responder melhor?",
+      options: [
+        "Um com cinquenta documentos bagunçados",
+        "Um com cinco fontes bem escolhidas",
+        "Um com fontes de datas misturadas",
+      ],
+      correct: 1,
+      feedback:
+        "Poucas fontes bem escolhidas dão melhores respostas que muitas bagunçadas.",
+    },
+    {
+      q: "Qual é uma boa fonte para o seu caderno?",
+      options: [
+        "Um texto anônimo sem data",
+        "Anotações soltas que se contradizem",
+        "Um relatório oficial com data e autor",
+      ],
+      correct: 2,
+      feedback: "Uma boa fonte tem autor, data e respaldo verificável.",
+    },
+    {
+      q: "Uma resposta do caderno traz citações. O que você faz?",
+      options: [
+        "Abro pelo menos uma para conferir o trecho",
+        "Ignoro, já são confiáveis",
+        "Apago para ficar limpo",
+      ],
+      correct: 0,
+      feedback:
+        "Uma resposta com citações ainda precisa do seu critério: abra uma e confirme.",
     },
   ],
 };

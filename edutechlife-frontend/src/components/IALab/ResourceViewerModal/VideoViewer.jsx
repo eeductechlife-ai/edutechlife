@@ -94,7 +94,11 @@ const VideoViewer = ({
           disablekb: 1,
           enablejsapi: 1,
           origin: window.location.origin,
-          cc_load_policy: 0,
+          // Subtítulos en el idioma del estudiante cuando el video es de otro idioma.
+          cc_load_policy: resource?.captionLang ? 1 : 0,
+          ...(resource?.captionLang
+            ? { cc_lang_pref: resource.captionLang, hl: resource.captionLang }
+            : {}),
           // Preferencia de calidad inicial en HD.
           vq: "hd1080",
         },

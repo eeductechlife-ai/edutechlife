@@ -244,7 +244,7 @@ const CONTENT_ES = {
         {
           title: "El Andamio del Arquitecto: Herramientas Integradas",
           icon: "fa-layer-group",
-          resources: 2,
+          resources: 3,
           duration: "30 min",
           outcome:
             "Elegir la herramienta de ChatGPT adecuada (búsqueda, archivos, imágenes o voz) y comprobar lo que te entrega.",
@@ -252,7 +252,7 @@ const CONTENT_ES = {
         {
           title: "La Fachada del Edificio: GPTs, Proyectos y Agentes",
           icon: "fa-code",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Organizar un trabajo repetido en un Proyecto y decidir cuándo conviene un GPT o un agente.",
@@ -456,7 +456,7 @@ const CONTENT_ES = {
         {
           title: "Grounding: Cuando la Evidencia Toca Tierra",
           icon: "fa-layer-group",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Distinguir una respuesta con fuentes de una que solo suena bien, y abrir las fuentes para comprobarla.",
@@ -673,7 +673,7 @@ const CONTENT_ES = {
         {
           title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
           icon: "fa-book-open",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Elegir buenas fuentes y convertirlas en un resumen o una guía de estudio que puedas verificar.",
