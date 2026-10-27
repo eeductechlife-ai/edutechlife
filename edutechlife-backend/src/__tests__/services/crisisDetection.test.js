@@ -8,15 +8,12 @@ const HIGH_RISK_ES = [
   'quiero desaparecer',
   'me quiero morir',
   'ya no quiero vivir',
-  'me toca',
   'me tocan',
-  'me pega',
   'me pegan',
   'no le digas a mi mamá',
   'no le digas a mi papá',
   'no le digas a mi mama',
   'no le digas a mi papa',
-  'es un secreto',
 ];
 
 describe('detectCrisis - frases de ideación suicida y abuso (es)', () => {
@@ -29,6 +26,11 @@ describe('detectCrisis - frases de ideación suicida y abuso (es)', () => {
   it('detecta la frase dentro de una oración más larga', () => {
     const result = detectCrisis('Profe, a veces siento que quiero morir y nadie se entera', 'es');
     expect(result.level).toBe('high');
+  });
+
+  it('una frase ambigua de uso cotidiano no dispara nivel alto', () => {
+    expect(detectCrisis('me toca hacer la tarea de matemáticas', 'es').level).not.toBe('high');
+    expect(detectCrisis('me pega el calor en el salón', 'es').level).not.toBe('high');
   });
 
   it('no marca como nivel alto un mensaje sin señales', () => {

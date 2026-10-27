@@ -39,16 +39,14 @@ const CRISIS_KEYWORDS = {
       'no quiero vivir',
       'ya no quiero vivir',
       'quiero desaparecer',
-      // Señales de abuso o grooming
-      'me toca',
+      // Señales de abuso o grooming (solo frases poco ambiguas: "me toca",
+      // "me pega" y "es un secreto" tienen uso cotidiano y pasan a riesgo medio)
       'me tocan',
-      'me pega',
       'me pegan',
       'no le digas a mi mamá',
       'no le digas a mi mama',
       'no le digas a mi papá',
-      'no le digas a mi papa',
-      'es un secreto'
+      'no le digas a mi papa'
     ],
     medium_risk: [
       'deprimido',
@@ -67,7 +65,10 @@ const CRISIS_KEYWORDS = {
       'mejor sin mí',
       'soy un problema',
       'todos estarían mejor sin mí',
-      'desaparecerme'
+      'desaparecerme',
+      'me toca',
+      'me pega',
+      'es un secreto'
     ]
   },
   // English keywords
