@@ -264,6 +264,16 @@ const RESOURCES_ES = {
     difficulty: "Intermedio",
     resources: [
       {
+        id: "herramientas-video-1",
+        type: "video",
+        title: "Las herramientas integradas de ChatGPT",
+        url: "/videos/curso/modulo2-herramientas-chatgpt.mp4",
+        duration: "3:36",
+        description:
+          "MAX te muestra para qué sirve cada herramienta, qué preguntas hacerte antes de activarla y cómo comprobar lo que entrega.",
+        thumbnailType: "premium",
+      },
+      {
         id: "workflow-pdf-modulo2",
         type: "pdf",
         title: "Las Herramientas Integradas de ChatGPT",
@@ -303,6 +313,16 @@ const RESOURCES_ES = {
     estimatedTime: "25 minutos",
     difficulty: "Avanzado",
     resources: [
+      {
+        id: "fachada-video-1",
+        type: "video",
+        title: "GPTs, Proyectos y agentes: elige la estructura",
+        url: "/videos/curso/modulo2-gpts-proyectos-agentes.mp4",
+        duration: "3:22",
+        description:
+          "Cuándo usar un Proyecto, un GPT o un agente, cómo armar un Proyecto en cuatro pasos y cómo probar y supervisar lo que construyes.",
+        thumbnailType: "premium",
+      },
       {
         id: "facade-guide-1",
         type: "pdf",
@@ -393,6 +413,16 @@ const RESOURCES_ES = {
     estimatedTime: "40 minutos",
     difficulty: "Intermedio",
     resources: [
+      {
+        id: "grounding-video-1",
+        type: "video",
+        title: "Grounding: respuestas que puedes comprobar",
+        url: "/videos/curso/modulo3-grounding-gemini.mp4",
+        duration: "2:27",
+        description:
+          "Qué es anclar una respuesta, de dónde salen los datos vivos de Gemini y un método de cuatro pasos para investigar y comprobar.",
+        thumbnailType: "premium",
+      },
       {
         id: "workspace-template-1",
         type: "pdf",
@@ -536,6 +566,16 @@ const RESOURCES_ES = {
     difficulty: "Intermedio",
     resources: [
       {
+        id: "curaduria-video-1",
+        type: "video",
+        title: "El arte de la curaduría de fuentes",
+        url: "/videos/curso/modulo4-curaduria-fuentes.mp4",
+        duration: "2:55",
+        description:
+          "Por qué un cuaderno no es un chat general, cómo elegir fuentes de calidad y cómo preguntar con citas y transformar lo que lees.",
+        thumbnailType: "premium",
+      },
+      {
         id: "notebook-summary-template-1",
         type: "pdf",
         title: "Gemini Notebook: el cuaderno del futuro",
@@ -630,9 +670,10 @@ const RESOURCES_ES = {
         duration: "5:19",
         thumbnail: "https://img.youtube.com/vi/0vZ_UVLhSQQ/maxresdefault.jpg",
         provider: "youtube",
+        captionLang: "es",
         title: "Introducción a Claude.ai",
         description:
-          "Video oficial de Anthropic, en inglés (título original: «Getting started with Claude.ai»): cómo empezar con Claude.ai y tener tu primera conversación útil. Si lo necesitas, activa los subtítulos de YouTube.",
+          "Video oficial de Anthropic, en inglés (título original: «Getting started with Claude.ai»): cómo empezar con Claude.ai y tener tu primera conversación útil. Se abre con subtítulos en español (traducción automática de YouTube).",
       },
       {
         id: "claude-guide-es",
