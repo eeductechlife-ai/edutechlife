@@ -47,9 +47,9 @@ export const contentData = {
       "Verify data against primary sources to avoid hallucinations.",
       "Use AI as a tutor to expand learning.",
     ],
-    toolTitle: "Featured Tool: NotebookLM",
+    toolTitle: "Featured tool: Gemini Notebook (formerly NotebookLM)",
     toolDesc:
-      "NotebookLM is an example of how to use AI responsibly for research, allowing you to centralize sources and verify information with direct citations.",
+      "Gemini Notebook is an example of using AI responsibly for research: it gathers your sources and shows citations you can open to check the information.",
   },
   cap3: {
     title: "3. Risks and Disadvantages",

@@ -391,7 +391,8 @@ const RESOURCES_ES = {
         id: "gemini-multimodal-ova-1",
         type: "ova_interactive",
         title: "La Lupa a Prueba",
-        description: null,
+        description:
+          "Mira cómo Gemini mira imágenes, texto y datos juntos: útil para analizar casos reales de tu entorno, con verificación de cada dato.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 6,
@@ -466,7 +467,8 @@ const RESOURCES_ES = {
       {
         id: "gemini-cases-video-1",
         type: "video",
-        title: "Casos Reales: Detectives Digitales en Acción",
+        title:
+          "Investigación académica con IA en minutos: Gemini y Deep Research sin perder rigor",
         url: "https://www.youtube.com/embed/XAshixrvG5k",
         duration: "2:41",
         thumbnail: "https://img.youtube.com/vi/XAshixrvG5k/maxresdefault.jpg",
@@ -517,7 +519,7 @@ const RESOURCES_ES = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "Primeros Pasos con Gemini Notebook",
+        title: "Guía completa de NotebookLM: exprímelo al 100% (2026)",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",

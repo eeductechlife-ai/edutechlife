@@ -93,76 +93,75 @@ export const MODULE_4 = [
     options: [
       {
         id: "m4q4_a",
-        label: "Comparar la cita con el original que subiste",
+        label: "Confiar en la cita si el PDF tiene buen formato",
       },
       {
         id: "m4q4_b",
-        label: "Confiar en la cita sin revisar el original",
+        label: "Borrar el PDF y pedir la respuesta de nuevo",
       },
       {
         id: "m4q4_c",
-        label: "Borrar el PDF porque la IA ya lo interpretó",
+        label: "Traducir la cita y comparar con su traducción",
       },
       {
         id: "m4q4_d",
-        label: "Traducir la respuesta para comprobar su calidad",
+        label: "Comparar la cita con el texto original del PDF que subiste",
       },
     ],
-    correctAnswer: "m4q4_a",
+    correctAnswer: "m4q4_d",
     topic: "Precisión",
     difficulty: "difícil",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Verifica siempre las citas con la fuente original: la IA te da velocidad y tú le das precisión.",
+      "Comparar la cita con el texto original confirma que el dato está y que dice lo que se afirma.",
   },
   {
     id: "m4q5",
-    question:
-      "¿Cómo organizas mejor tus fuentes en Gemini Notebook para investigar?",
+    question: "¿Cómo conviene nombrar un cuaderno de investigación?",
     options: [
       {
         id: "m4q5_a",
-        label: "Subir todas las fuentes sin ordenarlas",
+        label: "Con el tema concreto que investigas",
       },
       {
         id: "m4q5_b",
-        label: "Elegir fuentes relevantes y agruparlas por tema",
+        label: "Con tu nombre, para que se reconozca",
       },
       {
         id: "m4q5_c",
-        label: "Subir solo resúmenes, nunca documentos completos",
+        label: "Solo con la fecha de hoy",
       },
       {
         id: "m4q5_d",
-        label: "Mezclar fuentes académicas con blogs sin distinción",
+        label: "Con un título vacío para cambiarlo después",
       },
     ],
-    correctAnswer: "m4q5_b",
+    correctAnswer: "m4q5_a",
     topic: "Curaduría",
     difficulty: "medio",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Fuentes bien elegidas y organizadas dan mejores respuestas. Revisa el tema de curaduría.",
+      "Un nombre con el tema concreto permite encontrar el cuaderno y saber qué fuentes contiene.",
   },
   {
     id: "m4q6",
-    question: "Si dos de tus fuentes se contradicen, ¿qué haces?",
+    question: "Dos fuentes se contradicen. ¿Qué haces?",
     options: [
       {
         id: "m4q6_a",
-        label: "Analizas las dos fuentes con cuidado",
+        label: "Analizo las dos fuentes con cuidado y explico la diferencia",
       },
       {
         id: "m4q6_b",
-        label: "Eliminas las dos fuentes y buscas otras",
+        label: "Elimino las dos fuentes y busco otras sin mirarlas",
       },
       {
         id: "m4q6_c",
-        label: "Te quedas solo con la más reciente",
+        label: "Me quedo solo con la más reciente, sin comparar",
       },
       {
         id: "m4q6_d",
-        label: "Ignoras la contradicción y sigues",
+        label: "Ignoro la contradicción porque el resumen ya quedó bien",
       },
     ],
     correctAnswer: "m4q6_a",
@@ -170,7 +169,7 @@ export const MODULE_4 = [
     difficulty: "difícil",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Las contradicciones fortalecen tu investigación si las analizas. Repasa el simulador de análisis.",
+      "Una contradicción se resuelve leyendo ambas fuentes y explicando la diferencia. Descartar o ignorar una fuente no lo resuelve.",
   },
   {
     id: "m4q7",
@@ -199,7 +198,7 @@ export const MODULE_4 = [
     difficulty: "medio",
     source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "La IA es tu asistente, pero el responsable final eres tú. Revisa el OVA del módulo.",
+      "La IA es tu asistente, pero el responsable final eres tú. Revisa la guía del módulo.",
   },
   {
     id: "m4q8",
@@ -228,7 +227,7 @@ export const MODULE_4 = [
     difficulty: "medio",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Gemini Notebook permite compartir notebooks como Google Docs. Repasa el laboratorio del módulo.",
+      "Gemini Notebook permite compartir notebooks como Google Docs. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q9",
@@ -291,23 +290,23 @@ export const MODULE_4 = [
   {
     id: "m4q11",
     question:
-      "¿Cuál es la diferencia clave de Gemini Notebook frente a un chat general?",
+      "Vas a subir a un cuaderno una lista de estudiantes con sus notas. ¿Qué haces?",
     options: [
       {
         id: "m4q11_a",
-        label: "Responde solo con las fuentes que has subido al cuaderno",
+        label: "La anonimizas: códigos en lugar de nombres y solo lo necesario",
       },
       {
         id: "m4q11_b",
-        label: "Busca por su cuenta en internet cualquier dato nuevo",
+        label: "La subes completa, porque el cuaderno es privado",
       },
       {
         id: "m4q11_c",
-        label: "Inventa respuestas creativas aunque no haya fuentes cargadas",
+        label: "La subes con los teléfonos para contactarlos luego",
       },
       {
         id: "m4q11_d",
-        label: "Traduce los documentos a otro idioma automáticamente",
+        label: "La compartes con todo el curso sin revisarla",
       },
     ],
     correctAnswer: "m4q11_a",
@@ -315,7 +314,7 @@ export const MODULE_4 = [
     difficulty: "fácil",
     source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "Gemini Notebook se basa en tus fuentes: si no está en tus documentos, no lo responde. Revisa el video de primeros pasos.",
+      "Anonimizar y subir solo lo necesario protege a los estudiantes. Un cuaderno es un documento de trabajo, no un lugar sin reglas.",
   },
   {
     id: "m4q12",
@@ -347,32 +346,31 @@ export const MODULE_4 = [
   },
   {
     id: "m4q13",
-    question:
-      "¿Cuál de estas fuentes aporta más a un cuaderno de investigación formal?",
+    question: "¿Qué dato te indica que una fuente es confiable?",
     options: [
       {
         id: "m4q13_a",
-        label: "Artículos revisados por pares y datasets abiertos",
+        label: "Tiene muchas visitas y comentarios positivos",
       },
       {
         id: "m4q13_b",
-        label: "Comentarios sueltos de redes sociales sin autor claro",
+        label: "Es el primer resultado de la búsqueda",
       },
       {
         id: "m4q13_c",
-        label: "Memes y publicaciones graciosas sobre el tema",
+        label: "Autor identificable, fecha y referencias verificables",
       },
       {
         id: "m4q13_d",
-        label: "Opiniones anónimas sin fuente ni fecha declarada",
+        label: "Usa un lenguaje muy seguro y entusiasta",
       },
     ],
-    correctAnswer: "m4q13_a",
+    correctAnswer: "m4q13_c",
     topic: "Curaduría",
     difficulty: "fácil",
     source: "El Grimorio",
     feedback:
-      "Prioriza fuentes confiables y verificables. Practica en el laboratorio de creación de notebooks.",
+      "Autor, fecha y referencias se pueden comprobar. Las visitas, el orden de búsqueda o el tono no prueban nada.",
   },
   {
     id: "m4q14",
@@ -399,38 +397,38 @@ export const MODULE_4 = [
     correctAnswer: "m4q14_a",
     topic: "Curaduría",
     difficulty: "medio",
-    source: "Resúmenes Inteligentes con Gemini Notebook",
+    source: "Gemini Notebook: el cuaderno del futuro",
     feedback:
-      "Menos ruido, mejores respuestas: prioriza relevancia y confiabilidad. Repasa la infografía de resúmenes.",
+      "Menos ruido, mejores respuestas: prioriza relevancia y confiabilidad. Repasa la guía de Gemini Notebook.",
   },
   {
     id: "m4q15",
     question:
-      "Gemini Notebook solo responde con base en tus documentos. ¿Qué implica esto?",
+      "Quieres que el cuaderno responda solo sobre el documento 3. ¿Qué haces?",
     options: [
       {
         id: "m4q15_a",
-        label: "Si un dato no aparece en tus fuentes, no lo inventará",
+        label: "Subes todos los documentos y esperas que lo recuerde",
       },
       {
         id: "m4q15_b",
-        label: "El cuaderno accede solo a internet para completar datos",
+        label: "Pides que responda también con datos de internet",
       },
       {
         id: "m4q15_c",
-        label: "Siempre conoce más que la información que tú subiste",
+        label: "Pides que responda solo con ese documento y que cite la página",
       },
       {
         id: "m4q15_d",
-        label: "Puede completar huecos con información de otros usuarios",
+        label: "Borras los demás documentos sin avisar a nadie",
       },
     ],
-    correctAnswer: "m4q15_a",
+    correctAnswer: "m4q15_c",
     topic: "Alcance",
     difficulty: "medio",
     source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "Gemini Notebook es fiel a tus fuentes: por eso importa la curaduría. Revisa el video de primeros pasos.",
+      "Limitar la pregunta a un documento y pedir la página hace verificable la respuesta. Los demás pasos mezclan fuentes o pierden trazabilidad.",
   },
   {
     id: "m4q16",
@@ -521,60 +519,60 @@ export const MODULE_4 = [
   {
     id: "m4q19",
     question:
-      "Gemini Notebook da una cifra que no aparece en ninguno de tus documentos. ¿Qué haces?",
+      "Gemini Notebook da una cifra que no aparece en tus documentos. ¿Qué haces?",
     options: [
       {
         id: "m4q19_a",
-        label: "Buscarla en tus documentos y, si falta, no usarla",
+        label: "Usarla con una nota de que viene del cuaderno",
       },
       {
         id: "m4q19_b",
-        label: "Usarla, porque suena creíble y viene de una IA",
+        label: "Redondearla a un valor parecido y citar el cuaderno",
       },
       {
         id: "m4q19_c",
-        label: "Citar el notebook como fuente y publicarla así",
+        label: "Buscarla en tus documentos y, si falta, no usarla",
       },
       {
         id: "m4q19_d",
-        label: "Pedirle que la redondee para que parezca más precisa",
+        label: "Usarla porque la IA la dio con seguridad",
       },
     ],
-    correctAnswer: "m4q19_a",
+    correctAnswer: "m4q19_c",
     topic: "Precisión",
     difficulty: "difícil",
     source: "El Grimorio",
     feedback:
-      "Si la cifra no está en tus fuentes no es verificable: no la uses hasta confirmarla. Practica en el laboratorio de notebooks.",
+      "Una cifra que no aparece en tus documentos no es verificable. Búscala y, si falta, no la uses.",
   },
   {
     id: "m4q20",
     question:
-      "Dos fuentes se contradicen sobre un punto. ¿Qué es lo más riguroso?",
+      "Un informe cita una fuente que no encuentras en tu cuaderno. ¿Qué haces?",
     options: [
       {
         id: "m4q20_a",
-        label: "Analizar ambas fuentes y documentar la diferencia clara",
+        label: "Doy por válida la cita porque está bien escrita",
       },
       {
         id: "m4q20_b",
-        label: "Quedarte con la más reciente y descartar la otra sin más",
+        label: "Reviso si la subí y busco la fuente original",
       },
       {
         id: "m4q20_c",
-        label: "Ignorar la contradicción para no complicar el informe",
+        label: "Quito la cita del informe sin revisar nada más",
       },
       {
         id: "m4q20_d",
-        label: "Borrar las dos fuentes y quedarte sin evidencia del punto",
+        label: "Escribo el nombre del autor por mi cuenta",
       },
     ],
-    correctAnswer: "m4q20_a",
+    correctAnswer: "m4q20_b",
     topic: "Análisis Crítico",
     difficulty: "difícil",
     source: "El Crisol",
     feedback:
-      "Documenta la contradicción y busca evidencia adicional. Practica en el simulador de análisis.",
+      "Una cita que no puedes abrir no respalda el dato. Busca la fuente original antes de usarla.",
   },
   {
     id: "m4q21",
@@ -606,23 +604,23 @@ export const MODULE_4 = [
   },
   {
     id: "m4q22",
-    question: "¿Para qué situación es más útil un Audio Overview?",
+    question: "¿Cuál es la mejor manera de usar un Audio Overview?",
     options: [
       {
         id: "m4q22_a",
-        label: "Para repasar mientras te desplazas",
+        label: "Escucharlo primero y después abrir las citas que te interesan",
       },
       {
         id: "m4q22_b",
-        label: "Para reemplazar por completo la lectura y el análisis",
+        label: "Usarlo como única lectura del tema",
       },
       {
         id: "m4q22_c",
-        label: "Para subir documentos",
+        label: "Compartirlo sin revisar lo que dice",
       },
       {
         id: "m4q22_d",
-        label: "Para traducir los documentos a otro idioma desconocido",
+        label: "Usarlo para reemplazar las fuentes originales",
       },
     ],
     correctAnswer: "m4q22_a",
@@ -630,35 +628,35 @@ export const MODULE_4 = [
     difficulty: "fácil",
     source: "El Estudio Alquímico",
     feedback:
-      "El audio sirve para aprender en movimiento; no reemplaza el análisis. Practica en el laboratorio de podcast.",
+      "El audio sirve para una primera lectura en movimiento. Para confiar en lo que dice, abre las citas.",
   },
   {
     id: "m4q23",
-    question: "Al generar un podcast con tus documentos, ¿qué control tienes?",
+    question: "¿Cuál es el paso correcto después de escuchar el audio?",
     options: [
       {
         id: "m4q23_a",
-        label: "Orientas el enfoque y vuelves a generar si quieres",
+        label: "Dar por terminado el estudio sin revisar nada",
       },
       {
         id: "m4q23_b",
-        label: "No tienes ningún control y siempre sale igual al azar",
+        label: "Subir el audio como fuente del cuaderno",
       },
       {
         id: "m4q23_c",
-        label: "Escribes palabra por palabra el guion final del audio",
+        label: "Escribir tres ideas propias y compararlas con las citas",
       },
       {
         id: "m4q23_d",
-        label: "Solo eliges la música de fondo de la introducción",
+        label: "Compartirlo sin volver a escucharlo",
       },
     ],
-    correctAnswer: "m4q23_a",
+    correctAnswer: "m4q23_c",
     topic: "Audio Overview",
     difficulty: "medio",
     source: "El Estudio Alquímico",
     feedback:
-      "Puedes orientar el enfoque y regenerar. Practica en el laboratorio de creación de podcast IA.",
+      "Escribir las ideas con tus palabras y compararlas con las citas comprueba que entendiste y que el audio es fiel.",
   },
   {
     id: "m4q24",
@@ -684,9 +682,9 @@ export const MODULE_4 = [
     correctAnswer: "m4q24_a",
     topic: "Audio Overview",
     difficulty: "medio",
-    source: "La Transmutación",
+    source: "El Estudio Alquímico",
     feedback:
-      "Mejores fuentes y organización, mejor audio. Repasa el dominio del documento al podcast.",
+      "Mejores fuentes y organización, mejor audio. Repasa la actividad El Estudio Alquímico.",
   },
   {
     id: "m4q25",
@@ -719,52 +717,52 @@ export const MODULE_4 = [
   },
   {
     id: "m4q26",
-    question: "¿Quiénes pueden acceder a un notebook que compartes?",
+    question:
+      "¿Qué debes decidir antes de compartir un cuaderno con tu equipo?",
     options: [
       {
         id: "m4q26_a",
-        label: "Solo quienes reciben acceso al momento de compartir",
+        label: "Nada: se comparte con el mundo entero automáticamente",
       },
       {
         id: "m4q26_b",
-        label: "Cualquier persona del mundo, sin necesidad de invitación",
+        label: "Solo el color del título del cuaderno",
       },
       {
         id: "m4q26_c",
-        label: "Todos los usuarios de Gemini Notebook de forma automática",
+        label: "Que cada uno reciba una copia distinta con sus datos",
       },
       {
         id: "m4q26_d",
-        label: "Nadie, porque un cuaderno nunca se puede compartir",
+        label: "Quién puede ver y quién puede editarlo",
       },
     ],
-    correctAnswer: "m4q26_a",
+    correctAnswer: "m4q26_d",
     topic: "Colaboración",
     difficulty: "fácil",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Compartes con quien decidas, como en un documento colaborativo. Repasa la guía de Gemini Notebook.",
+      "Compartir bien significa definir quién ve y quién edita. Los permisos evitan cambios o accesos no deseados.",
   },
   {
     id: "m4q27",
-    question:
-      "Quieres formular una pregunta precisa a Gemini Notebook. ¿Cuál funciona mejor?",
+    question: "¿Qué pregunta conviene para comparar dos fuentes?",
     options: [
       {
         id: "m4q27_a",
-        label: "Una pregunta concreta que pida citar fuentes",
+        label: "¿En qué se contradicen y de qué documento sale cada punto?",
       },
       {
         id: "m4q27_b",
-        label: "Una palabra suelta sin contexto",
+        label: "¿Qué opinas de todo lo que dicen las fuentes en general?",
       },
       {
         id: "m4q27_c",
-        label: "Varias preguntas distintas mezcladas en un solo mensaje",
+        label: "Dame todo sobre el tema en una línea",
       },
       {
         id: "m4q27_d",
-        label: "Una petición amplia sin relación a las fuentes cargadas",
+        label: "Háblame de cualquier cosa que tengas",
       },
     ],
     correctAnswer: "m4q27_a",
@@ -772,7 +770,7 @@ export const MODULE_4 = [
     difficulty: "medio",
     source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "Preguntas concretas con citas dan mejores resultados. Revisa el video de primeros pasos.",
+      "Una pregunta concreta que pide el punto de contraste y su documento produce una comparación verificable.",
   },
   {
     id: "m4q28",
@@ -781,84 +779,84 @@ export const MODULE_4 = [
     options: [
       {
         id: "m4q28_a",
-        label: "Revisar la fuente y ajustar tu conclusión",
+        label: "Ignorar el dato porque ya tienes tu conclusión",
       },
       {
         id: "m4q28_b",
-        label: "Ignorar el dato sin revisarlo",
+        label: "Revisar la fuente y ajustar tu conclusión",
       },
       {
         id: "m4q28_c",
-        label: "Borrar el documento para que no aparezca en el cuaderno",
+        label: "Quitar ese documento del cuaderno sin decir nada",
       },
       {
         id: "m4q28_d",
-        label: "Pedirle a la IA que omita los datos que te contradicen",
+        label: "Pedirle a la IA que resuma sin ese dato",
       },
     ],
-    correctAnswer: "m4q28_a",
+    correctAnswer: "m4q28_b",
     topic: "Análisis Crítico",
     difficulty: "difícil",
     source: "El Crisol",
     feedback:
-      "La evidencia manda: ajusta tu conclusión si la fuente lo amerita. Practica en el simulador.",
+      "Un dato que contradice tu conclusión obliga a revisar la fuente y, si corresponde, ajustar la conclusión.",
   },
   {
     id: "m4q29",
-    question:
-      "¿Qué diferencia hay entre la base de conocimiento de un cuaderno y un chat general?",
+    question: "Dos documentos de 2019 y 2025 dan cifras distintas. ¿Qué haces?",
     options: [
       {
         id: "m4q29_a",
-        label: "El cuaderno se limita a responder con tus fuentes subidas",
+        label: "Uso la cifra de 2019 porque fue la primera que apareció",
       },
       {
         id: "m4q29_b",
-        label: "Ninguna: ambos responden siempre igual a la misma pregunta",
+        label:
+          "Comparo las fechas, uso la fuente más reciente y explico el cambio",
       },
       {
         id: "m4q29_c",
-        label: "El chat general solo funciona con archivos PDF cargados",
+        label: "Promedio las dos cifras sin mirar sus fechas",
       },
       {
         id: "m4q29_d",
-        label: "El cuaderno puede inventar datos fuera de tus documentos",
+        label: "Ignoro las cifras y escribo solo la conclusión",
       },
     ],
-    correctAnswer: "m4q29_a",
+    correctAnswer: "m4q29_b",
     topic: "Alcance",
     difficulty: "medio",
     source: "Guía de Gemini Notebook",
     feedback:
-      "El cuaderno está anclado a tus fuentes; el chat general usa su conocimiento previo. Repasa la guía.",
+      "Las fechas explican por qué cambian las cifras. Usar la más reciente con una explicación es el camino riguroso.",
   },
   {
     id: "m4q30",
-    question: "¿Qué logra la curaduría de fuentes en una investigación?",
+    question: "¿Para qué sirve filtrar fuentes antes de sintetizar?",
     options: [
       {
         id: "m4q30_a",
-        label: "Respuestas más fiables, apoyadas en fuentes relevantes",
+        label: "Para que el cuaderno pese más y se vea mejor",
       },
       {
         id: "m4q30_b",
-        label: "Que el cuaderno sea más pesado y difícil de abrir",
+        label: "Para que el resumen se apoye en lo que realmente importa",
       },
       {
         id: "m4q30_c",
-        label: "Que la IA invente más para rellenar los huecos de datos",
+        label: "Para que la IA invente lo que falta",
       },
       {
         id: "m4q30_d",
-        label: "Que se puedan cargar menos documentos en cada cuaderno",
+        label: "Para subir menos fuentes sin ninguna razón",
       },
     ],
-    correctAnswer: "m4q30_a",
+    correctAnswer: "m4q30_b",
     topic: "Curaduría",
     difficulty: "fácil",
-    source: "Resúmenes Inteligentes con Gemini Notebook",
+    source: "Gemini Notebook: el cuaderno del futuro",
     feedback:
-      "Curar es elegir bien: mejores fuentes, mejores respuestas. Repasa la infografía de resúmenes.",
+      "Filtrar elige las fuentes relevantes y confiables antes de resumir. Así la síntesis se apoya en evidencia útil.",
   },
   {
     id: "m4q31",
@@ -895,27 +893,27 @@ export const MODULE_4 = [
     options: [
       {
         id: "m4q32_a",
-        label: "Seleccionar fuentes, analizar sus ideas y generar el audio",
+        label: "Cargar documentos y confiar en la primera respuesta",
       },
       {
         id: "m4q32_b",
-        label: "Cargar documentos al azar y confiar en lo primero que responda",
+        label: "Generar el audio y revisar las fuentes después",
       },
       {
         id: "m4q32_c",
-        label: "Ignorar las citas y publicar las respuestas sin revisar",
+        label: "Publicar las respuestas sin citas",
       },
       {
         id: "m4q32_d",
-        label: "Generar el audio antes de subir cualquier documento base",
+        label: "Seleccionar fuentes, analizar sus ideas y generar el audio",
       },
     ],
-    correctAnswer: "m4q32_a",
+    correctAnswer: "m4q32_d",
     topic: "Flujo Documento-Podcast",
     difficulty: "difícil",
-    source: "La Transmutación",
+    source: "El Estudio Alquímico",
     feedback:
-      "El flujo ideal: curar → analizar/sintetizar → audio para repasar. Repasa el dominio del documento al podcast.",
+      "El flujo correcto va de la selección de fuentes al análisis y, al final, al audio. Revisar después deja el riesgo en el resultado.",
   },
   {
     id: "m4q33",
@@ -973,38 +971,36 @@ export const MODULE_4 = [
     difficulty: "medio",
     source: "El Grimorio",
     feedback:
-      "Un cuaderno enfocado responde mejor: remueve lo que no aporta. Practica en el laboratorio.",
+      "Un cuaderno enfocado responde mejor: remueve lo que no aporta. Practica en la actividad El Crisol.",
   },
   {
     id: "m4q35",
     question:
-      "Gemini Notebook no encuentra en tus fuentes algo que preguntas. ¿Qué significa?",
+      "¿Qué información da una cita de Gemini Notebook para comprobar un dato?",
     options: [
       {
         id: "m4q35_a",
-        label:
-          "Que ese dato no está en tus documentos y debes buscar otra fuente",
+        label: "Solo el nombre del cuaderno, sin indicar el documento",
       },
       {
         id: "m4q35_b",
-        label:
-          "Que el documento tiene un formato que Gemini Notebook no puede leer",
+        label: "La fecha de hoy, aunque el documento sea viejo",
       },
       {
         id: "m4q35_c",
-        label: "Que deberías pedirle que lo invente de todas formas",
+        label: "El número de palabras de la respuesta",
       },
       {
         id: "m4q35_d",
-        label: "Que el dato sí existe aunque no esté en ningún documento",
+        label: "El documento y el fragmento de donde sale la afirmación",
       },
     ],
-    correctAnswer: "m4q35_a",
+    correctAnswer: "m4q35_d",
     topic: "Alcance",
     difficulty: "medio",
     source: "Primeros Pasos con Gemini Notebook",
     feedback:
-      "Si no está en tus fuentes, no lo responde: agrega la fuente o busca en otro lugar.",
+      "La cita indica el documento y el fragmento. Con eso puedes abrir la fuente y confirmar lo que se afirma.",
   },
   {
     id: "m4q36",
@@ -1037,64 +1033,64 @@ export const MODULE_4 = [
   },
   {
     id: "m4q37",
-    question:
-      "Vas a basar una decisión en una síntesis de Gemini Notebook. ¿Qué haces antes?",
+    question: "¿Qué compruebas antes de confiar en una síntesis?",
     options: [
       {
         id: "m4q37_a",
-        label: "Abrir las fuentes citadas y confirmar los puntos clave",
+        label: "Que tenga más de cinco párrafos bien escritos",
       },
       {
         id: "m4q37_b",
-        label: "Decidir de una vez porque la IA no se equivoca casi nunca",
+        label: "Que cada afirmación clave lleve una cita que puedas abrir",
       },
       {
         id: "m4q37_c",
-        label: "Cambiar los datos de la síntesis",
+        label: "Que la IA la firme como correcta",
       },
       {
         id: "m4q37_d",
-        label: "Pedir otra síntesis y quedarte con la más larga de todas",
+        label: "Que la respuesta sea la primera que apareció",
       },
     ],
-    correctAnswer: "m4q37_a",
+    correctAnswer: "m4q37_b",
     topic: "Verificación",
     difficulty: "medio",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Antes de decidir, verifica los puntos clave en las fuentes citadas. Repasa la guía de Gemini Notebook.",
+      "Una síntesis es confiable cuando sus afirmaciones clave tienen cita verificable. Longitud o firma de la IA no lo garantizan.",
   },
   {
     id: "m4q38",
-    question: "¿Qué característica define un buen cuaderno de Gemini Notebook?",
+    question: "¿Qué hace útil una síntesis para tomar una decisión?",
     options: [
       {
         id: "m4q38_a",
-        label: "Fuentes relevantes, bien organizadas y de calidad revisada",
+        label: "Que sea la más larga posible",
       },
       {
         id: "m4q38_b",
-        label: "La mayor cantidad posible de documentos de cualquier tema",
+        label: "Que use palabras muy técnicas aunque no haya fuentes",
       },
       {
         id: "m4q38_c",
-        label: "Un título muy largo y llamativo con muchos emojis incluidos",
+        label: "Que no tenga fecha, para que siga vigente",
       },
       {
         id: "m4q38_d",
-        label: "Sin fuentes cargadas, para dejar que la IA improvise sola",
+        label: "Que cada conclusión tenga su cita y puedas abrirla",
       },
     ],
-    correctAnswer: "m4q38_a",
+    correctAnswer: "m4q38_d",
     topic: "Curaduría",
     difficulty: "fácil",
     source: "Guía de Gemini Notebook",
     feedback:
-      "Un cuaderno enfocado y confiable responde mejor. Repasa la guía de Gemini Notebook.",
+      "Una síntesis sirve para decidir cuando cada conclusión se puede verificar. Longitud, tecnicismo o falta de fecha no la hacen útil.",
   },
   {
     id: "m4q39",
-    question: "¿Cómo ayuda el Audio Overview en el flujo documento-a-podcast?",
+    question:
+      "¿Cómo ayuda el Audio Overview en el flujo de documento a podcast?",
     options: [
       {
         id: "m4q39_a",
@@ -1102,7 +1098,7 @@ export const MODULE_4 = [
       },
       {
         id: "m4q39_b",
-        label: "Sustituye la curaduría de fuentes por un resumen simple",
+        label: "Sustituye la revisión de fuentes con un resumen simple",
       },
       {
         id: "m4q39_c",
@@ -1110,45 +1106,44 @@ export const MODULE_4 = [
       },
       {
         id: "m4q39_d",
-        label: "Traduce los documentos a varios idiomas en simultáneo",
+        label: "Traduce los documentos a varios idiomas a la vez",
       },
     ],
     correctAnswer: "m4q39_a",
     topic: "Flujo Documento-Podcast",
     difficulty: "difícil",
-    source: "La Transmutación",
+    source: "El Estudio Alquímico",
     feedback:
-      "El audio convierte tus conclusiones en un repaso escuchable. Repasa el dominio del documento al podcast.",
+      "El Audio Overview sirve para repasar conclusiones ya curadas. No reemplaza la revisión de las fuentes.",
   },
   {
     id: "m4q40",
     question:
-      "Caso: convertir 8 papers en un podcast verificable sobre un tema. ¿Cuál es el mejor flujo?",
+      "Caso: quieres un podcast de 8 documentos que alguien pueda verificar. ¿Qué incluyes en el guion?",
     options: [
       {
         id: "m4q40_a",
-        label: "Curar fuentes, sintetizar las ideas y generar el audio final",
+        label: "Solo la música de fondo y una voz agradable",
       },
       {
         id: "m4q40_b",
-        label:
-          "Subir los papers sin orden y publicar el primer audio disponible",
+        label: "Afirmaciones sin fuente, para que suene más fluido",
       },
       {
         id: "m4q40_c",
-        label: "Generar el audio sin revisar que las citas sean correctas",
+        label:
+          "Las citas de cada idea, para que el oyente pueda ir a la fuente",
       },
       {
         id: "m4q40_d",
-        label:
-          "Elegir los papers por popularidad en redes sin leer su contenido",
+        label: "Los nombres de los autores, sin fechas ni documentos",
       },
     ],
-    correctAnswer: "m4q40_a",
+    correctAnswer: "m4q40_c",
     topic: "Flujo Documento-Podcast",
     difficulty: "difícil",
-    source: "La Transmutación",
+    source: "El Estudio Alquímico",
     feedback:
-      "Curar → sintetizar con citas → verificar → audio: el flujo completo y verificable. Repasa el OVA.",
+      "Un podcast verificable indica la fuente de cada idea. La música o la fluidez no sustituyen la evidencia.",
   },
 ];

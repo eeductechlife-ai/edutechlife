@@ -472,32 +472,31 @@ export const MODULE_5 = [
   {
     id: "m5q16",
     question:
-      "Le escribes a Claude: «Escribe un correo para las familias sobre la reunión del sábado, en tono cercano y sin nombres de estudiantes». ¿Qué parte del pedido falta?",
+      "El texto que escribió Claude está casi bien, pero el tono quedó demasiado formal. ¿Qué haces?",
     options: [
       {
         id: "m5q16_a",
-        label: "Ninguna: el pedido ya tiene las cinco partes completas",
+        label: "Pedir de nuevo todo el documento desde cero",
       },
       {
         id: "m5q16_b",
-        label: "El tono: cómo debe sonar el correo y qué palabras evitar en él",
+        label: "Pedir un cambio pequeño y específico en el tono",
       },
       {
         id: "m5q16_c",
-        label:
-          "Los límites: qué datos no debe incluir el correo y qué debe evitar en su redacción",
+        label: "Aceptarlo tal cual para no perder tiempo",
       },
       {
         id: "m5q16_d",
-        label: "El formato: cómo se verá el correo y qué tan largo debe ser",
+        label: "Cambiar de modelo y esperar otro resultado",
       },
     ],
-    correctAnswer: "m5q16_d",
+    correctAnswer: "m5q16_b",
     topic: "Límites y errores",
     difficulty: "medio",
     source: "Lección 1: Conoce a Claude",
     feedback:
-      "Un pedido completo tiene cinco partes: objetivo, audiencia, formato, tono y límites. Este pedido no dice el formato, así que Claude decidiría la extensión y la estructura por su cuenta.",
+      "Un cambio pequeño y específico mejora el resultado sin rehacer lo que ya funciona. Empezar de nuevo o aceptar un tono que no quieres son los errores comunes.",
   },
   {
     id: "m5q17",
@@ -565,25 +564,23 @@ export const MODULE_5 = [
   {
     id: "m5q19",
     question:
-      "Llevas semanas trabajando en el Proyecto de una escuela y te piden un texto para otro cliente, sin relación. ¿Dónde lo haces?",
+      "Necesitas una decisión que solo tú puedes tomar, como aprobar una propuesta. ¿Qué hace la IA?",
     options: [
       {
         id: "m5q19_a",
-        label: "En el mismo Proyecto, porque Claude ya conoce bien tu estilo",
+        label: "La aprueba, porque ya tiene todos los datos",
       },
       {
         id: "m5q19_b",
-        label:
-          "Fuera de ese Proyecto, para no arrastrar sus reglas ni sus archivos",
+        label: "Prepara las opciones y los riesgos; la decisión final es tuya",
       },
       {
         id: "m5q19_c",
-        label: "En el mismo Proyecto, pidiéndole que ignore sus instrucciones",
+        label: "La delega por completo para ahorrar tiempo",
       },
       {
         id: "m5q19_d",
-        label:
-          "En el Proyecto, tras borrar sus instrucciones y volver a escribirlas al terminar",
+        label: "La registra como aprobada a tu nombre",
       },
     ],
     correctAnswer: "m5q19_b",
@@ -591,7 +588,7 @@ export const MODULE_5 = [
     difficulty: "difícil",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "Cada Proyecto aplica sus instrucciones y archivos a todos sus chats. Un trabajo sin relación va en otro Proyecto o en un chat aparte, así no arrastras reglas ni datos que no aplican.",
+      "La IA acelera la preparación, pero una decisión con consecuencias sigue siendo tuya. Delegar la aprobación es el error.",
   },
   {
     id: "m5q20",
@@ -626,66 +623,63 @@ export const MODULE_5 = [
   {
     id: "m5q21",
     question:
-      "Vas a pedirle a Claude un informe de asistencia de un curso. ¿Qué versión de los datos compartes?",
+      "Vas a pedirle a Claude un informe con el promedio de notas de un grupo. ¿Qué compartes?",
     options: [
       {
         id: "m5q21_a",
         label:
-          "La asistencia por código de estudiante, sin nombres ni teléfonos",
+          "Los nombres completos y las notas, para que el informe sea preciso",
       },
       {
         id: "m5q21_b",
-        label: "La lista completa con nombres, porque el informe es interno",
+        label:
+          "Solo los promedios del grupo, sin nombres ni datos identificables",
       },
       {
         id: "m5q21_c",
-        label:
-          "La lista completa en un chat de incógnito, porque así no queda guardada",
+        label: "La lista con teléfonos, para contactar a las familias después",
       },
       {
         id: "m5q21_d",
-        label: "La lista completa dentro de un Proyecto privado",
+        label:
+          "El archivo completo, en un chat de incógnito para que no quede guardado",
       },
     ],
-    correctAnswer: "m5q21_a",
+    correctAnswer: "m5q21_b",
     topic: "Privacidad y datos",
     difficulty: "fácil",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "Comparte solo lo necesario: con códigos en lugar de nombres el informe sale igual. Ni el incógnito ni un Proyecto privado te autorizan a compartir datos personales (en Colombia, Ley 1581 de 2012).",
+      "Los promedios del grupo permiten el análisis sin identificar a nadie. Los datos personales de menores no se comparten con una herramienta de IA (Ley 1581 de 2012).",
   },
   {
     id: "m5q22",
     question:
-      "Le pides a Claude 'escríbeme un correo para un cliente' y el resultado sale largo y demasiado formal. ¿Qué explica mejor lo que pasó?",
+      "Necesitas un documento de seis páginas que vas a editar varias veces. ¿Dónde lo pides?",
     options: [
       {
         id: "m5q22_a",
-        label:
-          "Claude escribe largo por defecto y siempre toca recortarlo a mano",
+        label: "En un mensaje largo, pegando el documento en cada respuesta",
       },
       {
         id: "m5q22_b",
-        label:
-          "Usaste un modelo rápido; con uno más potente el correo habría salido corto y cercano",
+        label: "En un Artifact, para verlo y editarlo al lado del chat",
       },
       {
         id: "m5q22_c",
-        label:
-          "El pedido no decía audiencia, formato ni tono, y Claude los supuso",
+        label: "En un chat de incógnito, para que no quede guardado",
       },
       {
         id: "m5q22_d",
-        label:
-          "Claude imita correos formales de internet y ese estilo no se puede cambiar",
+        label: "En un mensaje corto, y luego copiar el texto a mano",
       },
     ],
-    correctAnswer: "m5q22_c",
+    correctAnswer: "m5q22_b",
     topic: "Límites y errores",
     difficulty: "medio",
     source: "Lección 1: Conoce a Claude",
     feedback:
-      "Cada parte que falta en el pedido es algo que Claude supone por ti. Si no dices para qué es, quién lo lee, qué extensión tiene y qué tono usar, Claude lo elige y puede no ser lo que querías. Un pedido completo tiene objetivo, audiencia, formato, tono y límites.",
+      "Un Artifact es una pieza que vive junto al chat: la ves, la editas y la descargas sin perder el hilo de la conversación.",
   },
   {
     id: "m5q23",
@@ -721,95 +715,90 @@ export const MODULE_5 = [
   {
     id: "m5q24",
     question:
-      "¿Qué es una buena práctica al revisar un documento que Claude escribió para tu cliente?",
+      "Claude escribió un informe técnico y lo necesitas para las familias. ¿Qué le pides?",
     options: [
       {
         id: "m5q24_a",
-        label:
-          "Revisar solo la ortografía, porque el contenido ya lo pediste bien",
+        label: "Que lo acorte y nada más, manteniendo el mismo lenguaje",
       },
       {
         id: "m5q24_b",
         label:
-          "Pedirle a Claude que lo revise y enviarlo si no encuentra errores",
+          "Que lo reescriba para familias: lenguaje sencillo, sin siglas y con acciones claras",
       },
       {
         id: "m5q24_c",
-        label:
-          "Leer la introducción y el cierre, que es lo que el cliente mira",
+        label: "Que lo traduzca al inglés para revisarlo mejor",
       },
       {
         id: "m5q24_d",
-        label:
-          "Revisar datos, nombres, fechas y tono contra lo que quieres decir",
+        label: "Que lo envíe tal cual, porque la familia debe entenderlo",
       },
     ],
-    correctAnswer: "m5q24_d",
+    correctAnswer: "m5q24_b",
     topic: "Supervisión",
     difficulty: "fácil",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "Un texto bien escrito puede tener datos incorrectos o un nombre equivocado, y Claude no siempre detecta sus propios errores. La revisión humana completa es obligatoria.",
+      "Adaptar un texto a su público cambia el lenguaje, no solo la longitud. Un pedido con público y tono claros da mejores resultados.",
   },
   {
     id: "m5q25",
     question:
-      "Quieres reutilizar en varios proyectos el mismo procedimiento para redactar actas de reunión. ¿Qué conviene crear?",
+      "Vas a usar las mismas instrucciones en varios chats de un mismo trabajo. ¿Dónde las dejas?",
     options: [
       {
         id: "m5q25_a",
-        label: "Una Skill con los pasos, la plantilla y un acta de ejemplo",
+        label: "Pegadas en cada chat nuevo, una por una",
       },
       {
         id: "m5q25_b",
-        label:
-          "Un Proyecto nuevo por cada reunión, con el procedimiento pegado en las instrucciones",
+        label: "En un Proyecto, para que todos sus chats las usen",
       },
       {
         id: "m5q25_c",
-        label: "Nada: dejar que la memoria lo recuerde y lo aplique sola",
+        label: "En un Artifact que se comparte con todos los chats",
       },
       {
         id: "m5q25_d",
-        label: "Un Artifact con el acta anterior para copiarlo cada vez",
+        label: "En un chat aparte que nadie más puede ver",
       },
     ],
-    correctAnswer: "m5q25_a",
+    correctAnswer: "m5q25_b",
     topic: "Conectores y Skills",
     difficulty: "medio",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "Lo que repites se convierte en Skill: el procedimiento queda igual cada vez, sirve en cualquier trabajo y ahorra tiempo.",
+      "Un Proyecto guarda instrucciones y archivos que aplican a todos sus chats. Pegarlas cada vez repite el trabajo, y es fácil olvidar alguna.",
   },
   {
     id: "m5q26",
     question:
-      "¿Cuál de estas afirmaciones sobre la IA y el trabajo es más responsable?",
+      "Tienes el caso de un estudiante con necesidades especiales. ¿Qué haces?",
     options: [
       {
         id: "m5q26_a",
-        label: "Si el pedido está bien hecho, la revisión humana sobra",
+        label: "Le pido a Claude la decisión y la aplico",
       },
       {
         id: "m5q26_b",
-        label: "La IA sirve para ideas, pero no para trabajo profesional",
+        label: "Lo decides tú con el equipo; la IA solo ayuda a redactar",
       },
       {
         id: "m5q26_c",
-        label: "La IA acelera el trabajo, pero la decisión sigue siendo humana",
+        label: "Envío a Claude el nombre completo para que lo revise",
       },
       {
         id: "m5q26_d",
-        label:
-          "Si Claude se equivoca, la responsabilidad del error es de la herramienta",
+        label: "Lo dejo a la IA, porque es más objetiva",
       },
     ],
-    correctAnswer: "m5q26_c",
+    correctAnswer: "m5q26_b",
     topic: "Delegar con Claude",
     difficulty: "fácil",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "La IA acelera el trabajo, también el profesional. La decisión y su consecuencia siguen siendo de la persona, por bueno que sea el pedido.",
+      "Las decisiones sobre personas, y más sobre menores, son humanas. La IA puede ayudar a redactar, pero no a decidir ni a recibir datos identificables.",
   },
   {
     id: "m5q27",
@@ -872,34 +861,32 @@ export const MODULE_5 = [
   {
     id: "m5q29",
     question:
-      "Quieres hacerle a Claude una consulta puntual que no quede en tu historial ni en su memoria. ¿Qué haces?",
+      "Quieres que Claude recuerde una preferencia en todos tus chats de trabajo. ¿Qué haces?",
     options: [
       {
         id: "m5q29_a",
-        label:
-          "Abrir un chat de incógnito y compartir solo los datos necesarios",
+        label: "La escribes en cada chat nuevo para que no se olvide",
       },
       {
         id: "m5q29_b",
         label:
-          "Hacerla en tu Proyecto de trabajo, que ya tiene todas tus instrucciones",
+          "La dejas en las instrucciones del Proyecto y revisas qué recuerda Claude",
       },
       {
         id: "m5q29_c",
-        label: "Hacerla en un chat normal, porque la memoria es privada",
+        label: "Le pides que la guarde en un chat de incógnito",
       },
       {
         id: "m5q29_d",
-        label:
-          "Usar el incógnito y pegar datos de clientes, porque ahí sí está permitido",
+        label: "Esperas: Claude aprende tus preferencias solo y sin control",
       },
     ],
-    correctAnswer: "m5q29_a",
+    correctAnswer: "m5q29_b",
     topic: "Privacidad y datos",
     difficulty: "fácil",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "El incógnito sirve para un chat puntual: no queda en tu historial ni se usa para la memoria del chat. Pero Anthropic puede conservar esas conversaciones un tiempo por seguridad, y el incógnito no te autoriza a compartir datos personales: comparte solo lo necesario. Un chat normal o un Proyecto sí conservan ese contexto.",
+      "Las instrucciones de un Proyecto aplican a todos sus chats, y la memoria se puede revisar y controlar. Un chat de incógnito no sirve para que Claude recuerde nada.",
   },
   {
     id: "m5q30",

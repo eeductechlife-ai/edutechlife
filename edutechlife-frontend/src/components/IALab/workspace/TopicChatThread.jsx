@@ -290,6 +290,22 @@ export default function TopicChatThread({
               >
                 {lesson.detailedDescription}
               </p>
+              {topicMeta?.outcome && (
+                <p
+                  style={{
+                    ...nlmFont,
+                    fontSize: 15,
+                    color: "#3c4043",
+                    lineHeight: 1.7,
+                    marginTop: 10,
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>
+                    {t("ialab.topic.outcome_label")}{" "}
+                  </span>
+                  {topicMeta.outcome}
+                </p>
+              )}
             </div>
           )}
 
@@ -469,6 +485,14 @@ export default function TopicChatThread({
           <p className="text-[15px] theme-text leading-[1.65]">
             {lesson.detailedDescription}
           </p>
+          {topicMeta?.outcome && (
+            <p className="text-[15px] theme-text leading-[1.65]">
+              <span className="font-bold">
+                {t("ialab.topic.outcome_label")}{" "}
+              </span>
+              {topicMeta.outcome}
+            </p>
+          )}
           <p className="text-[15px] font-bold theme-text leading-snug">
             Recursos de este tema:
           </p>

@@ -391,7 +391,8 @@ const RESOURCES_PT = {
         id: "gemini-multimodal-ova-1",
         type: "ova_interactive",
         title: "A Lupa à Prova",
-        description: null,
+        description:
+          "Veja como o Gemini trabalha com imagens, texto e dados juntos: útil para analisar casos reais do seu contexto, com verificação de cada dado.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 6,
@@ -466,7 +467,8 @@ const RESOURCES_PT = {
       {
         id: "gemini-cases-video-1",
         type: "video",
-        title: "Casos Reais: Detetives Digitais em Ação",
+        title:
+          "Pesquisa acadêmica com IA em minutos: Gemini e Deep Research sem perder o rigor",
         url: "https://www.youtube.com/embed/XAshixrvG5k",
         duration: "2:41",
         thumbnail: "https://img.youtube.com/vi/XAshixrvG5k/maxresdefault.jpg",
@@ -518,7 +520,7 @@ const RESOURCES_PT = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "Primeiros Passos com o Gemini Notebook",
+        title: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
@@ -693,7 +695,8 @@ const RESOURCES_PT = {
         id: "claude-first-request-ova-1",
         type: "ova_interactive",
         title: "O Primeiro Pedido",
-        description: null,
+        description:
+          "Pratique o seu primeiro pedido com retorno em cada etapa.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 3,

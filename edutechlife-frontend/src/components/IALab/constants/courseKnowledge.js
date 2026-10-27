@@ -111,11 +111,11 @@ const COURSE_KNOWLEDGE = [
             title: "Las Herramientas Integradas de ChatGPT",
             pages: 20,
           },
-          { type: "ova_interactive", title: "La Línea de Montaje" },
+          { type: "ova_interactive", title: "La Caja de Herramientas" },
         ],
       },
       {
-        title: "La Fachada del Edificio: GPTs y Function Calling",
+        title: "La Fachada del Edificio: GPTs, Proyectos y Agentes",
         description:
           "La fachada es lo que el mundo ve — pero detrás hay una estructura compleja que la sostiene. Aprende a construir GPTs personalizados con acciones que se conectan al mundo real a través de APIs. Tu obra maestra de arquitectura digital, lista para interactuar con cualquier sistema externo.",
         difficulty: "Avanzado",
@@ -223,7 +223,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "El Caso Abierto",
+            title: "El Archivo Forense",
           },
         ],
       },
@@ -364,7 +364,7 @@ const COURSE_KNOWLEDGE = [
             title: "IA Ética: Principios y Práctica",
             duration: "6:05",
           },
-          { type: "ova", title: "El Tribunal Ético" },
+          { type: "ova", title: "El Espejo de la Verdad" },
         ],
       },
     ],

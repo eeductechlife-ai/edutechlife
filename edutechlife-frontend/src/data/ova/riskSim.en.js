@@ -38,6 +38,17 @@ export const gameData = [
     feedback:
       "Very good! Explicitly instructing the AI is a great mitigation strategy.",
   },
+  {
+    q: "You want the AI to summarize an email that includes a client's ID number and phone. What do you do?",
+    opts: [
+      "I paste the whole email: it is faster.",
+      "I paste the email and ask the AI to delete the data afterwards.",
+      "I replace the personal data with [Client A], [ID] and [phone] before pasting it.",
+    ],
+    correct: 2,
+    feedback:
+      "Very good! What you paste into an AI leaves your control. Anonymize first and share only what is needed.",
+  },
 ];
 
 export const accordionData = [
@@ -50,10 +61,10 @@ export const accordionData = [
   },
   {
     id: "acc2",
-    title: "Representation and Gender Bias (Stanford Experiment)",
+    title: "Representation and Gender Bias",
     icon: "👥",
     content:
-      'In 2023, researchers asked language models: "Write the story of a successful CEO." In 78% of cases, it generated a man. When asked for stories of "nurses", 91% were women. This shows how historical biases replicate automatically.',
+      "Studies that have tested this show that, when asked for the story of “a successful executive”, models tend to picture a man, and for “a nurse”, a woman. This is how the stereotypes in their training data get repeated.",
   },
   {
     id: "acc3",

@@ -163,7 +163,6 @@ const UniversalTemplate = () => {
 const HowAIThinks = () => {
   const { t } = useTranslation();
   const [active, setActive] = useState(null);
-  const [temp, setTemp] = useState(0.7);
   const concepts = [
     {
       k: "tokens",
@@ -209,25 +208,9 @@ const HowAIThinks = () => {
             {t(`ova.introprompt.howit_${active}_desc`)}
           </p>
           {active === "temp" && (
-            <div className="mt-4 p-3 bg-white/10 rounded-xl space-y-2">
-              <div className="flex justify-between text-[10px] font-black text-white/70 uppercase tracking-wider">
-                <span>{t("ova.introprompt.howit_temp_precise")} (0.0)</span>
-                <span className="theme-text-primary">{temp.toFixed(1)}</span>
-                <span>{t("ova.introprompt.howit_temp_creative")} (1.0)</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={temp}
-                onChange={(e) => setTemp(parseFloat(e.target.value))}
-                className="w-full accent-[var(--theme-primary)] h-2 rounded-full appearance-none bg-white/20 cursor-pointer"
-              />
-              <p className="text-xs text-white/80 italic font-medium">
-                {t("ova.introprompt.howit_temp_example")}
-              </p>
-            </div>
+            <p className="mt-3 text-xs text-white/80 italic font-medium">
+              {t("ova.introprompt.howit_temp_example")}
+            </p>
           )}
         </div>
       ) : (

@@ -261,23 +261,23 @@ export const MODULE_1_PT = [
   {
     id: "m1q10",
     question:
-      "Você quer que a IA explique um tema difícil. Qual prompt pede uma explicação mais clara?",
+      "Você quer que a IA escreva mensagens no seu estilo. O que lhe dá?",
     options: [
       {
         id: "m1q10_a",
-        label: '"Explique com exemplos simples e do dia a dia."',
+        label: "Duas mensagens que você já escreveu e gostou",
       },
       {
         id: "m1q10_b",
-        label: '"Dê toda a teoria sobre o tema em uma só resposta."',
+        label: "Uma frase vaga: escreva bem",
       },
       {
         id: "m1q10_c",
-        label: '"Fale do tema e também de outros parecidos."',
+        label: "Só o nome da empresa",
       },
       {
         id: "m1q10_d",
-        label: '"Explique como faria um especialista avançado."',
+        label: "Nada: a IA já conhece o seu estilo",
       },
     ],
     correctAnswer: "m1q10_a",
@@ -285,7 +285,7 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "O Cinzel",
     feedback:
-      "Pedir exemplos e linguagem simples ajuda a tornar a explicação mais clara e útil.",
+      "Exemplos reais do seu estilo dão à IA um modelo concreto. Uma frase vaga ou nada não dão referência.",
   },
   {
     id: "m1q11",
@@ -519,35 +519,32 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q19",
-    question: "Qual prompt é MAIS específico?",
+    question:
+      "Para que ajuda a instrução «Aja como um professor do ensino fundamental»?",
     options: [
       {
         id: "m1q19_a",
-        label:
-          '"Resuma em 5 tópicos os riscos do sedentarismo para os idosos da família"',
+        label: "Faz a IA responder mais rápido",
       },
       {
         id: "m1q19_b",
-        label:
-          '"Fale sobre a saúde em geral e de outros temas parecidos que ocorrerem"',
+        label: "Muda o idioma da resposta sem avisar",
       },
       {
         id: "m1q19_c",
-        label:
-          '"Dê informação variada e extensa sobre muitos temas de interesse geral"',
+        label: "Define o ponto de vista e o nível da resposta",
       },
       {
         id: "m1q19_d",
-        label:
-          '"Escreva algo interessante e útil que eu possa usar no meu trabalho diário"',
+        label: "Obriga a IA a não usar exemplos",
       },
     ],
-    correctAnswer: "m1q19_a",
+    correctAnswer: "m1q19_c",
     topic: "Clareza em Prompts",
     difficulty: "fácil",
     source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
-      "O prompt correto define tema, formato e público; as demais são vagas.",
+      "Atribuir um papel define o olhar e o nível da resposta. Não muda a velocidade nem o idioma.",
   },
   {
     id: "m1q20",
@@ -610,52 +607,52 @@ export const MODULE_1_PT = [
   {
     id: "m1q22",
     question:
-      "O que ajuda a obter melhores resultados quando a IA tem pouco contexto?",
+      "O que acontece se você colar no chat uma lista com nomes e telefones de clientes?",
     options: [
       {
         id: "m1q22_a",
-        label: "Pedir que ela faça perguntas antes de responder",
+        label: "A IA apaga na hora, sem deixar rastro",
       },
       {
         id: "m1q22_b",
-        label: "Que responda mais rápido, sem pensar",
+        label: "Nada: o chat é privado e só você vê",
       },
       {
         id: "m1q22_c",
-        label: "Que não use nenhum dado do pedido",
+        label: "A IA usa para melhorar a sua nota no curso",
       },
       {
         id: "m1q22_d",
-        label: "Que mude de assunto para ser mais criativa e original",
+        label: "Esses dados saem do seu controle e podem ficar guardados",
       },
     ],
-    correctAnswer: "m1q22_a",
+    correctAnswer: "m1q22_d",
     topic: "Refinamento de Prompts",
     difficulty: "fácil",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Se faltar contexto, a IA pode supor. Pedir perguntas antes evita respostas erradas. Pratique no OVA O Cinzel.",
+      "Um dado pessoal colado em uma ferramenta sai do seu controle e pode ficar guardado. Por isso ele é anonimizado antes de ser compartilhado.",
   },
   {
     id: "m1q23",
     question:
-      "Você quer uma explicação curta: 'em no máximo 100 palavras'. O que está usando?",
+      "Você quer uma explicação para uma criança de 10 anos. O que precisa indicar?",
     options: [
       {
         id: "m1q23_a",
-        label: "Um limite de tamanho",
+        label: "O público: uma criança de 10 anos, com palavras simples",
       },
       {
         id: "m1q23_b",
-        label: "Um erro que quebra a IA",
+        label: "A cor do texto da resposta",
       },
       {
         id: "m1q23_c",
-        label: "Um tipo de arquivo",
+        label: "O nome da ferramenta que vai usar",
       },
       {
         id: "m1q23_d",
-        label: "Uma senha da ferramenta",
+        label: "Que use o máximo de palavras técnicas",
       },
     ],
     correctAnswer: "m1q23_a",
@@ -663,35 +660,36 @@ export const MODULE_1_PT = [
     difficulty: "fácil",
     source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
-      "As restrições (comprimento, tom, público) delimitam a resposta ao resultado desejado.",
+      "Indicar o público define a linguagem da resposta. Cor, nome da ferramenta ou jargão não dão essa referência.",
   },
   {
     id: "m1q24",
-    question: "Você pede a resposta em passos numerados. Qual é a vantagem?",
+    question:
+      "Você quer uma resposta que possa colar em um e-mail. O que indica?",
     options: [
       {
         id: "m1q24_a",
-        label: "Permite revisar cada parte com calma",
+        label: "Que responda em outro idioma",
       },
       {
         id: "m1q24_b",
-        label: "Faz a IA ignorar o tema do pedido",
+        label: "Que inclua muitos emojis",
       },
       {
         id: "m1q24_c",
-        label: "Obriga a IA a responder em outro idioma",
+        label: "Que não use tabelas nem markdown",
       },
       {
         id: "m1q24_d",
-        label: "Não muda nada no resultado",
+        label: "Que escreva tudo em letras maiúsculas",
       },
     ],
-    correctAnswer: "m1q24_a",
+    correctAnswer: "m1q24_c",
     topic: "Exemplos no Prompt",
     difficulty: "médio",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Passos numerados tornam o raciocínio visível e permitem corrigir uma parte sem refazer tudo.",
+      "Pedir texto simples evita símbolos e tabelas que ficam quebrados ao colar em um e-mail. Emojis, idioma ou maiúsculas não resolvem isso.",
   },
   {
     id: "m1q25",
@@ -725,31 +723,31 @@ export const MODULE_1_PT = [
   {
     id: "m1q26",
     question:
-      'Prompt: "Faça algo sobre marketing." Qual é o principal problema?',
+      "Na fórmula RTF, qual parte indica a ação concreta que a IA deve fazer?",
     options: [
       {
         id: "m1q26_a",
-        label: "É ambíguo: não diz tarefa, formato nem objetivo",
+        label: "A cor da tela onde a resposta é lida",
       },
       {
         id: "m1q26_b",
-        label: "É longo demais e contém muitos dados irrelevantes",
+        label: "A tarefa",
       },
       {
         id: "m1q26_c",
-        label: "Inclui exemplos demais que acabam confundindo a IA",
+        label: "O histórico de compras do usuário",
       },
       {
         id: "m1q26_d",
-        label: "Usa um tom formal demais para o público-alvo",
+        label: "A velocidade do servidor que responde",
       },
     ],
-    correctAnswer: "m1q26_a",
+    correctAnswer: "m1q26_b",
     topic: "Evitar Ambiguidade",
     difficulty: "médio",
     source: "O Cinzel",
     feedback:
-      "Sem tarefa, formato nem objetivo, a IA adivinha. Seja específico e delimite o resultado.",
+      "No RTF, a tarefa é a ação concreta. As outras opções não fazem parte do prompt.",
   },
   {
     id: "m1q27",
@@ -782,93 +780,87 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q28",
-    question:
-      "Você quer que a IA use só o texto que colar e avise se faltar algo. Qual pedido funciona?",
+    question: "Você escreve para um cliente e quer um tom próximo. O que pede?",
     options: [
       {
         id: "m1q28_a",
-        label: "Use só o texto que colei e me diga se falta algo",
+        label: "Um tom de bibliografia acadêmica, com citações",
       },
       {
         id: "m1q28_b",
-        label: "Complete o que faltar com o que souber da internet",
+        label: "A resposta mais técnica possível",
       },
       {
         id: "m1q28_c",
-        label: "Invente exemplos parecidos para ilustrar o texto",
+        label: "Um tom próximo, sem jargão e com um fecho breve",
       },
       {
         id: "m1q28_d",
-        label: "Resuma sem ler o texto, do jeito que quiser",
+        label: "Que soe como um advogado, sem nenhuma frase gentil",
       },
     ],
-    correctAnswer: "m1q28_a",
+    correctAnswer: "m1q28_c",
     topic: "Aplicação RTF",
     difficulty: "médio",
     source: "O Cinzel",
     feedback:
-      "Limitar a IA ao texto que você dá evita que ela invente dados. Pedir que avise o que falta é essencial.",
+      "O tom se pede com palavras concretas: próximo, sem jargão, com fecho breve. O acadêmico e o técnico não servem para um cliente.",
   },
   {
     id: "m1q29",
-    question:
-      "Você quer 10 ideias para uma campanha. Qual prompt dará melhores ideias?",
+    question: "Você quer 10 ideias para uma campanha. O que pede?",
     options: [
       {
         id: "m1q29_a",
-        label:
-          '"Gere 10 ideias de campanha para uma cafeteria local, em tópicos"',
+        label: "Só uma ideia, a melhor que tiver",
       },
       {
         id: "m1q29_b",
-        label:
-          '"Dê ideias variadas sobre marketing para negócios de qualquer tipo"',
+        label: "10 ideias, cada uma com uma linha explicando por que funciona",
       },
       {
         id: "m1q29_c",
-        label: '"O que você acha do marketing e de como as empresas o usam?"',
+        label: "Ideias aleatórias, sem tema nem público",
       },
       {
         id: "m1q29_d",
-        label:
-          '"Escreva um ensaio longo e detalhado sobre a publicidade moderna"',
+        label: "A campanha completa, sem fazer perguntas",
       },
     ],
-    correctAnswer: "m1q29_a",
+    correctAnswer: "m1q29_b",
     topic: "Aplicação de Prompts",
     difficulty: "fácil",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "O prompt correto especifica quantidade, contexto e formato: isso foca as ideias no que você precisa.",
+      "Pedir a quantidade e uma razão por ideia permite comparar e escolher. Uma ideia só ou ideias aleatórias não dão o que escolher.",
   },
   {
     id: "m1q30",
-    question:
-      "Você quer aprender um tema passo a passo. Qual prompt ajuda mais?",
+    question: "Você quer praticar um tema que acabou de ler. O que pede?",
     options: [
       {
         id: "m1q30_a",
-        label: '"Explique passo a passo, com um exemplo em cada passo"',
+        label: "Um resumo de uma linha, sem perguntas",
       },
       {
         id: "m1q30_b",
-        label: '"Dê toda a teoria num único parágrafo denso de ler"',
+        label: "Que dê a resposta antes de você tentar",
       },
       {
         id: "m1q30_c",
-        label: '"Fale sobre vários temas diferentes ao mesmo tempo agora"',
+        label: "Que mude de assunto para não aborrecer",
       },
       {
         id: "m1q30_d",
-        label: '"Resuma o tema em apenas uma única frase bem curta"',
+        label: "Cinco perguntas de prática, com as respostas no final",
       },
     ],
-    correctAnswer: "m1q30_a",
+    correctAnswer: "m1q30_d",
     topic: "Aplicação de Prompts",
     difficulty: "médio",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Pedir passos, exemplos e linguagem simples produz uma explicação mais clara.",
+      "Perguntas de prática com respostas no final permitem conferir o que você aprendeu. Dar a resposta antes elimina o esforço.",
   },
   {
     id: "m1q31",
@@ -987,23 +979,23 @@ export const MODULE_1_PT = [
   {
     id: "m1q35",
     question:
-      "Você quer que a IA revise a própria resposta antes de entregá-la. O que pede?",
+      "O que você deve fazer antes de compartilhar um texto que a IA redigiu?",
     options: [
       {
         id: "m1q35_a",
-        label: "Que critique a resposta e aponte dados duvidosos",
+        label: "Revisar dados, nomes e números, e declarar o uso",
       },
       {
         id: "m1q35_b",
-        label: "Que a reescreva sem mudar nada",
+        label: "Compartilhar como está, porque a IA não erra",
       },
       {
         id: "m1q35_c",
-        label: "Que entregue mais rápido sem revisar",
+        label: "Trocar só o logo do documento",
       },
       {
         id: "m1q35_d",
-        label: "Que a envie a outra pessoa sem avisar você sobre a mudança",
+        label: "Enviar para outra pessoa sem dizer que a IA gerou",
       },
     ],
     correctAnswer: "m1q35_a",
@@ -1011,7 +1003,7 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Pedir uma autocrítica ajuda a detectar suposições e dados duvidosos antes de usar a resposta.",
+      "A IA pode errar em dados e nomes. Revisar o texto e declarar o uso faz parte do trabalho responsável.",
   },
   {
     id: "m1q36",
@@ -1073,31 +1065,31 @@ export const MODULE_1_PT = [
   {
     id: "m1q38",
     question:
-      "A IA é um assistente, não um substituto. O que isso implica para o estudante?",
+      "O que você deve declarar ao entregar um trabalho feito com apoio de IA?",
     options: [
       {
         id: "m1q38_a",
-        label: "Revisar e decidir com o próprio critério o resultado",
+        label: "Nada: o trabalho é seu mesmo que a IA tenha escrito",
       },
       {
         id: "m1q38_b",
-        label: "Aceitar tudo o que a IA entregar sem revisar antes",
+        label: "Só o seu nome, sem mencionar a ferramenta",
       },
       {
         id: "m1q38_c",
-        label: "Delegar por completo à IA todas as decisões importantes",
+        label: "Qual ferramenta usou e em que parte a usou",
       },
       {
         id: "m1q38_d",
-        label: "Evitar aprender o tema porque a IA já resolve tudo",
+        label: "Uma cópia completa da conversa, sem revisar",
       },
     ],
-    correctAnswer: "m1q38_a",
+    correctAnswer: "m1q38_c",
     topic: "Uso Responsável",
     difficulty: "médio",
     source: "O Cinzel",
     feedback:
-      "A IA acelera o trabalho, mas a revisão e a decisão final são suas.",
+      "Declarar a ferramenta e a parte em que foi usada é a forma honesta. Apresentar o trabalho como se não houvesse IA não é.",
   },
   {
     id: "m1q39",
@@ -1188,7 +1180,7 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "OVA: O Espelho da Verdade",
     feedback:
-      "Os dados históricos refletiam uma contratação passada majoritariamente masculina: o viés vem dos dados,. Reveja o laboratório.",
+      "Os dados históricos refletiam uma contratação passada majoritariamente masculina: o viés vem dos dados,. Reveja a atividade O Espelho da Verdade.",
   },
   {
     id: "m1e02",
@@ -1363,7 +1355,7 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "OVA: O Espelho da Verdade",
     feedback:
-      "O viés de amostragem nasce de dados não representativos. Pratique no laboratório.",
+      "O viés de amostragem nasce de dados não representativos. Pratique na atividade O Espelho da Verdade.",
   },
   {
     id: "m1e08",
@@ -1391,7 +1383,7 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "OVA: O Espelho da Verdade",
     feedback:
-      "Se quem rotula tem vieses, o modelo os aprende. Revise o laboratório de viés.",
+      "Se quem rotula tem vieses, o modelo os aprende. Revise a atividade O Espelho da Verdade.",
   },
   {
     id: "m1e09",
@@ -1420,35 +1412,35 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "OVA: O Espelho da Verdade",
     feedback:
-      "Diante de um viés detectado, pare, documente e corrija. Pratique no laboratório.",
+      "Diante de um viés detectado, pare, documente e corrija. Pratique na atividade O Espelho da Verdade.",
   },
   {
     id: "m1e10",
-    question: "O que busca a explicabilidade de um modelo de IA?",
+    question: "Qual dado você não deve compartilhar com uma IA pública?",
     options: [
       {
         id: "m1e10_a",
-        label: "Que as decisões automáticas possam ser bem explicadas",
+        label: "Um texto de exemplo já publicado na internet",
       },
       {
         id: "m1e10_b",
-        label: "Que o modelo explique por que consome tantos recursos",
+        label: "Uma pergunta geral sobre história",
       },
       {
         id: "m1e10_c",
-        label: "Que o sistema resuma as respostas em menos palavras",
+        label: "Uma lista de ideias sem nomes",
       },
       {
         id: "m1e10_d",
-        label: "Que se possam traduzir as respostas para outros idiomas",
+        label: "Dados pessoais de estudantes ou clientes, sem anonimizar",
       },
     ],
-    correctAnswer: "m1e10_a",
+    correctAnswer: "m1e10_d",
     topic: "Explicabilidade",
     difficulty: "médio",
     source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "A explicabilidade permite justificar decisões às pessoas afetadas. Revise o código.",
+      "Dados pessoais sem anonimização não vão para uma ferramenta pública. Textos publicados e ideias gerais não são esse tipo de risco.",
   },
   {
     id: "m1e11",
@@ -1567,31 +1559,32 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1e15",
-    question: "O que é uma auditoria de viés num sistema de IA?",
+    question:
+      "O que uma pessoa deve conferir antes de usar um resultado que afeta pessoas?",
     options: [
       {
         id: "m1e15_a",
-        label: "Revisar se o modelo trata injustamente algum grupo",
+        label: "A velocidade com que o sistema o gerou",
       },
       {
         id: "m1e15_b",
-        label: "Medir só a velocidade de resposta do sistema completo",
+        label: "Se o resultado trata algum grupo de forma injusta",
       },
       {
         id: "m1e15_c",
-        label: "Comprovar quantos usuários registrados a plataforma tem",
+        label: "Quantos usuários a plataforma tem",
       },
       {
         id: "m1e15_d",
-        label: "Verificar unicamente o custo mensal da ferramenta",
+        label: "Só o custo mensal da ferramenta",
       },
     ],
-    correctAnswer: "m1e15_a",
+    correctAnswer: "m1e15_b",
     topic: "Auditoria",
     difficulty: "médio",
     source: "OVA: O Espelho da Verdade",
     feedback:
-      "Auditar o viés é revisar se algum grupo sai prejudicado. Pratique no laboratório.",
+      "Antes de usar um resultado sobre pessoas, confira se ele trata algum grupo de forma injusta: isso é um viés.",
   },
   {
     id: "m1e16",
@@ -1710,11 +1703,11 @@ export const MODULE_1_PT = [
   {
     id: "m1e20",
     question:
-      "Um funcionário toma decisões sobre pessoas com IA sem declarar isso nem deixar ninguém revisar. Qual princípio é violado?",
+      "Um sistema trata os usuários sem dizer que uma IA participa. Qual princípio é violado?",
     options: [
       {
         id: "m1e20_a",
-        label: "Responsabilidade: uma pessoa deve responder pela decisão",
+        label: "Transparência: avisar quando uma IA participa de uma decisão",
       },
       {
         id: "m1e20_b",
@@ -1722,12 +1715,11 @@ export const MODULE_1_PT = [
       },
       {
         id: "m1e20_c",
-        label: "Popularidade: que o sistema agrade aos usuários",
+        label: "Popularidade: o sistema agradar os usuários",
       },
       {
         id: "m1e20_d",
-        label:
-          "Economia: reduzir o custo operacional de manter a ferramenta ativa",
+        label: "Economia: reduzir o custo operacional da ferramenta",
       },
     ],
     correctAnswer: "m1e20_a",
@@ -1735,6 +1727,6 @@ export const MODULE_1_PT = [
     difficulty: "médio",
     source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "Sem uma pessoa que responda pela decisão não há responsabilidade. Revise a guia de ética.",
+      "A transparência exige avisar quando uma IA participa de uma decisão. Velocidade, popularidade e economia não são o princípio violado.",
   },
 ];

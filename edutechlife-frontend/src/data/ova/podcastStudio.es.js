@@ -87,7 +87,7 @@ export const SOURCE_TIPS = {
   creativo:
     "Guías de estilo, briefs y casos de éxito. La IA captura bien el tono creativo si las fuentes son descriptivas.",
   mixto:
-    "Agrupa tus fuentes por tema antes de subirlas. NotebookLM cruza información entre todas, así que la organización importa.",
+    "Agrupa tus fuentes por tema antes de subirlas. Gemini Notebook cruza información entre todas, así que la organización importa.",
 };
 
 export const GOAL_TIPS = {
@@ -135,7 +135,7 @@ export const FORMATS = {
 
 export const CHECKLIST_ITEMS = [
   { id: "select", label: "Seleccioné y organicé mis mejores fuentes" },
-  { id: "create", label: "Creé un notebook nuevo en NotebookLM" },
+  { id: "create", label: "Creé un notebook nuevo en Gemini Notebook" },
   { id: "upload", label: "Subí todas mis fuentes al notebook" },
   { id: "generate", label: "Inicié la generación del Audio Overview" },
   { id: "listen", label: "Escuché el resultado completo" },
@@ -151,15 +151,9 @@ export const learningObjectives = [
 
 export const furtherReading = [
   {
-    title: "NotebookLM Audio Overviews — Google Support",
+    title: "Gemini Notebook Audio Overviews — Google Support",
     url: "https://support.google.com/notebooklm/answer/14054503",
     description:
-      "Soporte oficial de Google sobre Audio Overviews en NotebookLM.",
-  },
-  {
-    title: "How to Create Educational Podcasts with AI",
-    url: "https://www.edutechlife.com/blog/educational-ai-podcasts",
-    description:
-      "Guía para crear podcasts educativos con inteligencia artificial.",
+      "Soporte oficial de Google sobre Audio Overviews en Gemini Notebook.",
   },
 ];

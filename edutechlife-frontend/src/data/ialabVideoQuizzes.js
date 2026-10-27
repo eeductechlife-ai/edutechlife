@@ -375,7 +375,7 @@ const ES = {
       q: "¿Para qué sirve un Proyecto?",
       options: [
         "Para guardar instrucciones y archivos de un trabajo",
-        "Para subir archivos sin ningún límite de tamaño ni de tipo de tamaño ni de tipo",
+        "Para subir archivos sin ningún límite de tamaño ni de tipo",
         "Para reemplazar la memoria de Claude",
       ],
       correct: 0,
@@ -397,7 +397,7 @@ const ES = {
       options: [
         "Un procedimiento que se repite",
         "Una contraseña de respaldo",
-        "Un modelo distinto de Claude para tareas para tareas",
+        "Un modelo distinto de Claude para tareas distintas",
       ],
       correct: 0,
       feedback:
@@ -448,7 +448,7 @@ const ES = {
       ],
       correct: 1,
       feedback:
-        "El Proyecto guarda instrucciones y archivos; además, OpenAI planea retirar los GPTs personalizados.",
+        "El Proyecto guarda instrucciones y archivos; además, OpenAI programó retirar los GPT personalizados el 11-dic-2026 (fecha sujeta a cambios).",
     },
     {
       q: "¿Qué prueba verifica que un GPT no repita datos de menores?",
@@ -964,7 +964,7 @@ const EN = {
       ],
       correct: 1,
       feedback:
-        "A Project stores instructions and files; also, OpenAI plans to retire custom GPTs.",
+        "A Project stores instructions and files; also, OpenAI has scheduled the retirement of custom GPTs for December 11, 2026 (date subject to change).",
     },
     {
       q: "Which test checks that a GPT does not repeat data about minors?",
@@ -1476,7 +1476,7 @@ const PT = {
       ],
       correct: 1,
       feedback:
-        "O Projeto guarda instruções e arquivos; além disso, a OpenAI planeja aposentar os GPTs personalizados.",
+        "O Projeto guarda instruções e arquivos; além disso, a OpenAI programou a retirada dos GPTs personalizados para 11 de dezembro de 2026 (data sujeita a mudanças).",
     },
     {
       q: "Qual teste verifica que um GPT não repete dados de menores?",

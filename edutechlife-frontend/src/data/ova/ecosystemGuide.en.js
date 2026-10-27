@@ -1,137 +1,133 @@
 export const learningObjectives = [
-  "Understand the evolution of GPT models and their capabilities",
-  "Identify the different ChatGPT operation modes",
-  "Analyze the integrated tools of the ChatGPT ecosystem",
-  "Apply advanced strategies to optimize AI usage",
+  "Understand what ChatGPT does and how it builds an answer",
+  "Tell the ways of answering apart: quick or with more reasoning",
+  "Pick the right tool for each task (search, files, Canvas, Projects)",
+  "Ask for an everyday task and review the answer before using it",
 ];
 
 export const furtherReading = [
   {
-    title: "OpenAI Model Reference",
-    url: "https://platform.openai.com/docs/models",
-    description: "Official documentation for all OpenAI models.",
-  },
-  {
-    title: "ChatGPT Ecosystem Evolution",
-    url: "https://openai.com/blog/",
-    description: "Official OpenAI blog with new feature announcements.",
+    title: "OpenAI Help Center",
+    url: "https://help.openai.com/",
+    description:
+      "Official documentation: features, plans and availability for your account.",
   },
 ];
 
 export const infographicData = {
   header: {
-    title: "Mastering the ChatGPT Ecosystem",
-    subtitle: "From Theory to Professional Action",
+    title: "The Master Blueprint: your ChatGPT map",
+    subtitle: "From your first request to a useful answer",
   },
   sections: [
     {
       id: "evolution",
-      title: "AI Engine Evolution (GPT Models)",
+      title: "How ChatGPT answers",
       icon: "TrendingUp",
       content:
-        "ChatGPT became the fastest-growing application in history after its November 2022 launch, reaching 100 Million Users in 2 months.",
+        "ChatGPT is a conversational assistant: you read its answer, adjust it with your next message and check it before using it.",
       details: [
         {
-          title: "GPT-4o",
-          date: "May 2024",
-          text: "Omni multimodal (text, image, audio).",
+          title: "1 · Your request",
+          date: "Step 1",
+          text: "You write what you need, for whom and in what format.",
           extendedText:
-            "This model broke latency barriers. It enables real-time voice interactions without typical delays, can 'see' through a smartphone camera and analyze the environment instantly, and processes audio natively rather than converting it to text first.",
+            "The clearer your request, the less it guesses. Example: “Help me write a WhatsApp message to confirm an appointment, friendly tone, 3 lines at most”.",
         },
         {
-          title: "GPT-5",
-          date: "August 2025",
-          text: "Optimized system, drastic reduction in hallucinations.",
+          title: "2 · Its answer",
+          date: "Step 2",
+          text: "ChatGPT builds the answer piece by piece.",
           extendedText:
-            "A qualitative leap toward enterprise reliability. It focuses on Agentic Workflows, where AI can more safely interact with external databases and make significantly fewer logical errors or invent data.",
+            "It does not look up a stored answer: it builds one from patterns. That is why it can sound very sure even when it is wrong.",
         },
         {
-          title: "GPT-5.5",
-          date: "April 2026",
-          text: "Autonomous reasoning and step-by-step planning.",
+          title: "3 · Your review",
+          date: "Step 3",
+          text: "You adjust and check.",
           extendedText:
-            "Represents the smartest model of the decade. It can receive a complex goal (e.g., 'Create a complete marketing campaign'), break it into small tasks, execute necessary code, correct its own errors, and use multiple web tools without constant human intervention.",
+            "Ask for small changes (“make it shorter”) and check dates, figures and names before using the result.",
         },
       ],
     },
     {
       id: "modes",
-      title: "Operation Modes",
+      title: "Ways of answering",
       icon: "Cpu",
       content:
-        "AI adapts its processing power and response time according to task complexity.",
+        "Depending on your account, ChatGPT may offer different ways of answering. Names and options change: check the selector in yours.",
       details: [
         {
-          title: "Fast Mode",
-          text: "Instant responses to simple, direct tasks.",
+          title: "Quick answer",
+          text: "For simple, direct tasks.",
           extendedText:
-            "Ideal for daily productivity: summarizing long email chains, quick content brainstorming, drafting client responses, or correcting grammar in seconds. Prioritizes speed over deep analysis.",
+            "Ideal for summarizing an email, suggesting ideas, fixing wording or translating. It favors speed over deep analysis.",
         },
         {
-          title: "Thinking Mode (Deep)",
-          text: "Detailed analysis and strategic decisions. Requires processing time.",
+          title: "Answer with more reasoning",
+          text: "For tasks that need analysis. It takes a little longer.",
           extendedText:
-            "The AI invests time in 'thinking' before writing. Essential for solving complex code bugs, designing software architectures, writing analytical academic essays, or modeling financial scenarios where a superficial error would be costly.",
+            "Useful when there are several factors: comparing options, planning a trip with constraints or reviewing a long document. It is slower, but usually more careful.",
         },
       ],
     },
     {
       id: "tools",
-      title: "The Integrated Toolbox",
+      title: "The toolbox",
       icon: "Wrench",
       content:
-        "ChatGPT evolved from a simple chatbot to a complete digital workspace.",
+        "ChatGPT is more than a chat: it has tools to search, read your files, edit and keep context. Which ones you see depends on your plan.",
       details: [
         {
-          title: "Web Search and Code Interpreter",
-          text: "Access to live data and Python script execution.",
+          title: "Web search and files",
           icon: "Search",
+          text: "Recent data with sources, and reading your documents.",
           extendedText:
-            "You can upload a raw Excel file and ask it to clean data, perform statistical analysis (like regressions), and generate interactive charts. The AI writes Python code in the background, executes it, and delivers the visual result.",
+            "Turn on search for prices, news or current rules and open the sources. Upload a PDF or a spreadsheet to ask for a summary or a table, and recompute one row by hand to check.",
         },
         {
-          title: "Canvas: Collaborative Editing",
-          text: "A shared workspace in a side panel.",
+          title: "Canvas",
           icon: "Layout",
+          text: "A panel next to the chat to edit a text with you.",
           extendedText:
-            "Instead of regenerating entire text in the chat, Canvas opens a side document. You can select a single paragraph and ask 'make this paragraph more professional', or edit code directly while AI reviews changes. Ideal for long projects.",
+            "Instead of regenerating the whole text, you select a paragraph and ask “make it more formal”. Useful for long documents.",
         },
         {
-          title: "Memory and Projects",
-          text: "Remembers preferences and organizes complex contexts under 'Projects'.",
+          title: "Projects and memory",
           icon: "Database",
+          text: "They keep the instructions and files of a job.",
           extendedText:
-            "If you set up a 'Project' for Edutechlife, you can upload the brand manual and guidelines. From then on, any chat within that project will remember to use your colors, institutional tone, and preferred formats without repeating yourself.",
+            "A Project gathers the context of a job (tone, rules, files) so you do not repeat it in every chat. Review memory from time to time and delete what you do not want it to keep.",
         },
       ],
     },
     {
       id: "automation",
-      title: "Connectivity and Automation",
+      title: "Apps and agents, with your permission",
       icon: "Share2",
       content:
-        "The real power comes from connecting your AI with the outside world and your daily applications.",
+        "ChatGPT can connect to other apps and do multi-step tasks, always with permissions you approve.",
       details: [
         {
-          title: "Zapier",
-          text: "Simple, intuitive automations.",
+          title: "Connectors",
           icon: "Zap",
+          text: "Permissions for ChatGPT to use your apps.",
           extendedText:
-            "Excellent for beginners. Example: 'Every time I receive an email labeled Invoice in Gmail, use AI to extract the amount and automatically add it to a row in Google Sheets'.",
+            "A connector is a permission for ChatGPT to read one of your tools, such as your calendar or documents. Read what permissions it asks for, grant only what is needed and disconnect what you no longer use.",
         },
         {
-          title: "Make (Integromat)",
-          text: "Complex, powerful flows (1,000 free operations/month).",
+          title: "Agent",
           icon: "Settings",
+          text: "Multi-step tasks under your supervision.",
           extendedText:
-            "Enables advanced logical branching. Example: 'If a lead comes in via Facebook, analyze their message with AI. If angry, notify Slack urgently. If a common question, send an automatic email using the company manual'.",
+            "You give it a goal (for example, compare three options and build a table). You review the plan, approve the important actions and open the sources before using the result.",
         },
         {
-          title: "Native Integration: Workspace and Slack",
-          text: "Ability to act directly on your corporate platforms.",
+          title: "Share with care",
           icon: "MessageSquare",
+          text: "Before sharing a chat, check what it contains.",
           extendedText:
-            "AI no longer lives only in its app. You can use @ChatGPT in Slack to summarize a 50-message thread from colleagues while you were in a meeting, saving vital reading minutes.",
+            "A shared link shows the whole conversation. Do not include other people's personal data, minors' data or confidential documents.",
         },
       ],
     },
@@ -139,178 +135,116 @@ export const infographicData = {
   quiz: {
     questions: [
       {
-        question: "What is the main advantage of ChatGPT's Thinking Mode?",
+        question: "When is the option with more reasoning worth it?",
         options: [
           {
-            text: "Faster responses than normal mode",
+            text: "For simple tasks, like fixing a sentence",
             score: 1,
             feedback:
-              "Thinking Mode prioritizes depth, not speed. It's designed to be slower but more rigorous.",
+              "A quick answer is enough for that: extra reasoning takes longer and adds nothing.",
           },
           {
-            text: "Detailed analysis and step-by-step reasoning before responding",
+            text: "When there are several factors to compare, like planning a trip with constraints",
             score: 3,
             feedback:
-              "Correct! Thinking Mode invests time in reasoning before answering, ideal for complex tasks.",
+              "Correct! That option is usually more careful with multi-factor tasks.",
           },
           {
-            text: "Consumes fewer server resources",
+            text: "Always, because it is better at everything",
             score: 1,
             feedback:
-              "It actually consumes more resources because it performs deeper processing before responding.",
+              "Not always: it is slower and simple tasks do not need it.",
           },
         ],
       },
       {
-        question: "What is the function of Canvas in ChatGPT?",
+        question: "What does Canvas do in ChatGPT?",
         options: [
           {
             text: "Generates images from text",
             score: 1,
             feedback:
-              "That's DALL-E's job, not Canvas. Canvas is a collaborative text and code editor.",
-          },
-          {
-            text: "Allows collaborative document editing in a side panel",
-            score: 3,
-            feedback:
-              "Exactly! Canvas opens a side document where you can edit and AI reviews changes in real time.",
+              "Image creation is another tool. Canvas is an editor next to the chat.",
           },
           {
             text: "Connects ChatGPT to social networks",
             score: 1,
+            feedback: "No: Canvas has nothing to do with social networks.",
+          },
+          {
+            text: "Lets you edit a document next to the chat, in a side panel",
+            score: 3,
             feedback:
-              "No, Canvas has nothing to do with social networks. It's a collaborative workspace.",
+              "Exactly! You can select a paragraph and ask for a change without regenerating everything.",
           },
         ],
       },
       {
-        question:
-          "How would a teacher benefit from using ChatGPT's Projects feature?",
+        question: "How would a teacher benefit from using Projects in ChatGPT?",
         options: [
           {
-            text: "Upload the curriculum and course guides so the AI remembers the context",
+            text: "They can keep the syllabus and course guides so they do not repeat the context in every chat",
             score: 3,
             feedback:
-              "Correct! Projects let you upload reference documents that the AI will use across all chats.",
+              "Correct! A Project gathers the instructions and files of a job.",
           },
           {
-            text: "Creates exams automatically without review",
+            text: "It creates exams automatically with no review",
             score: 1,
             feedback:
-              "AI can help create exams, but they always require human review to ensure accuracy.",
+              "AI helps prepare exams, but they always need human review.",
           },
           {
-            text: "Replaces the teacher in live sessions",
+            text: "It replaces the teacher in class",
             score: 1,
             feedback:
-              "ChatGPT is a support tool, not a replacement. The teacher's expertise is irreplaceable.",
+              "ChatGPT supports, it does not replace: the teacher's judgment is irreplaceable.",
           },
         ],
       },
       {
-        question:
-          "What is the main difference between Zapier and Make (Integromat)?",
+        question: "Before approving a connector, what do you do?",
         options: [
           {
-            text: "Make allows more complex flows with advanced logical branching",
+            text: "I read what permissions it asks for and grant only what is needed",
             score: 3,
             feedback:
-              "Correct! Make offers logical branching (if/else) and more powerful data transformations than Zapier.",
+              "Correct! The permissions are yours: give the minimum and disconnect what you no longer use.",
           },
           {
-            text: "Zapier is more expensive than Make",
+            text: "I approve everything so I do not have to repeat the step",
             score: 1,
-            feedback:
-              "Not necessarily. Both have different pricing models. Make offers 1,000 free operations per month.",
+            feedback: "Granting more permissions than needed raises the risk.",
           },
           {
-            text: "Make only works with Google Workspace",
+            text: "I share my password in the chat so it can get in",
             score: 1,
-            feedback:
-              "Make integrates with hundreds of apps, not just Google Workspace.",
+            feedback: "Never give passwords in the chat.",
           },
         ],
       },
       {
-        question:
-          "What is the most efficient way to start using generative AI in the classroom?",
+        question: "What is the best way to start with ChatGPT?",
         options: [
           {
-            text: "Implement AI in all areas at once",
+            text: "Try every feature on day one",
             score: 1,
-            feedback:
-              "Implementing everything at once can be overwhelming. Better to start with one specific area.",
+            feedback: "It is overwhelming and you will not know what helped.",
           },
           {
-            text: "Start with one specific task (summarize, create material) and expand gradually",
+            text: "Start with an everyday task, review the answer and improve it",
             score: 3,
             feedback:
-              "Exactly! The best strategy is to start with one concrete task, master it, then gradually expand.",
+              "Exactly! One concrete task, one review and one adjustment: that is how you learn.",
           },
           {
-            text: "Wait for the technology to mature before using it",
+            text: "Wait for the technology to mature",
             score: 1,
             feedback:
-              "AI is already mature enough for many educational tasks. Starting now allows progressive learning.",
+              "It already works for many everyday tasks; starting now lets you learn step by step.",
           },
         ],
       },
     ],
   },
-};
-
-export const pricingSection = {
-  title: "ChatGPT Plans: Which one to choose?",
-  subtitle:
-    "Each plan is designed for a different user profile. Compare and choose the one that best fits your needs.",
-  plans: [
-    {
-      name: "Free",
-      price: "/tmp/agent_c_work.sh",
-      period: "/month",
-      description:
-        "Ideal for getting started with AI and exploring basic capabilities.",
-      features: [
-        "Access to GPT-4o mini",
-        "Reduced message limit",
-        "No access to advanced tools",
-        "No DALL-E or web browsing",
-      ],
-      color: "from-gray-400 to-gray-500",
-      icon: "fa-rocket",
-    },
-    {
-      name: "ChatGPT Plus",
-      price: "0",
-      period: "/month",
-      description: "Perfect for students and professionals who use AI daily.",
-      features: [
-        "Full access to GPT-4o",
-        "Unlimited messages",
-        "Access to DALL-E, Browse, and Data Analysis",
-        "Create custom GPTs",
-        "Reduced voice and video limit",
-      ],
-      popular: true,
-      color: "from-corporate to-petroleum",
-      icon: "fa-star",
-    },
-    {
-      name: "ChatGPT Pro",
-      price: "00",
-      period: "/month",
-      description:
-        "For researchers and professionals requiring unlimited processing capacity.",
-      features: [
-        "Everything in Plus, unlimited",
-        "Unlimited access to GPT-4o, o1, and o1-pro",
-        "Advanced voice and video mode",
-        "Priority access to new features",
-        "Priority support",
-      ],
-      color: "from-amber-500 to-orange-600",
-      icon: "fa-crown",
-    },
-  ],
 };

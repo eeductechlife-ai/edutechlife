@@ -117,6 +117,7 @@ const OVAGeminiDeepResearch = ({ onComplete } = {}) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [selectedType, setSelectedType] = useState(null);
+  const [verified, setVerified] = useState(false);
 
   const handleStart = () => setStep(1);
   const handleSelectType = (id) => {
@@ -129,8 +130,8 @@ const OVAGeminiDeepResearch = ({ onComplete } = {}) => {
   };
 
   useEffect(() => {
-    if (step === 2) onComplete?.();
-  }, [step, onComplete]);
+    if (step === 2 && verified) onComplete?.();
+  }, [step, verified, onComplete]);
 
   return (
     <div className="relative">
@@ -273,6 +274,20 @@ const OVAGeminiDeepResearch = ({ onComplete } = {}) => {
               </div>
             </div>
 
+            <label
+              className="flex items-center gap-3 mb-5 p-3 rounded-xl theme-border cursor-pointer"
+              style={{ background: "var(--theme-surface)" }}
+            >
+              <input
+                type="checkbox"
+                checked={verified}
+                onChange={(e) => setVerified(e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-sm text-slate-700 dark:text-slate-200">
+                {t("ialab.gemini_research.verify_sources")}
+              </span>
+            </label>
             <div
               className="rounded-2xl p-5 mb-5 theme-border"
               style={{ background: "var(--theme-surface)" }}

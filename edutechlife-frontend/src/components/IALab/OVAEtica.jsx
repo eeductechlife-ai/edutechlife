@@ -27,7 +27,7 @@ import {
   Star,
 } from "lucide-react";
 import { stopSpeech } from "../../utils/speech";
-import { useOVATranslations } from "../../hooks/useOVATranslations";
+import { useEticaTexts } from "./ova-etica/eticaTexts";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { OVAIntro } from "./shared";
 import VoiceReader from "./VoiceReader";
@@ -67,25 +67,25 @@ const ModuleHistory = ({ texts }) => {
       t: texts.history_title_1,
       c: texts.history_desc_1,
       icon: <Cpu className="w-5 h-5" />,
-      era: "1940s",
+      era: "1950",
     },
     {
       t: texts.history_title_2,
       c: texts.history_desc_2,
       icon: <Layers className="w-5 h-5" />,
-      era: "1960s",
+      era: "2010",
     },
     {
       t: texts.history_title_3,
       c: texts.history_desc_3,
       icon: <Sparkles className="w-5 h-5" />,
-      era: "2000s",
+      era: "2017",
     },
     {
       t: texts.history_title_4,
       c: texts.history_desc_4,
       icon: <Rocket className="w-5 h-5" />,
-      era: "2020s",
+      era: "2022",
     },
   ];
   return (
@@ -377,7 +377,7 @@ Button.propTypes = {
 
 export default function OVAEtica({ onComplete }) {
   const { t, locale } = useTranslation();
-  const texts = useOVATranslations("etica");
+  const texts = useEticaTexts();
   const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState("welcome");
   const [completed, setCompleted] = useState([]);

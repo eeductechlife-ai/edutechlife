@@ -38,6 +38,17 @@ export const gameData = [
     feedback:
       "Muito bem! Instruir a IA de forma explícita é uma ótima estratégia de mitigação.",
   },
+  {
+    q: "Você quer que a IA resuma um e-mail que traz o documento e o telefone de um cliente. O que você faz?",
+    opts: [
+      "Colo o e-mail completo: é mais rápido.",
+      "Colo o e-mail e peço que a IA apague os dados depois.",
+      "Troco os dados pessoais por [Cliente A], [documento] e [telefone] antes de colar.",
+    ],
+    correct: 2,
+    feedback:
+      "Muito bem! O que você cola em uma IA sai do seu controle. Anonimize primeiro e compartilhe só o necessário.",
+  },
 ];
 
 export const accordionData = [
@@ -50,10 +61,10 @@ export const accordionData = [
   },
   {
     id: "acc2",
-    title: "Viés de Representação e Gênero (Experimento de Stanford)",
+    title: "Viés de Representação e Gênero",
     icon: "👥",
     content:
-      'Em 2023, pesquisadores pediram a modelos de linguagem: "Escreva a história de um CEO de sucesso." Em 78% dos casos, gerou um homem. Ao pedir histórias de "enfermeiras", 91% foram mulheres. Isso mostra como os vieses históricos se replicam automaticamente.',
+      "Estudos que testaram isso mostram que, ao pedir a história de “um executivo de sucesso”, os modelos tendem a imaginar um homem, e para “uma enfermeira”, uma mulher. É assim que os estereótipos dos dados de treinamento se repetem.",
   },
   {
     id: "acc3",

@@ -18,10 +18,10 @@ export const dilemmas = [
       "A classmate asks you to use AI to generate a complete academic essay that they will submit as their own. How do you respond?",
     opts: [
       "I help them, everyone uses AI nowadays.",
-      "I explain that academic plagiarism also applies to AI-generated content and offer to teach them how to use it as a support tool.",
       "I do it but ask them not to tell anyone.",
+      "I explain that academic plagiarism also applies to AI-generated content and offer to teach them how to use it as a support tool.",
     ],
-    correct: 1,
+    correct: 2,
     feedback:
       "Using AI to generate content presented as your own is plagiarism. AI should be a learning tool, not a shortcut to deceive.",
   },
@@ -30,11 +30,11 @@ export const dilemmas = [
     scenario:
       "A recruitment company uses an AI algorithm to filter resumes. The system systematically rejects women for technical positions. What is the main ethical issue?",
     opts: [
-      "There is no problem, the algorithm just follows historical data.",
       "The algorithm perpetuates historical gender biases and must be audited and corrected to ensure fairness.",
+      "There is no problem, the algorithm just follows historical data.",
       "The problem is that women don't apply for those positions.",
     ],
-    correct: 1,
+    correct: 0,
     feedback:
       "Algorithms can perpetuate and amplify historical biases. It is an ethical responsibility to audit AI systems to ensure fairness.",
   },
@@ -44,10 +44,10 @@ export const dilemmas = [
       "You are developing an educational AI app for children. What ethical consideration is PRIORITY?",
     opts: [
       "That the app is visually appealing and has many colors.",
-      "Guarantee children's data privacy, transparency in how the AI works, and parental supervision.",
       "That the AI responds as quickly as possible.",
+      "Guarantee children's data privacy, transparency in how the AI works, and parental supervision.",
     ],
-    correct: 1,
+    correct: 2,
     feedback:
       "When working with minors, privacy, security, and transparency are priority ethical and legal obligations.",
   },
@@ -56,11 +56,11 @@ export const dilemmas = [
     scenario:
       "Your boss asks you to implement an AI chatbot for customer service, but says: 'Don't tell customers they're talking to an AI.' What do you do?",
     opts: [
-      "Implement it without saying anything, that's what the boss wants.",
       "Explain that hiding it is an AI violates transparency and trust principles, and propose clearly informing at the start of the interaction.",
+      "Implement it without saying anything, that's what the boss wants.",
       "Implement it but tell a colleague in confidence.",
     ],
-    correct: 1,
+    correct: 0,
     feedback:
       "Transparency is a fundamental ethical principle in AI. Users have the right to know if they are interacting with a human or a machine.",
   },

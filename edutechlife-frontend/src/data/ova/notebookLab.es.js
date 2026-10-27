@@ -1,37 +1,37 @@
 export const learningObjectives = [
   "Comprender el concepto de IA basada en fuentes propias",
-  "Aprender a crear y gestionar notebooks en NotebookLM",
-  "Diferenciar NotebookLM de chatbots tradicionales",
+  "Aprender a crear y gestionar notebooks en Gemini Notebook",
+  "Diferenciar Gemini Notebook de chatbots tradicionales",
   "Aplicar estrategias de investigación con documentos propios",
 ];
 
 export const furtherReading = [
   {
-    title: "NotebookLM Guide — Google",
+    title: "Gemini Notebook Guide — Google",
     url: "https://notebooklm.google.com/",
-    description: "Plataforma oficial de NotebookLM de Google.",
+    description: "Plataforma oficial de Gemini Notebook de Google.",
   },
   {
-    title: "How to Use NotebookLM for Research",
+    title: "How to Use Gemini Notebook for Research",
     url: "https://blog.google/technology/ai/notebooklm/",
-    description: "Guía oficial de Google sobre cómo usar NotebookLM.",
+    description: "Guía oficial de Google sobre cómo usar Gemini Notebook.",
   },
 ];
 
 export const contentScreens = [
   {
     id: "intro",
-    title: "¿Qué es NotebookLM y para qué sirve?",
+    title: "¿Qué es Gemini Notebook y para qué sirve?",
     subtitle:
-      "Exploración guiada de NotebookLM: crea tu primer cuaderno con documentos propios",
+      "Exploración guiada de Gemini Notebook: crea tu primer cuaderno con documentos propios",
     objective:
       "Entender el concepto de IA basada en fuentes propias y crear tu primer notebook",
     maxText:
-      "NotebookLM es una herramienta de Google que revoluciona la gestión del conocimiento personal. A diferencia de los chatbots tradicionales, trabaja exclusivamente con los documentos que tú le entregas. Esto significa que sus respuestas están 100% fundamentadas en tus fuentes, eliminando el riesgo de alucinaciones. Tu objetivo es comprender cómo funciona y por qué es diferente a los chatbots genéricos.",
+      "Gemini Notebook es una herramienta de Google que revoluciona la gestión del conocimiento personal. A diferencia de los chatbots tradicionales, trabaja exclusivamente con los documentos que tú le entregas. Esto significa que sus respuestas están fundamentadas en tus fuentes, lo que reduce el riesgo de alucinaciones (no lo elimina). Tu objetivo es comprender cómo funciona y por qué es diferente a los chatbots genéricos.",
     achievements: [
       { text: "Entender el concepto de IA basada en fuentes propias" },
       { text: "Crear tu primer notebook con documentos" },
-      { text: "Diferenciar NotebookLM de chatbots genéricos" },
+      { text: "Diferenciar Gemini Notebook de chatbots genéricos" },
     ],
     warnings: [
       { text: "Subir documentos sin curar ni organizar" },
@@ -53,14 +53,14 @@ export const contentScreens = [
     objective:
       "Aprender a seleccionar, organizar y sintetizar documentos para maximizar el valor de tu notebook",
     maxText:
-      "La curaduría de fuentes es la clave para sacar el máximo provecho a NotebookLM. No se trata de subir la mayor cantidad de documentos, sino de seleccionar los más relevantes y organizarlos estratégicamente. Aprenderás a elegir fuentes confiables, categorizarlas por temas y generar síntesis cruzadas que te den una visión integral de tu investigación.",
+      "La curaduría de fuentes es la clave para sacar el máximo provecho a Gemini Notebook. No se trata de subir la mayor cantidad de documentos, sino de seleccionar los más relevantes y organizarlos estratégicamente. Aprenderás a elegir fuentes confiables, categorizarlas por temas y generar síntesis cruzadas que te den una visión integral de tu investigación.",
     achievements: [
       { text: "Seleccionar fuentes relevantes y confiables" },
       { text: "Organizar documentos por categorías temáticas" },
       { text: "Generar síntesis cruzadas entre múltiples fuentes" },
     ],
     warnings: [
-      { text: "Subir 50 documentos sin filtro de calidad" },
+      { text: "Subir documentos sin filtro de calidad" },
       { text: "Mezclar fuentes contradictorias sin contexto" },
       { text: "No actualizar las fuentes regularmente" },
     ],
@@ -79,7 +79,7 @@ export const contentScreens = [
     objective:
       "Transformar documentos complejos en conversaciones de audio con dos presentadores virtuales",
     maxText:
-      "Una de las funciones más impresionantes de NotebookLM es Audio Overview. Esta herramienta convierte tus documentos en conversaciones de podcast generadas por IA, con dos presentadores virtuales que discuten los hallazgos clave. Es ideal para repasar contenido mientras te desplazas, pero recuerda complementarlo con resúmenes escritos y siempre revisar el contenido generado.",
+      "Una de las funciones más impresionantes de Gemini Notebook es Audio Overview. Esta herramienta convierte tus documentos en conversaciones de podcast generadas por IA, con dos presentadores virtuales que discuten los hallazgos clave. Es ideal para repasar contenido mientras te desplazas, pero recuerda complementarlo con resúmenes escritos y siempre revisar el contenido generado.",
     achievements: [
       { text: "Generar Audio Overviews desde tus documentos" },
       { text: "Personalizar el tono y enfoque del podcast" },
@@ -106,7 +106,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=1000",
     question:
-      "Según la guía, ¿cuál es el 'superpoder' principal de NotebookLM?",
+      "Según la guía, ¿cuál es el 'superpoder' principal de Gemini Notebook?",
     options: [
       "Busca información en todo internet para darte respuestas más largas.",
       "Trabaja exclusivamente con las fuentes y documentos que tú le entregas.",
@@ -115,7 +115,7 @@ export const questionsData = [
     ],
     correct: 1,
     explanation:
-      "¡Correcto! NotebookLM se diferencia porque solo usa la información que tú subes. Así se asegura de no inventar datos que no están en tus apuntes.",
+      "¡Correcto! Gemini Notebook se diferencia porque solo usa la información que tú subes. Así se asegura de no inventar datos que no están en tus apuntes.",
     hint: "Lee bien las opciones; este asistente está diseñado para ser totalmente fiel a tus propios documentos, no a internet.",
   },
   {
@@ -123,16 +123,16 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?auto=format&fit=crop&q=80&w=1000",
     question:
-      "¿Cuál es la diferencia más importante entre usar ChatGPT y NotebookLM para estudiar?",
+      "¿Cuál es la diferencia más importante entre usar ChatGPT y Gemini Notebook para estudiar?",
     options: [
-      "ChatGPT usa 'todo el internet' y NotebookLM usa 'solo tus fuentes cargadas'.",
-      "ChatGPT es gratis y NotebookLM siempre es de pago.",
-      "NotebookLM usa el mismo conocimiento general de internet que ChatGPT.",
-      "ChatGPT es para matemáticas y NotebookLM es para historia.",
+      "ChatGPT usa 'todo el internet' y Gemini Notebook usa 'solo tus fuentes cargadas'.",
+      "Usan la misma información: solo cambia el nombre.",
+      "Gemini Notebook usa el mismo conocimiento general de internet que ChatGPT.",
+      "ChatGPT es para matemáticas y Gemini Notebook es para historia.",
     ],
     correct: 0,
     explanation:
-      "Exacto. Mientras ChatGPT tiene conocimiento general de toda la web, NotebookLM se enfoca en ser súper preciso y estricto solo con los documentos que tú elegiste.",
+      "Exacto. Mientras ChatGPT tiene conocimiento general de toda la web, Gemini Notebook se enfoca en ser súper preciso y estricto solo con los documentos que tú elegiste.",
     hint: "Piensa en el origen de los datos de cada uno. Uno busca en todo el mundo y el otro solo en lo que tú le das.",
   },
   {
@@ -140,7 +140,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000",
     question:
-      "¿Qué increíble función tiene NotebookLM para ayudarte a 'escuchar' tus documentos?",
+      "¿Qué increíble función tiene Gemini Notebook para ayudarte a 'escuchar' tus documentos?",
     options: [
       "Una canción estilo rap con las palabras clave más importantes.",
       "Un audiolibro monótono narrado por tu propia voz clonada.",
@@ -157,16 +157,16 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1000",
     question:
-      "Se dice que NotebookLM está 'libre de alucinaciones'. ¿Qué significa esto?",
+      "Gemini Notebook suele responder desde tus documentos. ¿Qué significa eso para la verificación?",
     options: [
       "Que no te permite subir documentos sobre temas de ciencia ficción.",
       "Que bloquea automáticamente las páginas web con virus o publicidad engañosa.",
-      "Que la IA no inventa datos, sus respuestas se basan 100% en la evidencia de tus textos.",
+      "Que puede equivocarse igual, así que debes abrir la cita y comprobar el fragmento original.",
       "Que corrige tu ortografía y gramática sin que te des cuenta.",
     ],
     correct: 2,
     explanation:
-      "Correcto. Como la IA está restringida (amarrada) solo a tus PDFs o documentos, se elimina casi por completo el riesgo de que invente información falsa (alucinación).",
+      "Correcto. Reducir el riesgo no lo elimina: la cita te permite comprobar cada afirmación.",
     hint: "En el mundo de la IA, 'alucinar' significa inventar cosas que no son reales.",
   },
   {
@@ -174,7 +174,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000",
     question:
-      "Si estás haciendo un trabajo en grupo para la escuela o universidad, ¿puedes usar NotebookLM con tus compañeros?",
+      "Si estás haciendo un trabajo en grupo para la escuela o universidad, ¿puedes usar Gemini Notebook con tus compañeros?",
     options: [
       "No, es una herramienta estrictamente para uso individual.",
       "Sí, puedes compartir tus 'Cuadernos' con tu equipo igual que un Google Doc.",
@@ -191,7 +191,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=1000",
     question:
-      "Según las 'Mejores Prácticas' de la guía, ¿qué debes hacer SIEMPRE que NotebookLM te da una respuesta?",
+      "Según las 'Mejores Prácticas' de la guía, ¿qué debes hacer SIEMPRE que Gemini Notebook te da una respuesta?",
     options: [
       "Verificar siempre la cita o la parte exacta de donde sacó la información.",
       "Borrar el documento original de tu computadora porque ya no lo necesitas.",
@@ -200,7 +200,7 @@ export const questionsData = [
     ],
     correct: 0,
     explanation:
-      "Excelente. NotebookLM es un gran asistente, pero tú eres el estudiante. Siempre debes verificar haciendo clic en las citas para ver de qué parte del texto original sacó la idea.",
+      "Excelente. Gemini Notebook es un gran asistente, pero tú eres el estudiante. Siempre debes verificar haciendo clic en las citas para ver de qué parte del texto original sacó la idea.",
     hint: "Recuerda que tú eres el estudiante y la máquina es el asistente. Debes asegurarte de revisar las fuentes.",
   },
   {
@@ -208,16 +208,16 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&q=80&w=1000",
     question:
-      "Según el manual, ¿cuántos documentos o fuentes diferentes puedes subir a un mismo cuaderno en NotebookLM?",
+      "Según el manual, ¿cuántos documentos o fuentes diferentes puedes subir a un mismo cuaderno en Gemini Notebook?",
     options: [
       "Solo 1 fuente muy larga a la vez.",
       "Hasta 5 fuentes pequeñas.",
       "Fuentes ilimitadas (todo lo que tengas en tu computadora).",
-      "Hasta 50 fuentes de diversos formatos.",
+      "Subir todas tus fuentes sin elegir, sin importar el tema.",
     ],
     correct: 3,
     explanation:
-      "Correcto. Puedes alimentar tu cuaderno con hasta 50 fuentes distintas (como PDFs, documentos, enlaces, etc.) para que la IA cruce la información entre todas ellas.",
+      "Correcto. Conviene pocas fuentes, del mismo tema y con autor y fecha. El límite de fuentes depende de tu cuenta: revísalo ahí.",
     hint: "No es infinito, pero es un número lo suficientemente grande como para armar una tesis completa (medio centenar).",
   },
 ];

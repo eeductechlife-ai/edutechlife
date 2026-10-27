@@ -466,32 +466,31 @@ export const MODULE_5_EN = [
   {
     id: "m5q16",
     question:
-      "You write to Claude: “Write an email to the families about Saturday’s meeting, in a warm tone and without student names.” Which part of the request is missing?",
+      "The text Claude wrote is almost right, but the tone came out too formal. What do you do?",
     options: [
       {
         id: "m5q16_a",
-        label: "Nothing: the request already has all five parts complete",
+        label: "Ask again for the whole document from scratch",
       },
       {
         id: "m5q16_b",
-        label: "The tone: how the email should sound and which words to avoid",
+        label: "Ask for one small, specific change to the tone",
       },
       {
         id: "m5q16_c",
-        label:
-          "The limits: which data the email must not include and what to avoid in its writing",
+        label: "Accept it as it is to save time",
       },
       {
         id: "m5q16_d",
-        label: "The format: how the email looks and how long it should be",
+        label: "Switch models and hope for a different result",
       },
     ],
-    correctAnswer: "m5q16_d",
+    correctAnswer: "m5q16_b",
     topic: "Limits and errors",
     difficulty: "medium",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "A complete request has five parts: goal, audience, format, tone and limits. This one leaves out the format, so Claude would decide the length and structure on its own.",
+      "A small, specific change improves the result without redoing what already works. Starting over or accepting a tone you do not want are the common mistakes.",
   },
   {
     id: "m5q17",
@@ -557,25 +556,24 @@ export const MODULE_5_EN = [
   {
     id: "m5q19",
     question:
-      "You have spent weeks working in a school's Project and you are asked for a text for an unrelated client. Where do you do it?",
+      "You need a decision that only you can make, such as approving a proposal. What does the AI do?",
     options: [
       {
         id: "m5q19_a",
-        label:
-          "In the same Project, because Claude already knows your style well",
+        label: "It approves it, because it already has all the data",
       },
       {
         id: "m5q19_b",
-        label: "Outside that Project, so its rules and files do not carry over",
+        label:
+          "It prepares the options and the risks; the final decision is yours",
       },
       {
         id: "m5q19_c",
-        label: "In the same Project, asking it to ignore its instructions",
+        label: "It delegates it entirely to save time",
       },
       {
         id: "m5q19_d",
-        label:
-          "In the Project, after deleting its instructions and writing them again when you finish",
+        label: "It records it as approved in your name",
       },
     ],
     correctAnswer: "m5q19_b",
@@ -583,7 +581,7 @@ export const MODULE_5_EN = [
     difficulty: "hard",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Each Project applies its instructions and files to all its chats. Unrelated work goes in another Project or a separate chat, so you do not carry over rules or data that do not apply.",
+      "AI speeds up the preparation, but a decision with consequences stays yours. Delegating the approval is the mistake.",
   },
   {
     id: "m5q20",
@@ -618,64 +616,60 @@ export const MODULE_5_EN = [
   {
     id: "m5q21",
     question:
-      "You are going to ask Claude for an attendance report for a course. Which version of the data do you share?",
+      "You are going to ask Claude for a report with a group's average grades. What do you share?",
     options: [
       {
         id: "m5q21_a",
-        label: "Attendance by student code, without names or phone numbers",
+        label: "Full names and grades, so the report is accurate",
       },
       {
         id: "m5q21_b",
-        label: "The full list with names, because the report is internal",
+        label: "Only the group averages, with no names or identifiable data",
       },
       {
         id: "m5q21_c",
-        label:
-          "The full list in an incognito chat, because that way it is not saved",
+        label: "The list with phone numbers, to contact families later",
       },
       {
         id: "m5q21_d",
-        label: "The full list inside a private Project",
+        label: "The full file, in an incognito chat so it is not saved",
       },
     ],
-    correctAnswer: "m5q21_a",
+    correctAnswer: "m5q21_b",
     topic: "Privacy and data",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Share only what is needed: with codes instead of names the report comes out the same. Neither incognito nor a private Project authorizes you to share personal data (in Colombia, Law 1581 of 2012).",
+      "Group averages allow the analysis without identifying anyone. Personal data about minors is not shared with an AI tool (Colombian Law 1581 of 2012).",
   },
   {
     id: "m5q22",
     question:
-      "You ask Claude to 'write me an email for a client' and the result comes out long and too formal. What best explains what happened?",
+      "You need a six-page document that you will edit several times. Where do you ask for it?",
     options: [
       {
         id: "m5q22_a",
-        label: "Claude writes long by default and you must always trim it",
+        label: "In one long message, pasting the document into every reply",
       },
       {
         id: "m5q22_b",
-        label:
-          "You used a fast model; a more powerful one would have written it short and warm",
+        label: "In an Artifact, to view and edit it beside the chat",
       },
       {
         id: "m5q22_c",
-        label:
-          "The request gave no audience, format or tone, so Claude assumed them",
+        label: "In an incognito chat, so it is not saved",
       },
       {
         id: "m5q22_d",
-        label:
-          "Claude imitates formal emails from the internet and that style cannot be changed",
+        label: "In a short message, then copy the text by hand",
       },
     ],
-    correctAnswer: "m5q22_c",
+    correctAnswer: "m5q22_b",
     topic: "Limits and errors",
     difficulty: "medium",
     source: "Lesson 1: Get to know Claude",
     feedback:
-      "Every part missing from the request is something Claude assumes for you. If you do not say what it is for, who reads it, how long it is and what tone to use, Claude chooses, and it may not be what you wanted. A complete request has a goal, audience, format, tone and limits.",
+      "An Artifact is a piece that lives beside the chat: you view it, edit it and download it without losing the thread of the conversation.",
   },
   {
     id: "m5q23",
@@ -710,94 +704,91 @@ export const MODULE_5_EN = [
   {
     id: "m5q24",
     question:
-      "What is a good practice when reviewing a document Claude wrote for your client?",
+      "Claude wrote a technical report and you need it for families. What do you ask for?",
     options: [
       {
         id: "m5q24_a",
-        label:
-          "Check only the spelling, because you already asked for the content well",
+        label: "That it shorten it and nothing more, keeping the same language",
       },
       {
         id: "m5q24_b",
-        label: "Ask Claude to review it and send it if it finds no errors",
+        label:
+          "That it rewrite it for families: plain language, no acronyms, clear actions",
       },
       {
         id: "m5q24_c",
-        label:
-          "Read the introduction and the closing, which is what the client looks at",
+        label: "That it translate it into English to review it better",
       },
       {
         id: "m5q24_d",
-        label: "Check data, names, dates and tone against what you want to say",
+        label:
+          "That you send it as it is, because the family must understand it",
       },
     ],
-    correctAnswer: "m5q24_d",
+    correctAnswer: "m5q24_b",
     topic: "Oversight",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "A well-written text can contain wrong data or a wrong name, and Claude does not always catch its own mistakes. A full human review is a must.",
+      "Adapting a text to its audience changes the language, not only the length. A request with a clear audience and tone gives better results.",
   },
   {
     id: "m5q25",
     question:
-      "You want to reuse the same procedure for writing meeting minutes across several projects. What should you create?",
+      "You will use the same instructions in several chats of one job. Where do you leave them?",
     options: [
       {
         id: "m5q25_a",
-        label:
-          "A Skill with the steps, the template and a sample set of minutes",
+        label: "Pasted into each new chat, one by one",
       },
       {
         id: "m5q25_b",
-        label:
-          "A new Project for each meeting, with the procedure pasted into the instructions",
+        label: "In a Project, so all its chats use them",
       },
       {
         id: "m5q25_c",
-        label: "Nothing: let memory remember it and apply it on its own",
+        label: "In an Artifact shared with all the chats",
       },
       {
         id: "m5q25_d",
-        label: "An Artifact with the previous minutes to copy each time",
+        label: "In a separate chat that nobody else can see",
       },
     ],
-    correctAnswer: "m5q25_a",
+    correctAnswer: "m5q25_b",
     topic: "Connectors and Skills",
     difficulty: "medium",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "What you repeat becomes a Skill: the procedure stays the same every time, works in any job and saves time.",
+      "A Project stores instructions and files that apply to all its chats. Pasting them each time repeats work, and it is easy to forget one.",
   },
   {
     id: "m5q26",
     question:
-      "Which of these statements about AI and work is the most responsible?",
+      "You have the case of a student with special needs. What do you do?",
     options: [
       {
         id: "m5q26_a",
-        label: "If the request is well written, human review is unnecessary",
+        label: "I ask Claude for the decision and apply it",
       },
       {
         id: "m5q26_b",
-        label: "AI is useful for ideas, but not for professional work",
+        label: "I decide with the team; AI only helps to write",
       },
       {
         id: "m5q26_c",
-        label: "AI speeds up work, but the decision still remains human",
+        label: "I send Claude the full name so it can review it",
       },
       {
         id: "m5q26_d",
-        label:
-          "If Claude makes a mistake, the tool is responsible for the error",
+        label: "I leave it to AI, because it is more objective",
       },
     ],
-    correctAnswer: "m5q26_c",
+    correctAnswer: "m5q26_b",
     topic: "Delegating with Claude",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "AI speeds up work, professional work included. The decision and its consequences still belong to the person, however good the request is.",
+      "Decisions about people, and especially about minors, are human. AI can help write, but not decide or receive identifiable data.",
   },
   {
     id: "m5q27",
@@ -861,33 +852,33 @@ export const MODULE_5_EN = [
   {
     id: "m5q29",
     question:
-      "You want to ask Claude a one-off question that stays out of your history and its memory. What do you do?",
+      "You want Claude to remember a preference in all your work chats. What do you do?",
     options: [
       {
         id: "m5q29_a",
-        label: "Open an incognito chat and share only the data that is needed",
+        label: "You write it in each new chat so it is not forgotten",
       },
       {
         id: "m5q29_b",
         label:
-          "Ask it in your work Project, since it already has all your instructions",
+          "You put it in the Project instructions and review what Claude remembers",
       },
       {
         id: "m5q29_c",
-        label: "Ask it in a normal chat, because memory is private",
+        label: "You ask it to keep it in an incognito chat",
       },
       {
         id: "m5q29_d",
         label:
-          "Use incognito and paste client data, since that is allowed there",
+          "You wait: Claude learns your preferences by itself, without control",
       },
     ],
-    correctAnswer: "m5q29_a",
+    correctAnswer: "m5q29_b",
     topic: "Privacy and data",
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Incognito is for a one-off chat: it is not saved to your history or used for memory. Anthropic may still keep those conversations for a period for safety reasons, and incognito does not authorize you to share personal data: share only what is needed. A normal chat or a Project does keep that context.",
+      "Project instructions apply to all its chats, and memory can be reviewed and controlled. An incognito chat does not help Claude remember anything.",
   },
   {
     id: "m5q30",

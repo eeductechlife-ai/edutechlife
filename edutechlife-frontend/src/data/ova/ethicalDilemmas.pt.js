@@ -18,10 +18,10 @@ export const dilemmas = [
       "Um colega pede que você use IA para gerar um ensaio acadêmico completo que ele apresentará como próprio. Como você responde?",
     opts: [
       "Ajudo, afinal, hoje todo mundo usa IA.",
-      "Explico que o plágio acadêmico também se aplica a conteúdo gerado por IA e ofereço ensiná-lo a usá-la como ferramenta de apoio.",
       "Faço, mas peço que ele não conte para ninguém.",
+      "Explico que o plágio acadêmico também se aplica a conteúdo gerado por IA e ofereço ensiná-lo a usá-la como ferramenta de apoio.",
     ],
-    correct: 1,
+    correct: 2,
     feedback:
       "Usar IA para gerar conteúdo apresentado como próprio é plágio. A IA deve ser uma ferramenta de aprendizado, não um atalho para enganar.",
   },
@@ -30,11 +30,11 @@ export const dilemmas = [
     scenario:
       "Uma empresa de recrutamento usa um algoritmo de IA para filtrar currículos. O sistema rejeita sistematicamente mulheres para cargos técnicos. Qual é o principal problema ético?",
     opts: [
-      "Não há problema, o algoritmo apenas segue dados históricos.",
       "O algoritmo perpetua vieses históricos de gênero e deve ser auditado e corrigido para garantir equidade.",
+      "Não há problema, o algoritmo apenas segue dados históricos.",
       "O problema é que as mulheres não se candidatam a esses cargos.",
     ],
-    correct: 1,
+    correct: 0,
     feedback:
       "Os algoritmos podem perpetuar e amplificar vieses históricos. É responsabilidade ética auditar os sistemas de IA para garantir equidade.",
   },
@@ -44,10 +44,10 @@ export const dilemmas = [
       "Você está desenvolvendo um aplicativo educacional com IA para crianças. Qual consideração ética é PRIORITÁRIA?",
     opts: [
       "Que o aplicativo seja visualmente atraente e tenha muitas cores.",
-      "Garantir a privacidade dos dados infantis, a transparência sobre como a IA funciona e a supervisão dos pais.",
       "Que a IA responda o mais rápido possível.",
+      "Garantir a privacidade dos dados infantis, a transparência sobre como a IA funciona e a supervisão dos pais.",
     ],
-    correct: 1,
+    correct: 2,
     feedback:
       "Ao trabalhar com menores, privacidade, segurança e transparência são obrigações éticas e legais prioritárias.",
   },
@@ -56,11 +56,11 @@ export const dilemmas = [
     scenario:
       "Seu chefe pede que você implemente um chatbot de IA para atendimento ao cliente, mas diz: 'Não conte aos clientes que estão falando com uma IA'. O que você faz?",
     opts: [
-      "Implemento sem dizer nada, é o que o chefe pediu.",
       "Explico que ocultar que é uma IA viola princípios de transparência e confiança, e proponho informar claramente no início da interação.",
+      "Implemento sem dizer nada, é o que o chefe pediu.",
       "Implemento, mas conto a um colega em confiança.",
     ],
-    correct: 1,
+    correct: 0,
     feedback:
       "A transparência é um princípio ético fundamental na IA. Os usuários têm o direito de saber se interagem com um humano ou com uma máquina.",
   },

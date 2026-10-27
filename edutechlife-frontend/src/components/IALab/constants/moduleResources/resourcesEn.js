@@ -391,7 +391,8 @@ const RESOURCES_EN = {
         id: "gemini-multimodal-ova-1",
         type: "ova_interactive",
         title: "Testing the Magnifying Glass",
-        description: null,
+        description:
+          "See how Gemini works with images, text and data together: useful for real cases from your field, with verification of each figure.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 6,
@@ -464,9 +465,10 @@ const RESOURCES_EN = {
       {
         id: "gemini-cases-video-1",
         type: "video",
-        title: "Real Cases: Digital Detectives in Action",
+        title:
+          "Academic research with AI in minutes: Gemini and Deep Research without losing rigor",
         url: "https://www.youtube.com/embed/XAshixrvG5k",
-        duration: "16:30",
+        duration: "2:41",
         thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
         provider: "youtube",
         description:
@@ -515,7 +517,7 @@ const RESOURCES_EN = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "First Steps with Gemini Notebook",
+        title: "Complete NotebookLM guide: get the most out of it (2026)",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
@@ -689,7 +691,7 @@ const RESOURCES_EN = {
         id: "claude-first-request-ova-1",
         type: "ova_interactive",
         title: "The First Request",
-        description: null,
+        description: "Practice your first request with feedback at every step.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 3,

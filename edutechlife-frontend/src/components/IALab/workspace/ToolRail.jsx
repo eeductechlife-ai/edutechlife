@@ -67,7 +67,7 @@ const STYLE = {
     border: "#e0e3e8",
     radius: "rounded-lg",
     avatar: "#1a73e8",
-    wordmark: "NotebookLM",
+    wordmark: "Gemini Notebook",
     groupLabel: "Fuentes",
     footerAction: null,
   },

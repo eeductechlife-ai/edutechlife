@@ -1,5 +1,5 @@
 export const learningObjectives = [
-  "Simulate using NotebookLM to organize information",
+  "Simulate using Gemini Notebook to organize information",
   "Practice uploading and analyzing documents in a virtual environment",
   "Develop information synthesis skills with AI",
   "Evaluate the quality of responses based on your own sources",
@@ -7,9 +7,9 @@ export const learningObjectives = [
 
 export const furtherReading = [
   {
-    title: "NotebookLM Help Center",
+    title: "Gemini Notebook Help Center",
     url: "https://support.google.com/notebooklm/",
-    description: "Official NotebookLM help center.",
+    description: "Official Gemini Notebook help center.",
   },
   {
     title: "AI-Powered Research Tools Comparison",
@@ -53,7 +53,7 @@ export const contentScreens = [
     objective:
       "Generate syntheses that integrate information from diverse sources",
     maxText:
-      "The true power of document analysis lies in the ability to connect ideas across different sources. Cross-synthesis allows you to identify patterns, contradictions, and complements between documents that, viewed separately, would not be evident. NotebookLM facilitates this process by letting you ask questions that span all your sources simultaneously.",
+      "The true power of document analysis lies in the ability to connect ideas across different sources. Cross-synthesis allows you to identify patterns, contradictions, and complements between documents that, viewed separately, would not be evident. Gemini Notebook facilitates this process by letting you ask questions that span all your sources simultaneously.",
     achievements: [
       { text: "Identify common points between different authors" },
       { text: "Detect contradictions and academic debates" },
@@ -105,7 +105,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=1000",
     question:
-      "What is the first recommended step before uploading documents to NotebookLM for analysis?",
+      "What is the first recommended step before uploading documents to Gemini Notebook for analysis?",
     options: [
       "Upload all available documents without reviewing them.",
       "Select and curate sources based on their relevance and quality.",
@@ -155,7 +155,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1000",
     question:
-      "What is the best practice when organizing sources in NotebookLM?",
+      "What is the best practice when organizing sources in Gemini Notebook?",
     options: [
       "Upload all 50 allowed sources into a single notebook without sorting.",
       "Create separate notebooks by topics or categories with related sources.",
@@ -172,16 +172,16 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000",
     question:
-      "Why is it important to verify the citations provided by NotebookLM?",
+      "Why is it important to verify the citations provided by Gemini Notebook?",
     options: [
       "Because AI can sometimes hallucinate or incorrectly interpret context.",
       "Because citations are always wrong.",
-      "Because NotebookLM only works if you manually verify each citation.",
+      "Because Gemini Notebook only works if you manually verify each citation.",
       "Because citations are decorative and don't need verification.",
     ],
     correct: 0,
     explanation:
-      "Very good! Although NotebookLM is very precise with citations, you should always verify that the citation matches the correct context within the original document.",
+      "Very good! Although Gemini Notebook is very precise with citations, you should always verify that the citation matches the correct context within the original document.",
     hint: "AI is a powerful tool, but human verification is still essential.",
   },
   {
@@ -189,7 +189,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=1000",
     question:
-      "What strategy is most effective when asking NotebookLM questions about multiple sources?",
+      "What strategy is most effective when asking Gemini Notebook questions about multiple sources?",
     options: [
       "Asking very general questions like 'what are these documents about?'",
       "Formulating specific questions that require comparing information across sources.",
@@ -198,7 +198,7 @@ export const questionsData = [
     ],
     correct: 1,
     explanation:
-      "Correct. Specific questions that require comparison across sources make the most of NotebookLM's ability to perform cross-synthesis.",
+      "Correct. Specific questions that require comparison across sources make the most of Gemini Notebook's ability to perform cross-synthesis.",
     hint: "The more specific your question, the more useful the AI's answer will be.",
   },
   {
@@ -206,7 +206,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&q=80&w=1000",
     question:
-      "What is the main benefit of using NotebookLM for document analysis?",
+      "What is the main benefit of using Gemini Notebook for document analysis?",
     options: [
       "It completely replaces reading the original documents.",
       "It allows processing and consulting multiple sources simultaneously with grounded responses.",
@@ -215,7 +215,7 @@ export const questionsData = [
     ],
     correct: 1,
     explanation:
-      "Exactly! NotebookLM is an assistant that amplifies your analysis capabilities, allowing you to work with multiple sources at once, but it still requires your supervision and critical thinking.",
+      "Exactly! Gemini Notebook is an assistant that amplifies your analysis capabilities, allowing you to work with multiple sources at once, but it still requires your supervision and critical thinking.",
     hint: "AI is an augmentation tool, not a replacement for human critical thinking.",
   },
 ];
