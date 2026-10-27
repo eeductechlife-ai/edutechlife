@@ -4,7 +4,7 @@ const { chat, chatStream, validateMessages, DEFAULT_MODEL } = require('../../ser
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { detectCrisis } = require('../../services/crisisDetection');
-const { sendCrisisAlert, logCrisisIncident } = require('../../services/emailService');
+const { retenerAlertaCrisis } = require('../../services/crisisReviewService');
 const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../../services/daniOrchestrator');
 const { validateInput, detectEmotionalState, sanitizeOutput } = require('../../services/aiSafetyGateway');
 const { createMemoriaFilter, parseMemoria, buildMemoryRow, saveDaniMemory } = require('../../services/daniMemory');
@@ -165,26 +165,16 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
         .single();
 
       if (consentData && consentData.parent_email) {
-        // Send crisis alert to parent
-        const emailResult = await sendCrisisAlert(
-          consentData.parent_email,
-          'Estudiante', // Would come from user metadata
-          consentData.student_age,
-          lastUserMessage,
-          'high'
-        );
+        // El padre no recibe nada hasta que el CEO apruebe la alerta
+        const retencion = await retenerAlertaCrisis({
+          studentId: userId,
+          parentEmail: consentData.parent_email,
+          studentAge: consentData.student_age,
+          detectedContent: lastUserMessage,
+          crisisLevel: 'high',
+        });
 
-        // Log incident to database
-        await logCrisisIncident(
-          supabase,
-          userId,
-          consentData.student_age,
-          lastUserMessage,
-          'high',
-          consentData.parent_email
-        );
-
-        logger.info('[Crisis Escalation] Email sent:', emailResult);
+        logger.info('[Crisis Escalation] Alerta retenida para revisión:', { id: retencion.id });
       }
     } catch (e) {
       logger.error('[Crisis Escalation Error]', e);
@@ -453,8 +443,14 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
         .limit(1)
         .single();
       if (consentData?.parent_email) {
-        await sendCrisisAlert(consentData.parent_email, 'Estudiante', consentData.student_age, sanitized, 'high');
-        await logCrisisIncident(supabase, req.userId, consentData.student_age, sanitized, 'high', consentData.parent_email);
+        // El padre no recibe nada hasta que el CEO apruebe la alerta
+        await retenerAlertaCrisis({
+          studentId: req.userId,
+          parentEmail: consentData.parent_email,
+          studentAge: consentData.student_age,
+          detectedContent: sanitized,
+          crisisLevel: 'high',
+        });
       }
     } catch (e) {
       logger.error('[Dani2 Crisis]', e.message);
