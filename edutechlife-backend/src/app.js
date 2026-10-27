@@ -25,6 +25,7 @@ const wompiRoutes = require('./routes/wompi');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
+const crisisReviewRoutes = require('./routes/crisisReview');
 const notificationPushRoutes = require('./routes/notificationsPush');
 const institutionRoutes = require('./routes/institutions');
 const complianceRoutes = require('./routes/compliance');
@@ -191,6 +192,8 @@ app.use('/api/admin', authLimiter, adminRoutes);
 // Push del padre: antes del guard de sesión de /api/notifications (la clave pública es pública).
 app.use('/api/notifications/push', notificationPushRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);
+// Decisión del CEO sobre alertas de crisis: autorizada por token de un solo uso del correo.
+app.use('/api/crisis-reviews', crisisReviewRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/compliance', complianceRoutes);
 // Formularios públicos del sitio (sin sesión). Rate limit y campo trampa en la ruta.
