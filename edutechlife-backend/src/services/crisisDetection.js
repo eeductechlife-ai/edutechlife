@@ -32,7 +32,23 @@ const CRISIS_KEYWORDS = {
       'me corto',
       'cortarme',
       'me hago daño',
-      'hacerme daño'
+      'hacerme daño',
+      // Ideación suicida
+      'quiero morir',
+      'me quiero morir',
+      'no quiero vivir',
+      'ya no quiero vivir',
+      'quiero desaparecer',
+      // Señales de abuso o grooming
+      'me toca',
+      'me tocan',
+      'me pega',
+      'me pegan',
+      'no le digas a mi mamá',
+      'no le digas a mi mama',
+      'no le digas a mi papá',
+      'no le digas a mi papa',
+      'es un secreto'
     ],
     medium_risk: [
       'deprimido',
