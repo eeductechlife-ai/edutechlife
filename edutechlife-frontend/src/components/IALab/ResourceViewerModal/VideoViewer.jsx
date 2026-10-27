@@ -311,6 +311,35 @@ const VideoViewer = ({
     return () => window.removeEventListener("keydown", h);
   }, [playing, muted, duration, currentTime, ccActive]);
 
+  if (!videoId && /\.mp4(\?|$)/i.test(resource?.url || "")) {
+    const handleLocalEnded = () => {
+      if (getVideoQuiz(resource?.id, locale)) setShowQuiz(true);
+      else endedRef.current?.();
+    };
+    return (
+      <div className="relative w-full h-full bg-black rounded-2xl overflow-hidden flex items-center justify-center">
+        <video
+          src={resource.url}
+          controls
+          playsInline
+          preload="metadata"
+          aria-label={resource.title}
+          onEnded={handleLocalEnded}
+          className="w-full h-full object-contain"
+        />
+        {showQuiz && (
+          <VideoMicroQuiz
+            videoId={resource?.id}
+            onPassed={() => {
+              setShowQuiz(false);
+              endedRef.current?.();
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
   if (!videoId) {
     return (
       <div className="relative w-full h-full bg-gradient-to-br from-[#0A1729] to-[#004B63] rounded-2xl overflow-hidden flex items-center justify-center">
