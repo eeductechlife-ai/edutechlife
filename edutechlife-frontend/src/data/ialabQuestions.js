@@ -254,7 +254,7 @@ export const MODULE_QUESTIONS = {
     { id: "m4q37", topic: "Verificación", correctAnswer: "m4q37_b" },
     { id: "m4q38", topic: "Curaduría", correctAnswer: "m4q38_d" },
     { id: "m4q39", topic: "Flujo Documento-Podcast", correctAnswer: "m4q39_a" },
-    { id: "m4q40", topic: "Flujo Documento-Podcast", correctAnswer: "m4q40_c" },
+    { id: "m4q40", topic: "Audio Overview", correctAnswer: "m4q40_c" },
   ],
   5: [
     { id: "m5q1", topic: "Conocer a Claude", correctAnswer: "m5q1_a" },

@@ -1,7 +1,7 @@
 export const MODULE_CONFIG_PART2 = {
   3: {
     name: {
-      es: "Investigación de Elite con Gemini",
+      es: "Investigación con fuentes en Gemini",
       en: "Elite Research with Gemini",
     },
     totalSteps: 4,

@@ -128,7 +128,7 @@ ${box("tip", "Regla de oro", "<p>Si una cifra, una cita o una norma es important
   "Redacta un pedido con los seis elementos y compáralo con una versión débil.",
   "Haz una búsqueda con fuentes y verifica dos de ellas.",
   "Analiza una tabla pequeña y pide el método y un gráfico.",
-  "Diseña un GPT con instrucciones, límites y una prueba con tres casos reales.",
+  "Arma un Proyecto (o migra tu GPT) con instrucciones y límites, y pruébalo con tres casos reales.",
 ])}`,
     },
     {

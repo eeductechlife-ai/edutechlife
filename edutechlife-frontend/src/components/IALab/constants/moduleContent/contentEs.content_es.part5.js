@@ -84,7 +84,7 @@ export const CONTENT_ES_PART5 = {
         title: "Delega con Claude: Proyectos, conectores y Skills",
         description: "Trabajo recurrente sin perder el control",
         detailedDescription:
-          "Un Proyecto guarda el contexto de un trabajo; los conectores dan acceso a tus herramientas con permisos que apruebas, y puedes desconectarlos cuando ya no los necesites; una Skill reutiliza un procedimiento; las tareas programadas automatizan lo recurrente. Delegar es definir el objetivo, los límites y la revisión: la decisión final sigue siendo tuya. Al entregar, declara cómo usaste la IA y quién responde por el contenido.",
+          "Un Proyecto guarda el contexto de un trabajo; los conectores dan acceso a tus herramientas con permisos que apruebas, y puedes desconectarlos cuando ya no los necesites; una Skill reutiliza un procedimiento; las tareas programadas automatizan lo recurrente. Cowork es el modo agente de Claude: le describes el resultado y ejecuta una tarea de varios pasos, como ordenar una carpeta o armar un informe con tus archivos, e incluso tareas programadas que se repiten. Hoy es solo de planes de pago y, para trabajar con archivos de tu computador, necesita la app de escritorio abierta (según tu plan; revisa en tu cuenta). Delegar es definir el objetivo, los límites y la revisión: la decisión final sigue siendo tuya. Al entregar, declara cómo usaste la IA y quién responde por el contenido.",
         duration: "30 min",
         format: "Video",
         icon: "fa-diagram-project",

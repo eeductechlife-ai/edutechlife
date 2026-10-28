@@ -264,7 +264,7 @@ export const MODULE_3_EN_PART2 = [
   {
     id: "m3q24",
     question:
-      "You will use Gemini to solve a problem that requires careful multi-step reasoning. What do you adjust in the selector?",
+      "Your Gemini plan shows the reasoning levels, and you will solve a problem that requires careful multi-step reasoning. What do you adjust in the selector?",
     options: [
       {
         id: "m3q24_a",

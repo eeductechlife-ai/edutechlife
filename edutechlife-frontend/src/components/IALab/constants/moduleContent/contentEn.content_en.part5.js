@@ -83,7 +83,7 @@ export const CONTENT_EN_PART5 = {
         title: "Delegate with Claude: Projects, Connectors and Skills",
         description: "Recurring work without losing control",
         detailedDescription:
-          "A Project keeps the context of one piece of work; connectors give access to your tools with permissions you approve, and you can disconnect them when you no longer need them; a Skill reuses a procedure; scheduled tasks automate recurring work. Delegating means defining the goal, the limits and the review: the final decision is still yours. When you deliver, disclose how you used AI and who answers for the content.",
+          "A Project keeps the context of one piece of work; connectors give access to your tools with permissions you approve, and you can disconnect them when you no longer need them; a Skill reuses a procedure; scheduled tasks automate recurring work. Cowork is Claude's agent mode: you describe the result and it carries out a multi-step task, such as organizing a folder or building a report from your files, and even scheduled tasks that repeat. Today it is only on paid plans and, to work with files on your computer, it needs the desktop app open (depending on your plan; check your account). Delegating means defining the goal, the limits and the review: the final decision is still yours. When you deliver, disclose how you used AI and who answers for the content.",
         duration: "30 min",
         format: "Video",
         icon: "fa-diagram-project",

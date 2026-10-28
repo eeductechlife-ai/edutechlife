@@ -39,7 +39,7 @@ export const RESOURCES_PT_PART3 = {
         type: "ova_interactive",
         title: "A Oficina de Artifacts",
         description:
-          "Monte o pedido perfeito para um documento ou apresentação: escolha objetivo, público, formato e restrições, e veja o resultado antes de pedir.",
+          "Monte um pedido completo para um documento ou apresentação: escolha objetivo, público, formato e restrições, e veja o resultado antes de pedir.",
         estimatedTime: "15 minutos",
         difficulty: "Intermediário",
         interactiveElements: 4,

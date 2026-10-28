@@ -320,30 +320,30 @@ export const MODULE_4_PART3 = [
   {
     id: "m4q40",
     question:
-      "Caso: quieres un podcast de 8 documentos que alguien pueda verificar. ¿Qué incluyes en el guion?",
+      "Escuchaste un Audio Overview de 8 documentos y quieres usar una de sus ideas en tu informe. ¿Qué haces?",
     options: [
       {
         id: "m4q40_a",
-        label: "La lista de los 8 documentos al final del episodio",
+        label: "Cito el audio, porque resume los 8 documentos",
       },
       {
         id: "m4q40_b",
-        label: "Los nombres de los autores al inicio",
+        label: "Cito el minuto del audio donde se dice la idea",
       },
       {
         id: "m4q40_c",
-        label: "La fuente de cada idea, para poder comprobarla",
+        label: "Busco la idea en las citas del cuaderno y cito el documento",
       },
       {
         id: "m4q40_d",
-        label: "Un resumen escrito aparte, sin citas en el audio",
+        label: "Cito los 8 documentos al final del informe",
       },
     ],
     correctAnswer: "m4q40_c",
-    topic: "Flujo Documento-Podcast",
+    topic: "Audio Overview",
     difficulty: "difícil",
     source: "El Estudio Alquímico",
     feedback:
-      "Para verificar un podcast, el oyente necesita saber de dónde sale cada idea. Una lista final de documentos o los autores al inicio no dicen qué idea viene de qué fuente, y un resumen aparte no cita lo que se escucha.",
+      "El audio resume; para citar una idea, búscala en las citas del cuaderno y cita el documento del que sale, no el audio.",
   },
 ];

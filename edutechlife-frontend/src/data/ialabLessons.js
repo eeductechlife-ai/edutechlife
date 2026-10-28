@@ -5,7 +5,7 @@ export const ALL_LESSONS = {
       id: 1,
       title: "IA Generativa: Tu Primer Paso",
       description:
-        "Descubre cómo la IA generativa está transformando la educación y domina los conceptos clave para aplicarla desde hoy.",
+        "Descubre qué es la IA generativa, qué hace bien y por qué a veces se equivoca, para usarla con criterio desde hoy.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
@@ -20,7 +20,7 @@ export const ALL_LESSONS = {
       id: 2,
       title: "El Poder de un Buen Prompt",
       description:
-        "Aprende a comunicarte con la IA como un experto: el prompt correcto marca la diferencia entre un resultado genérico y una solución a tu medida.",
+        "Aprende a pedirle a la IA lo que necesitas: el prompt correcto marca la diferencia entre un resultado genérico y uno a tu medida.",
       duration: "20 min",
       type: "práctica",
       hasMedia: true,
@@ -35,14 +35,14 @@ export const ALL_LESSONS = {
       id: 3,
       title: "Construye Prompts Impecables",
       description:
-        "Aprende la fórmula RTF: Rol + Tarea + Formato (con el contexto necesario) = Resultado preciso.",
+        "Aprende la fórmula RTF: Rol + Tarea + Formato (con el contexto necesario) = un resultado más útil.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
       icon: "fa-sitemap",
       objectives: [
-        "Dominar la fórmula RTF: Rol + Tarea + Formato",
-        "Construir prompts estructurados con resultados precisos",
+        "Escribir un prompt con la fórmula RTF: Rol + Tarea + Formato",
+        "Mejorar un prompt pidiendo ajustes hasta obtener una respuesta útil",
         "Evaluar y refinar la calidad de las respuestas de IA",
       ],
     },
@@ -52,7 +52,7 @@ export const ALL_LESSONS = {
       id: 1,
       title: "Conoce ChatGPT a Fondo",
       description:
-        "Qué es ChatGPT, qué puede y qué no puede hacer, y cómo pedirle resultados útiles a la primera.",
+        "Qué es ChatGPT, qué puede y qué no puede hacer, y cómo pedirle resultados útiles con menos intentos.",
       duration: "25 min",
       type: "teoría",
       hasMedia: true,
@@ -99,14 +99,14 @@ export const ALL_LESSONS = {
       id: 1,
       title: "Ve, Lee y Analiza con Gemini",
       description:
-        "Analiza texto, imágenes y datos en un solo lugar con el poder multimodal de la IA.",
+        "Analiza texto, imágenes y datos en un solo lugar y comprueba lo que la IA entendió.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
       icon: "fa-brain",
       objectives: [
         "Combinar texto, imágenes y datos en un solo análisis",
-        "Comprender las capacidades multimodales de la IA actual",
+        "Pedir a la IA que lea una imagen o un documento y comprobar lo que entendió",
         "Aplicar razonamiento multimodal a casos de investigación",
       ],
     },
@@ -114,7 +114,7 @@ export const ALL_LESSONS = {
       id: 2,
       title: "Respuestas Siempre Actualizadas",
       description:
-        "Obtén respuestas siempre actualizadas conectando la IA a fuentes de información en tiempo real.",
+        "Pide respuestas con fuentes actuales de la web y ábrelas para comprobar que dicen lo mismo.",
       duration: "25 min",
       type: "práctica",
       hasMedia: true,
@@ -122,21 +122,21 @@ export const ALL_LESSONS = {
       objectives: [
         "Conectar la IA con fuentes de datos en vivo",
         "Verificar respuestas con información actualizada",
-        "Implementar grounding en aplicaciones prácticas",
+        "Distinguir una respuesta con fuentes de una que solo suena bien",
       ],
     },
     {
       id: 3,
       title: "El Arte de Investigar con IA",
       description:
-        "Investiga a fondo y verifica cualquier hecho con técnicas avanzadas de investigación asistida por IA.",
+        "Encarga una investigación a la IA, revisa su plan y comprueba cada fuente de su informe.",
       duration: "30 min",
       type: "laboratorio",
       hasMedia: false,
       icon: "fa-microscope",
       objectives: [
-        "Realizar investigaciones profundas asistidas por IA",
-        "Verificar hechos y fuentes automáticamente",
+        "Encargar una investigación profunda y revisar su plan",
+        "Verificar hechos y fuentes uno por uno",
         "Estructurar informes de investigación con IA",
       ],
     },
@@ -167,9 +167,9 @@ export const ALL_LESSONS = {
       hasMedia: true,
       icon: "fa-compress",
       objectives: [
-        "Transformar documentos complejos en resúmenes ejecutivos",
+        "Resumir documentos largos en ideas clave que puedes comprobar",
         "Extraer ideas clave de múltiples fuentes",
-        "Estructurar conocimiento de forma accionable",
+        "Convertir un resumen en una guía de estudio o una lista de tareas",
       ],
     },
     {
@@ -184,7 +184,7 @@ export const ALL_LESSONS = {
       objectives: [
         "Convertir documentos escritos en contenido de audio",
         "Gestionar una biblioteca de conocimiento digital",
-        "Optimizar flujos de documentación con IA",
+        "Nombrar y ordenar tus cuadernos para encontrar cada documento",
       ],
     },
   ],

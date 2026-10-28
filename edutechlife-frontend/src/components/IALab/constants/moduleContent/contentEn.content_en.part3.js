@@ -1,14 +1,14 @@
 export const CONTENT_EN_PART3 = {
   3: {
     objective:
-      "Wield your digital magnifying glass: investigate deeply, verify every clue, and analyze information with the precision of a master detective.",
+      "Wield your digital magnifying glass: investigate with Gemini, review every clue, and check every fact against its source before you use it.",
     learningPoints: [
       {
         text: "Analyze text, images, and code as a single body of evidence",
         icon: "fa-cubes",
       },
       {
-        text: "Pull fresh clues from the real world in real-time",
+        text: "Ask for answers with current web sources and open them to check",
         icon: "fa-signal",
       },
       {
@@ -16,16 +16,16 @@ export const CONTENT_EN_PART3 = {
         icon: "fa-search",
       },
       {
-        text: "Separate facts from hallucinations with AI-powered forensic verification",
+        text: "Separate facts from hallucinations by checking every fact against its source",
         icon: "fa-shield-alt",
       },
     ],
     overviewData: {
-      title: "The Data Detective: Elite Research with Gemini",
+      title: "The Data Detective: Research and Verify with Gemini",
       description:
-        "Welcome to the digital detective academy. Here you'll learn to cross-reference clues in real-time, analyze any type of evidence (text, image, audio, video), and verify every fact with the precision of a data forensics expert.",
+        "Welcome to the digital detective academy. Here you'll learn to cross-reference clues in real-time, analyze any type of evidence (text, image, audio, video), and check every fact against its source before you use it.",
       mission:
-        "Your mission: become the world's best data detective. Master Google Gemini to cross-reference clues, verify every source, and deliver reports any CEO would sign. Every lesson brings you closer to your digital detective badge.",
+        "Your mission: investigate like a data detective. Use Google Gemini to cross-reference clues, verify every source, and deliver a short report in which every key fact has its source. Every lesson brings you closer to your digital detective badge.",
       topics: [
         {
           title: "The Multimodal Detective Awakens",
@@ -60,7 +60,7 @@ export const CONTENT_EN_PART3 = {
         description:
           "Gemini: your all-terrain magnifying glass that sees, reads, and listens simultaneously",
         detailedDescription:
-          "Imagine a magnifying glass that doesn't just see images — it reads documents, listens to audio, and analyzes video, all at the same time. That's Gemini. In this lesson, you'll learn to wield this multimodal superpower to analyze, create, and crack cases that used to require 4 different tools. Use it as a tutor too: have it explain, quiz you and make you practice. Unlike a search engine, which gives you a list of links, Gemini drafts an answer to your question; that is why you check it. With an audio file, ask for the transcript and compare the lines you will quote with the recording.",
+          "Imagine a magnifying glass that doesn't just see images — it reads documents, listens to audio, and analyzes video, all at the same time. That's Gemini. In this lesson, you'll learn to ask it to analyze a photo, a document, or an audio file in the same conversation, and to check what it understood. Use it as a tutor too: have it explain, quiz you and make you practice. Unlike a search engine, which gives you a list of links, Gemini drafts an answer to your question; that is why you check it. With an audio file, ask for the transcript and compare the lines you will quote with the recording. Two more features of the app (depending on your plan; check your account): Canvas opens a space next to the chat where you edit a document or code with Gemini, section by section. Gems are custom assistants that save your instructions so you can reuse them; Google is turning Gems into 'skills' (reusable instructions), so you may see them under that name.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-google",
@@ -86,7 +86,7 @@ export const CONTENT_EN_PART3 = {
         description:
           "Dig until you find the truth with deep investigation tools",
         detailedDescription:
-          "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, source verification to verify every source, and technical report generation any expert would endorse. Before starting, Deep Research shows you its research plan: review and adjust it. If it does not appear in your account, make the same request in a normal conversation and verify each source. A hallucination is a fact the AI makes up with confidence: mark every unsupported claim and check it. Present projections as estimates, with the source they are based on.",
+          "For questions that need many sources, Gemini has Deep Research: it searches many pages and gives you a report with links. You'll learn to commission it, review its sources one by one, and turn the result into a short report you can defend. Before starting, Deep Research shows you its research plan: review and adjust it. If it does not appear in your account, make the same request in a normal conversation and verify each source. A hallucination is a fact the AI makes up with confidence: mark every unsupported claim and check it. Present projections as estimates, with the source they are based on. For multi-step tasks there is Gemini's agent (in the app it may appear as 'Task'): it shows you the steps it follows, asks for confirmation before sensitive actions such as sending a message or making a purchase, and you can stop it at any time. It is for people 18 and over with a paid plan (depending on your plan; check your account).",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -98,7 +98,7 @@ export const CONTENT_EN_PART3 = {
       1: {
         objective: "🎯 Activate Your Multimodal Magnifying Glass",
         objectiveDesc:
-          "Gemini processes text, images, audio, and video as one language. Your new secret research weapon.",
+          "Gemini processes text, images, audio, and video as one language. One conversation to review several kinds of evidence.",
         achievements: [
           {
             icon: "fa-check",
@@ -110,7 +110,7 @@ export const CONTENT_EN_PART3 = {
           },
           {
             icon: "fa-check",
-            text: "Know exactly when to use Gemini vs. other models — the right tool for every case",
+            text: "Decide when Gemini suits you and when another tool does, depending on the task",
           },
         ],
         warnings: [
@@ -131,7 +131,7 @@ export const CONTENT_EN_PART3 = {
           label: "Practical example",
           weak: "❌ Novice: Asking 'What is Gemini?' — like a tourist asking for the time",
           strong:
-            "✅ Detective: Upload a financial chart, request trend analysis with historical data correlation, cross-reference with real-time economic indicators search, and receive an executive report ready for your board meeting",
+            "✅ Detective: Upload a photo of a chart, ask it to describe the trend, search the web for a current fact that explains it (with its link), and ask for a 5-line summary that you check before sharing it",
         },
       },
       2: {
@@ -141,7 +141,7 @@ export const CONTENT_EN_PART3 = {
         achievements: [
           {
             icon: "fa-check",
-            text: "Analyze images and documents like a digital forensics expert",
+            text: "Ask Gemini to describe an image or a document and check what it understood",
           },
           {
             icon: "fa-check",
@@ -170,7 +170,7 @@ export const CONTENT_EN_PART3 = {
           label: "Practical example",
           weak: "❌ Novice: 'Analyze this image' — no context, no instructions, no direction",
           strong:
-            "✅ Detective: 'Analyze this architecture diagram as if you were a systems auditor. Identify every component, trace the data flow, flag scalability vulnerabilities, and compare against the AWS 2024 standard. Deliver a 3-paragraph executive report with action priorities.'",
+            "✅ Detective: 'This is a photo of my utility bill. Give me the total, the due date, and this month's usage in a table. If any figure is hard to read, tell me instead of guessing.'",
         },
       },
       3: {
@@ -180,15 +180,15 @@ export const CONTENT_EN_PART3 = {
         achievements: [
           {
             icon: "fa-check",
-            text: "Execute deep investigations that cross-reference dozens of sources automatically",
+            text: "Commission a Deep Research investigation and review its plan before it starts",
           },
           {
             icon: "fa-check",
-            text: "Verify every fact instantly — your safety net against misinformation",
+            text: "Check key facts by opening their source — your safety net against misinformation",
           },
           {
             icon: "fa-check",
-            text: "Produce consultant-level reports with verifiable references and exact citations",
+            text: "Write a short report in which every key fact carries its link",
           },
         ],
         warnings: [
@@ -209,7 +209,7 @@ export const CONTENT_EN_PART3 = {
           label: "Practical example",
           weak: "❌ Novice: 'What are the AI trends in 2026?' — a question anyone can Google",
           strong:
-            "✅ Detective: 'Conduct a forensic investigation of the top 5 generative AI trends in 2026. For each trend: verified primary source, quantitative enterprise adoption data, 2 real company use cases, identified risks with criticality level, and 3-year projection with sources. Deliver as an executive report with verifiable links to every source.'",
+            "✅ Detective: 'Research 3 uses of AI in schools in Colombia in 2026. For each one: what it is, a real example with its source, and one risk. End with a table and flag anything you could not confirm.'",
         },
       },
     },

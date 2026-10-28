@@ -38,7 +38,7 @@ export const MODULE_3_EN_PART3 = [
       },
       {
         id: "m3q30_b",
-        label: "Upload the file to the chat",
+        label: "Upload the file without saying what you need from it",
       },
       {
         id: "m3q30_c",

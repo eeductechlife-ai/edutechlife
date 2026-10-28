@@ -34,7 +34,7 @@ export const modules = [
     ],
     challenge:
       "¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el desafío y lleva tus conocimientos al siguiente nivel.",
-    desc: "La IA te da respuestas genéricas que no resuelven lo que necesitas. En este módulo aprenderás a escribir prompts precisos que obtengan resultados útiles a la primera. Vas a dominar la fórmula RTF (Rol + Tarea + Formato), sumando el contexto necesario, y a aplicar la IA en tu estudio, trabajo y vida diaria.",
+    desc: "La IA te da respuestas genéricas que no resuelven lo que necesitas. En este módulo aprenderás a escribir prompts claros y a mejorarlos hasta obtener resultados útiles. Vas a practicar la fórmula RTF (Rol + Tarea + Formato), sumando el contexto necesario, y a aplicar la IA en tu estudio, trabajo y vida diaria.",
     duration: "2h",
     level: "Principiante",
     videos: 12,
@@ -70,8 +70,8 @@ export const modules = [
       "Verificar datos antes de usarlos",
     ],
     challenge:
-      "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe profesional con conclusiones propias.",
-    desc: "No basta con preguntar: necesitas respuestas verificadas y actualizadas. Vas a dominar Gemini para investigar a fondo, analizar imágenes y texto, y verificar hechos con fuentes reales.",
+      "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe breve con conclusiones propias.",
+    desc: "No basta con preguntar: necesitas respuestas verificadas y actualizadas. Vas a usar Gemini para investigar a fondo, analizar imágenes y texto, y verificar hechos con fuentes reales.",
     duration: "2h",
     level: "Intermedio",
     videos: 10,
@@ -133,7 +133,7 @@ export const modules_en = [
     ],
     challenge:
       "It's practice time! Apply everything you've learned in this module by solving a real-world case. Consolidate your knowledge, overcome the challenge, and take your skills to the next level.",
-    desc: "AI gives you generic answers that don't solve what you need. In this module you'll learn to write precise prompts that get useful results on the first try. Master the Context + Instruction + Format formula and apply AI in your studies, work, and daily life.",
+    desc: "AI gives you generic answers that don't solve what you need. In this module you'll learn to write clear prompts and improve them until you get useful results. You'll practice the RTF formula (Role + Task + Format), adding the context needed, and apply AI in your studies, work, and daily life.",
     duration: "2h",
     level: "Beginner",
     videos: 12,
@@ -169,8 +169,8 @@ export const modules_en = [
       "Verify facts before using them",
     ],
     challenge:
-      "Use Gemini Deep Research to investigate a current topic, verify every cited source, and present a professional report with your own conclusions.",
-    desc: "Asking isn't enough — you need verified, up-to-date answers. You'll master Gemini to research deeply, analyze images and text, and fact-check with real sources.",
+      "Use Gemini Deep Research to investigate a current topic, verify every cited source, and present a short report with your own conclusions.",
+    desc: "Asking isn't enough — you need verified, up-to-date answers. You'll use Gemini to research in depth, analyze images and text, and fact-check with real sources.",
     duration: "2h",
     level: "Intermediate",
     videos: 10,
@@ -232,7 +232,7 @@ export const modules_pt = [
     ],
     challenge:
       "Chegou a hora da prática! Aplique tudo o que aprendeu neste módulo resolvendo um caso real. Atreva-se a consolidar o seu aprendizado, supere o desafio e leve os seus conhecimentos ao próximo nível.",
-    desc: "A IA te dá respostas genéricas que não resolvem o que você precisa. Neste módulo, você aprenderá a escrever prompts precisos que obtenham resultados úteis na primeira tentativa. Vai dominar a fórmula Contexto + Instrução + Formato e aplicar a IA nos seus estudos, no trabalho e na vida diária.",
+    desc: "A IA te dá respostas genéricas que não resolvem o que você precisa. Neste módulo, você aprenderá a escrever prompts claros e a melhorá-los até obter resultados úteis. Vai praticar a fórmula RTF (Papel + Tarefa + Formato), somando o contexto necessário, e aplicar a IA nos seus estudos, no trabalho e na vida diária.",
     duration: "2h",
     level: "Iniciante",
     videos: 12,
@@ -268,8 +268,8 @@ export const modules_pt = [
       "Verificar dados antes de usá-los",
     ],
     challenge:
-      "Use o Gemini Deep Research para investigar um tema atual, verifique cada fonte citada e apresente um relatório profissional com conclusões próprias.",
-    desc: "Não basta perguntar: você precisa de respostas verificadas e atualizadas. Vai dominar o Gemini para pesquisar a fundo, analisar imagens e texto e verificar fatos com fontes reais.",
+      "Use o Gemini Deep Research para investigar um tema atual, verifique cada fonte citada e apresente um relatório breve com conclusões próprias.",
+    desc: "Não basta perguntar: você precisa de respostas verificadas e atualizadas. Vai usar o Gemini para pesquisar a fundo, analisar imagens e texto e verificar fatos com fontes reais.",
     duration: "2h",
     level: "Intermediário",
     videos: 10,

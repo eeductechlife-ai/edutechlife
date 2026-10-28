@@ -1,22 +1,22 @@
 export const CONTENT_ES_PART4 = {
   4: {
     objective:
-      "Convierte documentos en oro: podcasts que suenan a radio profesional, resúmenes que van al grano y respuestas que citan cada fuente sin inventar nada.",
+      "Convierte tus documentos en oro: resúmenes que van al grano, resúmenes en audio para repasar donde estés y respuestas con citas que puedes comprobar.",
     learningPoints: [
       {
         text: "Curar tus fuentes como un joyero elige gemas",
         icon: "fa-book-open",
       },
       {
-        text: "Destilar documentos en conocimiento puro con IA",
+        text: "Destilar tus documentos en resúmenes y guías de estudio que puedas verificar",
         icon: "fa-file-alt",
       },
       {
-        text: "Crear podcasts que parecen programa de radio desde tus archivos",
+        text: "Crear un resumen en audio, tipo podcast, a partir de tus archivos",
         icon: "fa-microphone",
       },
       {
-        text: "Gestionar tu biblioteca digital con inteligencia sobrehumana",
+        text: "Ordenar tu biblioteca digital: un cuaderno por proyecto, con un nombre claro",
         icon: "fa-folder-open",
       },
     ],
@@ -24,9 +24,9 @@ export const CONTENT_ES_PART4 = {
       title:
         "El Alquimista Digital: Gemini Notebook — Donde tus Documentos se Convierten en Conocimiento",
       description:
-        "En este módulo, te convertirás en un alquimista digital: tus PDFs, artículos y apuntes tienen un potencial oculto que ni imaginas. Aprende a extraerlo, transformarlo y compartirlo en formatos que cautivan, educan y transforman.",
+        "En este módulo, te convertirás en un alquimista digital: tus PDFs, artículos y apuntes guardan más de lo que parece. Aprende a hacerles preguntas, a convertirlos en resúmenes, guías de estudio y audios, y a comprobar cada cita antes de compartirlos.",
       mission:
-        "Conviértete en un alquimista digital: tus PDFs, artículos y apuntes tienen un potencial oculto que ni imaginas. Aprende a extraerlo, transformarlo y compartirlo en formas que cautivan, educan y transforman.",
+        "Conviértete en un alquimista digital: crea un cuaderno con tus propios documentos, transfórmalo en un resumen, una guía de estudio o un audio, y compártelo solo después de comprobar sus citas.",
       topics: [
         {
           title:
@@ -62,7 +62,7 @@ export const CONTENT_ES_PART4 = {
           "El Alquimista de Documentos: Tu Primer Hechizo con Gemini Notebook",
         description: "Donde los PDFs cobran vida",
         detailedDescription:
-          "Conoce Gemini Notebook, la herramienta de Google que convierte tus PDFs, artículos y apuntes en un asistente personal que responde con citas que puedes verificar. Reduce el riesgo de error, pero no lo elimina: cada afirmación se comprueba con su cita. Si preguntas algo que no está en tus fuentes, agrega una fuente confiable; para ideas generales sin documentos, un chat general sirve más. Es tu bibliotecario con superpoderes.",
+          "Conoce Gemini Notebook, la herramienta de Google que convierte tus PDFs, artículos y apuntes en un asistente personal que responde con citas que puedes verificar. Reduce el riesgo de error, pero no lo elimina: cada afirmación se comprueba con su cita. Si preguntas algo que no está en tus fuentes, agrega una fuente confiable; para ideas generales sin documentos, un chat general sirve más. Es como un bibliotecario que solo responde con los libros que tú le das.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -74,7 +74,7 @@ export const CONTENT_ES_PART4 = {
         title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
         description: "Calidad sobre cantidad, siempre",
         detailedDescription:
-          "Aprende a seleccionar las mejores fuentes como un joyero elige gemas, organizarlas por temas y conectar ideas entre documentos para crear resúmenes y análisis de nivel profesional. Una fuente confiable tiene autor identificable, fecha y referencias que puedes comprobar. Incluye fuentes con distintas posturas, para que tu síntesis no muestre una sola mirada.",
+          "Aprende a seleccionar las mejores fuentes como un joyero elige gemas, organizarlas por temas y conectar ideas entre documentos para crear resúmenes y análisis que puedas comprobar cita por cita. Una fuente confiable tiene autor identificable, fecha y referencias que puedes comprobar. Incluye fuentes con distintas posturas, para que tu síntesis no muestre una sola mirada. Gemini Notebook también crea, a partir de tus fuentes, un mapa mental (un diagrama de cómo se conectan sus temas) y tarjetas de estudio o cuestionarios para repasar. Antes de estudiar con ellos, comprueba cada pregunta y su respuesta en la fuente (según tu plan; revisa en tu cuenta).",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -86,7 +86,7 @@ export const CONTENT_ES_PART4 = {
         title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
         description: "Tus documentos hablan por sí solos",
         detailedDescription:
-          "Transforma tus documentos en conversaciones de podcast con dos voces IA. Una experiencia sonora que parece radio profesional. Ideal para aprender mientras te mueves. Gestiona tu biblioteca digital con inteligencia sobrehumana: un cuaderno por proyecto, con un nombre claro, para encontrar todo. Antes de compartir un cuaderno, quita datos personales o sensibles (anonimiza listas de personas) y decide quién puede verlo y quién editarlo.",
+          "Transforma tus documentos en conversaciones de podcast con dos voces IA. Suena como una conversación entre dos personas. Ideal para aprender mientras te mueves. Ordena tu biblioteca digital: un cuaderno por proyecto, con un nombre claro, para encontrar todo. Antes de compartir un cuaderno, quita datos personales o sensibles (anonimiza listas de personas) y decide quién puede verlo y quién editarlo. El audio resume; para citar una idea, búscala en las citas del cuaderno y cita el documento, no el audio. Si prefieres verlo, crea un resumen en video: un video narrado con imágenes, citas y cifras tomadas de tus documentos (según tu plan; revisa en tu cuenta). Igual que con el audio, compáralo con tus fuentes antes de compartirlo.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",
@@ -98,7 +98,7 @@ export const CONTENT_ES_PART4 = {
       1: {
         objective: "🎯 El Hechizo Inicial",
         objectiveDesc:
-          "Gemini Notebook responde con base en tus fuentes y te muestra de dónde sale cada respuesta. La IA que transforma la gestión del conocimiento.",
+          "Gemini Notebook responde con base en tus fuentes y te muestra de dónde sale cada respuesta. Así puedes comprobar cada respuesta en su documento.",
         achievements: [
           {
             icon: "fa-check",
@@ -131,7 +131,7 @@ export const CONTENT_ES_PART4 = {
           label: "Ejemplo práctico",
           weak: "❌ Catalina subió 50 PDFs sin organizar y obtuvo respuestas confusas. Basura entra, basura sale.",
           strong:
-            "✅ Felipe seleccionó 5 papers clave, los organizó por tema, añadió contexto — y su notebook se convirtió en un asistente experto que respondía con citas exactas. La diferencia: calidad sobre cantidad.",
+            "✅ Felipe seleccionó 5 papers clave, los organizó por tema, añadió contexto — y su cuaderno le respondía con citas que él podía comprobar. La diferencia: calidad sobre cantidad.",
         },
       },
       2: {
@@ -176,7 +176,7 @@ export const CONTENT_ES_PART4 = {
       3: {
         objective: "🎙️ Audio Overviews",
         objectiveDesc:
-          "Convierte tus documentos en conversaciones de audio generadas por IA, como un programa hecho a tu medida. 🧪 El Maestro Alquimista: domina el flujo completo, de tus documentos a un podcast listo para compartir.",
+          "Convierte tus documentos en conversaciones de audio generadas por IA, como un programa hecho a tu medida. 🧪 El alquimista recorre el camino completo: de tus documentos a un audio que revisas antes de compartir.",
         achievements: [
           {
             icon: "fa-check",
@@ -209,7 +209,7 @@ export const CONTENT_ES_PART4 = {
           label: "Ejemplo práctico",
           weak: "❌ Audio genérico: Dos voces leyendo el documento sin chispa ni estructura",
           strong:
-            "✅ Audio enfocado: Podcast de 15 minutos donde dos presentadores discuten los hallazgos clave de 5 papers sobre neuroplasticidad, con ejemplos prácticos, analogías y hasta un momento '¡ahá!' que lo hace inolvidable",
+            "✅ Audio enfocado: Podcast de 15 minutos donde dos presentadores discuten los hallazgos clave de 5 papers sobre neuroplasticidad, con ejemplos prácticos y analogías, revisado contra las fuentes antes de compartirlo",
         },
       },
     },

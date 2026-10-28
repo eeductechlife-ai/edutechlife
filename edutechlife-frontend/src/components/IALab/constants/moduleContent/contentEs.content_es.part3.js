@@ -1,14 +1,14 @@
 export const CONTENT_ES_PART3 = {
   3: {
     objective:
-      "Afila tu lupa digital: investiga a fondo, verifica cada pista y analiza información con la precisión de un detective profesional.",
+      "Afila tu lupa digital: investiga con Gemini, revisa cada pista y comprueba cada dato en su fuente antes de usarlo.",
     learningPoints: [
       {
         text: "Analizar texto, imagen y código como un solo cuerpo de evidencia",
         icon: "fa-cubes",
       },
       {
-        text: "Obtener pistas frescas del mundo real al instante",
+        text: "Pedir respuestas con fuentes actuales de la web y abrirlas para comprobarlas",
         icon: "fa-signal",
       },
       {
@@ -16,16 +16,16 @@ export const CONTENT_ES_PART3 = {
         icon: "fa-search",
       },
       {
-        text: "Separar los hechos de las alucinaciones: verificación forense con IA",
+        text: "Separar los hechos de las alucinaciones: comprobar cada dato en su fuente",
         icon: "fa-shield-alt",
       },
     ],
     overviewData: {
-      title: "El Detective de Datos: Investigación de Élite con Gemini",
+      title: "El Detective de Datos: Investiga y Verifica con Gemini",
       description:
-        "Bienvenido a la academia de detectives digitales. Aquí aprenderás a cruzar pistas en tiempo real, analizar cualquier tipo de evidencia (texto, imagen, audio, video) y verificar cada hecho con la precisión de un forense de datos.",
+        "Bienvenido a la academia de detectives digitales. Aquí aprenderás a cruzar pistas en tiempo real, analizar cualquier tipo de evidencia (texto, imagen, audio, video) y comprobar cada dato en su fuente antes de usarlo.",
       mission:
-        "Tu misión: convertirte en el mejor detective de datos del mundo. Domina Google Gemini para cruzar pistas, verificar cada fuente y presentar informes que cualquier director ejecutivo firmaría. Cada lección te acerca a tu insignia de detective digital.",
+        "Tu misión: investigar como un detective de datos. Usa Google Gemini para cruzar pistas, verificar cada fuente y presentar un informe breve en el que cada dato clave tenga su fuente. Cada lección te acerca a tu insignia de detective digital.",
       topics: [
         {
           title: "El Despertar del Detective Multimodal",
@@ -60,7 +60,7 @@ export const CONTENT_ES_PART3 = {
         description:
           "Gemini: tu lupa todoterreno que ve, lee y escucha a la vez",
         detailedDescription:
-          "Imagina una lupa que no solo ve imágenes, sino que también lee documentos, escucha audios y analiza videos — todo al mismo tiempo. Esa es Gemini. En esta lección, aprenderás a usar este superpoder multimodal para analizar, crear y resolver casos que antes requerían 4 herramientas diferentes. Úsala también como tutor: que te explique, te pregunte y te ponga a practicar. A diferencia de un buscador, que te da una lista de enlaces, Gemini redacta una respuesta a tu pregunta; por eso la compruebas. Con un audio, pide la transcripción y compara con la grabación las frases que vas a citar.",
+          "Imagina una lupa que no solo ve imágenes, sino que también lee documentos, escucha audios y analiza videos — todo al mismo tiempo. Esa es Gemini. En esta lección, aprenderás a pedirle que analice una foto, un documento o un audio en la misma conversación y a comprobar lo que entendió. Úsala también como tutor: que te explique, te pregunte y te ponga a practicar. A diferencia de un buscador, que te da una lista de enlaces, Gemini redacta una respuesta a tu pregunta; por eso la compruebas. Con un audio, pide la transcripción y compara con la grabación las frases que vas a citar. Dos funciones más de la app (según tu plan; revisa en tu cuenta): Canvas abre un espacio junto al chat donde editas con Gemini un documento o un código, parte por parte. Los Gems son asistentes personalizados que guardan tus instrucciones para reutilizarlas; Google los está convirtiendo en «skills» (instrucciones reutilizables), así que puede que los veas con ese nombre.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-google",
@@ -86,7 +86,7 @@ export const CONTENT_ES_PART3 = {
         description:
           "Excava hasta encontrar la verdad con herramientas de investigación profunda",
         detailedDescription:
-          "Los casos más complejos requieren las herramientas más poderosas. Domina la investigación profunda con IA: Deep Research para explorar temas en su totalidad, verificación de fuentes para verificar cada fuente, y generación de informes técnicos que cualquier experto firmaría. Antes de empezar, Deep Research te muestra su plan de investigación: revísalo y ajústalo. Si no aparece en tu cuenta, haz el mismo pedido en una conversación normal y verifica cada fuente. Una alucinación es un dato que la IA inventa con seguridad: marca cada afirmación sin respaldo y compruébala. Presenta las proyecciones como estimaciones, con la fuente en que se basan.",
+          "Para preguntas que necesitan muchas fuentes, Gemini tiene Deep Research: busca en muchas páginas y te entrega un informe con enlaces. Aprenderás a encargarlo, a revisar sus fuentes una por una y a convertir el resultado en un informe breve que puedas defender. Antes de empezar, Deep Research te muestra su plan de investigación: revísalo y ajústalo. Si no aparece en tu cuenta, haz el mismo pedido en una conversación normal y verifica cada fuente. Una alucinación es un dato que la IA inventa con seguridad: marca cada afirmación sin respaldo y compruébala. Presenta las proyecciones como estimaciones, con la fuente en que se basan. Para tareas de varios pasos está el agente de Gemini (en la app puede aparecer como «Task» o «Tarea», según tu idioma): te muestra los pasos que sigue, te pide confirmación antes de acciones sensibles como enviar un mensaje o comprar, y puedes detenerlo cuando quieras. Es para mayores de 18 años con un plan de pago (según tu plan; revisa en tu cuenta).",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -98,7 +98,7 @@ export const CONTENT_ES_PART3 = {
       1: {
         objective: "🎯 Activa tu Lupa Multimodal",
         objectiveDesc:
-          "Gemini procesa texto, imágenes, audio y video como un solo lenguaje. Tu nueva arma secreta de investigación.",
+          "Gemini procesa texto, imágenes, audio y video como un solo lenguaje. Una sola conversación para revisar varios tipos de evidencia.",
         achievements: [
           {
             icon: "fa-check",
@@ -110,7 +110,7 @@ export const CONTENT_ES_PART3 = {
           },
           {
             icon: "fa-check",
-            text: "Saber exactamente cuándo usar Gemini vs. otros modelos — la herramienta correcta para cada caso",
+            text: "Decidir cuándo te conviene Gemini y cuándo otra herramienta, según la tarea",
           },
         ],
         warnings: [
@@ -131,7 +131,7 @@ export const CONTENT_ES_PART3 = {
           label: "Ejemplo práctico",
           weak: "❌ Novato: Preguntar '¿Qué es Gemini?' — como un turista preguntando la hora",
           strong:
-            "✅ Detective: Subir un gráfico financiero, pedir análisis de tendencias con correlación de datos históricos, cruzar con búsqueda en tiempo real de indicadores económicos, y recibir un informe ejecutivo listo para presentar a tu junta directiva",
+            "✅ Detective: Subir la foto de un gráfico, pedir que describa la tendencia, buscar en la web un dato actual que la explique (con su enlace) y pedir un resumen de 5 líneas que verificas antes de compartirlo",
         },
       },
       2: {
@@ -141,7 +141,7 @@ export const CONTENT_ES_PART3 = {
         achievements: [
           {
             icon: "fa-check",
-            text: "Analizar imágenes y documentos como un perito forense digital",
+            text: "Pedir a Gemini que describa una imagen o un documento y comprobar lo que entendió",
           },
           {
             icon: "fa-check",
@@ -170,7 +170,7 @@ export const CONTENT_ES_PART3 = {
           label: "Ejemplo práctico",
           weak: "❌ Novato: 'Analiza esta imagen' — sin contexto, sin instrucciones, sin dirección",
           strong:
-            "✅ Detective: 'Analiza este diagrama de arquitectura como si fueras un auditor de sistemas. Identifica cada componente, traza el flujo de datos, señala vulnerabilidades de escalabilidad y compáralo con el estándar AWS 2024. Dame un informe ejecutivo de 3 párrafos con prioridades de acción.'",
+            "✅ Detective: 'Esta es la foto de mi factura de servicios públicos. Dame en una tabla el total, la fecha de vencimiento y el consumo del mes. Si algún dato no se lee bien, dímelo en lugar de adivinarlo.'",
         },
       },
       3: {
@@ -180,15 +180,15 @@ export const CONTENT_ES_PART3 = {
         achievements: [
           {
             icon: "fa-check",
-            text: "Ejecutar investigaciones profundas que cruzan decenas de fuentes automáticamente",
+            text: "Encargar una investigación con Deep Research y revisar su plan antes de que empiece",
           },
           {
             icon: "fa-check",
-            text: "Verificar cada hecho al instante — tu red de seguridad contra la desinformación",
+            text: "Comprobar los datos clave abriendo su fuente — tu red de seguridad contra la desinformación",
           },
           {
             icon: "fa-check",
-            text: "Producir informes de nivel consultor con referencias verificables y citas exactas",
+            text: "Redactar un informe breve en el que cada dato clave lleva su enlace",
           },
         ],
         warnings: [
@@ -209,7 +209,7 @@ export const CONTENT_ES_PART3 = {
           label: "Ejemplo práctico",
           weak: "❌ Novato: '¿Cuáles son las tendencias de IA en 2026?' — una pregunta que cualquiera puede responder con Google",
           strong:
-            "✅ Detective: 'Realiza una investigación forense de las 5 tendencias principales de IA generativa en 2026. Para cada tendencia: fuente primaria verificada, datos cuantitativos de adopción empresarial, 2 casos de uso reales con nombres de empresas, riesgos identificados con nivel de criticidad, y proyección a 3 años con fuentes. Presenta como informe ejecutivo con enlaces verificables a cada fuente.'",
+            "✅ Detective: 'Investiga 3 usos de la IA en colegios de Colombia en 2026. Para cada uno: qué es, un ejemplo real con su fuente y un riesgo. Cierra con una tabla y marca lo que no pudiste confirmar.'",
         },
       },
     },

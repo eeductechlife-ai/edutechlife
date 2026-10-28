@@ -2,10 +2,10 @@ export const RESOURCES_ES_PART2 = {
   "El Despertar del Detective Multimodal": {
     title: "El Despertar del Detective Multimodal",
     description:
-      "Tu primera misión como detective: conocer a tu nueva arma secreta. Gemini es la IA que procesa texto, imágenes, audio y video en un solo movimiento. Una lupa multimodal. Todos los formatos.",
+      "Tu primera misión como detective: conocer tu nueva lupa. Gemini es una IA que lee texto, imágenes, audio y video en la misma conversación, y tú compruebas lo que entendió.",
     learningObjectives: [
-      "Descubrir el poder de procesar cualquier tipo de evidencia en una sola herramienta",
-      "Interrogar a Gemini con fotos, documentos, audios y videos como un investigador experto",
+      "Pedirle a Gemini que lea distintos tipos de evidencia en una misma conversación",
+      "Hacerle preguntas a Gemini sobre fotos, documentos, audios y videos, como un investigador que pide pruebas",
       "Comparar qué tipo de evidencia puedes pedirle a Gemini (imagen, documento, audio o video) y cómo pedirle la fuente de cada dato",
       "Usar Gemini para revisar un material propio y anotar qué dato comprobaste",
     ],
@@ -31,7 +31,7 @@ export const RESOURCES_ES_PART2 = {
         format: "PDF",
         size: "0.88 MB",
         description:
-          "El manual de campo del detective: aprende a usar Gemini para estudiar, trabajar y crear contenido con la precisión de un investigador profesional.",
+          "El manual de campo del detective: aprende a usar Gemini para estudiar, trabajar y crear contenido comprobando cada dato como un buen investigador.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -52,12 +52,12 @@ export const RESOURCES_ES_PART2 = {
   "Grounding: Cuando la Evidencia Toca Tierra": {
     title: "Grounding: Cuando la Evidencia Toca Tierra",
     description:
-      "Gemini no flota en el aire — se conecta con tus herramientas diarias. Aprende a integrarlo en Google Docs, Sheets y Gmail para multiplicar tu velocidad de investigación.",
+      "Gemini no flota en el aire: puede anclar sus respuestas en la web y en tus archivos. Aprende a pedirle fuentes, a abrirlas para comprobarlas y a usarlo en Google Docs, Sheets y Gmail con datos que puedes verificar.",
     learningObjectives: [
       "Redactar informes de investigación con Gemini como coautor",
-      "Convertir datos crudos en evidencia procesable directamente en Sheets",
-      "Dominar tu bandeja de entrada: que Gemini filtre, resuma y priorice por ti",
-      "Generar presentaciones de alto impacto con la ayuda de Gemini",
+      "Pedir a Gemini que explique una fórmula de Sheets y probarla con un caso conocido",
+      "Pedir a Gemini que resuma tus correos y revisar qué dejó por fuera",
+      "Armar el borrador de una presentación con Gemini y verificar sus datos",
     ],
     estimatedTime: "40 minutos",
     difficulty: "Intermedio",
@@ -81,7 +81,7 @@ export const RESOURCES_ES_PART2 = {
         format: "PDF",
         size: "2.70 MB",
         description:
-          "El cuaderno de ejercicios del detective: domina Gemini con casos prácticos y aplicaciones reales que multiplican tu productividad.",
+          "El cuaderno de ejercicios del detective: practica con Gemini en casos reales y comprueba cada resultado.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -90,7 +90,7 @@ export const RESOURCES_ES_PART2 = {
         type: "ova_interactive",
         title: "La Lupa Multimodal",
         description:
-          "Recorrido interactivo por la arquitectura de tu nueva arma secreta: capacidades multimodales, Deep Research e integración Workspace. Incluye audio guiado y examen final para certificar tu rango de detective.",
+          "Recorrido interactivo por tu nueva lupa: capacidades multimodales, Deep Research e integración con Workspace. Incluye audio guiado y una prueba final para ganar tu rango de detective.",
         estimatedTime: "25 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -102,12 +102,12 @@ export const RESOURCES_ES_PART2 = {
   "Deep Research: La Caja de Herramientas Forenses": {
     title: "Deep Research: La Caja de Herramientas Forenses",
     description:
-      "Los casos más impresionantes no se resuelven con suerte — se resuelven con método. Descubre cómo investigadores, marketeros, programadores y educadores usan Gemini para encontrar lo que nadie más encuentra.",
+      "Los casos más impresionantes no se resuelven con suerte — se resuelven con método. Descubre cómo investigadores, marketeros, programadores y educadores usan Gemini para investigar paso a paso y comprobar cada fuente.",
     learningObjectives: [
-      "Diseñar estrategias de marketing basadas en datos de investigación profunda",
-      "Depurar y optimizar código con la asistencia de un detective digital",
-      "Crear experiencias educativas que parecen investigaciones interactivas",
-      "Realizar investigación académica con la profundidad de un doctorando y la velocidad de la IA",
+      "Encargar una investigación sobre tu mercado y revisar sus fuentes antes de decidir",
+      "Pedir a Gemini que explique un error de código y probar la solución que propone",
+      "Preparar una actividad de clase a partir de un informe de Deep Research",
+      "Usar Deep Research para empezar una investigación académica y comprobar cada fuente en el texto original",
     ],
     estimatedTime: "42 minutos",
     difficulty: "Avanzado",
@@ -122,7 +122,7 @@ export const RESOURCES_ES_PART2 = {
         thumbnail: "https://img.youtube.com/vi/XAshixrvG5k/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Empresas y profesionales revelan cómo Gemini transformó su forma de investigar. Resultados que parecen magia — pero son método.",
+          "Cómo usar Gemini y Deep Research en una investigación académica sin perder rigor. Resultados que parecen magia, pero son método.",
       },
       {
         id: "deep-research-guide-1",
@@ -142,7 +142,7 @@ export const RESOURCES_ES_PART2 = {
         type: "ova_interactive",
         title: "El Archivo Forense",
         description:
-          "Investiga en profundidad y verifica cada fuente: analiza evidencia, cruza datos y genera informes con trazabilidad forense usando Gemini Deep Research.",
+          "Investiga en profundidad y verifica cada fuente: analiza evidencia, cruza datos y redacta un informe en el que cada dato lleva su fuente, usando Gemini Deep Research.",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 3,
@@ -154,12 +154,12 @@ export const RESOURCES_ES_PART2 = {
   "El Alquimista de Documentos: Tu Primer Hechizo con Gemini Notebook": {
     title: "El Alquimista de Documentos: Tu Primer Hechizo con Gemini Notebook",
     description:
-      "La herramienta secreta de Google para alquimistas digitales: sube tus PDFs y obtén respuestas precisas con citas textuales. Tu bibliotecario personal con superpoderes de IA.",
+      "La herramienta de Google para alquimistas digitales: sube tus PDFs y obtén respuestas con citas que puedes comprobar. Como un bibliotecario que solo responde con los libros que tú le das.",
     learningObjectives: [
       "Construir tu primera biblioteca inteligente donde los documentos cobran vida",
       "Interrogar tus fuentes como un detective que busca la verdad",
       "Destilar montañas de texto en resúmenes que van al grano",
-      "Comparar información entre múltiples fuentes con precisión quirúrgica",
+      "Comparar lo que dicen varias fuentes sobre un tema y ubicar cada dato en su cita",
     ],
     estimatedTime: "28 minutos",
     difficulty: "Principiante",
@@ -184,7 +184,7 @@ export const RESOURCES_ES_PART2 = {
         format: "PDF",
         size: "2.32 MB",
         description:
-          "El grimorio del alquimista: 10 páginas para dominar Gemini Notebook desde tu primer cuaderno hasta técnicas avanzadas de investigación.",
+          "El grimorio del alquimista: una guía para usar Gemini Notebook, desde tu primer cuaderno hasta preguntas con citas que puedes comprobar.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -193,7 +193,7 @@ export const RESOURCES_ES_PART2 = {
         type: "ova_interactive",
         title: "El Grimorio",
         description:
-          "7 preguntas que te convertirán en experto en Gemini Notebook. Completa el desafío con MAX como tu guía personal en este viaje alquímico.",
+          "7 preguntas para practicar lo esencial de Gemini Notebook. Completa el desafío con MAX como tu guía personal en este viaje alquímico.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 7,
@@ -205,12 +205,12 @@ export const RESOURCES_ES_PART2 = {
   "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes": {
     title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
     description:
-      "Convierte montañas de documentos en resúmenes, preguntas frecuentes y reportes ejecutivos que parecen obra de un equipo de analistas.",
+      "Elige pocas fuentes de calidad y conviértelas en resúmenes, preguntas frecuentes y guías de estudio que puedes comprobar cita por cita.",
     learningObjectives: [
-      "Generar resúmenes ejecutivos que parecen escritos por un equipo de analistas",
-      "Crear FAQs que anticipan cada pregunta antes de que la formules",
-      "Conectar cada respuesta a su fuente original con precisión quirúrgica",
-      "Validar que la información generada es tan precisa como tu criterio",
+      "Generar un resumen de tus fuentes y revisar que cada idea esté en ellas",
+      "Crear una lista de preguntas frecuentes a partir de tus documentos",
+      "Conectar cada respuesta con su fuente original mediante las citas",
+      "Comprobar con tu propio criterio la información generada antes de usarla",
     ],
     estimatedTime: "20 minutos",
     difficulty: "Intermedio",
@@ -234,14 +234,14 @@ export const RESOURCES_ES_PART2 = {
         format: "PDF",
         size: "2.18 MB",
         description:
-          "Plantillas profesionales de resumen para cada tipo de documento: académico, empresarial, técnico y más. El kit de herramientas del alquimista.",
+          "Plantillas de resumen para cada tipo de documento: académico, empresarial, técnico y más. El kit de herramientas del alquimista.",
       },
       {
         id: "notebook-summary-ova-1",
         type: "ova_interactive",
         title: "El Crisol",
         description:
-          "Simulador práctico: toma documentos reales y genera resúmenes de nivel profesional en minutos. Pon a prueba tus habilidades alquímicas.",
+          "Simulador práctico: toma documentos reales y genera resúmenes que puedes comprobar cita por cita. Pon a prueba tus habilidades alquímicas.",
         estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -253,12 +253,12 @@ export const RESOURCES_ES_PART2 = {
   "La Fórmula Secreta: Audio Overviews y Gestión Documental": {
     title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
     description:
-      "Convierte tus apuntes en podcasts que suenan a radio profesional: dos voces IA conversan sobre tus documentos como si fueran viejos amigos.",
+      "Convierte tus apuntes en un resumen en audio, tipo podcast: dos voces IA conversan sobre tus documentos como si fueran viejos amigos.",
     learningObjectives: [
-      "Dar vida a tus documentos con Audio Overviews que parecen programa de radio",
+      "Generar un Audio Overview de tus documentos y revisar lo que dice",
       "Afilar el tono: sé académico, conversacional o divulgativo según tu audiencia",
       "Aprender mientras te mueves: convertir el estudio en experiencia auditiva",
-      "Compartir tus creaciones sonoras con equipos enteros",
+      "Compartir un cuaderno o un audio decidiendo quién puede verlo y quién editarlo",
     ],
     estimatedTime: "47 minutos",
     difficulty: "Avanzado",
