@@ -123,7 +123,7 @@ export const MODULE_5_PT_PART1 = [
   {
     id: "m5q5",
     question:
-      "Você quer que o Claude leia o seu correo para preparar a resposta a um cliente. O que você faz?",
+      "Você quer que o Claude leia o seu e-mail para preparar a resposta a um cliente. O que você faz?",
     options: [
       {
         id: "m5q5_a",

@@ -228,7 +228,8 @@ export const MODULE_5_PT_PART2 = [
       },
       {
         id: "m5q21_d",
-        label: "O arquivo inteiro, em um chat anônimo para não ficar salvo",
+        label:
+          "O arquivo inteiro, com os dados de cada aluno, para revisar depois",
       },
     ],
     correctAnswer: "m5q21_b",

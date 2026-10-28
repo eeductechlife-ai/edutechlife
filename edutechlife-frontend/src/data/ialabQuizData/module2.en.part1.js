@@ -385,30 +385,30 @@ export const MODULE_2_EN_PART1 = [
   {
     id: "m2q14",
     question:
-      "You have a CSV with sales and want a monthly bar chart. What do you use?",
+      "You have a 20-page document and want to fix only section 3 without touching the rest. What do you use?",
     options: [
       {
         id: "m2q14_a",
-        label: "The Code Interpreter, which builds the chart from the file",
+        label: "Canvas, editing only section 3 and reviewing each change",
       },
       {
         id: "m2q14_b",
-        label: "Web Search, to read articles about charts",
+        label: "Asking it to rewrite the whole document from scratch",
       },
       {
         id: "m2q14_c",
-        label: "The image generator, drawing the bars by hand",
+        label: "Web search to replace the section",
       },
       {
         id: "m2q14_d",
-        label: "Canvas, pasting each row into a table",
+        label: "The image generator, turning the text into a poster",
       },
     ],
     correctAnswer: "m2q14_a",
-    topic: "data analysis",
+    topic: "Canvas",
     difficulty: "medium",
     source: "The Toolbox",
     feedback:
-      "The Code Interpreter reads the file and builds the chart; then check that the totals match your CSV.",
+      "Canvas lets you change one part and review each change before accepting it; the rest of the document stays the same.",
   },
 ];

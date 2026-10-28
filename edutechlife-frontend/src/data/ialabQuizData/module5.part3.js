@@ -73,7 +73,7 @@ export const MODULE_5_PART3 = [
       },
       {
         id: "m5q29_c",
-        label: "Le pides que la guarde en un chat de incógnito",
+        label: "Le pides que la guarde en otro chat, separado de tu trabajo",
       },
       {
         id: "m5q29_d",
@@ -85,7 +85,7 @@ export const MODULE_5_PART3 = [
     difficulty: "fácil",
     source: "Lección 3: Delega con Claude",
     feedback:
-      "Las instrucciones de un Proyecto aplican a todos sus chats, y la memoria se puede revisar y controlar. Un chat de incógnito no sirve para que Claude recuerde nada.",
+      "Las instrucciones de un Proyecto aplican a todos sus chats, y la memoria se puede revisar y controlar. Guardarla en otro chat tampoco la lleva a todos tus chats de trabajo.",
   },
   {
     id: "m5q30",

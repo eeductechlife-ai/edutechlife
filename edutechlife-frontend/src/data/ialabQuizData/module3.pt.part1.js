@@ -261,23 +261,23 @@ export const MODULE_3_PT_PART1 = [
   {
     id: "m3q10",
     question:
-      "Qual vantagem tem pedir dados atuais ao Gemini em vez de confiar na memória dele?",
+      "Enviaram a foto de um recibo e você precisa saber o total dos gastos. O que pede ao Gemini?",
     options: [
       {
         id: "m3q10_a",
-        label: "Nenhuma: a memória é sempre mais atual",
+        label: "Confio no total que o Gemini diz sem conferir a foto",
       },
       {
         id: "m3q10_b",
-        label: "Elimina a necessidade de conferir qualquer fonte",
+        label: "Subo a foto na internet para alguém somar",
       },
       {
         id: "m3q10_c",
-        label: "Alonga a resposta sem melhorar a precisão",
+        label: "Peço que troque os valores que não aparecem bem",
       },
       {
         id: "m3q10_d",
-        label: "Os dados vêm de fontes atuais que você pode abrir",
+        label: "Peço que leia cada linha com o valor e eu somo para comparar",
       },
     ],
     correctAnswer: "m3q10_d",
@@ -285,7 +285,7 @@ export const MODULE_3_PT_PART1 = [
     difficulty: "médio",
     source: "Manual de Campo: Introdução ao Gemini",
     feedback:
-      "A web atual permite abrir a fonte e ver a data. A memória do modelo pode estar desatualizada.",
+      "Pedir cada linha permite comparar o total com os valores originais. Um total sem detalhamento não pode ser conferido.",
   },
   {
     id: "m3q11",

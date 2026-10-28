@@ -386,31 +386,30 @@ export const MODULE_2_PART1 = [
   {
     id: "m2q14",
     question:
-      "Tienes un CSV con ventas y quieres una gráfica de barras por mes. ¿Qué usas?",
+      "Tienes un documento de 20 páginas y quieres corregir solo la sección 3 sin tocar lo demás. ¿Qué usas?",
     options: [
       {
         id: "m2q14_a",
-        label:
-          "El Intérprete de Código, que genera la gráfica desde el archivo",
+        label: "Canvas, editando solo la sección 3 y revisando cada cambio",
       },
       {
         id: "m2q14_b",
-        label: "La Búsqueda Web, para leer artículos sobre gráficas",
+        label: "Pedir que reescriba todo el documento desde cero",
       },
       {
         id: "m2q14_c",
-        label: "El generador de imágenes, dibujando las barras a mano",
+        label: "La búsqueda web para reemplazar la sección",
       },
       {
         id: "m2q14_d",
-        label: "Canvas, pegando cada fila en una tabla",
+        label: "El generador de imágenes, convirtiendo el texto en un cartel",
       },
     ],
     correctAnswer: "m2q14_a",
-    topic: "Intérprete de Código",
+    topic: "Canvas",
     difficulty: "medio",
     source: "La Caja de Herramientas",
     feedback:
-      "El Intérprete de Código lee el archivo y genera la gráfica; después revisa que los totales coincidan con tu CSV.",
+      "Canvas permite cambiar solo una parte y revisar cada cambio antes de aceptarlo; el resto del documento no se altera.",
   },
 ];

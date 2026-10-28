@@ -2,31 +2,33 @@ export const MODULE_4_PART2 = [
   {
     id: "m4q15",
     question:
-      "Quieres que el cuaderno responda solo sobre el documento 3. ¿Qué haces?",
+      "Un resumen del cuaderno incluye una cifra que no recuerdas haber leído. ¿Qué haces?",
     options: [
       {
         id: "m4q15_a",
-        label: "Subes todos los documentos y esperas que lo recuerde",
+        label:
+          "La doy por buena porque el cuaderno la dice con mucha seguridad",
       },
       {
         id: "m4q15_b",
-        label: "Pides que responda también con datos de internet",
+        label: "Pregunto al cuaderno si está seguro y acepto su respuesta",
       },
       {
         id: "m4q15_c",
-        label: "Pides que responda solo con ese documento y que cite la página",
+        label:
+          "Pido la cita de la fuente de esa cifra y la verifico en el documento",
       },
       {
         id: "m4q15_d",
-        label: "Borras los demás documentos sin avisar a nadie",
+        label: "La cambio por una cifra redonda que suene más creíble",
       },
     ],
     correctAnswer: "m4q15_c",
-    topic: "Alcance",
+    topic: "Verificación de citas",
     difficulty: "medio",
     source: "Guía completa de NotebookLM: exprímelo al 100% (en 2026)",
     feedback:
-      "Limitar la pregunta a un documento y pedir la página hace verificable la respuesta. Los demás pasos mezclan fuentes o pierden trazabilidad.",
+      "Pedir la cita y comprobarla en el documento es la única forma de saber si la cifra está en la fuente.",
   },
   {
     id: "m4q16",

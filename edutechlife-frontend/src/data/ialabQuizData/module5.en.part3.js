@@ -45,7 +45,7 @@ export const MODULE_5_EN_PART3 = [
       },
       {
         id: "m5q29_c",
-        label: "You ask it to keep it in an incognito chat",
+        label: "You ask it to save it in a separate chat, apart from your work",
       },
       {
         id: "m5q29_d",
@@ -58,7 +58,7 @@ export const MODULE_5_EN_PART3 = [
     difficulty: "easy",
     source: "Lesson 3: Delegate with Claude",
     feedback:
-      "Project instructions apply to all its chats, and memory can be reviewed and controlled. An incognito chat does not help Claude remember anything.",
+      "Project instructions apply to all its chats, and memory can be reviewed and controlled. Saving it in another chat does not carry it to all your work chats.",
   },
   {
     id: "m5q30",

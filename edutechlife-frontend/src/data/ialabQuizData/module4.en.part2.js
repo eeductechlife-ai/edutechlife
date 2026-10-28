@@ -2,31 +2,33 @@ export const MODULE_4_EN_PART2 = [
   {
     id: "m4q15",
     question:
-      "You want the notebook to answer only about document 3. What do you do?",
+      "A notebook summary includes a figure you do not remember reading. What do you do?",
     options: [
       {
         id: "m4q15_a",
-        label: "Upload all the documents and hope it remembers",
+        label:
+          "I accept it because the notebook states it with great confidence",
       },
       {
         id: "m4q15_b",
-        label: "Ask it to also answer with internet data",
+        label: "I ask the notebook if it is sure and accept its answer",
       },
       {
         id: "m4q15_c",
-        label: "Ask it to answer only from that document and cite the page",
+        label:
+          "I ask for the source citation of that figure and check it in the document",
       },
       {
         id: "m4q15_d",
-        label: "Delete the other documents without telling anyone",
+        label: "I change it to a round number that sounds more credible",
       },
     ],
     correctAnswer: "m4q15_c",
-    topic: "Scope",
+    topic: "Citation check",
     difficulty: "medium",
     source: "Complete NotebookLM guide: get the most out of it (2026)",
     feedback:
-      "Limiting the question to one document and asking for the page makes the answer verifiable. The other steps mix sources or lose traceability.",
+      "Asking for the citation and checking it in the document is the only way to know whether the figure is in the source.",
   },
   {
     id: "m4q16",

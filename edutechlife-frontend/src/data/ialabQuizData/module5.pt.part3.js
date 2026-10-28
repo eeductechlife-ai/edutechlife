@@ -44,7 +44,7 @@ export const MODULE_5_PT_PART3 = [
       },
       {
         id: "m5q29_c",
-        label: "Pede para guardar em um chat anônimo, sem controle",
+        label: "Pede para guardar em outro chat, separado do seu trabalho",
       },
       {
         id: "m5q29_d",
@@ -56,7 +56,7 @@ export const MODULE_5_PT_PART3 = [
     difficulty: "fácil",
     source: "Lição 3: Delegue com o Claude",
     feedback:
-      "As instruções de um Projeto valem para todos os seus chats, e a memória pode ser revisada e controlada. Um chat anônimo não serve para o Claude lembrar de nada.",
+      "As instruções de um Projeto valem para todos os seus chats, e a memória pode ser revisada e controlada. Guardá-la em outro chat também não a leva para todos os seus chats de trabalho.",
   },
   {
     id: "m5q30",

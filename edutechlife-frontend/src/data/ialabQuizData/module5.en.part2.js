@@ -231,7 +231,7 @@ export const MODULE_5_EN_PART2 = [
       },
       {
         id: "m5q21_d",
-        label: "The full file, in an incognito chat so it is not saved",
+        label: "The full file, with each student's data, to review it later",
       },
     ],
     correctAnswer: "m5q21_b",

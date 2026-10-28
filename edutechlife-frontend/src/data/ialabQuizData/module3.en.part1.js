@@ -260,23 +260,24 @@ export const MODULE_3_EN_PART1 = [
   {
     id: "m3q10",
     question:
-      "What advantage is there in asking Gemini for current data instead of trusting its memory?",
+      "You receive a photo of a receipt and need the total spending. What do you ask Gemini?",
     options: [
       {
         id: "m3q10_a",
-        label: "None: memory is always more current",
+        label: "I trust the total Gemini gives without checking the photo",
       },
       {
         id: "m3q10_b",
-        label: "It removes the need to check any source",
+        label: "I upload the photo online so someone else adds it up",
       },
       {
         id: "m3q10_c",
-        label: "It makes the answer longer without improving accuracy",
+        label: "I ask it to change the values that are not clearly visible",
       },
       {
         id: "m3q10_d",
-        label: "The data comes from current sources you can open",
+        label:
+          "I ask it to read each line with its amount and I add them to compare",
       },
     ],
     correctAnswer: "m3q10_d",
@@ -284,7 +285,7 @@ export const MODULE_3_EN_PART1 = [
     difficulty: "medium",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "The current web lets you open the source and see the date. The model's memory may be out of date.",
+      "Asking for each line lets you compare the total with the original amounts. A total without a breakdown cannot be checked.",
   },
   {
     id: "m3q11",

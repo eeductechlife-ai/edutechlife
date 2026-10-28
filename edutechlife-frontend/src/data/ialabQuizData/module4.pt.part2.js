@@ -2,31 +2,31 @@ export const MODULE_4_PT_PART2 = [
   {
     id: "m4q15",
     question:
-      "Você quer que o caderno responda só sobre o documento 3. O que faz?",
+      "Um resumo do caderno traz um número que você não lembra de ter lido. O que faz?",
     options: [
       {
         id: "m4q15_a",
-        label: "Sobe todos os documentos e espera que ele se lembre",
+        label: "Aceito porque o caderno afirma isso com muita segurança",
       },
       {
         id: "m4q15_b",
-        label: "Pede que responda também com dados da internet",
+        label: "Pergunto ao caderno se ele tem certeza e aceito a resposta",
       },
       {
         id: "m4q15_c",
-        label: "Pede que responda só com esse documento e cite a página",
+        label: "Peço a citação da fonte desse número e confiro no documento",
       },
       {
         id: "m4q15_d",
-        label: "Apaga os outros documentos sem avisar ninguém",
+        label: "Troco por um número redondo que pareça mais crível",
       },
     ],
     correctAnswer: "m4q15_c",
-    topic: "Alcance",
+    topic: "Verificação de citações",
     difficulty: "médio",
     source: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
     feedback:
-      "Limitar a pergunta a um documento e pedir a página torna a resposta verificável. Os outros passos misturam fontes ou perdem a rastreabilidade.",
+      "Pedir a citação e conferi-la no documento é a única forma de saber se o número está na fonte.",
   },
   {
     id: "m4q16",
