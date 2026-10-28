@@ -26,7 +26,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q1_a",
     topic: "Conocer a Claude",
     difficulty: "fácil",
-    source: "Lección 1: Conoce a Claude",
+    source: "Lección 1 · Conoce a Claude: la IA que trabaja contigo",
     feedback:
       "Un pedido completo tiene cinco partes: objetivo, audiencia, formato, tono y límites. Cada parte que falta es una suposición que Claude hace por ti.",
   },
@@ -55,7 +55,8 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q2_c",
     topic: "Crear con Claude",
     difficulty: "fácil",
-    source: "Lección 2: Crea con Claude",
+    source:
+      "Lección 2 · Crea con Claude: Artifacts, documentos y presentaciones",
     feedback:
       "Un Artifact es una pieza (documento, tabla o pequeña app) que vive al lado del chat: la ves, la mejoras por partes y la exportas. Las instrucciones fijas van en un Proyecto, las preferencias en la memoria y el acceso a tus apps en los conectores.",
   },
@@ -87,7 +88,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q3_b",
     topic: "Supervisión",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Claude puede equivocarse con cifras y sonar seguro, incluso cuando se revisa a sí mismo. Citar una fuente no es verificarla: compara con el dato original antes de presentar.",
   },
@@ -119,7 +120,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q4_d",
     topic: "Proyectos y memoria",
     difficulty: "fácil",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Un Proyecto guarda las instrucciones y los archivos de un trabajo concreto que se repite, para que no los repitas en cada chat. Mezclar temas o subir archivos de más le da contexto que no sirve y puede exponer datos.",
   },
@@ -151,7 +152,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q5_a",
     topic: "Conectores y Skills",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Con un conector das acceso solo a lo que la tarea necesita y apruebas sus permisos. Puedes desconectarlo al terminar, y la respuesta la revisas y la envías tú.",
   },
@@ -183,7 +184,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q6_c",
     topic: "Conectores y Skills",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Una Skill guarda un procedimiento que haces siempre igual: pasos, plantillas y ejemplos. Un Proyecto guarda el contexto de un trabajo que se repite, con sus instrucciones y archivos. Los conectores dan acceso a tus apps.",
   },
@@ -215,7 +216,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q7_b",
     topic: "Delegar con Claude",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Un procedimiento que haces siempre igual se guarda como Skill: Claude aplica los mismos pasos cada vez y tú solo revisas el resultado. El incógnito no guarda el procedimiento para la semana siguiente, y crear un Proyecto por semana repite el trabajo.",
   },
@@ -247,7 +248,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q8_d",
     topic: "Delegar con Claude",
     difficulty: "fácil",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Delegar no es desentenderse: entregas la forma y el borrador, revisas lo que sale a terceros y conservas la decisión. Un buen pedido mejora el resultado, pero no traslada la responsabilidad.",
   },
@@ -280,7 +281,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q9_a",
     topic: "Privacidad y datos",
     difficulty: "medio",
-    source: "Lección 1: Conoce a Claude",
+    source: "Lección 1 · Conoce a Claude: la IA que trabaja contigo",
     feedback:
       "La memoria se revisa y se ajusta en la configuración: decides qué conviene que recuerde. El incógnito sirve para un chat puntual que no quieres que quede en memoria, no para todo tu trabajo.",
   },
@@ -311,7 +312,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q10_c",
     topic: "Privacidad y datos",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Minimiza los datos que compartes: anonimiza o pide autorización antes de subirlos, y respeta la política de tu organización y la ley (en Colombia, Ley 1581 de 2012). Borrar el chat después o pedir que ignore los nombres no evita que ya los compartiste.",
   },
@@ -342,7 +343,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q11_b",
     topic: "Proyectos y memoria",
     difficulty: "medio",
-    source: "Lección 1: Conoce a Claude",
+    source: "Lección 1 · Conoce a Claude: la IA que trabaja contigo",
     feedback:
       "El Proyecto es el contexto de un trabajo concreto: instrucciones y archivos. La memoria recuerda preferencias y datos útiles entre conversaciones. Por ejemplo, tu marca va en un Proyecto y tu preferencia de tono, en la memoria.",
   },
@@ -372,7 +373,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q12_d",
     topic: "Límites y errores",
     difficulty: "fácil",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Una cita puede parecer real y no existir o decir otra cosa; un enlace o una confirmación de Claude no lo prueban. Verifica siempre en la fuente primaria.",
   },
@@ -401,7 +402,7 @@ export const MODULE_5_PART1 = [
     correctAnswer: "m5q13_a",
     topic: "Delegar con Claude",
     difficulty: "fácil",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Las tareas de forma, sin decisión de fondo, son ideales para delegar. Lo que sale a terceros, contiene datos personales o cifras para decidir se delega y se revisa.",
   },

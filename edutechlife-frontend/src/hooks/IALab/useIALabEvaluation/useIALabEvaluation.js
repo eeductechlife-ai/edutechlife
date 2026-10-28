@@ -10,7 +10,11 @@ import {
   saveGradeToSupabase as apiSaveGradeToSupabase,
 } from "./supabase";
 
-const useIALabEvaluation = (moduleId = 1, locale = "es", activityType = "challenge") => {
+const useIALabEvaluation = (
+  moduleId = 1,
+  locale = "es",
+  activityType = "challenge",
+) => {
   const { user } = useAuth();
   const abortRef = useRef(null);
   const config = MODULE_CONFIG[moduleId] || MODULE_CONFIG[1];

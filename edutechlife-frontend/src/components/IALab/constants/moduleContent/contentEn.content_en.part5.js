@@ -59,7 +59,7 @@ export const CONTENT_EN_PART5 = {
         title: "Get to Know Claude: the AI That Works With You",
         description: "How to think and ask like an orchestra conductor",
         detailedDescription:
-          "Before giving instructions, know the instrument. What Claude is, how it differs from a search engine, how to write a request with goal, audience and format, how memory works and when to choose a faster model or a more capable one.",
+          "Before giving instructions, know the instrument. What Claude is, how it differs from a search engine, how to write a request with goal, audience and format, how memory works and when to choose a faster model or a more capable one. Memory is reviewed and adjusted in the settings; an incognito chat is not saved to your history or to memory, and it is only available outside Projects (Claude help center, checked in October 2026).",
         duration: "20 min",
         format: "Reading",
         icon: "fa-comments",

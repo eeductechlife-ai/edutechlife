@@ -26,7 +26,8 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q14_c",
     topic: "Creating with Claude",
     difficulty: "medium",
-    source: "Lesson 2: Create with Claude",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
       "A good presentation starts with the message and the audience. If Claude chooses what to highlight, the decision is its own, not yours; and the figures are checked before they go on a slide.",
   },
@@ -56,7 +57,8 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q15_b",
     topic: "Creating with Claude",
     difficulty: "medium",
-    source: "Lesson 2: Create with Claude",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
       "Each change leaves a different version: compare before and after and decide what stays. Starting over or discarding without looking wastes what already worked.",
   },
@@ -85,7 +87,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q16_b",
     topic: "Limits and errors",
     difficulty: "medium",
-    source: "Lesson 1: Get to know Claude",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
       "A small, specific change improves the result without redoing what already works. Starting over or accepting a tone you do not want are the common mistakes.",
   },
@@ -115,7 +117,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q17_a",
     topic: "Projects and memory",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A Project's instructions say who Claude is, what it is for, how it sounds and what it must never do. Files complement them, and personal data is not uploaded without authorization.",
   },
@@ -146,7 +148,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q18_c",
     topic: "Privacy and data",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A tool generating a document does not change how confidential it is. Anyone who receives an open link can see it: share only what the policy allows and only with the right people.",
   },
@@ -178,7 +180,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q19_b",
     topic: "Delegating with Claude",
     difficulty: "hard",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "AI speeds up the preparation, but a decision with consequences stays yours. Delegating the approval is the mistake.",
   },
@@ -208,7 +210,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q20_d",
     topic: "Oversight",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Choosing whom to hire is a decision about a person: that decision is not delegated. Claude can sort and compare; you review the analysis and decide. Neither a confirmation from Claude nor a good request transfers the responsibility.",
   },
@@ -237,7 +239,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q21_b",
     topic: "Privacy and data",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Group averages allow the analysis without identifying anyone. Personal data about minors is not shared with an AI tool (Colombian Law 1581 of 2012).",
   },
@@ -266,7 +268,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q22_b",
     topic: "Limits and errors",
     difficulty: "medium",
-    source: "Lesson 1: Get to know Claude",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
       "An Artifact is a piece that lives beside the chat: you view it, edit it and download it without losing the thread of the conversation.",
   },
@@ -296,7 +298,8 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q23_b",
     topic: "Creating with Claude",
     difficulty: "medium",
-    source: "Lesson 2: Create with Claude",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
       "Describe the use, the input data and the result, improve it with small changes and test the piece before sharing it.",
   },
@@ -327,7 +330,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q24_b",
     topic: "Oversight",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Adapting a text to its audience changes the language, not only the length. A request with a clear audience and tone gives better results.",
   },
@@ -356,7 +359,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q25_b",
     topic: "Connectors and Skills",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A Project stores instructions and files that apply to all its chats. Pasting them each time repeats work, and it is easy to forget one.",
   },
@@ -385,7 +388,7 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q26_b",
     topic: "Delegating with Claude",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Decisions about people, and especially about minors, are human. AI can help write, but not decide or receive identifiable data.",
   },
@@ -414,7 +417,8 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q27_b",
     topic: "Limits and errors",
     difficulty: "hard",
-    source: "Lesson 2: Create with Claude",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
       "Ask for the method and check a sample with an independent calculation. Claude confirming or a chart looking good does not prove the data is right.",
   },

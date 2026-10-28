@@ -59,7 +59,7 @@ export const CONTENT_ES_PART5 = {
         title: "Conoce a Claude: la IA que trabaja contigo",
         description: "Cómo pensar y pedir como un director de orquesta",
         detailedDescription:
-          "Antes de dar instrucciones, conoce el instrumento. Qué es Claude, en qué se diferencia de un buscador, cómo escribir un pedido con objetivo, audiencia y formato, cómo funciona la memoria y cuándo elegir un modelo más rápido o uno más capaz.",
+          "Antes de dar instrucciones, conoce el instrumento. Qué es Claude, en qué se diferencia de un buscador, cómo escribir un pedido con objetivo, audiencia y formato, cómo funciona la memoria y cuándo elegir un modelo más rápido o uno más capaz. La memoria se revisa y se ajusta en la configuración; un chat de incógnito no se guarda en el historial ni en la memoria, y solo existe fuera de los Proyectos (centro de ayuda de Claude, verificado en octubre de 2026).",
         duration: "20 min",
         format: "Reading",
         icon: "fa-comments",

@@ -27,7 +27,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q1_a",
     topic: "Getting to know Claude",
     difficulty: "easy",
-    source: "Lesson 1: Get to know Claude",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
       "A complete request has five parts: goal, audience, format, tone and limits. Every missing part is an assumption Claude makes for you.",
   },
@@ -55,7 +55,8 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q2_c",
     topic: "Creating with Claude",
     difficulty: "easy",
-    source: "Lesson 2: Create with Claude",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
       "An Artifact is a piece (document, table or small app) that lives next to the chat: you see it, improve it step by step and export it. Fixed instructions go in a Project, preferences in memory and access to your apps in connectors.",
   },
@@ -87,7 +88,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q3_b",
     topic: "Oversight",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Claude can get figures wrong and still sound sure, even when it checks itself. Citing a source is not checking it: compare with the original data before presenting.",
   },
@@ -117,7 +118,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q4_d",
     topic: "Projects and memory",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A Project stores the instructions and files for a specific job that repeats, so you do not repeat them in every chat. Mixing topics or uploading extra files gives it useless context and can expose data.",
   },
@@ -149,7 +150,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q5_a",
     topic: "Connectors and Skills",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "With a connector you give access only to what the task needs and you approve its permissions. You can disconnect it when you finish, and you review and send the reply yourself.",
   },
@@ -181,7 +182,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q6_c",
     topic: "Connectors and Skills",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A Skill stores a procedure you always do the same way: steps, templates and examples. A Project stores the context of a job that repeats, with its instructions and files. Connectors give access to your apps.",
   },
@@ -212,7 +213,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q7_b",
     topic: "Delegating with Claude",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A procedure you always do the same way is saved as a Skill: Claude applies the same steps each time and you only review the result. Incognito does not keep the procedure for the following week, and creating a Project every week repeats the work.",
   },
@@ -243,7 +244,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q8_d",
     topic: "Delegating with Claude",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Delegating is not walking away: you hand over the form and the draft, review what goes to third parties and keep the decision. A good request improves the result, but it does not transfer responsibility.",
   },
@@ -275,7 +276,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q9_a",
     topic: "Privacy and data",
     difficulty: "medium",
-    source: "Lesson 1: Get to know Claude",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
       "Memory is reviewed and adjusted in the settings: you decide what it should remember. Incognito is for a one-off chat you do not want kept in memory, not for all your work.",
   },
@@ -306,7 +307,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q10_c",
     topic: "Privacy and data",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Minimize the data you share: anonymize it or get authorization before uploading, and follow your organization's policy and the law (in Colombia, Law 1581 of 2012). Deleting the chat afterwards or asking it to ignore the names does not undo the fact that you already shared them.",
   },
@@ -337,7 +338,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q11_b",
     topic: "Projects and memory",
     difficulty: "medium",
-    source: "Lesson 1: Get to know Claude",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
       "The Project is the context of a specific job: instructions and files. Memory remembers preferences and useful details across conversations. For example, your brand goes in a Project and your tone preference, in memory.",
   },
@@ -367,7 +368,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q12_d",
     topic: "Limits and errors",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "A citation can look real and not exist or say something else; a link or a confirmation from Claude does not prove it. Always check the primary source.",
   },
@@ -396,7 +397,7 @@ export const MODULE_5_EN_PART1 = [
     correctAnswer: "m5q13_a",
     topic: "Delegating with Claude",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Form tasks with no underlying decision are ideal to delegate. Whatever goes to third parties, contains personal data or figures for decisions is delegated and reviewed.",
   },

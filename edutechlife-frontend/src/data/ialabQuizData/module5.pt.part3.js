@@ -24,7 +24,7 @@ export const MODULE_5_PT_PART3 = [
     correctAnswer: "m5q28_d",
     topic: "Delegar com o Claude",
     difficulty: "médio",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "Declarar o uso de IA faz parte de entregar com honestidade: você diz em que ela ajudou e quem revisou e responde pelo resultado. Revisar não apaga que você usou IA, e a responsabilidade é de uma pessoa, não da ferramenta.",
   },
@@ -54,7 +54,7 @@ export const MODULE_5_PT_PART3 = [
     correctAnswer: "m5q29_b",
     topic: "Privacidade e dados",
     difficulty: "fácil",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "As instruções de um Projeto valem para todos os seus chats, e a memória pode ser revisada e controlada. Guardá-la em outro chat também não a leva para todos os seus chats de trabalho.",
   },
@@ -85,7 +85,7 @@ export const MODULE_5_PT_PART3 = [
     correctAnswer: "m5q30_c",
     topic: "Projetos e memória",
     difficulty: "médio",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "O que funciona deve ficar salvo em um Projeto ou uma Skill: assim cada novo trabalho parte do que foi aprendido, sem depender de reler chats nem do que a memória guarda.",
   },

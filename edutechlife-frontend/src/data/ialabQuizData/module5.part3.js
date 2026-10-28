@@ -24,7 +24,8 @@ export const MODULE_5_PART3 = [
     correctAnswer: "m5q27_b",
     topic: "Límites y errores",
     difficulty: "difícil",
-    source: "Lección 2: Crea con Claude",
+    source:
+      "Lección 2 · Crea con Claude: Artifacts, documentos y presentaciones",
     feedback:
       "Pide el método y valida una muestra con un cálculo independiente. Que Claude confirme o que el gráfico se vea bien no prueba que el dato sea correcto.",
   },
@@ -53,7 +54,7 @@ export const MODULE_5_PART3 = [
     correctAnswer: "m5q28_d",
     topic: "Delegar con Claude",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Declarar el uso de IA es parte de entregar con honestidad: dices en qué te ayudó y quién revisó y responde por el resultado. Revisarlo no borra que usaste IA, y la responsabilidad es de una persona, no de la herramienta.",
   },
@@ -83,7 +84,7 @@ export const MODULE_5_PART3 = [
     correctAnswer: "m5q29_b",
     topic: "Privacidad y datos",
     difficulty: "fácil",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Las instrucciones de un Proyecto aplican a todos sus chats, y la memoria se puede revisar y controlar. Guardarla en otro chat tampoco la lleva a todos tus chats de trabajo.",
   },
@@ -114,7 +115,7 @@ export const MODULE_5_PART3 = [
     correctAnswer: "m5q30_c",
     topic: "Proyectos y memoria",
     difficulty: "medio",
-    source: "Lección 3: Delega con Claude",
+    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
       "Lo que funciona debe quedar guardado en un Proyecto o una Skill: así cada nuevo trabajo parte de lo aprendido, sin depender de releer chats ni de lo que la memoria retenga.",
   },

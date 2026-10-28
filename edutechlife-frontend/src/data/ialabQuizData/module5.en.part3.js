@@ -25,7 +25,7 @@ export const MODULE_5_EN_PART3 = [
     correctAnswer: "m5q28_d",
     topic: "Delegating with Claude",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Disclosing your use of AI is part of delivering honestly: you say what it helped with and who reviewed and answers for the result. Reviewing it does not erase that you used AI, and responsibility belongs to a person, not to the tool.",
   },
@@ -56,7 +56,7 @@ export const MODULE_5_EN_PART3 = [
     correctAnswer: "m5q29_b",
     topic: "Privacy and data",
     difficulty: "easy",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "Project instructions apply to all its chats, and memory can be reviewed and controlled. Saving it in another chat does not carry it to all your work chats.",
   },
@@ -87,7 +87,7 @@ export const MODULE_5_EN_PART3 = [
     correctAnswer: "m5q30_c",
     topic: "Projects and memory",
     difficulty: "medium",
-    source: "Lesson 3: Delegate with Claude",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
       "What works should be saved in a Project or a Skill: that way every new job starts from what you learned, without rereading chats or relying on what memory keeps.",
   },

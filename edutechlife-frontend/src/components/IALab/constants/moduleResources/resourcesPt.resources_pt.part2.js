@@ -27,9 +27,9 @@ export const RESOURCES_PT_PART2 = {
         type: "pdf",
         title: "Manual de Campo: Introdução ao Gemini",
         url: "/ialab-resources/modulo3/guia-gemini-es.pdf",
-        pages: 8,
+        pages: 7,
         format: "PDF",
-        size: "2.84 MB",
+        size: "0.88 MB",
         description:
           "O manual de campo do detetive: aprenda a usar o Gemini para estudar, trabalhar e criar conteúdo com a precisão de um investigador profissional.",
         thumbnailType: "premium",

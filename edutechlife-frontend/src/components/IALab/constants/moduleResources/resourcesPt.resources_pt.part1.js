@@ -227,9 +227,9 @@ export const RESOURCES_PT_PART1 = {
         type: "pdf",
         title: "Guia Completo de ChatGPT",
         url: "/ialab-resources/modulo2/guia-chatgpt-es.pdf",
-        pages: 10,
+        pages: 9,
         format: "PDF",
-        size: "1.46 MB",
+        size: "1.67 MB",
         description:
           "O manual do arquiteto: dicas, truques e exemplos práticos organizados para construir qualquer projeto com o ChatGPT. Consulta rápida para profissionais da construção digital.",
         thumbnailType: "premium",

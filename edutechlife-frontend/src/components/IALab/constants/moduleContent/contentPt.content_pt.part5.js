@@ -59,7 +59,7 @@ export const CONTENT_PT_PART5 = {
         title: "Conheça o Claude: a IA que trabalha com você",
         description: "Como pensar e pedir como um maestro",
         detailedDescription:
-          "Antes de dar instruções, conheça o instrumento. O que é o Claude, em que se diferencia de um buscador, como escrever um pedido com objetivo, público e formato, como funciona a memória e quando escolher um modelo mais rápido ou um mais capaz.",
+          "Antes de dar instruções, conheça o instrumento. O que é o Claude, em que se diferencia de um buscador, como escrever um pedido com objetivo, público e formato, como funciona a memória e quando escolher um modelo mais rápido ou um mais capaz. A memória é revisada e ajustada nas configurações; um chat anônimo não fica salvo no histórico nem na memória, e só existe fora dos Projetos (central de ajuda do Claude, verificado em outubro de 2026).",
         duration: "20 min",
         format: "Reading",
         icon: "fa-comments",

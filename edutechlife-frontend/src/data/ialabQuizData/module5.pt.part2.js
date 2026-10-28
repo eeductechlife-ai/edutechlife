@@ -26,7 +26,8 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q14_c",
     topic: "Criar com o Claude",
     difficulty: "médio",
-    source: "Lição 2: Crie com o Claude",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
       "Uma boa apresentação começa pela mensagem e pelo público. Se o Claude escolhe o que destacar, a decisão é dele e não sua; e os números são conferidos antes de entrar no slide.",
   },
@@ -55,7 +56,8 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q15_b",
     topic: "Criar com o Claude",
     difficulty: "médio",
-    source: "Lição 2: Crie com o Claude",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
       "Cada mudança deixa uma versão diferente: compare o antes e o depois e decida você o que fica. Começar do zero ou descartar sem olhar desperdiça o que já funcionava.",
   },
@@ -84,7 +86,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q16_b",
     topic: "Limites e erros",
     difficulty: "médio",
-    source: "Lição 1: Conheça o Claude",
+    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
     feedback:
       "Uma mudança pequena e específica melhora o resultado sem refazer o que já funciona. Recomeçar ou aceitar um tom que você não quer são os erros comuns.",
   },
@@ -116,7 +118,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q17_a",
     topic: "Projetos e memória",
     difficulty: "médio",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "As instruções do Projeto dizem quem é o Claude, para que serve, como soa e o que nunca deve fazer. Os arquivos complementam, e dados pessoais não são enviados sem autorização.",
   },
@@ -146,7 +148,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q18_c",
     topic: "Privacidade e dados",
     difficulty: "médio",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "Uma ferramenta gerar um documento não muda o seu nível de confidencialidade. Qualquer pessoa que receba um link aberto pode vê-lo: compartilhe só o que a política permite e com quem deve.",
   },
@@ -176,7 +178,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q19_b",
     topic: "Delegar com o Claude",
     difficulty: "difícil",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "A IA acelera a preparação, mas uma decisão com consequências continua sendo sua. Delegar a aprovação é o erro.",
   },
@@ -205,7 +207,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q20_d",
     topic: "Supervisão",
     difficulty: "médio",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "Escolher quem contratar é decidir sobre uma pessoa: essa decisão não se delega. O Claude pode ordenar e comparar; você revisa a análise e decide. Nem uma confirmação do Claude nem um bom pedido transferem a responsabilidade.",
   },
@@ -235,7 +237,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q21_b",
     topic: "Privacidade e dados",
     difficulty: "fácil",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "As médias do grupo permitem a análise sem identificar ninguém. Dados pessoais de menores não se compartilham com uma ferramenta de IA (Lei 1581 de 2012, na Colômbia).",
   },
@@ -264,7 +266,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q22_b",
     topic: "Limites e erros",
     difficulty: "médio",
-    source: "Lição 1: Conheça o Claude",
+    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
     feedback:
       "Um Artifact é uma peça que fica ao lado do chat: você a vê, edita e baixa sem perder o fio da conversa.",
   },
@@ -295,7 +297,8 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q23_b",
     topic: "Criar com o Claude",
     difficulty: "médio",
-    source: "Lição 2: Crie com o Claude",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
       "Descreva o uso, os dados de entrada e o resultado, melhore com mudanças pequenas e teste a peça antes de compartilhar.",
   },
@@ -325,7 +328,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q24_b",
     topic: "Supervisão",
     difficulty: "fácil",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "Adaptar o texto ao público muda a linguagem, não só o tamanho. Um pedido com público e tom definidos dá melhores resultados.",
   },
@@ -354,7 +357,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q25_b",
     topic: "Conectores e Skills",
     difficulty: "médio",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "Um Projeto guarda instruções e arquivos que valem para todos os seus chats. Colá-los a cada vez repete o trabalho, e é fácil esquecer algum.",
   },
@@ -383,7 +386,7 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q26_b",
     topic: "Delegar com o Claude",
     difficulty: "fácil",
-    source: "Lição 3: Delegue com o Claude",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
       "Decisões sobre pessoas, e ainda mais sobre menores, são humanas. A IA pode ajudar a redigir, mas não a decidir nem a receber dados identificáveis.",
   },
@@ -413,7 +416,8 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q27_b",
     topic: "Limites e erros",
     difficulty: "difícil",
-    source: "Lição 2: Crie com o Claude",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
       "Peça o método e valide uma amostra com um cálculo independente. O Claude confirmar ou o gráfico parecer bom não prova que o dado está certo.",
   },
