@@ -456,7 +456,7 @@ const CONTENT_ES = {
         {
           title: "Grounding: Cuando la Evidencia Toca Tierra",
           icon: "fa-layer-group",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Distinguir una respuesta con fuentes de una que solo suena bien, y abrir las fuentes para comprobarla.",

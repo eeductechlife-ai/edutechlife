@@ -12,83 +12,11 @@ import {
 } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { usePersistedOvaState } from "../../../hooks/IALab/usePersistedOvaState";
+import { UI, LETTERS } from "./ovaExplicativoTextos";
+import { makeBtn } from "./ovaExplicativoBoton";
 
 // OVA explicativo con la identidad visual de cada OVA (tema por OVA).
 // El contenido llega por idioma desde un archivo de datos; la estructura es común.
-
-const UI = {
-  es: {
-    start: "Comenzar",
-    next: "Siguiente",
-    prev: "Anterior",
-    summary: "Ver resumen",
-    check: "Ir a la verificación",
-    finish: "Terminar",
-    vocab: "Vocabulario",
-    how: "Cómo funciona",
-    example: "Ejemplo",
-    mistake: "Error común",
-    objectives: "Al terminar podrás",
-    summaryTitle: "Lo esencial",
-    checkTitle: "Verificación",
-    checkHint: "Elige una respuesta. Lee la explicación antes de seguir.",
-    correct: "¡Correcto!",
-    incorrect: "Revisa la explicación y vuelve a intentarlo.",
-    done: "¡Lo lograste! Ya puedes explicar este tema con tus palabras.",
-    back: "Volver al tema",
-    section: "Sección",
-    of: "de",
-    step: "Paso",
-  },
-  en: {
-    start: "Start",
-    next: "Next",
-    prev: "Previous",
-    summary: "See summary",
-    check: "Go to the check",
-    finish: "Finish",
-    vocab: "Vocabulary",
-    how: "How it works",
-    example: "Example",
-    mistake: "Common mistake",
-    objectives: "By the end you will be able to",
-    summaryTitle: "The essentials",
-    checkTitle: "Check",
-    checkHint: "Choose an answer. Read the explanation before you continue.",
-    correct: "Correct!",
-    incorrect: "Review the explanation and try again.",
-    done: "You did it! You can now explain this topic in your own words.",
-    back: "Back to the topic",
-    section: "Section",
-    of: "of",
-    step: "Step",
-  },
-  pt: {
-    start: "Começar",
-    next: "Próximo",
-    prev: "Anterior",
-    summary: "Ver resumo",
-    check: "Ir para a verificação",
-    finish: "Terminar",
-    vocab: "Vocabulário",
-    how: "Como funciona",
-    example: "Exemplo",
-    mistake: "Erro comum",
-    objectives: "Ao final você vai conseguir",
-    summaryTitle: "O essencial",
-    checkTitle: "Verificação",
-    checkHint: "Escolha uma resposta. Leia a explicação antes de continuar.",
-    correct: "Correto!",
-    incorrect: "Revise a explicação e tente de novo.",
-    done: "Você conseguiu! Agora pode explicar este tema com as suas palavras.",
-    back: "Voltar ao tema",
-    section: "Seção",
-    of: "de",
-    step: "Passo",
-  },
-};
-
-const LETTERS = ["A", "B", "C", "D"];
 
 // Dibuja el tema de cada OVA: colores, fondo, claridad y el icono de la portada.
 export function makeOVAExplicativo(ovaId, DATA, THEME) {
@@ -104,6 +32,7 @@ export function makeOVAExplicativo(ovaId, DATA, THEME) {
   const card = T.dark ? "rgba(255,255,255,0.06)" : "#ffffff";
   const cardBorder = T.dark ? "rgba(255,255,255,0.12)" : "#e2e8f0";
   const pageBg = T.bg || (T.dark ? "#0b1220" : "#f8fafc");
+  const Btn = makeBtn(T);
 
   function OVAExplicativo({ onComplete, onClose }) {
     const { locale } = useTranslation();
@@ -143,26 +72,6 @@ export function makeOVAExplicativo(ovaId, DATA, THEME) {
         onComplete?.();
       }
     };
-
-    const Btn = ({ onClick, children, primary = false, disabled = false }) => (
-      <button
-        type="button"
-        onClick={onClick}
-        disabled={disabled}
-        className="inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0"
-        style={
-          primary
-            ? { background: T.accent, color: "#fff" }
-            : {
-                border: `2px solid ${T.accent}`,
-                color: T.dark ? "#fff" : T.accent,
-                background: "transparent",
-              }
-        }
-      >
-        {children}
-      </button>
-    );
 
     const Shell = ({ children }) => (
       <div

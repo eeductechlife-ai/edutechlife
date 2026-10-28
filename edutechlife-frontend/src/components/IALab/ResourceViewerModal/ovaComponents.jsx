@@ -8,14 +8,11 @@ import {
   Hammer,
   Scale,
   Wrench,
-  Microscope,
-  Eye,
-  Headphones,
   FlaskConical,
   Blocks,
   Users,
   Send,
-  BadgeCheck,
+  Headphones,
 } from "lucide-react";
 import InteractiveViewer from "./InteractiveViewer";
 import { makeOVAExplicativo } from "../ova-explicativo/OVAExplicativo";
@@ -28,13 +25,10 @@ import CINCEL from "../ova-explicativo/data/cincel";
 import ESPEJO from "../ova-explicativo/data/espejo";
 import CRISOL from "../ova-explicativo/data/crisol";
 import CAJA from "../ova-explicativo/data/caja";
-import LUPA_PRUEBA from "../ova-explicativo/data/lupa-prueba";
-import LUPA from "../ova-explicativo/data/lupa";
 import ESTUDIO from "../ova-explicativo/data/estudio";
 import ARTIFACTS from "../ova-explicativo/data/artifacts";
 import DELEGACION from "../ova-explicativo/data/delegacion";
 import PRIMER_PEDIDO from "../ova-explicativo/data/primer-pedido";
-import GROUNDING from "../ova-explicativo/data/grounding";
 
 // Reintenta la carga del chunk ante fallos transitorios (reinicio del dev
 // server, re-optimización de deps o chunk obsoleto tras un deploy). Sin esto,
@@ -51,13 +45,7 @@ const lazyWithRetry = (importFn, retries = 2) =>
     return attempt(retries);
   });
 
-const OVAEcosystemGuide = lazyWithRetry(
-  () => import("../OVAEcosystemGuide.jsx"),
-);
-const OVABuildGPT = lazyWithRetry(() => import("../OVABuildGPT"));
 const OVAEtica = lazyWithRetry(() => import("../OVAEtica.jsx"));
-const OVANotebookLab = lazyWithRetry(() => import("../OVANotebookLab.jsx"));
-const OVARiskSimulator = lazyWithRetry(() => import("../OVARiskSimulator.jsx"));
 const OVAEthicalDilemmas = lazyWithRetry(
   () => import("../OVAEthicalDilemmas.jsx"),
 );
@@ -72,12 +60,12 @@ const OVAAutomationFlows = lazyWithRetry(
 const OVADocumentMastery = lazyWithRetry(
   () => import("../OVADocumentMastery.jsx"),
 );
-const OVAGeminiDeepResearch = lazyWithRetry(
-  () => import("../OVAGeminiDeepResearch.jsx"),
-);
 const OVANotebookPodcastGuide = lazyWithRetry(
   () => import("../OVANotebookPodcastGuide.jsx"),
 );
+// Componentes originales de Gemini (curador: conservar y añadir glosario).
+const OvaEdutechlife = lazyWithRetry(() => import("../OvaEdutechlife.jsx"));
+const OVAMultimodalLab = lazyWithRetry(() => import("../OVAMultimodalLab.jsx"));
 
 // Lotes 1 y 2 de OVA explicativos: cada uno con su identidad visual (paleta, fondo e icono).
 const OVAProyectos = makeOVAExplicativo("gpts-ova-1", PROYECTOS, {
@@ -135,22 +123,6 @@ const OVACaja = makeOVAExplicativo("workflow-ova-herramientas", CAJA, {
   bg: "#fff7ed",
   heroIcon: Wrench,
 });
-const OVALupaPrueba = makeOVAExplicativo(
-  "gemini-multimodal-ova-1",
-  LUPA_PRUEBA,
-  {
-    accent: "#1e40af",
-    accent2: "#a21caf",
-    bg: "#f0f4ff",
-    heroIcon: Microscope,
-  },
-);
-const OVALupa = makeOVAExplicativo("workspace-ova-1", LUPA, {
-  accent: "#0891b2",
-  accent2: "#22c55e",
-  bg: "#ecfeff",
-  heroIcon: Eye,
-});
 const OVAEstudio = makeOVAExplicativo("notebook-audio-ova-1", ESTUDIO, {
   accent: "#be185d",
   accent2: "#facc15",
@@ -183,19 +155,12 @@ const OVAPrimerPedido = makeOVAExplicativo(
     heroIcon: Send,
   },
 );
-const OVAGrounding = makeOVAExplicativo("grounding-ova-1", GROUNDING, {
-  accent: "#be123c",
-  accent2: "#f59e0b",
-  bg: "#fff1f2",
-  heroIcon: BadgeCheck,
-});
 
 export const OVA_COMPONENTS = {
   "workflow-ova-herramientas": OVACaja,
-  "workspace-ova-1": OVALupa,
+  "workspace-ova-1": OvaEdutechlife,
   "gemini-deep-research-ova-1": OVAArchivo,
-  "gemini-multimodal-ova-1": OVALupaPrueba,
-  "grounding-ova-1": OVAGrounding,
+  "gemini-multimodal-ova-1": OVAMultimodalLab,
   "claude-first-request-ova-1": OVAPrimerPedido,
   "gpts-ova-1": OVAProyectos,
   "chatgpt-ova-ecosystem": OVAPlano,

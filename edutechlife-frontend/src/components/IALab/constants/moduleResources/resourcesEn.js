@@ -446,18 +446,6 @@ const RESOURCES_EN = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-      {
-        id: "grounding-ova-1",
-        type: "ova_interactive",
-        title: "The Evidence Anchor",
-        description:
-          "What grounding is, why a citation does not prove something is true, and how to open the source to check it. Includes practice and assessment.",
-        estimatedTime: "15 minutes",
-        difficulty: "Intermediate",
-        interactiveElements: 4,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
     ],
   },
   "Deep Research: The Forensic Toolkit": {

@@ -457,7 +457,7 @@ const CONTENT_PT = {
         {
           title: "Grounding: Quando a Evidência Toca o Chão",
           icon: "fa-layer-group",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Distinguir uma resposta com fontes de uma que só parece boa, e abrir as fontes para conferir.",

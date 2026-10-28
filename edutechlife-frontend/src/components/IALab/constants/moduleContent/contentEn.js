@@ -456,7 +456,7 @@ const CONTENT_EN = {
         {
           title: "Grounding: When Evidence Touches the Real World",
           icon: "fa-layer-group",
-          resources: 4,
+          resources: 3,
           duration: "20 min",
           outcome:
             "Tell an answer with sources from one that only sounds good, and open the sources to check it.",

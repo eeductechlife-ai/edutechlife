@@ -448,18 +448,6 @@ const RESOURCES_PT = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-      {
-        id: "grounding-ova-1",
-        type: "ova_interactive",
-        title: "A Âncora de Evidência",
-        description:
-          "O que é o grounding, por que uma citação não prova que algo é verdade e como abrir a fonte para conferir. Inclui prática e avaliação.",
-        estimatedTime: "15 minutos",
-        difficulty: "Intermediário",
-        interactiveElements: 4,
-        thumbnailType: "premium",
-        fullscreen: true,
-      },
     ],
   },
   "Deep Research: A Caixa de Ferramentas Forenses": {

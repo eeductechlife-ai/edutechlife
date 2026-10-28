@@ -460,24 +460,6 @@ export const OVA_REGISTRY = [
     principle: "Criterio",
   },
   {
-    code: "ILAB-M3-OVA5",
-    module: 3,
-    status: "active",
-    resourceId: "grounding-ova-1",
-    component: "OVAGrounding",
-    name: {
-      es: "El Ancla de Evidencia",
-      en: "The Evidence Anchor",
-      pt: "A Âncora de Evidência",
-    },
-    descriptor: {
-      es: "Grounding: comprobar lo que dice la IA",
-      en: "Grounding: checking what the AI says",
-      pt: "Grounding: conferir o que a IA diz",
-    },
-    principle: "Evidencia",
-  },
-  {
     code: "ILAB-M3-OVA4",
     module: 3,
     status: "active",
