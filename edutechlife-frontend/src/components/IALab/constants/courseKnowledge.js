@@ -120,7 +120,7 @@ const COURSE_KNOWLEDGE = [
           "La fachada es lo que el mundo ve — pero detrás hay una estructura compleja que la sostiene. Aprende a construir GPTs personalizados con acciones que se conectan al mundo real a través de APIs. Tu obra maestra de arquitectura digital, lista para interactuar con cualquier sistema externo.",
         difficulty: "Avanzado",
         learningObjectives: [
-          "Crear GPTs personalizados como módulos de construcción reutilizables",
+          "Construir Proyectos con instrucciones y archivos como módulos reutilizables",
           "Configurar acciones Function Calling para conectar con APIs externas",
           "Compartir tus creaciones y aprender de la comunidad de arquitectos digitales",
         ],

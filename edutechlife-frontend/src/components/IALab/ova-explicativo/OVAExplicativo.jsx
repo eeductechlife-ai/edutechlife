@@ -14,6 +14,8 @@ import { useTranslation } from "../../../i18n/I18nProvider";
 import { usePersistedOvaState } from "../../../hooks/IALab/usePersistedOvaState";
 import { UI, LETTERS } from "./ovaExplicativoTextos";
 import { makeBtn } from "./ovaExplicativoBoton";
+import GlossaryPanel from "../ova/GlossaryPanel";
+import { GLOSARIO_TITULO } from "../ova/glosarios";
 
 // OVA explicativo con la identidad visual de cada OVA (tema por OVA).
 // El contenido llega por idioma desde un archivo de datos; la estructura es común.
@@ -40,6 +42,9 @@ export function makeOVAExplicativo(ovaId, DATA, THEME) {
     const ui = UI[lang];
     const d = DATA[lang] || DATA.es;
     const sections = d.sections;
+    const glosario = sections
+      .flatMap((s) => s.terms || [])
+      .filter((x, i, all) => all.findIndex((y) => y.term === x.term) === i);
     const Hero = T.heroIcon;
 
     const [phase, setPhase] = usePersistedOvaState(ovaId, "phase", "intro");
@@ -319,6 +324,11 @@ export function makeOVAExplicativo(ovaId, DATA, THEME) {
               </div>
             ))}
           </div>
+          {glosario.length > 0 && (
+            <div className="mt-8">
+              <GlossaryPanel title={GLOSARIO_TITULO[lang]} terms={glosario} />
+            </div>
+          )}
           <div className="mt-10 flex flex-wrap justify-between gap-3">
             <Btn onClick={() => goSection(sections.length - 1)}>
               <ArrowLeft size={18} /> {ui.prev}
