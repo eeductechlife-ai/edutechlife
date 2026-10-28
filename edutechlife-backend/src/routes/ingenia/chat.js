@@ -339,13 +339,17 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
       .select('auth_id')
       .eq('id', bodyStudentId)
       .maybeSingle();
-    const isOwner = studentRow?.auth_id === req.userId;
+    if (!studentRow?.auth_id) return res.status(403).json({ error: 'Acceso no autorizado' });
+    const isOwner = studentRow.auth_id === req.userId;
     if (!isOwner) {
+      // parent_student_links (migración 023) enlaza auth uids: student_user_id
+      // es students.auth_id, no students.id.
       const { data: parentLink } = await supabase
         .from('parent_student_links')
-        .select('id')
-        .eq('student_id', bodyStudentId)
+        .select('parent_user_id')
         .eq('parent_user_id', req.userId)
+        .eq('student_user_id', studentRow.auth_id)
+        .eq('is_active', true)
         .maybeSingle();
       if (!parentLink) return res.status(403).json({ error: 'Acceso no autorizado' });
     }
