@@ -108,7 +108,14 @@ export default defineConfig({
         skipWaiting: true,
         // No sirvas index.html cuando se pide un asset JS/CSS que no existe:
         // así el fallo de import se detecta y no genera error de MIME "text/html"
-        navigateFallbackDenylist: [/^\/assets\//, /\.[a-z0-9]+\.(js|css)$/i],
+        navigateFallbackDenylist: [
+          /^\/assets\//,
+          /^\/ialab-resources\//,
+          /^\/videos\//,
+          /\.[a-z0-9]+\.(js|css)$/i,
+          // Archivos estáticos (PDF, video, imágenes): el SW no debe responder con la SPA.
+          /\.(pdf|mp4|webm|vtt|srt|jpg|jpeg|png|gif|webp|svg|json|xml|txt|csv|zip)$/i,
+        ],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
