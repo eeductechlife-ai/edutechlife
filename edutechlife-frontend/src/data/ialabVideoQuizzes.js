@@ -108,37 +108,37 @@ const ES = {
   ],
   "gemini-video-1": [
     {
-      q: "¿Qué significa 'multimodal' en Gemini?",
+      q: "¿Qué significa que Gemini sea multimodal?",
       options: [
-        "Que solo procesa texto",
-        "Entiende varios formatos",
-        "Que funciona sin internet",
+        "Que solo lee texto y lo hace rápido",
+        "Que lee texto, imágenes, audio y video a la vez",
+        "Que solo funciona con documentos de Google",
       ],
       correct: 1,
       feedback:
-        "Multimodal = trabaja con varios tipos de datos a la vez (texto, imagen, audio, video).",
+        "Multimodal quiere decir que procesa varios tipos de material en una misma conversación.",
     },
     {
-      q: "¿Cómo se conecta Gemini con el trabajo diario?",
+      q: "¿Qué le pides a Gemini para comprobar un dato de una imagen?",
       options: [
-        "Solo con Google Chrome instalado instalado",
-        "Integrado en Docs y Sheets",
-        "No tiene integración",
+        "Que confirme que tiene razón",
+        "El lugar exacto donde aparece el dato",
+        "Que la haga más bonita",
       ],
       correct: 1,
       feedback:
-        "Gemini se integra nativamente en las apps de Google Workspace.",
+        "Pedir el lugar del dato te permite abrirlo y verificarlo en la evidencia.",
     },
     {
-      q: "¿Para qué sirve Deep Research en Gemini?",
+      q: "Gemini responde algo muy seguro sobre una imagen borrosa. ¿Qué haces?",
       options: [
-        "Buscar datos actuales",
-        "Inventar datos verosímiles",
-        "Solo traducir textos",
+        "La acepto porque suena segura",
+        "Pido que diga qué no se puede leer",
+        "La comparto de inmediato",
       ],
-      correct: 0,
+      correct: 1,
       feedback:
-        "Deep Research busca, cruza fuentes y entrega informes con citas verificables.",
+        "Una respuesta segura sobre algo borroso es una señal de alerta: pide qué no se puede confirmar.",
     },
   ],
   "gemini-cases-video-1": [
@@ -638,34 +638,37 @@ const EN = {
   ],
   "gemini-video-1": [
     {
-      q: "What does 'multimodal' mean in Gemini?",
+      q: "What does it mean that Gemini is multimodal?",
       options: [
-        "It only processes text",
-        "It reads text and images",
-        "It works without internet",
+        "It only reads text, and does it fast",
+        "It reads text, images, audio and video at once",
+        "It only works with Google documents",
       ],
       correct: 1,
-      feedback: "Multimodal = works with several data types at once.",
+      feedback:
+        "Multimodal means it processes several kinds of material in the same conversation.",
     },
     {
-      q: "How does Gemini connect to daily work?",
+      q: "What do you ask Gemini to check a figure in an image?",
       options: [
-        "Only with Google Chrome installed",
-        "Integrated into Docs and Meet",
-        "It has no integration",
+        "That it confirms it is right",
+        "The exact place where the figure appears",
+        "That it makes the image prettier",
       ],
       correct: 1,
-      feedback: "Gemini is natively integrated into Google Workspace apps.",
+      feedback:
+        "Asking where the figure appears lets you open it and verify it in the evidence.",
     },
     {
-      q: "What is Deep Research in Gemini for?",
+      q: "Gemini gives a very confident answer about a blurry image. What do you do?",
       options: [
-        "Real-time search, cited",
-        "Inventing plausible data",
-        "Only translating texts",
+        "I accept it because it sounds confident",
+        "I ask it to say what cannot be read",
+        "I share it right away",
       ],
-      correct: 0,
-      feedback: "Deep Research searches, cross-references and cites sources.",
+      correct: 1,
+      feedback:
+        "A confident answer about something blurry is a warning sign: ask what cannot be confirmed.",
     },
   ],
   "gemini-cases-video-1": [
@@ -1145,34 +1148,37 @@ const PT = {
   ],
   "gemini-video-1": [
     {
-      q: "O que significa 'multimodal' no Gemini?",
+      q: "O que significa o Gemini ser multimodal?",
       options: [
-        "Só processa texto",
-        "Lê texto e imagens",
-        "Funciona sem internet",
+        "Que só lê texto e faz isso rápido",
+        "Que lê texto, imagens, áudio e vídeo ao mesmo tempo",
+        "Que só funciona com documentos do Google",
       ],
       correct: 1,
-      feedback: "Multimodal = trabalha com vários tipos de dados.",
+      feedback:
+        "Multimodal quer dizer que ele processa vários tipos de material na mesma conversa.",
     },
     {
-      q: "Como o Gemini se conecta ao trabalho diário?",
+      q: "O que você pede ao Gemini para conferir um dado de uma imagem?",
       options: [
-        "Só com o Google Chrome",
-        "Integrado ao Docs e Meet",
-        "Não tem nenhuma integração",
+        "Que confirme que tem razão",
+        "O lugar exato onde o dado aparece",
+        "Que deixe a imagem mais bonita",
       ],
       correct: 1,
-      feedback: "Integra-se nativamente ao Google Workspace.",
+      feedback:
+        "Pedir o lugar do dado permite abri-lo e conferi-lo na evidência.",
     },
     {
-      q: "Para que serve o Deep Research no Gemini?",
+      q: "O Gemini dá uma resposta muito segura sobre uma imagem borrada. O que você faz?",
       options: [
-        "Buscar ao vivo com fontes",
-        "Inventar dados verossímeis",
-        "Apenas traduzir textos",
+        "Aceito, porque parece segura",
+        "Peço que diga o que não se consegue ler",
+        "Compartilho na hora",
       ],
-      correct: 0,
-      feedback: "Deep Research busca, cruza e cita fontes.",
+      correct: 1,
+      feedback:
+        "Uma resposta segura sobre algo borrado é um sinal de alerta: peça o que não pode ser confirmado.",
     },
   ],
   "gemini-cases-video-1": [

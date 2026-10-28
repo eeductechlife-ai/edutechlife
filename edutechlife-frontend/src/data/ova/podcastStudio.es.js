@@ -136,7 +136,10 @@ export const FORMATS = {
 export const CHECKLIST_ITEMS = [
   { id: "select", label: "Seleccioné y organicé mis mejores fuentes" },
   { id: "create", label: "Creé un notebook nuevo en Gemini Notebook" },
-  { id: "upload", label: "Subí todas mis fuentes al notebook" },
+  {
+    id: "upload",
+    label: "Elegí pocas fuentes del mismo tema, con autor y fecha",
+  },
   { id: "generate", label: "Inicié la generación del Audio Overview" },
   { id: "listen", label: "Escuché el resultado completo" },
   { id: "notes", label: "Tomé notas de los puntos clave" },

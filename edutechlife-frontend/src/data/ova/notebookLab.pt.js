@@ -212,12 +212,12 @@ export const questionsData = [
     options: [
       "Apenas 1 fonte muito longa por vez.",
       "Até 5 fontes pequenas.",
-      "Fontes ilimitadas (tudo o que você tem no computador).",
+      "Depende da sua conta: confira o limite atual e envie poucas fontes do mesmo tema.",
       "Enviar todas as fontes sem escolher, qualquer que seja o tema.",
     ],
-    correct: 3,
+    correct: 2,
     explanation:
       "Correto. O melhor são poucas fontes, do mesmo tema, com autor e data. O limite de fontes depende da sua conta: confira lá.",
-    hint: "Não é infinito, mas é um número grande o suficiente para montar uma tese completa (meia centena).",
+    hint: "Confira o limite de fontes na sua conta antes de enviar.",
   },
 ];

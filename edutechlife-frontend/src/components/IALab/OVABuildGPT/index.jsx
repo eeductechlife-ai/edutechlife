@@ -5,18 +5,20 @@ import { GraduationCap, Star } from "lucide-react";
 import { OVAIntro, OVAMaxBar } from "../shared";
 
 import IntroScreen from "./screens/IntroScreen";
-import ModuleSlack from "./screens/ModuleSlack";
-import ModuleGoogle from "./screens/ModuleGoogle";
-import ModuleMakeZapier from "./screens/ModuleMakeZapier";
+import ModuleProyecto from "./screens/ModuleProyecto";
+import ModuleInstrucciones from "./screens/ModuleInstrucciones";
+import ModuleComparativa from "./screens/ModuleComparativa";
+import ModulePrueba from "./screens/ModulePrueba";
 import ActivityBuilder from "./screens/ActivityBuilder";
 import QuizScreen from "./screens/QuizScreen";
 import CertificateScreen from "./screens/CertificateScreen";
 
 const screens = [
   IntroScreen,
-  ModuleSlack,
-  ModuleGoogle,
-  ModuleMakeZapier,
+  ModuleProyecto,
+  ModuleInstrucciones,
+  ModuleComparativa,
+  ModulePrueba,
   ActivityBuilder,
   QuizScreen,
   CertificateScreen,
@@ -44,12 +46,13 @@ export default function OVABuildGPT({ onComplete }) {
   };
 
   const getMaxText = () => {
+    // Un texto por pantalla: 0 intro, 1 Proyecto, 2 Instrucciones, 3 Comparativa, 4 Prueba, 5 Actividad, 6 Evaluación, 7 Certificado.
     const screenTexts = [
-      "",
       t("ova.buildgpt.intro_text"),
       t("ova.buildgpt.max_screen_2"),
       t("ova.buildgpt.max_screen_3"),
       t("ova.buildgpt.max_screen_4"),
+      t("ova.buildgpt.max_screen_test"),
       t("ova.buildgpt.max_screen_5"),
       t("ova.buildgpt.quiz_title"),
       t("ova.buildgpt.cert_desc"),

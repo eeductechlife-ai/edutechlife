@@ -339,9 +339,9 @@ const RESOURCES_ES = {
       {
         id: "gpts-ova-1",
         type: "ova_interactive",
-        title: "La Fábrica de Asistentes",
+        title: "El Taller de Proyectos",
         description:
-          "Manos a la obra: construye un GPT desde cero con ejercicios guiados y retroalimentación en cada paso. Como el arquitecto que supervisa cada detalle de su creación.",
+          "Manos a la obra: construye un Proyecto con instrucciones y archivos, pruébalo con un caso real y decide cuándo conviene un agente o un plugin. Como el arquitecto que supervisa cada detalle antes de entregar la obra.",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 8,
@@ -366,13 +366,12 @@ const RESOURCES_ES = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Gemini: Curso de Introducción Acelerado",
-        url: "https://www.youtube.com/embed/Y5-5dI3Iero",
-        duration: "7:34",
-        thumbnail: "https://img.youtube.com/vi/Y5-5dI3Iero/maxresdefault.jpg",
-        provider: "youtube",
+        title:
+          "Gemini multimodal: tu lupa para imágenes, documentos, audio y video",
+        url: "/videos/curso/modulo3-multimodal-gemini.mp4",
+        duration: "1:59",
         description:
-          "Descubre el poder de tu nueva lupa: desde analizar imágenes como un forense hasta escribir código como un desarrollador. Todo lo que Gemini puede hacer por ti, explicado en 7 minutos.",
+          "Mira cómo Gemini lee imágenes, documentos, audio y video, y cómo pedirle la evidencia para comprobar cada dato. Narrado en español por MAX.",
       },
       {
         id: "gemini-guide-1",
@@ -519,7 +518,7 @@ const RESOURCES_ES = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "Guía completa de NotebookLM: exprímelo al 100% (2026)",
+        title: "Guía completa de NotebookLM: exprímelo al 100% (en 2026)",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
@@ -673,7 +672,7 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/0vZ_UVLhSQQ/maxresdefault.jpg",
         provider: "youtube",
         captionLang: "es",
-        title: "Introducción a Claude.ai",
+        title: "Primeros pasos con Claude.ai (video de Anthropic, en inglés)",
         description:
           "Video oficial de Anthropic, en inglés (título original: «Getting started with Claude.ai»): cómo empezar con Claude.ai y tener tu primera conversación útil. Se abre con subtítulos en español (traducción automática de YouTube).",
       },

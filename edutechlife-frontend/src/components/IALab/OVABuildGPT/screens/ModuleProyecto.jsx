@@ -4,7 +4,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import { Bot, MessageSquare, CheckCircle, Zap, ArrowRight } from "lucide-react";
 import { Button, Card } from "../shared";
 
-ModuleSlack.propTypes = {
+ModuleProyecto.propTypes = {
   onNext: PropTypes.func,
   addXp: PropTypes.func,
 };
@@ -36,7 +36,7 @@ const SIM = {
   },
 };
 
-export default function ModuleSlack({ onNext, addXp }) {
+export default function ModuleProyecto({ onNext, addXp }) {
   const { t, locale } = useTranslation();
   const sim = SIM[locale] || SIM.es;
   const [messages, setMessages] = useState([

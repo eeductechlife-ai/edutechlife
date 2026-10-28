@@ -339,9 +339,9 @@ const RESOURCES_PT = {
       {
         id: "gpts-ova-1",
         type: "ova_interactive",
-        title: "A Fábrica de Assistentes",
+        title: "A Oficina de Projetos",
         description:
-          "Mãos à obra: construa um GPT do zero com exercícios guiados e feedback em cada etapa. Como o arquiteto que supervisiona cada detalhe de sua criação.",
+          "Mãos à obra: construa um Projeto com instruções e arquivos, teste-o com um caso real e decida quando um agente ou um plugin cabe. Como o arquiteto que supervisiona cada detalhe de sua criação.",
         estimatedTime: "25 minutos",
         difficulty: "Avançado",
         interactiveElements: 8,
@@ -366,13 +366,12 @@ const RESOURCES_PT = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Gemini: Curso de Introdução Acelerado",
-        url: "https://www.youtube.com/embed/Y5-5dI3Iero",
-        duration: "7:34",
-        thumbnail: "https://img.youtube.com/vi/Y5-5dI3Iero/maxresdefault.jpg",
-        provider: "youtube",
+        title:
+          "Gemini multimodal: sua lupa para imagens, documentos, áudio e vídeo",
+        url: "/videos/curso/modulo3-multimodal-gemini.mp4",
+        duration: "1:59",
         description:
-          "Descubra o poder da sua nova lupa: desde analisar imagens como um perito forense até escrever código como um desenvolvedor. Tudo o que o Gemini pode fazer por você, explicado em 7 minutos.",
+          "Veja como o Gemini lê imagens, documentos, áudio e vídeo, e como pedir evidência para conferir cada dado. Narrado em espanhol pelo MAX.",
       },
       {
         id: "gemini-guide-1",
@@ -674,7 +673,8 @@ const RESOURCES_PT = {
         thumbnail: "https://img.youtube.com/vi/0vZ_UVLhSQQ/maxresdefault.jpg",
         provider: "youtube",
         captionLang: "pt",
-        title: "Introdução ao Claude.ai (em espanhol)",
+        title:
+          "Primeiros passos com o Claude.ai (vídeo da Anthropic, em inglês) (em espanhol)",
         description:
           "Vídeo oficial da Anthropic, em inglês (título original: «Getting started with Claude.ai»): como começar com o Claude.ai e ter a sua primeira conversa útil. Abre com legendas em português (tradução automática do YouTube).",
       },

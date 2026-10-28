@@ -287,11 +287,12 @@ export const OVA_CATALOG = [
   },
   {
     id: "gpts-ova-1",
-    title: "La Fábrica de Asistentes",
+    title: "El Taller de Proyectos",
     module: 2,
     icon: "fa-robot",
     duration: "25 min",
-    description: "Construye tu GPT personalizado.",
+    description:
+      "Construye un Proyecto, pruébalo y decide cuándo conviene un agente o un plugin.",
     component: "OVABuildGPT",
   },
   {

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Button, Card } from "../shared";
 
-ModuleGoogle.propTypes = {
+ModuleInstrucciones.propTypes = {
   onNext: PropTypes.func,
   addXp: PropTypes.func,
 };
@@ -37,7 +37,7 @@ const TEXTS = {
   },
 };
 
-export default function ModuleGoogle({ onNext, addXp }) {
+export default function ModuleInstrucciones({ onNext, addXp }) {
   const { t, locale } = useTranslation();
   const txt = TEXTS[locale] || TEXTS.es;
   const [emailText, setEmailText] = useState(txt.weak);

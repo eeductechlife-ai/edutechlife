@@ -13,7 +13,7 @@ export const furtherReading = [
   },
   {
     title: "AI-Powered Research Tools Comparison",
-    url: "https://www.edutechlife.com/blog/ai-research-tools",
+    url: "https://www.edutechlife.co/blog/ai-research-tools",
     description: "Comparison of AI research tools.",
   },
 ];

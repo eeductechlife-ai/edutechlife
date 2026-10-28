@@ -212,12 +212,12 @@ export const questionsData = [
     options: [
       "Only 1 very long source at a time.",
       "Up to 5 small sources.",
-      "Unlimited sources (everything you have on your computer).",
+      "It depends on your account: check the current limit and upload few sources on the same topic.",
       "Upload all your sources without choosing, whatever the topic.",
     ],
-    correct: 3,
+    correct: 2,
     explanation:
       "Correct. Few sources, on the same topic, with author and date work best. The source limit depends on your account: check it there.",
-    hint: "It's not infinite, but it's a large enough number to build a complete thesis (half a hundred).",
+    hint: "Check the source limit in your account before uploading.",
   },
 ];

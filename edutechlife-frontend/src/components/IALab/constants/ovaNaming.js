@@ -208,9 +208,9 @@ export const OVA_REGISTRY = [
     resourceId: "gpts-ova-1",
     component: "OVABuildGPT",
     name: {
-      es: "La Fábrica de Asistentes",
-      en: "The Assistant Factory",
-      pt: "A Fábrica de Assistentes",
+      es: "El Taller de Proyectos",
+      en: "The Project Workshop",
+      pt: "A Oficina de Projetos",
     },
     descriptor: {
       es: "Construye tu GPT",

@@ -7,12 +7,12 @@ export const learningObjectives = [
 
 export const furtherReading = [
   {
-    title: "Gemini Notebook Guide — Google",
+    title: "Guía de Gemini Notebook — Google",
     url: "https://notebooklm.google.com/",
     description: "Plataforma oficial de Gemini Notebook de Google.",
   },
   {
-    title: "How to Use Gemini Notebook for Research",
+    title: "Cómo usar Gemini Notebook para investigar",
     url: "https://blog.google/technology/ai/notebooklm/",
     description: "Guía oficial de Google sobre cómo usar Gemini Notebook.",
   },
@@ -212,12 +212,12 @@ export const questionsData = [
     options: [
       "Solo 1 fuente muy larga a la vez.",
       "Hasta 5 fuentes pequeñas.",
-      "Fuentes ilimitadas (todo lo que tengas en tu computadora).",
+      "Depende de tu cuenta: revisa el límite vigente y sube pocas fuentes del mismo tema.",
       "Subir todas tus fuentes sin elegir, sin importar el tema.",
     ],
-    correct: 3,
+    correct: 2,
     explanation:
       "Correcto. Conviene pocas fuentes, del mismo tema y con autor y fecha. El límite de fuentes depende de tu cuenta: revísalo ahí.",
-    hint: "No es infinito, pero es un número lo suficientemente grande como para armar una tesis completa (medio centenar).",
+    hint: "Revisa el límite en tu cuenta antes de subir fuentes.",
   },
 ];
