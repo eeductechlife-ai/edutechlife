@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { cn } from "../forum/forumDesignSystem";
-import { speakTextConversational, stopSpeech } from "../../utils/speech";
+import { VoiceReader } from "./IALabInteractionAdvisorParts";
 
 const toolRules = [
   {
@@ -298,32 +298,6 @@ const getSuggestions = (t) => [
     text: "Necesito automatizar el envío de correos de bienvenida cuando un usuario se registra",
   },
 ];
-
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const { t: tInner } = useTranslation();
-  const speak = () => {
-    if (isPlaying) {
-      stopSpeech();
-      setIsPlaying(false);
-      return;
-    }
-    speakTextConversational(text, "max", () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button
-      onClick={speak}
-      className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${isPlaying ? "bg-red-100 text-red-600 hover:bg-red-200" : "bg-[#E0F7FA] text-[var(--theme-emphasis)] hover:bg-[#B2EBF2]"}`}
-      title={tInner("ialab.interaction_advisor.tool_aria")}
-    >
-      <Icon name={isPlaying ? "fa-stop" : "fa-volume-up"} className="w-3 h-3" />
-      {isPlaying
-        ? tInner("ialab.interaction_advisor.stop")
-        : tInner("ialab.interaction_advisor.listen")}
-    </button>
-  );
-};
 
 const findRecommendation = (text) => {
   if (!text || text.length < 3) return null;

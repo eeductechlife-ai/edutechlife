@@ -1,17 +1,4 @@
-/**
- * TopicChatThread — Renderiza un tema del módulo como un hilo de ChatGPT.
- * Burbuja del usuario (derecha) + respuesta del asistente (izquierda)
- * con recursos clicables que abren ResourceViewerModal.
- */
-import {
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -24,8 +11,7 @@ import { useIALabStore } from "../../../store/ialabStore";
 import { useContentSequence } from "../../../hooks/IALab/useContentSequence";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { Icon } from "../../../utils/iconMapping.jsx";
-
-const ResourceViewerModal = lazy(() => import("../ResourceViewerModal"));
+import { ResourceViewerModal } from "./TopicChatThreadParts";
 
 const RESOURCE_ICON = {
   video: "fa-play",
