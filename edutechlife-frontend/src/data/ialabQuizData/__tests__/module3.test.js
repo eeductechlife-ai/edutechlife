@@ -26,9 +26,10 @@ describe("MODULE_3 (examen / mi reto)", () => {
       const others = q.options.filter((o) => o.id !== q.correctAnswer);
       const shortest = Math.min(...others.map((o) => words(o.label)));
       const correctWords = words(correct.label);
-      expect(correctWords, `longitud correcta muy larga en ${q.id}`).toBeLessThanOrEqual(
-        shortest * 1.6 + 2,
-      );
+      expect(
+        correctWords,
+        `longitud correcta muy larga en ${q.id}`,
+      ).toBeLessThanOrEqual(shortest * 1.6 + 2);
     }
   });
 });

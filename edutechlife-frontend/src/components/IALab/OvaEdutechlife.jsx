@@ -8,6 +8,8 @@ import { OVALayout, OVAIntro } from "./shared";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 import OvaGeminiSlides from "./ova/OvaGeminiSlides";
 import OvaGeminiQuiz from "./ova/OvaGeminiQuiz";
+import GlossaryPanel from "./ova/GlossaryPanel";
+import { GLOSARIO_LUPA, GLOSARIO_TITULO } from "./ova/glosarios";
 import {
   GEMINI_SLIDE_TABS,
   SLIDE_ICONS,
@@ -122,12 +124,20 @@ const OvaEdutechlife = ({ onComplete }) => {
       >
         <div className="max-w-3xl mx-auto">
           {currentSlide < 4 ? (
-            <OvaGeminiSlides
-              currentSlide={currentSlide}
-              slideContent={slideContent}
-              slideDescs={slideDescs}
-              slideTitles={slideTitles}
-            />
+            <div className="space-y-6">
+              <OvaGeminiSlides
+                currentSlide={currentSlide}
+                slideContent={slideContent}
+                slideDescs={slideDescs}
+                slideTitles={slideTitles}
+              />
+              {currentSlide === 3 && (
+                <GlossaryPanel
+                  title={GLOSARIO_TITULO[lang]}
+                  terms={GLOSARIO_LUPA[lang]}
+                />
+              )}
+            </div>
           ) : (
             <OvaGeminiQuiz
               quiz={quiz}

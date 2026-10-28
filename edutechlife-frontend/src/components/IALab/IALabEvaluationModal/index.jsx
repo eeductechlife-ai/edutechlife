@@ -9,22 +9,6 @@ import SecurityWarningModal from "../SecurityWarningModal";
 import ScreenshotProtectionOverlay from "../ScreenshotProtectionOverlay";
 import useScreenshotProtection from "../../../hooks/IALab/useScreenshotProtection";
 import MaxChallengeIntro from "../challenges/challengeIntro/MaxChallengeIntro";
-import IALabEvaluationStep1 from "../IALabEvaluationStep1";
-import IALabEvaluationStep2 from "../IALabEvaluationStep2";
-import IALabEvaluationStep3 from "../IALabEvaluationStep3";
-import ChatGPTStep1 from "../challenges/module2/ChatGPTStep1";
-import ChatGPTStep2 from "../challenges/module2/ChatGPTStep2";
-import ChatGPTStep3 from "../challenges/module2/ChatGPTStep3";
-import GeminiStep1 from "../challenges/module3/GeminiStep1";
-import GeminiStep2 from "../challenges/module3/GeminiStep2";
-import GeminiStep3 from "../challenges/module3/GeminiStep3";
-import GeminiStep4 from "../challenges/module3/GeminiStep4";
-import NotebookStep1 from "../challenges/module4/NotebookStep1";
-import NotebookStep2 from "../challenges/module4/NotebookStep2";
-import NotebookStep3 from "../challenges/module4/NotebookStep3";
-import ClaudeStep1 from "../challenges/module5/ClaudeStep1";
-import ClaudeStep2 from "../challenges/module5/ClaudeStep2";
-import ClaudeStep3 from "../challenges/module5/ClaudeStep3";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { useEvaluationSecurity } from "./hooks/useEvaluationSecurity";
@@ -35,84 +19,12 @@ import {
   ErrorState,
   StepContent,
 } from "./components/EvaluationContent";
-
-const usePrefersReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mq.matches);
-    const handler = (e) => setPrefersReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-  return prefersReducedMotion;
-};
-
-const STEP_COMPONENTS = {
-  1: [IALabEvaluationStep1, IALabEvaluationStep2, IALabEvaluationStep3],
-  2: [ChatGPTStep1, ChatGPTStep2, ChatGPTStep3],
-  3: [GeminiStep1, GeminiStep2, GeminiStep3, GeminiStep4],
-  4: [NotebookStep1, NotebookStep2, NotebookStep3],
-  5: [ClaudeStep1, ClaudeStep2, ClaudeStep3],
-};
-
-const STEP_TITLE_KEYS = {
-  1: [
-    "ialab.evaluation.modal.step1_title",
-    "ialab.evaluation.modal.step2_title",
-    "ialab.evaluation.modal.step3_title",
-  ],
-  2: [
-    "ialab.challenge.m2.step1_title",
-    "ialab.challenge.m2.step2_title",
-    "ialab.challenge.m2.step3_title",
-  ],
-  3: [
-    "ialab.challenge.m3.step1_title",
-    "ialab.challenge.m3.step2_title",
-    "ialab.challenge.m3.step3_title",
-    "ialab.challenge.m3.step4_title",
-  ],
-  4: [
-    "ialab.challenge.m4.step1_title",
-    "ialab.challenge.m4.step2_title",
-    "ialab.challenge.m4.step3_title",
-  ],
-  5: [
-    "ialab.challenge.m5.step1_title",
-    "ialab.challenge.m5.step2_title",
-    "ialab.challenge.m5.step3_title",
-  ],
-};
-
-const STEP_DESC_KEYS = {
-  1: [
-    "ialab.evaluation.modal.step1_desc",
-    "ialab.evaluation.modal.step2_desc",
-    "ialab.evaluation.modal.step3_desc",
-  ],
-  2: [
-    "ialab.challenge.m2.step1_desc",
-    "ialab.challenge.m2.step2_desc",
-    "ialab.challenge.m2.step3_desc",
-  ],
-  3: [
-    "ialab.challenge.m3.step1_desc",
-    "ialab.challenge.m3.step2_desc",
-    "ialab.challenge.m3.step3_desc",
-    "ialab.challenge.m3.step4_desc",
-  ],
-  4: [
-    "ialab.challenge.m4.step1_desc",
-    "ialab.challenge.m4.step2_desc",
-    "ialab.challenge.m4.step3_desc",
-  ],
-  5: [
-    "ialab.challenge.m5.step1_desc",
-    "ialab.challenge.m5.step2_desc",
-    "ialab.challenge.m5.step3_desc",
-  ],
-};
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
+import {
+  STEP_COMPONENTS,
+  STEP_TITLE_KEYS,
+  STEP_DESC_KEYS,
+} from "./evaluationSteps";
 
 /**
  * IALabEvaluationModal — Modal multi-paso para evaluación de desafíos.

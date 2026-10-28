@@ -7,8 +7,6 @@ import { useIALabStore } from "../../../store/ialabStore";
 import { useNotification } from "../../../context/NotificationContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useFocusTrap from "../../../hooks/useFocusTrap";
-import { scopedKey } from "../../../utils/userScopedStorage";
-import { awardQuestionXp } from "../quizQuestionXp";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
 import SecurityWarningModal from "../SecurityWarningModal";
@@ -21,6 +19,8 @@ import RouletteSpin from "./components/RouletteSpin";
 import { NavigationBar } from "./components/NavigationBar";
 import { QuizResults } from "./components/QuizResults";
 import { SubmitConfirmDialog } from "./components/SubmitConfirmDialog";
+import { applyQuizSubmitResult } from "./applyQuizSubmitResult";
+import QuizIntroCard from "./QuizIntroCard";
 
 /**
  * IALabQuizModal — Modal de pantalla completa para realizar exámenes.
@@ -177,99 +177,16 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     const submitResult = await submitQuiz();
     setIsSubmitting(false);
 
-    // Registro silencioso de conceptos fallados en el sistema adaptativo (aditivo)
-    // Usa el topic de cada pregunta para agrupar errores por concepto pedagógico
-    try {
-      const stAdaptive = useIALabStore.getState();
-      if (
-        typeof stAdaptive.recordError === "function" &&
-        Array.isArray(quizQuestions)
-      ) {
-        quizQuestions.forEach((q) => {
-          const answered = quizAnswers?.[q.id];
-          if (answered && q.correctAnswer && answered !== q.correctAnswer) {
-            const concept = q.topic || `module-${activeMod}-q${q.id}`;
-            stAdaptive.recordError(concept, q.question?.slice(0, 120) || "");
-          }
-        });
-      }
-    } catch (e) {
-      /* silent — no debe interrumpir flujo del quiz */
-    }
-
-    // XP por cada respuesta correcta (una vez por pregunta y cuenta).
-    if (!practiceMode && Array.isArray(quizQuestions)) {
-      quizQuestions.forEach((q) => {
-        const answered = quizAnswers?.[q.id];
-        if (answered && answered === q.correctAnswer) {
-          awardQuestionXp(`exam:${activeMod}:${q.id}`);
-        }
-      });
-    }
-
-    if (!practiceMode && submitResult?.result) {
-      const { score, passed } = submitResult.result;
-      const st = useIALabStore.getState();
-      st.updateModuleActivity(activeMod, "exam", passed, score);
-      try {
-        // Clave POR CUENTA (antes sin scope).
-        const key = scopedKey("ialab_completed_exams");
-        const current = JSON.parse(
-          localStorage.getItem(key) ||
-            localStorage.getItem("ialab_completed_exams") ||
-            "{}",
-        );
-        current[activeMod] = score;
-        localStorage.setItem(key, JSON.stringify(current));
-      } catch (e) {
-        /* ignore */
-      }
-
-      if (markExamComplete) {
-        markExamComplete(activeMod, score).catch((err) => {
-          if (import.meta.env.DEV)
-            console.error("Error al sincronizar examen completado:", err);
-          createNotification({
-            type: "error",
-            title: t("ialab.quiz.sync_error_title"),
-            message: t("ialab.quiz.sync_error_msg"),
-            metadata: { moduleId: activeMod, score },
-          });
-        });
-      }
-
-      if (passed) {
-        const addXp = useIALabStore.getState().addXp;
-        if (addXp) addXp(score >= 90 ? 100 : 75);
-      }
-
-      window.dispatchEvent(
-        new CustomEvent("ialab:examCompleted", {
-          detail: { moduleId: activeMod, score, passed },
-        }),
-      );
-    }
-
-    if (!practiceMode && submitResult?.success && submitResult?.result) {
-      createNotification({
-        type: submitResult.result.passed ? "success" : "warning",
-        title: submitResult.result.passed
-          ? t("ialab.quiz.exam_passed_notif_title")
-          : t("ialab.quiz.exam_failed_notif_title"),
-        message: t("ialab.quiz.exam_notif_message", {
-          module: activeMod,
-          score: submitResult.result.score,
-          result: submitResult.result.passed
-            ? t("ialab.quiz.exam_passed_result")
-            : t("ialab.quiz.exam_failed_result"),
-        }),
-        metadata: {
-          moduleId: activeMod,
-          score: submitResult.result.score,
-          type: "exam",
-        },
-      });
-    }
+    applyQuizSubmitResult({
+      submitResult,
+      practiceMode,
+      quizQuestions,
+      quizAnswers,
+      activeMod,
+      markExamComplete,
+      createNotification,
+      t,
+    });
   }, [
     practiceMode,
     submitQuiz,
@@ -460,31 +377,11 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                   >
                     <div id="quiz-content" className="max-w-4xl mx-auto py-6">
                       {!started ? (
-                        <div
-                          data-testid="quiz-intro"
-                          className="mx-auto max-w-lg rounded-3xl border border-[var(--theme-emphasis)]/15 bg-white dark:bg-slate-800 p-8 text-center shadow-sm"
-                        >
-                          <h2 className="text-2xl font-extrabold text-[var(--theme-emphasis)]">
-                            {t("ialab.quiz.intro_title")}
-                          </h2>
-                          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                            {t("ialab.quiz.intro_desc", {
-                              total: TOTAL_QUESTIONS,
-                              minutes: Math.round(SUGGESTED_TIME_SECONDS / 60),
-                            })}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => setStarted(true)}
-                            className="mt-6 inline-flex items-center justify-center rounded-full px-8 py-3 font-semibold !text-white min-h-[44px]"
-                            style={{
-                              background:
-                                "linear-gradient(120deg, var(--theme-emphasis), var(--theme-primary))",
-                            }}
-                          >
-                            {t("ialab.quiz.intro_cta")}
-                          </button>
-                        </div>
+                        <QuizIntroCard
+                          totalQuestions={TOTAL_QUESTIONS}
+                          suggestedTimeSeconds={SUGGESTED_TIME_SECONDS}
+                          onStart={() => setStarted(true)}
+                        />
                       ) : currentQuestion !== revealedFor ? (
                         <RouletteSpin
                           total={QUESTION_BANK_SIZE}

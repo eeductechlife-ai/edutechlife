@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../i18n/I18nProvider";
+import GlossaryPanel from "./ova/GlossaryPanel";
+import { GLOSARIO_LUPA_PRUEBA, GLOSARIO_TITULO } from "./ova/glosarios";
 
 // Laboratorio multimodal (Módulo 3): elegir la forma correcta de trabajar cada tipo de material.
 // Aprueba con 4 de 6. Cada respuesta explica por qué, para que el aprendizaje no sea solo acertar.
@@ -285,6 +287,13 @@ export default function OVAMultimodalLab({ onComplete }) {
         </h2>
         <p className="mt-2 text-slate-600 dark:text-slate-300">{copy.intro}</p>
       </header>
+
+      {!finished && (
+        <GlossaryPanel
+          title={GLOSARIO_TITULO[lang]}
+          terms={GLOSARIO_LUPA_PRUEBA[lang]}
+        />
+      )}
 
       {!finished ? (
         <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">

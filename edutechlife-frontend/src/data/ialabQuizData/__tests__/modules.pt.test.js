@@ -42,9 +42,10 @@ describe("Exámenes PT (checkpoints) módulos 1-5", () => {
         const others = q.options.filter((o) => o.id !== q.correctAnswer);
         const shortest = Math.min(...others.map((o) => words(o.label)));
         const correctWords = words(correct.label);
-        expect(correctWords, `opção correta longa em ${q.id}`).toBeLessThanOrEqual(
-          shortest * 1.6 + 2,
-        );
+        expect(
+          correctWords,
+          `opção correta longa em ${q.id}`,
+        ).toBeLessThanOrEqual(shortest * 1.6 + 2);
       }
     }
   });

@@ -1,14 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useMemo,
-} from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import { supabase } from "../../../lib/supabase";
-import { API_BASE_URL } from "../../../config/api";
 import {
   useIALabProgressContext,
   useIALabUIContext,
@@ -20,9 +13,6 @@ import {
   prefetchTts,
 } from "../../../utils/speech";
 import { cleanTextForTTS } from "../../../utils/textCleaner";
-import { callDeepseekStream } from "../../../utils/api";
-import { readAuthIdentity } from "../../../hooks/useAuthIdentity";
-
 import SectionErrorBoundary from "../SectionErrorBoundary";
 import { useMaxVoice } from "./useMaxVoice";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -32,19 +22,8 @@ import MaxQuickActions from "./MaxQuickActions";
 // ENHANCED: Use improved conversation area with professional features
 import MaxEnhancedConversationArea from "./MaxEnhancedConversationArea";
 // FALLBACK: Keep original as emergency backup
-import MaxConversationArea from "./MaxConversationArea";
 import MaxChatInput from "./MaxChatInput";
-import {
-  buildMaxSystemPrompt,
-  generateFallbackResponse,
-  buildContextualWelcome,
-} from "./maxPrompts";
-import {
-  startSession,
-  endSession,
-  updateSession,
-} from "../../../services/maxMemory";
-import { MaxAcademicMemory } from "../../../services/maxAcademicMemory";
+import { generateFallbackResponse } from "./maxPrompts";
 import {
   useDebouncedInput,
   useResponseCache,
@@ -52,37 +31,22 @@ import {
 } from "./maxPerfOptimizations";
 import { useToast } from "./MaxUIEnhancements";
 import { createSpeechQueue } from "./maxSpeechQueue";
-import { buildMaxQuickActions } from "./quickActionsBuilder";
+import { MAX_MEMORY_KEY, splitIntoSentences } from "./IALabMaxPanelParts";
 import {
-  ALL_LESSONS,
-  ALL_LESSONS_EN,
-  ALL_LESSONS_PT,
-} from "../../../data/ialab";
-
-const MAX_MEMORY_KEY = "ialab_valerio_conversation";
-
-const LESSONS_BY_LOCALE = {
-  en: ALL_LESSONS_EN,
-  pt: ALL_LESSONS_PT,
-  es: ALL_LESSONS,
-};
-
-// Divide un texto en frases completas para hablarlas de una en una
-const splitIntoSentences = (text) => {
-  const sentences = [];
-  let pending = text;
-  while (true) {
-    const match = pending.match(/[.!?…](?:\s|$|[\n\r])/);
-    if (!match) break;
-    const endIdx = match.index + 1;
-    const sentence = pending.slice(0, endIdx).trim();
-    pending = pending.slice(endIdx + match[0].length);
-    if (sentence.length >= 5) sentences.push(sentence);
-  }
-  const rest = pending.trim();
-  if (rest.length > 3) sentences.push(rest);
-  return sentences;
-};
+  sanitizeStudentName,
+  loadSavedConversation,
+  takeCompleteSentences,
+  streamMaxResponse,
+  isCoarsePointer,
+} from "./maxPanelHelpers";
+import {
+  useMaxSystemPrompt,
+  useMaxLifecycle,
+  useMaxPersistence,
+  useKeyboardOffset,
+  useMaxQuickActions,
+  useMaxWelcome,
+} from "./useMaxPanelEffects";
 
 const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   const { t, locale } = useTranslation();
@@ -98,25 +62,11 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
 
   const [maxState, setMaxState] = useState("idle");
   const [message, setMessage] = useState("");
-  const [conversation, setConversation] = useState(() => {
-    try {
-      const saved = localStorage.getItem(MAX_MEMORY_KEY);
-      // Conversaciones guardadas antes del renombre usan type "valerio".
-      return saved
-        ? JSON.parse(saved).map((m) =>
-            m.type === "valerio" ? { ...m, type: "max" } : m,
-          )
-        : [];
-    } catch {
-      return [];
-    }
-  });
+  const [conversation, setConversation] = useState(loadSavedConversation);
   const [userInput, setUserInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [streamingMessage, setStreamingMessage] = useState("");
-  const [quickActions, setQuickActions] = useState([]);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [systemPrompt, setSystemPrompt] = useState("");
 
   // Performance optimizations (with fallbacks)
   const debouncedInput = useDebouncedInput(userInput, 300);
@@ -133,29 +83,15 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
 
   const welcomeSpokenRef = useRef(false);
   const abortRef = useRef(null);
-  const warmupDoneRef = useRef(false);
-  const warmupRef = useRef(null);
   const firstChunkRef = useRef(false);
   const pendingSentenceRef = useRef("");
   const streamDoneRef = useRef(false);
   const conversationFinalizedRef = useRef(false);
   const fullResponseRef = useRef("");
 
-  // Nombre para personalizar la conversación. Si el perfil no trae nombre y el
-  // valor es el marcador genérico, se prefiere no usar nombre antes que
-  // decirle "Usuario" al estudiante.
+  // Nombre para personalizar la conversación (sin marcadores genéricos).
   const rawStudentName = user?.firstName || user?.full_name || "";
-  const studentName = [
-    "usuario",
-    "user",
-    "estudiante",
-    "student",
-    "alumno",
-    "invitado",
-    "guest",
-  ].includes(rawStudentName.trim().toLowerCase())
-    ? ""
-    : rawStudentName.trim();
+  const studentName = sanitizeStudentName(rawStudentName);
   const currentModule = modules.find((m) => m.id === activeMod);
   const userLevel = completedModules.length;
   const lastVisitedLesson = useIALabStore((s) => s.lastVisitedLesson);
@@ -170,58 +106,18 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
 
   const voice = useMaxVoice(isOpen, setUserInput, locale);
 
-  // Build system prompt with academic personalization (async)
-  useEffect(() => {
-    let isMounted = true;
-
-    const buildPrompt = async () => {
-      try {
-        const userId = user?.id || readAuthIdentity().userId;
-        const prompt = await buildMaxSystemPrompt({
-          locale,
-          currentModule,
-          modules,
-          studentName,
-          userLevel,
-          completedModules,
-          t,
-          currentLesson,
-          supabaseClient,
-          userId,
-        });
-        if (isMounted) setSystemPrompt(prompt);
-      } catch (err) {
-        console.warn("[buildPrompt] Error:", err.message);
-        // Fallback to sync version if async fails
-        const prompt = await buildMaxSystemPrompt({
-          locale,
-          currentModule,
-          modules,
-          studentName,
-          userLevel,
-          completedModules,
-          t,
-          currentLesson,
-        });
-        if (isMounted) setSystemPrompt(prompt);
-      }
-    };
-
-    buildPrompt();
-    return () => {
-      isMounted = false;
-    };
-  }, [
+  const systemPrompt = useMaxSystemPrompt({
     locale,
-    currentModule?.id,
+    currentModule,
+    modules,
     studentName,
     userLevel,
-    completedModules?.length,
-    currentLesson?.lessonId,
-    supabaseClient,
-    user?.id,
+    completedModules,
     t,
-  ]);
+    currentLesson,
+    supabaseClient,
+    user,
+  });
 
   const finalizeMessage = useCallback((fullText) => {
     if (conversationFinalizedRef.current) return;
@@ -266,213 +162,29 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     }),
   );
 
-  useEffect(() => {
-    let warmupTimeoutId;
-    if (isOpen) {
-      startSession(activeMod);
-      if (!warmupDoneRef.current) {
-        warmupDoneRef.current = true;
-        const baseUrl = API_BASE_URL;
-        const controller = new AbortController();
-        warmupRef.current = controller;
-        warmupTimeoutId = setTimeout(() => controller.abort(), 12000);
-        fetch(`${baseUrl}/api/chat/stream`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(sessionStorage.getItem("auth_token")
-              ? {
-                  Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
-                }
-              : {}),
-          },
-          body: JSON.stringify({
-            messages: [{ role: "user", content: "ping" }],
-            temperature: 0.5,
-            maxTokens: 10,
-          }),
-          signal: controller.signal,
-        })
-          .then((r) => r.body?.cancel?.())
-          .catch(() => {});
-        fetch(`${baseUrl}/api/tts`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(sessionStorage.getItem("auth_token")
-              ? {
-                  Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
-                }
-              : {}),
-          },
-          body: JSON.stringify({
-            input: { text: "Hola" },
-            voice: { languageCode: "es-US", name: "es-US-Neural2-C" },
-            audioConfig: { audioEncoding: "MP3" },
-          }),
-          signal: controller.signal,
-        })
-          .then((r) => r.body?.cancel?.())
-          .catch(() => {});
-        if (activeMod) {
-          prefetchTts(t(`ialab.max.ova_intro_${activeMod}`), "max");
-        }
-        prefetchTts(t("ialab.max.system_instructions"), "sistema");
-      }
-    } else {
-      warmupDoneRef.current = false;
-      welcomeSpokenRef.current = false;
-      ttsQueueRef.current.reset();
-      pendingSentenceRef.current = "";
-      endSession(conversationRef.current);
-      stopSpeech();
-      setMaxState("idle");
-    }
-    return () => {
-      clearTimeout(warmupTimeoutId);
-      warmupRef.current?.abort();
-      ttsQueueRef.current.reset();
-      pendingSentenceRef.current = "";
-      // Si la respuesta ya se generó pero el audio no terminó, fijarla en la
-      // conversación para no perderla al cerrar el panel
-      if (streamDoneRef.current && fullResponseRef.current) {
-        finalizeMessage(fullResponseRef.current);
-      }
-      streamDoneRef.current = false;
-      endSession(conversationRef.current);
-      stopSpeech();
-    };
-  }, [isOpen, finalizeMessage]);
+  useMaxLifecycle({
+    isOpen,
+    activeMod,
+    t,
+    finalizeMessage,
+    setMaxState,
+    welcomeSpokenRef,
+    ttsQueueRef,
+    pendingSentenceRef,
+    streamDoneRef,
+    fullResponseRef,
+    conversationRef,
+  });
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const baseUrl = API_BASE_URL;
-    const interval = setInterval(() => {
-      fetch(`${baseUrl}/api/health`, {
-        method: "GET",
-        signal: AbortSignal.timeout(5000),
-      }).catch(() => {});
-    }, 180000);
-    return () => clearInterval(interval);
-  }, [isOpen]);
+  useMaxPersistence({ conversation, supabaseClient, user, currentModule });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        localStorage.setItem(MAX_MEMORY_KEY, JSON.stringify(conversation));
-      } catch {
-        /* ignore */
-      }
-      if (conversation.length > 0) {
-        updateSession({ messageCount: conversation.length });
-      }
-
-      // Record academic session to Supabase (non-blocking)
-      if (
-        conversation.length > 2 &&
-        supabaseClient &&
-        user?.id &&
-        currentModule?.id
-      ) {
-        recordAcademicSession().catch(() => {
-          /* silent fail - don't block UI */
-        });
-      }
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-      try {
-        localStorage.setItem(MAX_MEMORY_KEY, JSON.stringify(conversation));
-      } catch {
-        /* ignore */
-      }
-    };
-  }, [conversation, supabaseClient, user?.id, currentModule?.id]);
-
-  // Helper: Record academic session
-  const recordAcademicSession = useCallback(async () => {
-    try {
-      if (!supabaseClient || !user?.id || !currentModule?.id) return;
-
-      const academicMemory = new MaxAcademicMemory(supabaseClient, user.id);
-
-      // Extract topics from conversation
-      const userMessages = conversation
-        .filter((m) => m.type === "user")
-        .map((m) => m.content);
-
-      // Basic sentiment detection (could be enhanced)
-      const lastMessage =
-        conversation.length > 0
-          ? conversation[conversation.length - 1].content
-          : "";
-      let sentiment = "neutral";
-      if (lastMessage.toLowerCase().match(/confus|no entend|no entiend/))
-        sentiment = "confused";
-      if (lastMessage.toLowerCase().match(/gracias|excelent|perfecto/))
-        sentiment = "confident";
-
-      await academicMemory.recordSession({
-        moduleId: currentModule.id,
-        topicsCovered: extractTopicsFromMessages(userMessages),
-        questionsAsked: userMessages,
-        weakAreasIdentified: [],
-        progressMade: calculateProgress(),
-        sentiment,
-      });
-    } catch (err) {
-      console.warn("[recordAcademicSession] Error:", err.message);
-      // Silent fail - don't disrupt UX
-    }
-  }, [conversation, supabaseClient, user?.id, currentModule?.id]);
-
-  // Helper: Extract topics from messages
-  const extractTopicsFromMessages = (messages) => {
-    const topics = new Set();
-    const keywords = {
-      "prompt engineering": ["prompt", "instruction", "role"],
-      IA: ["ai", "ia", "inteligencia", "artificial"],
-      "text to speech": ["tts", "audio", "voice"],
-      chatgpt: ["chatgpt", "gpt", "openai"],
-      gemini: ["gemini", "google"],
-    };
-
-    messages.forEach((msg) => {
-      const lower = msg.toLowerCase();
-      Object.entries(keywords).forEach(([topic, kws]) => {
-        if (kws.some((kw) => lower.includes(kw))) {
-          topics.add(topic);
-        }
-      });
-    });
-
-    return Array.from(topics).slice(0, 5);
-  };
-
-  // Helper: Calculate progress (simple heuristic)
-  const calculateProgress = () => {
-    const userMessages = conversation.filter((m) => m.type === "user").length;
-    return Math.min(userMessages * 15, 95); // 15% per question, max 95%
-  };
-
-  useEffect(() => {
-    const lessons = currentModule
-      ? (LESSONS_BY_LOCALE[locale] || ALL_LESSONS)?.[currentModule.id] || []
-      : [];
-    const currentLessonData = currentLesson?.lessonId
-      ? lessons.find((l) => l.id === currentLesson.lessonId)
-      : null;
-    const lessonTitle = currentLessonData?.title || "";
-    const actions = buildMaxQuickActions({
-      locale,
-      currentModule,
-      lessonTitle,
-      userLevel,
-      t,
-    });
-    setQuickActions(actions);
-  }, [currentModule, userLevel, locale, currentLesson?.lessonId]);
+  const quickActions = useMaxQuickActions({
+    currentModule,
+    userLevel,
+    locale,
+    currentLesson,
+    t,
+  });
 
   useEffect(() => {
     if (isOpen && initialMessage) {
@@ -480,42 +192,19 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     }
   }, [isOpen, initialMessage]);
 
-  useEffect(() => {
-    if (isOpen && !welcomeSpokenRef.current) {
-      welcomeSpokenRef.current = true;
-      setMaxState("speaking");
-
-      const alreadyWelcomed = useIALabStore.getState().getMaxWelcomed();
-      if (!alreadyWelcomed) {
-        useIALabStore.getState().setMaxWelcomed();
-        const introGreeting = t("ialab.max.intro_greeting");
-        speakTextConversational(introGreeting, "max", {}, () =>
-          setMaxState("idle"),
-        );
-        const welcomeMessage = buildContextualWelcome({
-          locale,
-          studentName,
-          currentModule,
-          userLevel,
-          activeMod,
-        });
-        setMessage(welcomeMessage);
-        setConversation([
-          {
-            id: "welcome",
-            type: "max",
-            content: welcomeMessage,
-            timestamp: new Date().toISOString(),
-          },
-        ]);
-      } else {
-        const greeting = studentName
-          ? t("ialab.max.greeting_name", { name: studentName })
-          : t("ialab.max.greeting_anon");
-        speakTextConversational(greeting, "max", {}, () => setMaxState("idle"));
-      }
-    }
-  }, [isOpen]);
+  useMaxWelcome({
+    isOpen,
+    welcomeSpokenRef,
+    setMaxState,
+    setMessage,
+    setConversation,
+    t,
+    locale,
+    studentName,
+    currentModule,
+    userLevel,
+    activeMod,
+  });
 
   const processUserInput = useCallback(
     async (inputText) => {
@@ -563,59 +252,23 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
         fullResponseRef.current = "";
         let fullResponse = "";
 
-        let retries = 0;
-        const maxRetries = 1;
-
-        while (true) {
-          try {
-            await callDeepseekStream(
-              messages,
-              { temperature: 0.7, maxTokens: 500, signal: controller.signal },
-              false,
-              (chunk) => {
-                fullResponse += chunk;
-                fullResponseRef.current = fullResponse;
-                if (!firstChunkRef.current && chunk.trim()) {
-                  firstChunkRef.current = true;
-                }
-
-                // El texto NO se adelanta a la voz: solo se acumulan frases
-                // completas para que MAX las hable primero y el texto se
-                // revele en la burbuja cuando cada frase empieza a sonar.
-                pendingSentenceRef.current += chunk;
-                while (true) {
-                  const match = pendingSentenceRef.current.match(
-                    /[.!?…](?:\s|$|[\n\r])/,
-                  );
-                  if (!match) break;
-                  const endIdx = match.index + 1;
-                  const sentence = pendingSentenceRef.current
-                    .slice(0, endIdx)
-                    .trim();
-                  pendingSentenceRef.current = pendingSentenceRef.current.slice(
-                    endIdx + match[0].length,
-                  );
-                  if (sentence.length >= 5) {
-                    ttsQueueRef.current.push(sentence);
-                  }
-                }
-              },
-            );
-            break;
-          } catch (err) {
-            if (
-              retries < maxRetries &&
-              (err.name === "AbortError" || err.name === "TimeoutError")
-            ) {
-              retries++;
-              if (import.meta.env.DEV)
-                console.warn(`⚠️ Reintentando (${retries}/${maxRetries})...`);
-              await new Promise((r) => setTimeout(r, 2000));
-              continue;
-            }
-            throw err;
+        await streamMaxResponse(messages, controller.signal, (chunk) => {
+          fullResponse += chunk;
+          fullResponseRef.current = fullResponse;
+          if (!firstChunkRef.current && chunk.trim()) {
+            firstChunkRef.current = true;
           }
-        }
+
+          // El texto NO se adelanta a la voz: solo se acumulan frases
+          // completas para que MAX las hable primero y el texto se
+          // revele en la burbuja cuando cada frase empieza a sonar.
+          pendingSentenceRef.current += chunk;
+          const { sentences, rest } = takeCompleteSentences(
+            pendingSentenceRef.current,
+          );
+          pendingSentenceRef.current = rest;
+          sentences.forEach((sentence) => ttsQueueRef.current.push(sentence));
+        });
 
         clearTimeout(timeoutId);
 
@@ -699,11 +352,7 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     // En pantallas táctiles Enter inserta un salto de línea (no existe Shift),
     // así que el envío se hace con el botón. Con teclado físico se mantiene
     // Enter = enviar.
-    const isCoarsePointer =
-      typeof window !== "undefined" &&
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(pointer: coarse)").matches;
-    if (e.key === "Enter" && !e.shiftKey && !isCoarsePointer) {
+    if (e.key === "Enter" && !e.shiftKey && !isCoarsePointer()) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -734,29 +383,7 @@ const IALabMaxPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     setShowClearConfirm(false);
   };
 
-  // Teclado móvil: se sube el panel con el viewport visual para que el cuadro
-  // de texto y el botón de enviar queden siempre visibles sobre el teclado.
-  const [keyboardOffset, setKeyboardOffset] = useState(0);
-  useEffect(() => {
-    const vv =
-      typeof window !== "undefined" ? window.visualViewport : undefined;
-    if (!vv) return undefined;
-    const onViewportChange = () => {
-      const offset = Math.max(
-        0,
-        Math.round(window.innerHeight - vv.height - vv.offsetTop),
-      );
-      // <80px suele ser chrome del navegador, no teclado.
-      setKeyboardOffset(offset > 80 ? offset : 0);
-    };
-    vv.addEventListener("resize", onViewportChange);
-    vv.addEventListener("scroll", onViewportChange);
-    onViewportChange();
-    return () => {
-      vv.removeEventListener("resize", onViewportChange);
-      vv.removeEventListener("scroll", onViewportChange);
-    };
-  }, []);
+  const keyboardOffset = useKeyboardOffset();
 
   if (!isOpen) return null;
 

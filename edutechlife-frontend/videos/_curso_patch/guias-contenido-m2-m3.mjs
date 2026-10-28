@@ -83,7 +83,7 @@ ${checks([
     },
     {
       h: "GPTs personalizados: asistentes a tu medida",
-      html: `${box("warn", "Estado de los GPTs", "<p>OpenAI anunció el retiro de los GPTs personalizados en fechas provisionales: revisa en tu cuenta si tu GPT sigue disponible y considera migrar sus instrucciones a un Proyecto.</p>")}
+      html: `${box("warn", "Estado de los GPTs", "<p>OpenAI programó retirar los GPT personalizados el 11 de diciembre de 2026 (fecha sujeta a cambios; algunas cuentas Enterprise tienen otra fecha). Revisa en tu cuenta si tu GPT sigue disponible y migra sus instrucciones a un Proyecto.</p>")}
 <p>Un GPT combina tres piezas: <strong>instrucciones</strong> (rol, tono y límites), <strong>conocimiento</strong> (archivos de referencia) y, si lo necesitas, <strong>acciones</strong> (conexiones con otros servicios).</p>
 ${box("warn", "Antes de compartir un GPT", "<p>Decide quién puede usarlo y revisa qué archivos contiene. Nunca cargues datos personales de terceros, datos de menores ni documentos confidenciales sin autorización.</p>")}`,
     },

@@ -20,7 +20,10 @@ describe("completeExercisesShape", () => {
   });
 
   it("rellena valores null o undefined con el fallback", () => {
-    const result = completeExercisesShape({ a: null, b: undefined }, { a: "A", b: "B" });
+    const result = completeExercisesShape(
+      { a: null, b: undefined },
+      { a: "A", b: "B" },
+    );
     expect(result).toEqual({ a: "A", b: "B" });
   });
 

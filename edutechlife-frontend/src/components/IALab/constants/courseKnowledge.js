@@ -38,7 +38,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "El Juramento",
+            title: "La Materia Prima",
             estimatedTime: "10 minutos",
           },
         ],
@@ -120,7 +120,7 @@ const COURSE_KNOWLEDGE = [
           "La fachada es lo que el mundo ve — pero detrás hay una estructura compleja que la sostiene. Aprende a construir GPTs personalizados con acciones que se conectan al mundo real a través de APIs. Tu obra maestra de arquitectura digital, lista para interactuar con cualquier sistema externo.",
         difficulty: "Avanzado",
         learningObjectives: [
-          "Crear GPTs personalizados como módulos de construcción reutilizables",
+          "Construir Proyectos con instrucciones y archivos como módulos reutilizables",
           "Configurar acciones Function Calling para conectar con APIs externas",
           "Compartir tus creaciones y aprender de la comunidad de arquitectos digitales",
         ],
@@ -131,7 +131,7 @@ const COURSE_KNOWLEDGE = [
             duration: "18:45",
           },
           { type: "image", title: "Guía de GPTs y Acciones" },
-          { type: "ova", title: "La Fábrica de Asistentes" },
+          { type: "ova", title: "El Taller de Proyectos" },
         ],
       },
     ],

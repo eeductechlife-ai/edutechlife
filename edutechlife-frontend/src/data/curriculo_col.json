@@ -46,10 +46,7 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": [
-            "Exploración del entorno",
-            "Observación y registro"
-          ],
+          "competencias": ["Exploración del entorno", "Observación y registro"],
           "dba": [
             "Identifica las partes del cuerpo humano",
             "Reconoce los sentidos y su función",
@@ -62,10 +59,7 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": [
-            "Identidad y convivencia",
-            "Relaciones espaciales"
-          ],
+          "competencias": ["Identidad y convivencia", "Relaciones espaciales"],
           "dba": [
             "Reconoce su entorno familiar y escolar",
             "Identifica las normas básicas de convivencia",
@@ -119,10 +113,7 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": [
-            "Exploración del entorno",
-            "Indagación científica"
-          ],
+          "competencias": ["Exploración del entorno", "Indagación científica"],
           "dba": [
             "Clasifica animales según su hábitat y alimentación",
             "Identifica las partes de las plantas",
@@ -194,10 +185,7 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": [
-            "Uso del conocimiento científico",
-            "Indagación"
-          ],
+          "competencias": ["Uso del conocimiento científico", "Indagación"],
           "dba": [
             "Identifica los sistemas del cuerpo humano",
             "Clasifica los materiales según sus propiedades",
@@ -226,10 +214,7 @@
           "nombre": "Inglés",
           "icon": "🇬🇧",
           "color": "#4DA8C4",
-          "competencias": [
-            "Comprensión oral",
-            "Producción oral básica"
-          ],
+          "competencias": ["Comprensión oral", "Producción oral básica"],
           "dba": [
             "Comprende saludos y expresiones cotidianas",
             "Identifica vocabulario básico (colores, números, familia)",
@@ -302,10 +287,7 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": [
-            "Pensamiento social",
-            "Interpretación histórica"
-          ],
+          "competencias": ["Pensamiento social", "Interpretación histórica"],
           "dba": [
             "Analiza las culturas precolombinas en Colombia",
             "Comprende el proceso de descubrimiento de América",
