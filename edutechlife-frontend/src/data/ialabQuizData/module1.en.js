@@ -260,23 +260,23 @@ export const MODULE_1_EN = [
   {
     id: "m1q10",
     question:
-      "You want the AI to explain a hard topic. Which prompt asks for a clearer explanation?",
+      "You want AI to write messages in your style. What do you give it?",
     options: [
       {
         id: "m1q10_a",
-        label: '"Explain with simple examples and everyday words."',
+        label: "Two messages you already wrote and liked",
       },
       {
         id: "m1q10_b",
-        label: '"Give me all the theory about the topic in one answer."',
+        label: "A vague line: write nicely",
       },
       {
         id: "m1q10_c",
-        label: '"Tell me about this topic and also about similar ones."',
+        label: "Only the company name",
       },
       {
         id: "m1q10_d",
-        label: '"Explain it as an advanced expert would."',
+        label: "Nothing: AI already knows your style",
       },
     ],
     correctAnswer: "m1q10_a",
@@ -284,7 +284,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "Asking for examples and simple language helps make the explanation clearer and more useful.",
+      "Real examples of your style give the AI a concrete model. A vague line or nothing gives it no reference.",
   },
   {
     id: "m1q11",
@@ -520,35 +520,32 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q19",
-    question: "Which prompt is MORE specific?",
+    question:
+      "What does the instruction 'Act as a primary school teacher' help with?",
     options: [
       {
         id: "m1q19_a",
-        label:
-          '"Summarize in 5 bullets the risks of a sedentary life for older adults"',
+        label: "It makes the AI answer faster",
       },
       {
         id: "m1q19_b",
-        label:
-          '"Tell me about health in general and other similar topics you can think of"',
+        label: "It changes the answer's language without notice",
       },
       {
         id: "m1q19_c",
-        label:
-          '"Give me varied and extensive information on many topics of general interest"',
+        label: "It sets the point of view and level",
       },
       {
         id: "m1q19_d",
-        label:
-          '"Write something interesting and useful I can use in my daily work"',
+        label: "It forces the AI not to use examples",
       },
     ],
-    correctAnswer: "m1q19_a",
+    correctAnswer: "m1q19_c",
     topic: "Prompt Clarity",
     difficulty: "easy",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
-      "The correct prompt defines topic, format and audience; the others are vague. Review 'How to Create Effective Prompts'.",
+      "Assigning a role sets the perspective and level of the answer. It does not change speed or language.",
   },
   {
     id: "m1q20",
@@ -610,52 +607,52 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q22",
-    question: "What helps get better results when the AI has little context?",
+    question:
+      "What happens if you paste a list of customer names and phone numbers into the chat?",
     options: [
       {
         id: "m1q22_a",
-        label: "Ask it to ask you questions before answering",
+        label: "AI deletes it instantly, leaving no trace",
       },
       {
         id: "m1q22_b",
-        label: "Have it answer faster without thinking",
+        label: "Nothing: the chat is private and only you see it",
       },
       {
         id: "m1q22_c",
-        label: "Have it leave out any data from the request",
+        label: "AI uses it to improve your course score",
       },
       {
         id: "m1q22_d",
-        label: "Have it change topic to be more creative and original",
+        label: "That data leaves your control and may stay stored",
       },
     ],
-    correctAnswer: "m1q22_a",
+    correctAnswer: "m1q22_d",
     topic: "Prompt Refinement",
     difficulty: "easy",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "If it lacks context, the AI may guess. Asking it questions first avoids wrong answers. Practice in the OVA The Chisel.",
+      "Personal data pasted into a tool leaves your control and may be stored. That is why you anonymize it before sharing.",
   },
   {
     id: "m1q23",
-    question:
-      "You want a short explanation: 'in no more than 100 words'. What are you using?",
+    question: "You want an explanation for a 10-year-old. What do you specify?",
     options: [
       {
         id: "m1q23_a",
-        label: "A length constraint",
+        label: "The audience: a 10-year-old, with simple words",
       },
       {
         id: "m1q23_b",
-        label: "An error that breaks the AI",
+        label: "The color of the answer's text",
       },
       {
         id: "m1q23_c",
-        label: "A type of file",
+        label: "The name of the tool you will use",
       },
       {
         id: "m1q23_d",
-        label: "A password for the tool",
+        label: "That it uses as many technical words as possible",
       },
     ],
     correctAnswer: "m1q23_a",
@@ -663,36 +660,36 @@ export const MODULE_1_EN = [
     difficulty: "easy",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
-      "Constraints (length, tone, audience) narrow the answer to the desired result.",
+      "Naming the audience sets the language of the answer. Color, the tool's name or jargon do not give that reference.",
   },
   {
     id: "m1q24",
     question:
-      "You ask for the answer in numbered steps. What is the advantage?",
+      "You want an answer you can paste into an email. What do you specify?",
     options: [
       {
         id: "m1q24_a",
-        label: "It makes each step easy to follow",
+        label: "That it answers in another language",
       },
       {
         id: "m1q24_b",
-        label: "It makes the AI ignore the topic of the request",
+        label: "That it includes many emojis",
       },
       {
         id: "m1q24_c",
-        label: "It forces the AI to answer in another language",
+        label: "No markdown formatting or tables, just plain text",
       },
       {
         id: "m1q24_d",
-        label: "It changes nothing in the result",
+        label: "That it is all in capital letters",
       },
     ],
-    correctAnswer: "m1q24_a",
+    correctAnswer: "m1q24_c",
     topic: "Examples in Prompts",
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Numbered steps make the reasoning visible and let you fix one part without redoing everything.",
+      "Asking for plain text avoids symbols and tables that look broken when pasted into an email. Emojis, language or capitals do not solve that.",
   },
   {
     id: "m1q25",
@@ -726,31 +723,31 @@ export const MODULE_1_EN = [
   {
     id: "m1q26",
     question:
-      'Prompt: "Do something about marketing." What is the main problem?',
+      "In the RTF formula, which part states the concrete action the AI must take?",
     options: [
       {
         id: "m1q26_a",
-        label: "It is ambiguous: it does not state task, format or goal",
+        label: "The color of the screen where the answer is read",
       },
       {
         id: "m1q26_b",
-        label: "It is too long and contains too much irrelevant data",
+        label: "The task",
       },
       {
         id: "m1q26_c",
-        label: "It includes too many examples that end up confusing the AI",
+        label: "The user's purchase history",
       },
       {
         id: "m1q26_d",
-        label: "It uses a tone that is too formal for the target audience",
+        label: "The speed of the server answering",
       },
     ],
-    correctAnswer: "m1q26_a",
+    correctAnswer: "m1q26_b",
     topic: "Avoiding Ambiguity",
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "Without task, format or goal, the AI guesses. Be specific and narrow the result.",
+      "In RTF, the task is the concrete action. The other options are not part of the prompt.",
   },
   {
     id: "m1q27",
@@ -785,91 +782,88 @@ export const MODULE_1_EN = [
   {
     id: "m1q28",
     question:
-      "You want the AI to use only the text you paste and tell you if something is missing. Which request works?",
+      "You are writing to a client and want a warm tone. What do you ask for?",
     options: [
       {
         id: "m1q28_a",
-        label: "Use only the text I pasted and tell me if anything is missing",
+        label: "An academic bibliography tone, with citations",
       },
       {
         id: "m1q28_b",
-        label:
-          "Fill in what is missing with whatever you know from the internet",
+        label: "The most technical answer possible",
       },
       {
         id: "m1q28_c",
-        label: "Invent similar examples to illustrate the text",
+        label: "A warm tone, no jargon and a short closing",
       },
       {
         id: "m1q28_d",
-        label: "Summarize without reading the text, however you like",
+        label: "That it sounds like a lawyer, with no friendly phrase",
       },
     ],
-    correctAnswer: "m1q28_a",
+    correctAnswer: "m1q28_c",
     topic: "RTF Application",
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "Limiting the AI to the text you give prevents invented data. Asking it to flag what is missing is key.",
+      "Tone is requested with concrete words: warm, no jargon, short closing. Academic or technical language does not suit a client.",
   },
   {
     id: "m1q29",
-    question:
-      "You want 10 ideas for a campaign. Which prompt will give you better ideas?",
+    question: "You want 10 ideas for a campaign. What do you ask for?",
     options: [
       {
         id: "m1q29_a",
-        label: '"Generate 10 campaign ideas for a coffee shop, in bullets"',
+        label: "One idea only, the best you have",
       },
       {
         id: "m1q29_b",
-        label:
-          '"Give me varied ideas about marketing for businesses of any kind"',
+        label: "10 ideas, each with a line on why it works",
       },
       {
         id: "m1q29_c",
-        label: '"What do you think about marketing and how companies use it?"',
+        label: "Random ideas with no topic or audience",
       },
       {
         id: "m1q29_d",
-        label: '"Write a long, detailed essay about modern advertising"',
+        label: "The full campaign, with no questions asked",
       },
     ],
-    correctAnswer: "m1q29_a",
+    correctAnswer: "m1q29_b",
     topic: "Prompt Application",
     difficulty: "easy",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "The correct prompt specifies amount, context and format: that focuses the ideas on what you need.",
+      "Asking for a number and a reason per idea lets you compare and choose. One idea or random ideas give you nothing to choose from.",
   },
   {
     id: "m1q30",
     question:
-      "You want to learn a topic step by step. Which prompt helps most?",
+      "You want to practice a topic you just read. What do you ask for?",
     options: [
       {
         id: "m1q30_a",
-        label: '"Explain step by step, with one example per step"',
+        label: "A one-line summary, with no questions",
       },
       {
         id: "m1q30_b",
-        label: '"Give me all the theory in one dense paragraph"',
+        label: "The answer before you try, so you can see it",
       },
       {
         id: "m1q30_c",
-        label: '"Tell me about several topics at the same time"',
+        label: "A change of topic so you don't get bored",
       },
       {
         id: "m1q30_d",
-        label: '"Summarize the topic in just a single short sentence"',
+        label: "Five practice questions, with the answers at the end",
       },
     ],
-    correctAnswer: "m1q30_a",
+    correctAnswer: "m1q30_d",
     topic: "Prompt Application",
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Asking for steps, examples and simple language produces a clearer, more applicable explanation.",
+      "Practice questions with answers at the end let you check what you learned. Giving the answer first removes the effort.",
   },
   {
     id: "m1q31",
@@ -988,24 +982,23 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q35",
-    question:
-      "You want the AI to review its own answer before giving it to you. What do you ask?",
+    question: "What must you do before sharing a text that AI drafted?",
     options: [
       {
         id: "m1q35_a",
-        label: "Critique its answer and point out doubtful data",
+        label: "Check data, names and figures, and declare AI use",
       },
       {
         id: "m1q35_b",
-        label: "Rewrite it without changing anything at all",
+        label: "Share it as it is, because AI does not make mistakes",
       },
       {
         id: "m1q35_c",
-        label: "Deliver it faster without reviewing it",
+        label: "Change only the document's logo",
       },
       {
         id: "m1q35_d",
-        label: "Send it to another person without telling you about the change",
+        label: "Send it to someone else without saying AI generated it",
       },
     ],
     correctAnswer: "m1q35_a",
@@ -1013,7 +1006,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Asking for self-critique helps detect assumptions and doubtful data before you use the answer.",
+      "AI can make mistakes in data and names. Checking the text and declaring its use is part of responsible work.",
   },
   {
     id: "m1q36",
@@ -1075,33 +1068,31 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q38",
-    question:
-      "AI is an assistant, not a replacement. What does this mean for the student?",
+    question: "What must you state when you hand in work done with AI help?",
     options: [
       {
         id: "m1q38_a",
-        label: "Review and decide the final result with your own judgment",
+        label: "Nothing: the work is yours even if AI wrote it",
       },
       {
         id: "m1q38_b",
-        label: "Accept everything the AI delivers without reviewing it first",
+        label: "Only your name, without mentioning the tool",
       },
       {
         id: "m1q38_c",
-        label: "Delegate all important decisions to the AI completely",
+        label: "Which tool you used and which part you used it for",
       },
       {
         id: "m1q38_d",
-        label:
-          "Avoid learning the topic because the AI already solves everything",
+        label: "A full copy of the conversation, unreviewed",
       },
     ],
-    correctAnswer: "m1q38_a",
+    correctAnswer: "m1q38_c",
     topic: "Responsible Use",
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "AI speeds up the work, but the review and the final decision are yours.",
+      "Declaring the tool and the part where it was used is the honest way. Presenting the work as if there had been no AI is not.",
   },
   {
     id: "m1q39",
@@ -1192,7 +1183,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "OVA: The Mirror of Truth",
     feedback:
-      "Historical data reflected a mostly male hiring history: the bias comes from the data, not the algorithm. Review the bias lab.",
+      "Historical data reflected a mostly male hiring history: the bias comes from the data, not the algorithm. Review the activity The Mirror of Truth.",
   },
   {
     id: "m1e02",
@@ -1367,7 +1358,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "OVA: The Mirror of Truth",
     feedback:
-      "Sampling bias comes from unrepresentative data. Practice in the bias lab.",
+      "Sampling bias comes from unrepresentative data. Practice in the activity The Mirror of Truth.",
   },
   {
     id: "m1e08",
@@ -1395,7 +1386,7 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "OVA: The Mirror of Truth",
     feedback:
-      "If the labeler has biases, the model learns them. Review the bias lab.",
+      "If the labeler has biases, the model learns them. Review the activity The Mirror of Truth.",
   },
   {
     id: "m1e09",
@@ -1424,35 +1415,35 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "OVA: The Mirror of Truth",
     feedback:
-      "When bias is detected, stop, document and correct. Practice in the bias lab.",
+      "When bias is detected, stop, document and correct. Practice in the activity The Mirror of Truth.",
   },
   {
     id: "m1e10",
-    question: "What does the explainability of an AI model aim for?",
+    question: "Which data should you not share with a public AI?",
     options: [
       {
         id: "m1e10_a",
-        label: "That automatic decisions can be justified to any person",
+        label: "A sample text already published online",
       },
       {
         id: "m1e10_b",
-        label: "That the model explains why it consumes so many resources",
+        label: "A general question about history",
       },
       {
         id: "m1e10_c",
-        label: "That the system summarizes its answers in fewer words",
+        label: "A list of ideas with no names",
       },
       {
         id: "m1e10_d",
-        label: "That its answers can be translated into other languages",
+        label: "Personal data of students or clients, not anonymized",
       },
     ],
-    correctAnswer: "m1e10_a",
+    correctAnswer: "m1e10_d",
     topic: "Explainability",
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Explainability lets you justify decisions to the people affected. Review the ethics guide.",
+      "Personal data that is not anonymized must not go to a public tool. Published texts and general ideas are not that kind of risk.",
   },
   {
     id: "m1e11",
@@ -1571,31 +1562,32 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1e15",
-    question: "What is a bias audit in an AI system?",
+    question:
+      "What should a person check before using a result that affects people?",
     options: [
       {
         id: "m1e15_a",
-        label: "Checking whether the model treats any group unfairly",
+        label: "How fast the system generated it",
       },
       {
         id: "m1e15_b",
-        label: "Measuring only the response speed of the whole system",
+        label: "Whether the result treats any group unfairly",
       },
       {
         id: "m1e15_c",
-        label: "Checking how many registered users the platform has",
+        label: "How many users the platform has",
       },
       {
         id: "m1e15_d",
-        label: "Verifying only the monthly cost of the tool",
+        label: "Only the monthly cost of the tool",
       },
     ],
-    correctAnswer: "m1e15_a",
+    correctAnswer: "m1e15_b",
     topic: "Audit",
     difficulty: "medium",
     source: "OVA: The Mirror of Truth",
     feedback:
-      "Auditing bias means checking whether any group ends up harmed. Practice in the bias lab.",
+      "Before using a result about people, check whether it treats any group unfairly: that is bias.",
   },
   {
     id: "m1e16",
@@ -1714,24 +1706,23 @@ export const MODULE_1_EN = [
   {
     id: "m1e20",
     question:
-      "An employee makes decisions about people with AI without declaring it or letting anyone review them. Which principle is breached?",
+      "A system treats users without telling them an AI is involved. Which principle is broken?",
     options: [
       {
         id: "m1e20_a",
-        label: "Accountability: a person must answer for the decision",
+        label: "Transparency: tell people when AI takes part in a decision",
       },
       {
         id: "m1e20_b",
-        label: "Speed: settling the case in the least time",
+        label: "Speed: resolve the case in the shortest time",
       },
       {
         id: "m1e20_c",
-        label: "Popularity: the system being liked by users",
+        label: "Popularity: the system is liked by users",
       },
       {
         id: "m1e20_d",
-        label:
-          "Savings: reducing the operating cost of keeping the tool active",
+        label: "Savings: lower the operating cost of the tool",
       },
     ],
     correctAnswer: "m1e20_a",
@@ -1739,6 +1730,6 @@ export const MODULE_1_EN = [
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Without a person answering for the decision there is no accountability. Review the ethics guide.",
+      "Transparency requires telling people when AI takes part in a decision. Speed, popularity and savings are not the principle that is broken.",
   },
 ];

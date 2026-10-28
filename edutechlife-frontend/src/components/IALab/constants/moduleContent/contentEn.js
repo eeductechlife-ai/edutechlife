@@ -213,11 +213,11 @@ const CONTENT_EN = {
         icon: "fa-sliders",
       },
       {
-        text: "Build GPTs and Projects that work with your context",
+        text: "Build Projects and use plugins that work with your context",
         icon: "fa-code",
       },
       {
-        text: "Build your own custom GPT as an architectural module",
+        text: "Organize a Project with instructions and files as an architectural module",
         icon: "fa-robot",
       },
       {
@@ -245,7 +245,7 @@ const CONTENT_EN = {
           title: "The Architect's Scaffolding: Integrated Tools",
           icon: "fa-layer-group",
           resources: 3,
-          duration: "30 min",
+          duration: "20 min",
           outcome:
             "Choose the right ChatGPT tool (search, files, images or voice) and check what it gives you.",
         },
@@ -255,7 +255,7 @@ const CONTENT_EN = {
           resources: 3,
           duration: "20 min",
           outcome:
-            "Organize a repeated task in a Project and decide when a GPT or an agent makes sense.",
+            "Organize a repeated task in a Project and decide when a Project, a plugin or an agent makes sense.",
         },
       ],
     },
@@ -265,7 +265,7 @@ const CONTENT_EN = {
         title: "The Architect's Blueprints: Complete ChatGPT Guide",
         description: "The foundations of every great digital construction",
         detailedDescription:
-          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects. Currency note: OpenAI retires custom GPTs on December 11, 2026 and replaces them with plugins. Start now with Projects and with the plugins connected to your account.",
+          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects. Currency note: OpenAI has scheduled the retirement of custom GPTs for December 11, 2026 (date subject to change), replaced by plugins. Start with Projects and plugins, and check the notice in your account. Start now with Projects and with the plugins connected to your account.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -289,7 +289,7 @@ const CONTENT_EN = {
         title: "The Building's Facade: GPTs, Projects and Agents",
         description: "Connect your work to the real world",
         detailedDescription:
-          "The facade is what the world sees. Here you build tailored assistants: GPTs with your instructions and knowledge, Projects that organize each piece of work, and ChatGPT's agent for multi-step tasks. Learn to design, test, and use them without losing control of any decision. OpenAI has announced it will retire custom GPTs on provisional dates: check in your account whether your GPT is still available, and consider moving its instructions to a Project.",
+          "The facade is what the world sees. Here you build tailored assistants: Projects with your instructions and knowledge, plugins that connect your tools, and ChatGPT's agent for multi-step tasks. Learn to design, test, and use them without losing control of any decision. Check the currency note in lesson 1 and consider moving a GPT's instructions to a Project.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -379,7 +379,7 @@ const CONTENT_EN = {
       3: {
         objective: "🧱 The Architect's Facade",
         objectiveDesc:
-          "Build custom GPTs and Projects, and use them so ChatGPT works with your context on every task.",
+          "Build Projects, with instructions and files, so ChatGPT works with your context on every task.",
         achievements: [
           {
             icon: "fa-check",
@@ -405,7 +405,7 @@ const CONTENT_EN = {
           },
           {
             icon: "fa-times",
-            text: "Publishing a GPT without testing it on real cases — like handing over a facade without inspection",
+            text: "Sharing a Project or plugin without testing it on real cases — like handing over a facade without inspection",
           },
         ],
         example: {
@@ -682,7 +682,7 @@ const CONTENT_EN = {
           title: "The Secret Formula: Audio Overviews and Document Management",
           icon: "fa-podcast",
           resources: 3,
-          duration: "30 min",
+          duration: "20 min",
           outcome:
             "Generate an audio summary of your documents and organize your notebooks so you can find everything.",
         },

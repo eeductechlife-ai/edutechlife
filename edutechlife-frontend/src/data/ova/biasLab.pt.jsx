@@ -47,9 +47,9 @@ export const contentData = {
       "Verificar dados em fontes primárias para evitar alucinações.",
       "Usar a IA como tutor para ampliar o aprendizado.",
     ],
-    toolTitle: "Ferramenta em Destaque: NotebookLM",
+    toolTitle: "Ferramenta em destaque: Gemini Notebook (antes NotebookLM)",
     toolDesc:
-      "O NotebookLM é um exemplo de como usar a IA de forma responsável para a pesquisa, permitindo centralizar fontes e verificar informações com citações diretas.",
+      "O Gemini Notebook é um exemplo de como usar a IA com responsabilidade para pesquisar: reúne suas fontes e mostra citações que você pode abrir para conferir a informação.",
   },
   cap3: {
     title: "3. Riscos e Desvantagens",

@@ -52,6 +52,7 @@ export const MODULE_BLOOM = {
   1: [
     { level: "recordar", verb: "Identificar" },
     { level: "aplicar", verb: "Construir" },
+    { level: "aplicar", verb: "Aplicar" },
     { level: "evaluar", verb: "Verificar" },
   ],
   2: [

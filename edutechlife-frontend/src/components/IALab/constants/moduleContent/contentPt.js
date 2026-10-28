@@ -214,11 +214,11 @@ const CONTENT_PT = {
         icon: "fa-sliders",
       },
       {
-        text: "Criar GPTs e Projetos que trabalham com o seu contexto",
+        text: "Criar Projetos e usar plugins que trabalham com o seu contexto",
         icon: "fa-code",
       },
       {
-        text: "Construir seu próprio GPT como um módulo arquitetônico",
+        text: "Organizar um Projeto com instruções e arquivos como módulo arquitetônico",
         icon: "fa-robot",
       },
       {
@@ -246,7 +246,7 @@ const CONTENT_PT = {
           title: "O Andaime do Arquiteto: Ferramentas Integradas",
           icon: "fa-layer-group",
           resources: 3,
-          duration: "30 min",
+          duration: "20 min",
           outcome:
             "Escolher a ferramenta certa do ChatGPT (pesquisa, arquivos, imagens ou voz) e conferir o que ela entrega.",
         },
@@ -256,7 +256,7 @@ const CONTENT_PT = {
           resources: 3,
           duration: "20 min",
           outcome:
-            "Organizar um trabalho repetido em um Projeto e decidir quando vale um GPT ou um agente.",
+            "Organizar um trabalho repetido em um Projeto e decidir quando vale um Projeto, um plugin ou um agente.",
         },
       ],
     },
@@ -266,7 +266,7 @@ const CONTENT_PT = {
         title: "As Plantas do Arquiteto: Guia Completo do ChatGPT",
         description: "Os alicerces de toda grande construção digital",
         detailedDescription:
-          "Todo edifício começa com uma planta. Nesta lição, você conhecerá a arquitetura completa do ChatGPT: desde os modelos disponíveis até as melhores práticas de prompt engineering. Aprenda a selecionar a ferramenta certa para cada fase da sua construção e sente as bases dos seus projetos de automação. Nota de atualização: a OpenAI retira os GPTs personalizados em 11 de dezembro de 2026 e os substitui por plugins. Comece já com Projetos e com os plugins conectados à sua conta.",
+          "Todo edifício começa com uma planta. Nesta lição, você conhecerá a arquitetura completa do ChatGPT: desde os modelos disponíveis até as melhores práticas de prompt engineering. Aprenda a selecionar a ferramenta certa para cada fase da sua construção e sente as bases dos seus projetos de automação. Nota de atualização: a OpenAI programou a retirada dos GPTs personalizados para 11 de dezembro de 2026 (data sujeita a mudanças), substituídos por plugins. Comece por Projetos e plugins e verifique o aviso na sua conta. Comece já com Projetos e com os plugins conectados à sua conta.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -290,7 +290,7 @@ const CONTENT_PT = {
         title: "A Fachada do Edifício: GPTs, Projetos e Agentes",
         description: "Conecte sua obra ao mundo real",
         detailedDescription:
-          "A fachada é o que o mundo vê. Aqui você constrói assistentes sob medida: GPTs com suas instruções e seu conhecimento, Projetos que organizam cada trabalho e o agente do ChatGPT para tarefas de várias etapas. Aprenda a projetá-los, testá-los e usá-los sem perder o controle de cada decisão. A OpenAI anunciou a descontinuação dos GPTs personalizados em datas provisórias: verifique na sua conta se o seu GPT ainda está disponível e considere migrar as instruções para um Projeto.",
+          "A fachada é o que o mundo vê. Aqui você constrói assistentes sob medida: Projetos com suas instruções e seu conhecimento, plugins que conectam suas ferramentas e o agente do ChatGPT para tarefas de várias etapas. Aprenda a projetá-los, testá-los e usá-los sem perder o controle de cada decisão. Veja a nota de atualização da lição 1 e considere migrar as instruções de um GPT para um Projeto.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -380,7 +380,7 @@ const CONTENT_PT = {
       3: {
         objective: "🧱 A Fachada do Arquiteto",
         objectiveDesc:
-          "Crie GPTs e Projetos sob medida e use-os para que o ChatGPT trabalhe com o seu contexto em cada tarefa.",
+          "Crie Projetos sob medida, com instruções e arquivos, para que o ChatGPT trabalhe com o seu contexto em cada tarefa.",
         achievements: [
           {
             icon: "fa-check",
@@ -406,7 +406,7 @@ const CONTENT_PT = {
           },
           {
             icon: "fa-times",
-            text: "Publicar um GPT sem testá-lo com casos reais — como entregar uma fachada sem inspeção",
+            text: "Compartilhar um Projeto ou plugin sem testá-lo com casos reais — como entregar uma fachada sem inspeção",
           },
         ],
         example: {
@@ -488,7 +488,7 @@ const CONTENT_PT = {
       },
       {
         id: 2,
-        title: "Grounding: Quando a IA Toca o Mundo Real",
+        title: "Grounding: Quando a Evidência Toca o Chão",
         description:
           "Conecte sua lupa ao solo firme: dados vivos do mundo real",
         detailedDescription:
@@ -683,7 +683,7 @@ const CONTENT_PT = {
           title: "A Fórmula Secreta: Audio Overviews e Gestão Documental",
           icon: "fa-podcast",
           resources: 3,
-          duration: "30 min",
+          duration: "20 min",
           outcome:
             "Gerar um resumo em áudio dos seus documentos e organizar seus cadernos para encontrar tudo.",
         },

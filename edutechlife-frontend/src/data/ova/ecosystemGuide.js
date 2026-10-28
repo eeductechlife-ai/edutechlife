@@ -5,7 +5,7 @@ import { resolveLocalized } from "../../utils/localeUtils";
 
 const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 
-export const { infographicData, learningObjectives, pricingSection } = data;
+export const { infographicData, learningObjectives } = data;
 
 export const moduleContext =
-  "Comprender la evolución, modos de operación y herramientas del ecosistema ChatGPT para optimizar su uso profesional.";
+  "Comprender cómo responde ChatGPT, sus formas de responder y sus herramientas para pedir una tarea del día a día y obtener una respuesta útil.";

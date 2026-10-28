@@ -51,9 +51,9 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q2_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
-      "Always verify: the AI can be wrong. Practice in the case-solving lab.",
+      "Gemini can be wrong or cite badly: opening the source confirms whether the data exists and says what it claims.",
   },
   {
     id: "m3q3",
@@ -107,9 +107,9 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q4_a",
     topic: "Multimodality",
     difficulty: "easy",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "You can show it an image, PDF or video in the same chat. See the ecosystem map.",
+      "You can show it an image, PDF or video in the same chat. Review the guide Field Guide: Introduction to Gemini.",
   },
   {
     id: "m3q5",
@@ -137,28 +137,29 @@ export const MODULE_3_EN = [
     difficulty: "medium",
     source: "The Multimodal Lens",
     feedback:
-      "Gemini helps in Gmail, Docs and Sheets from each app. Practice in the ecosystem OVA.",
+      "Gemini helps in Gmail, Docs and Sheets from each app. Practice in the activity The Multimodal Lens.",
   },
   {
     id: "m3q6",
     question:
-      "How do you analyze with Gemini a chart you see on screen during a meeting?",
+      "A chart appears on screen in a meeting and you cannot read the figures. What do you ask Gemini?",
     options: [
       {
         id: "m3q6_a",
-        label: "With Gemini Live sharing the screen",
+        label:
+          "That it points to where each figure comes from, and that you open it",
       },
       {
         id: "m3q6_b",
-        label: "By asking a colleague to explain it later",
+        label: "That it tells you the figure without showing anything",
       },
       {
         id: "m3q6_c",
-        label: "By drawing the chart from memory to explain it",
+        label: "That it swaps the figure for a similar one",
       },
       {
         id: "m3q6_d",
-        label: "By waiting for the email",
+        label: "That it leaves it for later without checking",
       },
     ],
     correctAnswer: "m3q6_a",
@@ -166,7 +167,7 @@ export const MODULE_3_EN = [
     difficulty: "medium",
     source: "The Multimodal Lens",
     feedback:
-      "Gemini Live lets you share the screen and ask about what you see. Review the ecosystem OVA.",
+      "Asking for the origin of each figure lets you open the source and check it. A figure without an origin is not used.",
   },
   {
     id: "m3q7",
@@ -200,31 +201,31 @@ export const MODULE_3_EN = [
   {
     id: "m3q8",
     question:
-      "A journalist has 2 hours for a report with verifiable sources. What do they do first with Gemini?",
+      "A journalist has two hours for a story with data. What comes first?",
     options: [
       {
         id: "m3q8_a",
-        label: "Deep Research and citation checks",
+        label: "The amount of data, even if it cannot be verified",
       },
       {
         id: "m3q8_b",
-        label: "Read twenty articles by hand before writing",
+        label: "Publishing fast and correcting later if someone warns",
       },
       {
         id: "m3q8_c",
-        label: "Ask for a summary",
+        label: "The data they can verify with sources they can open",
       },
       {
         id: "m3q8_d",
-        label: "Search Google and write without checking",
+        label: "A catchy headline before checking anything",
       },
     ],
-    correctAnswer: "m3q8_a",
+    correctAnswer: "m3q8_c",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
-      "Deep Research finds sources and you verify and write. Practice in the case lab.",
+      "In a story, every figure must be verifiable. Quantity without verification does not give credibility.",
   },
   {
     id: "m3q9",
@@ -257,60 +258,59 @@ export const MODULE_3_EN = [
   {
     id: "m3q10",
     question:
-      "What do Gemini extensions (flights, maps, hotels) add in the chat?",
+      "What advantage is there in asking Gemini for current data instead of trusting its memory?",
     options: [
       {
         id: "m3q10_a",
-        label: "Current data from Google services in chat",
+        label: "None: memory is always more current",
       },
       {
         id: "m3q10_b",
-        label: "They fully replace the Google websites",
+        label: "It removes the need to check any source",
       },
       {
         id: "m3q10_c",
-        label: "They only work to book flights and nothing else",
+        label: "It makes the answer longer without improving accuracy",
       },
       {
         id: "m3q10_d",
-        label: "They require paying an extra subscription",
+        label: "The data comes from current sources you can open",
       },
     ],
-    correctAnswer: "m3q10_a",
+    correctAnswer: "m3q10_d",
     topic: "Gemini Extensions",
     difficulty: "medium",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Extensions bring live information from Google services. Review the ecosystem map.",
+      "The current web lets you open the source and see the date. The model's memory may be out of date.",
   },
   {
     id: "m3q11",
-    question:
-      "What does Gemini Live let you do when you point the camera at an object?",
+    question: "What can Gemini do with a photo of a receipt?",
     options: [
       {
         id: "m3q11_a",
-        label: "Identify it and answer questions about it",
+        label: "Send it to your email without you seeing it",
       },
       {
         id: "m3q11_b",
-        label: "Convert it into a PDF automatically",
+        label: "Delete it from your phone completely",
       },
       {
         id: "m3q11_c",
-        label: "Send it to your email without you seeing it, in the background",
+        label: "Read the amounts and date, and ask about what is unclear",
       },
       {
         id: "m3q11_d",
-        label: "Delete it from the phone screen completely",
+        label: "Publish it online with your details",
       },
     ],
-    correctAnswer: "m3q11_a",
+    correctAnswer: "m3q11_c",
     topic: "Multimodality",
     difficulty: "medium",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Gemini Live uses the camera to identify what you point at and answer questions about it.",
+      "Gemini reads the visible data on the receipt and asks about doubtful parts; it sends or publishes nothing without your order.",
   },
   {
     id: "m3q12",
@@ -343,32 +343,31 @@ export const MODULE_3_EN = [
   },
   {
     id: "m3q13",
-    question: "What is grounding with Google Search in Gemini for?",
+    question: "What happens if a Gemini answer has no sources?",
     options: [
       {
         id: "m3q13_a",
-        label: "To anchor answers in current information",
+        label: "It is reliable because AI is very advanced",
       },
       {
         id: "m3q13_b",
-        label: "To disconnect the AI",
+        label: "You can use it in a report without changes",
       },
       {
         id: "m3q13_c",
-        label:
-          "To automatically translate everything into your native language",
+        label: "You treat it as a hypothesis and check it before using it",
       },
       {
         id: "m3q13_d",
-        label: "To store all of your conversations in the Google cloud",
+        label: "It is enough that it sounds confident and has numbers",
       },
     ],
-    correctAnswer: "m3q13_a",
+    correctAnswer: "m3q13_c",
     topic: "Grounding",
     difficulty: "medium",
     source: "Gemini in Practice: Field Exercises",
     feedback:
-      "Grounding connects the answer to live data and its sources. Review the field exercises.",
+      "Without a source, the answer is a hypothesis. Before using it, look for it in sources you can open.",
   },
   {
     id: "m3q14",
@@ -395,37 +394,38 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q14_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
       "Verify by opening the source: a formatted citation does not guarantee the data is correct.",
   },
   {
     id: "m3q15",
-    question: "What does Deep Research do when investigating a topic?",
+    question:
+      "Gemini gives you a Deep Research report. What do you check before using it?",
     options: [
       {
         id: "m3q15_a",
-        label: "It explores sources and writes a cited report",
+        label: "Only that it has many pages and headings",
       },
       {
         id: "m3q15_b",
-        label: "It returns the very first result and ends the search",
+        label: "That the tone is enthusiastic and confident",
       },
       {
         id: "m3q15_c",
-        label: "It generates images to illustrate the topic being researched",
+        label: "That it looks like another report you read",
       },
       {
         id: "m3q15_d",
-        label: "It answers simple questions",
+        label: "The sources: open at least three that support the conclusions",
       },
     ],
-    correctAnswer: "m3q15_a",
+    correctAnswer: "m3q15_d",
     topic: "Deep Research",
     difficulty: "easy",
     source: "Real Cases: Digital Detectives in Action",
     feedback:
-      "Deep Research goes through many sources and delivers a cited report. Review the real cases video.",
+      "A report with sources is checked by opening some of them. Three sources that back the conclusions are the minimum criterion.",
   },
   {
     id: "m3q16",
@@ -452,29 +452,30 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
-      "Defining topic, angle and sources improves the report. Practice in the case lab.",
+      "Defining topic, angle and sources improves the report. Practice in the activity The Forensic Archive.",
   },
   {
     id: "m3q17",
-    question: "What does triangulating information mean when researching?",
+    question:
+      "What does it mean to verify a figure with an independent source?",
     options: [
       {
         id: "m3q17_a",
-        label: "Check a fact against two independent sources",
+        label: "Checking it in a source that did not copy it from the first",
       },
       {
         id: "m3q17_b",
-        label: "Repeating the same question three times to the same AI",
+        label: "Asking the same question to the same AI",
       },
       {
         id: "m3q17_c",
-        label: "Drawing a triangle shape to organize ideas",
+        label: "Searching in one site by the same author",
       },
       {
         id: "m3q17_d",
-        label: "Always using three different browsers at the same time",
+        label: "Using three different browsers without reading anything",
       },
     ],
     correctAnswer: "m3q17_a",
@@ -482,65 +483,65 @@ export const MODULE_3_EN = [
     difficulty: "medium",
     source: "Gemini in Practice: Field Exercises",
     feedback:
-      "Triangulating means checking against independent sources to reduce the risk of error.",
+      "An independent source does not copy the first one. When two different sources agree, the figure is firmer.",
   },
   {
     id: "m3q18",
     question:
-      "What advantage does Gemini's long context give when analyzing documents?",
+      "You will analyze several documents at once. What do you ask Gemini first?",
     options: [
       {
         id: "m3q18_a",
-        label: "It processes very long documents in one chat",
+        label: "That it answers without saying where anything comes from",
       },
       {
         id: "m3q18_b",
-        label:
-          "It forces you to summarize the document before reading it whole",
+        label: "That it cites the section of each data point it uses",
       },
       {
         id: "m3q18_c",
-        label: "It accepts one page",
+        label: "That it summarizes before anyone has read them",
       },
       {
         id: "m3q18_d",
-        label: "It stores the documents inside the user's own web browser",
+        label: "That it keeps the documents outside the conversation",
       },
     ],
-    correctAnswer: "m3q18_a",
+    correctAnswer: "m3q18_b",
     topic: "Long Context",
     difficulty: "medium",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Long context lets you work with big documents without splitting them. Review the ecosystem map.",
+      "Citing the section of each data point lets you check it in the document. Without a citation there is no way to verify it.",
   },
   {
     id: "m3q19",
-    question: "What does Gemini Live let you do during a meeting?",
+    question:
+      "Someone shows you a meeting video. What do you ask Gemini to find an agreement?",
     options: [
       {
         id: "m3q19_a",
-        label: "Share your screen and ask live questions",
+        label: "That it publishes it automatically online",
       },
       {
         id: "m3q19_b",
-        label: "Record the meeting and publish it automatically online",
+        label: "The exact minute where the agreement is stated",
       },
       {
         id: "m3q19_c",
-        label: "Take control of the computer and answer in your place",
+        label: "That it answers for you in the meeting",
       },
       {
         id: "m3q19_d",
-        label: "Replace the other participants",
+        label: "A general summary, with no indication of where each thing is",
       },
     ],
-    correctAnswer: "m3q19_a",
+    correctAnswer: "m3q19_b",
     topic: "Gemini Live",
     difficulty: "medium",
     source: "The Multimodal Lens",
     feedback:
-      "Gemini Live analyzes in real time what you share on screen. Review the ecosystem OVA.",
+      "Asking for the exact minute lets you review that moment in the video. A summary with no location cannot be checked.",
   },
   {
     id: "m3q20",
@@ -573,31 +574,31 @@ export const MODULE_3_EN = [
   },
   {
     id: "m3q21",
-    question: "In Google Workspace, Gemini can…",
+    question: "What should you check when Gemini drafts in Docs for you?",
     options: [
       {
         id: "m3q21_a",
-        label: "Summarize emails, draft in Docs, help in Sheets",
+        label: "Nothing: what AI writes is always correct",
       },
       {
         id: "m3q21_b",
-        label: "Only work inside Docs and absolutely nowhere else at all",
+        label: "Only the spelling, without checking the figures",
       },
       {
         id: "m3q21_c",
-        label: "Replace traditional email entirely",
+        label: "That the data and names match your sources",
       },
       {
         id: "m3q21_d",
-        label: "Edit presentations without you ever reviewing the content",
+        label: "That it uses many technical words",
       },
     ],
-    correctAnswer: "m3q21_a",
+    correctAnswer: "m3q21_c",
     topic: "Google Workspace",
     difficulty: "easy",
     source: "The Multimodal Lens",
     feedback:
-      "Gemini assists in Gmail, Docs and Sheets, integrated into each app. Review the ecosystem OVA.",
+      "What AI drafts can also contain errors in data and names. Check it against your sources.",
   },
   {
     id: "m3q22",
@@ -626,35 +627,35 @@ export const MODULE_3_EN = [
     difficulty: "medium",
     source: "The Multimodal Lens",
     feedback:
-      "Working inside the app avoids copying data and reduces errors. Review the ecosystem OVA.",
+      "Working inside the app avoids copying data and reduces errors. Review the activity The Multimodal Lens.",
   },
   {
     id: "m3q23",
-    question: "What are Gemini extensions (flights, hotels, maps) for?",
+    question: "What should you check when Gemini gives you a flight price?",
     options: [
       {
         id: "m3q23_a",
-        label: "Bring current data from those services into chat",
+        label: "The source and the date of the price on the official site",
       },
       {
         id: "m3q23_b",
-        label: "To completely replace the websites of those services",
+        label: "Nothing: the price Gemini gives is always final",
       },
       {
         id: "m3q23_c",
-        label: "To block internet access for greater security",
+        label: "Only the color of the airline's logo",
       },
       {
         id: "m3q23_d",
-        label: "To download those services so you can use them offline",
+        label: "That it is the cheapest in the market, without comparing",
       },
     ],
     correctAnswer: "m3q23_a",
     topic: "Gemini Extensions",
     difficulty: "medium",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Extensions add live data from Google services into the chat. Review the ecosystem map.",
+      "A price changes and may have conditions. Confirm it on the official site and check its date.",
   },
   {
     id: "m3q24",
@@ -688,118 +689,120 @@ export const MODULE_3_EN = [
   {
     id: "m3q25",
     question:
-      "Gemini cites a source that you cannot open. What is the correct conclusion?",
+      "What do you do if a cited source does not exist when you search for it?",
     options: [
       {
         id: "m3q25_a",
-        label: "Do not use that data until you find a verifiable source",
+        label: "Use the data because the citation looks well formatted",
       },
       {
         id: "m3q25_b",
-        label: "Use the data anyway because the AI presented it as true",
+        label: "Write a similar citation with the same author",
       },
       {
         id: "m3q25_c",
-        label: "Invent a similar citation to back the data up",
+        label: "Publish it anyway so you do not look bad",
       },
       {
         id: "m3q25_d",
-        label: "Publish it without a citation and avoid reader questions",
+        label: "Remove the data and look for another source that backs it",
       },
     ],
-    correctAnswer: "m3q25_a",
+    correctAnswer: "m3q25_d",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
-      "If you cannot verify the source, the data does not hold. Practice in the case lab.",
+      "A citation that does not exist supports nothing. Remove the data or find a verifiable source.",
   },
   {
     id: "m3q26",
-    question: "What is a responsible use of Gemini when studying?",
+    question:
+      "Which practice shows responsible use of Gemini when working in a team?",
     options: [
       {
         id: "m3q26_a",
-        label: "Learn from its explanations and verify",
+        label: "Not mentioning AI to avoid arguments",
       },
       {
         id: "m3q26_b",
-        label: "Submitting its answers as your own work without review",
+        label: "Sending the answer to the whole group without reading it",
       },
       {
         id: "m3q26_c",
-        label: "Copying and pasting without reading or understanding it",
+        label: "Letting Gemini decide how tasks are split",
       },
       {
         id: "m3q26_d",
-        label: "Solving exams for you",
+        label: "Declaring the AI parts and reviewing them as a team",
       },
     ],
-    correctAnswer: "m3q26_a",
+    correctAnswer: "m3q26_d",
     topic: "Responsible Use",
     difficulty: "easy",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Use it as a tutor: understand, practice and verify. Review the field manual.",
+      "Declaring the use and reviewing the result together gives the group transparency. Hiding AI or delegating without review does not.",
   },
   {
     id: "m3q27",
-    question:
-      "A long document (200 pages) must be analyzed. What is the best practice?",
+    question: "A 200-page document: what does a careful student do?",
     options: [
       {
         id: "m3q27_a",
-        label:
-          "Upload it and ask for answers anchored to specific sections you can verify",
+        label: "Summarizes it by hand first and does not use AI at all",
       },
       {
         id: "m3q27_b",
-        label: "Summarize it by hand first and not use the AI at all",
+        label: "Turns it into loose images for each question",
       },
       {
         id: "m3q27_c",
-        label: "Turn it into loose images for each separate question",
+        label:
+          "Asks for answers with section and page, and verifies the ones they will use",
       },
       {
         id: "m3q27_d",
         label:
-          "Ask for a quick summary without saying which section the information came from, to save time",
+          "Asks for a general summary without saying which part it came from",
       },
     ],
-    correctAnswer: "m3q27_a",
+    correctAnswer: "m3q27_c",
     topic: "Long Context",
     difficulty: "hard",
     source: "Gemini in Practice: Field Exercises",
     feedback:
-      "Ask for answers anchored to specific sections so you can verify. Review the field exercises.",
+      "Asking for sections and pages lets you verify what you will use. A summary with no origin is no good for a citation.",
   },
   {
     id: "m3q28",
-    question: "What does Gemini do with an image you share with it?",
+    question:
+      "What should you ask for if Gemini describes an image with a doubtful detail?",
     options: [
       {
         id: "m3q28_a",
-        label: "It can describe it, extract text or answer about it",
+        label: "That it invents more detail to convince you",
       },
       {
         id: "m3q28_b",
-        label: "It only stores it without analyzing any of its content",
+        label:
+          "That it points to the part of the image that supports that detail",
       },
       {
         id: "m3q28_c",
-        label: "It replaces it with a similar generated image",
+        label: "That it does not look at the image again",
       },
       {
         id: "m3q28_d",
-        label: "It publishes it online instantly without any permission",
+        label: "That it changes the description without saying why",
       },
     ],
-    correctAnswer: "m3q28_a",
+    correctAnswer: "m3q28_b",
     topic: "Multimodality",
     difficulty: "medium",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Gemini understands images: it describes, reads text and answers about them. Review the map.",
+      "Asking for the part of the image that supports the detail lets you check it. A detail with no visible basis is not used.",
   },
   {
     id: "m3q29",
@@ -825,7 +828,7 @@ export const MODULE_3_EN = [
     correctAnswer: "m3q29_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
       "A long report does not guarantee accuracy: verify key findings in its sources.",
   },
@@ -864,27 +867,28 @@ export const MODULE_3_EN = [
     options: [
       {
         id: "m3q31_a",
-        label: "Check both against sources and decide",
+        label: "Choose the longer one, because it looks more complete",
       },
       {
         id: "m3q31_b",
-        label: "Pick the longest answer without comparing anything at all",
+        label: "Contrast both with sources and decide afterwards",
       },
       {
         id: "m3q31_c",
-        label: "Pick the one with the most citations without reviewing them",
+        label:
+          "Choose the one with more citations, even if you have not opened them",
       },
       {
         id: "m3q31_d",
-        label: "Use the first one",
+        label: "Keep the first one and forget the other",
       },
     ],
-    correctAnswer: "m3q31_a",
+    correctAnswer: "m3q31_b",
     topic: "Critical Thinking",
     difficulty: "hard",
     source: "Real Cases: Digital Detectives in Action",
     feedback:
-      "When answers differ, go back to the sources. Review the real cases video.",
+      "Two different answers are contrasted with sources before deciding. Length or the number of citations guarantees nothing.",
   },
   {
     id: "m3q32",
@@ -917,32 +921,31 @@ export const MODULE_3_EN = [
   },
   {
     id: "m3q33",
-    question:
-      "What is the difference between a normal search and Deep Research in Gemini?",
+    question: "What is Deep Research for, rather than a normal search?",
     options: [
       {
         id: "m3q33_a",
-        label: "Deep Research does a deep, extensive analysis",
+        label: "A topic with many sources and a cited report",
       },
       {
         id: "m3q33_b",
-        label: "Deep Research only searches for images instead of pages",
+        label: "A quick question with a single answer",
       },
       {
         id: "m3q33_c",
-        label: "They are identical in every way",
+        label: "Generating supporting images for the report",
       },
       {
         id: "m3q33_d",
-        label: "Deep Research answers much faster than a normal search",
+        label: "Answering faster than any search",
       },
     ],
     correctAnswer: "m3q33_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Deep Research goes deeper and delivers a report with sources. Review the ecosystem map.",
+      "Deep Research gathers several sources and delivers a report with citations. A quick question is solved with a normal search.",
   },
   {
     id: "m3q34",
@@ -974,24 +977,23 @@ export const MODULE_3_EN = [
   },
   {
     id: "m3q35",
-    question:
-      "What is the best way to use Gemini for an exam or academic work?",
+    question: "Which rule must an academic work with Gemini support follow?",
     options: [
       {
         id: "m3q35_a",
-        label: "As study support, following your institution's rules",
+        label: "Declaring the use and citing the sources you consulted",
       },
       {
         id: "m3q35_b",
-        label: "To produce the whole assignment without ever declaring it",
+        label: "Hiding that AI was used to avoid suspicion",
       },
       {
         id: "m3q35_c",
-        label: "To answer the exam in real time on your behalf",
+        label: "Not citing, because AI already summarizes everything",
       },
       {
         id: "m3q35_d",
-        label: "To copy complete texts without citing the authorship",
+        label: "Handing it in as it is, even if the teacher does not ask",
       },
     ],
     correctAnswer: "m3q35_a",
@@ -999,149 +1001,150 @@ export const MODULE_3_EN = [
     difficulty: "easy",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Use it as support and respect your institution's integrity rules. Review the manual.",
+      "Declaring the use and citing the sources consulted is the honest rule. Hiding AI or not citing is not.",
   },
   {
     id: "m3q36",
-    question: "What type of question makes the best use of Grounding?",
+    question:
+      "When is it better for Gemini to check the web instead of answering from memory?",
     options: [
       {
         id: "m3q36_a",
-        label: "One that depends on recent data",
+        label: "When the question is a joke with no data",
       },
       {
         id: "m3q36_b",
-        label: "An invented question with no relation to the present",
+        label:
+          "When the answer depends on changing data, such as prices or news",
       },
       {
         id: "m3q36_c",
-        label: "A creative fiction task with no external data at all",
+        label: "Always, even if the question is about a poem",
       },
       {
         id: "m3q36_d",
-        label: "A simple math operation",
+        label: "Never, because memory is always more recent",
       },
     ],
-    correctAnswer: "m3q36_a",
+    correctAnswer: "m3q36_b",
     topic: "Grounding",
     difficulty: "medium",
     source: "Gemini in Practice: Field Exercises",
     feedback:
-      "Grounding shines with current information that changes fast. Review the field exercises.",
+      "Changing data needs current sources. A poem or a joke does not need a web check.",
   },
   {
     id: "m3q37",
     question:
-      "Gemini is slow because it is analyzing a huge document. What is the best strategy?",
+      "Gemini answers without having read the part you need. What do you do?",
     options: [
       {
         id: "m3q37_a",
-        label: "Ask about specific sections and verify answers",
+        label: "I accept the answer, since a general summary is usually enough",
       },
       {
         id: "m3q37_b",
-        label: "Repeat the same question until it answers fast",
+        label: "I ask the same thing again in other words",
       },
       {
         id: "m3q37_c",
-        label: "Delete the document and guess the content yourself",
+        label: "I ask it to answer fast even if it does not cite the section",
       },
       {
         id: "m3q37_d",
-        label: "Ask for an invented summary to save time",
+        label: "I ask it to cite the section and I review it myself",
       },
     ],
-    correctAnswer: "m3q37_a",
+    correctAnswer: "m3q37_d",
     topic: "Long Context",
     difficulty: "hard",
     source: "Gemini in Practice: Field Exercises",
     feedback:
-      "Focus by sections and ask for citations to move faster and verify. Review the field exercises.",
+      "Asking for the section and reviewing it confirms whether the answer comes from the document. Accepting a general summary without checking does not.",
   },
   {
     id: "m3q38",
-    question: "What is a good use of Gemini extensions in your daily life?",
+    question: "What use of Gemini for planning a trip is most responsible?",
     options: [
       {
         id: "m3q38_a",
-        label: "Check flights or places with current data",
+        label: "Booking without checking anything, only with Gemini's answer",
       },
       {
         id: "m3q38_b",
-        label: "Replacing all your travel decisions without reviewing",
+        label: "Sharing your passport so it can keep it",
       },
       {
         id: "m3q38_c",
-        label: "Avoiding any other websites online",
+        label: "Checking options and confirming prices on the official page",
       },
       {
         id: "m3q38_d",
-        label: "Sharing your personal data with every service available",
+        label: "Avoiding every other website forever",
       },
     ],
-    correctAnswer: "m3q38_a",
+    correctAnswer: "m3q38_c",
     topic: "Gemini Extensions",
     difficulty: "easy",
-    source: "Gemini Ecosystem: Your Visual Research Map",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Extensions add current data to help you decide better. Review the ecosystem map.",
+      "Gemini helps compare options; the booking and your personal data are confirmed on the official site.",
   },
   {
     id: "m3q39",
-    question:
-      "A key data point only appears in a blog with no author. What do you do?",
+    question: "What do you look at before citing an author in your report?",
     options: [
       {
         id: "m3q39_a",
-        label: "Find a more reliable source or discard it",
+        label: "That they are identifiable and the data is theirs",
       },
       {
         id: "m3q39_b",
-        label: "Cite it anyway because the data seems very convincing",
+        label: "That they have many followers online",
       },
       {
         id: "m3q39_c",
-        label: "Attribute it to a recognized institution without checking",
+        label: "That their name sounds familiar",
       },
       {
         id: "m3q39_d",
-        label: "Hide it in a footnote",
+        label: "That the blog has a professional design",
       },
     ],
     correctAnswer: "m3q39_a",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "The Guardian's Cases",
+    source: "The Mirror of Truth",
     feedback:
-      "A source with no author is not enough: find reliable backup or discard the data.",
+      "Citing requires an identifiable author and the data in their text. Followers or design are not sources.",
   },
   {
     id: "m3q40",
     question:
-      "Case: a report on fusion energy with recent, verifiable data. What is the best flow?",
+      "Case: a report with data on a recent topic. What do you verify before handing it in?",
     options: [
       {
         id: "m3q40_a",
-        label: "Deep Research with focus and citation checks",
+        label: "That the report has many images",
       },
       {
         id: "m3q40_b",
-        label: "A normal search and copy the first result",
+        label: "That each figure has an openable source and date",
       },
       {
         id: "m3q40_c",
-        label: "Ask for the report with no sources or checkable data",
+        label: "That the text is longer than a classmate's",
       },
       {
         id: "m3q40_d",
-        label: "Generate images of the topic instead of researching the data",
+        label: "That nobody read the sources before handing in",
       },
     ],
-    correctAnswer: "m3q40_a",
+    correctAnswer: "m3q40_b",
     topic: "Professional Research",
     difficulty: "hard",
     source: "Real Cases: Digital Detectives in Action",
     feedback:
-      "The ideal flow: Deep Research with sources and verification afterward. Review the video.",
+      "Each figure needs a source you can open and a date. Images or length prove nothing.",
   },
 ];

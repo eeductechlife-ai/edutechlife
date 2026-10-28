@@ -19,7 +19,7 @@ ActivityBuilder.propTypes = {
 };
 
 export default function ActivityBuilder({ onNext, addXp }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [step, setStep] = useState(1);
   const [selections, setSelections] = useState({
     trigger: null,
@@ -27,7 +27,20 @@ export default function ActivityBuilder({ onNext, addXp }) {
     dest: null,
   });
 
+  const [hint, setHint] = useState(false);
+  const HINT = {
+    es: "Antes de usar el resultado hay que revisarlo: elige la opción del guardián.",
+    en: "A result must be reviewed before you use it: choose the guardian's option.",
+    pt: "Antes de usar o resultado é preciso revisá-lo: escolha a opção do guardião.",
+  };
+
   const handleSelect = (type, val) => {
+    // Paso 3: solo avanza quien elige revisar el resultado antes de usarlo.
+    if (type === "dest" && val !== t("ova.buildgpt.slack_dest")) {
+      setHint(true);
+      return;
+    }
+    setHint(false);
     setSelections({ ...selections, [type]: val });
     setTimeout(() => {
       if (step < 3) setStep(step + 1);
@@ -143,6 +156,14 @@ export default function ActivityBuilder({ onNext, addXp }) {
               ))}
             </div>
           </div>
+        )}
+        {step === 3 && hint && !selections.dest && (
+          <p
+            role="status"
+            className="mt-4 text-center text-sm font-semibold text-amber-700 dark:text-amber-300"
+          >
+            {HINT[locale] || HINT.es}
+          </p>
         )}
         {selections.dest && (
           <div className="text-center animate-[scaleIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">

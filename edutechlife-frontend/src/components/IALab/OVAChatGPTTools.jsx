@@ -9,6 +9,7 @@ import {
   Image as ImageIcon,
   Layout,
   Cpu,
+  Mic,
   Lightbulb,
   Play,
   CheckCircle2,
@@ -33,7 +34,7 @@ import {
 import { withShuffledOptions } from "../../utils/stableShuffle";
 import { OVAIntro } from "./shared";
 
-const iconMap = { Globe, Code, ImageIcon, Layout, Cpu };
+const iconMap = { Globe, Code, ImageIcon, Layout, Cpu, Mic };
 
 const ToolIcon = ({ icon, iconColor, className }) => {
   const Icon = iconMap[icon];

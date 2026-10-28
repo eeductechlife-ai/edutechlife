@@ -404,7 +404,7 @@ export const furtherReading = [
   },
   {
     title: "AI Podcast Creation Best Practices",
-    url: "https://www.edutechlife.com/blog/ai-podcast-creation",
+    url: "https://www.edutechlife.co/blog/ai-podcast-creation",
     description: "Best practices for creating podcasts with AI.",
   },
 ];

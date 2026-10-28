@@ -113,7 +113,7 @@ const COURSE_KNOWLEDGE_PT = [
           },
           {
             type: "ova_interactive",
-            title: "A Linha de Montagem",
+            title: "A Caixa de Ferramentas",
           },
         ],
       },
@@ -226,7 +226,7 @@ const COURSE_KNOWLEDGE_PT = [
           },
           {
             type: "ova",
-            title: "O Caso Aberto",
+            title: "O Arquivo Forense",
           },
         ],
       },
@@ -371,7 +371,7 @@ const COURSE_KNOWLEDGE_PT = [
             title: "IA Ética: Princípios e Prática",
             duration: "6:05",
           },
-          { type: "ova", title: "O Tribunal Ético" },
+          { type: "ova", title: "O Espelho da Verdade" },
         ],
       },
     ],

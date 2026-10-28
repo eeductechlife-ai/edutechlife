@@ -4,69 +4,194 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import { CheckCircle, Check, Award, Star, CheckCircle2 } from "lucide-react";
 import { Card } from "../shared";
 
-const questions = [
-  {
-    q: "1. Un equipo docente quiere que un GPT responda automáticamente dudas sobre fechas de exámenes dentro del correo electrónico. ¿Qué necesita configurar?",
-    options: [
-      "Un GPT con Acción de Gmail que lea y responda correos automáticamente.",
-      "Un GPT estándar sin acciones, los alumnos copian y pegan sus dudas.",
-      "Solo un prompt bien escrito, sin necesidad de APIs externas.",
-      "Un archivo PDF subido como conocimiento del GPT.",
-    ],
-    answer: 0,
-  },
-  {
-    q: "2. ¿Cuál es la diferencia clave entre un GPT personalizado y el ChatGPT estándar?",
-    options: [
-      "El GPT personalizado sigue instrucciones fijas, tiene base de conocimiento propia y puede conectar con APIs externas.",
-      "El GPT personalizado es más rápido que ChatGPT estándar.",
-      "ChatGPT estándar no puede procesar texto largo, solo el GPT personalizado.",
-      "El GPT personalizado funciona sin conexión a internet.",
-    ],
-    answer: 0,
-  },
-  {
-    q: "3. Un estudiante usa un GPT para generar un ensayo completo y lo entrega sin leerlo. ¿Cuál debió ser el uso correcto?",
-    options: [
-      "Usarlo como compañero cognitivo: para lluvia de ideas, debatir conceptos y recibir retroalimentación de sus borradores.",
-      "Usarlo solo para formato, porque la IA no debería participar en la creación de contenido.",
-      "Usar herramientas para ocultar el rastro de IA y evitar detección.",
-      "Evitar la IA por completo, pues destruye la creatividad.",
-    ],
-    answer: 0,
-  },
-  {
-    q: "4. ¿Cuál es el mayor impacto pedagógico de que un docente automatice tareas administrativas con un GPT?",
-    options: [
-      "Libera tiempo para enfocarse en empatía, tutorías personalizadas y diseño de experiencias de aprendizaje más humanas.",
-      "Permite justificar una reducción de carga laboral y dar menos clases.",
-      "Demuestra que los docentes pueden ser reemplazados por sistemas de IA.",
-      "Obliga al docente a certificarse como ingeniero de software.",
-    ],
-    answer: 0,
-  },
-
-  {
-    q: "5. Un equipo de marketing quiere crear un GPT que genere informes semanales automáticos a partir de datos de ventas en Google Sheets. ¿Qué necesita configurar?",
-    options: [
-      "Un GPT con conocimiento de archivos PDF y Acción de Gmail.",
-      "Un GPT con Acción de Google Sheets que lea datos y genere informes.",
-      "Un GPT estándar, el usuario copia y pega los datos manualmente.",
-      "Solo un prompt con instrucciones, sin necesidad de acciones.",
-    ],
-    answer: 1,
-  },
-  {
-    q: "6. ¿Qué consideración ética es más importante al crear un GPT para uso educativo con estudiantes menores de edad?",
-    options: [
-      "Que el GPT tenga la apariencia más moderna posible.",
-      "Que el GPT sea gratuito y no requiera suscripción.",
-      "Garantizar privacidad de datos, supervisión docente y transparencia sobre el uso de IA.",
-      "Que el GPT pueda generar contenido en múltiples idiomas.",
-    ],
-    answer: 2,
-  },
-];
+const QUESTIONS = {
+  es: [
+    {
+      q: "1. Cada semana escribes un boletín para las familias con el mismo tono y las mismas reglas. ¿Qué te conviene armar?",
+      options: [
+        "Un agente que lo envíe solo, sin revisar.",
+        "Un Proyecto con tus instrucciones y un ejemplo de boletín.",
+        "Escribirlo desde cero cada semana.",
+        "Un archivo con las contraseñas de las familias.",
+      ],
+      answer: 1,
+    },
+    {
+      q: "2. ¿Cuál es la diferencia entre un Proyecto y un agente?",
+      options: [
+        "Un Proyecto guarda el contexto de un trabajo; un agente hace varios pasos seguidos bajo tu supervisión.",
+        "Un agente siempre es más rápido que un Proyecto.",
+        "El Proyecto solo funciona sin internet.",
+        "No hay ninguna diferencia.",
+      ],
+      answer: 0,
+    },
+    {
+      q: "3. Tu cuenta avisa que los GPTs personalizados dejarán de funcionar y tienes uno con tus instrucciones. ¿Qué haces?",
+      options: [
+        "Lo ignoro: seguro no pasa nada.",
+        "Borro todo mi trabajo.",
+        "Copio sus instrucciones y las guardo en un Proyecto.",
+        "Lo comparto con más gente para que lo usen ya.",
+      ],
+      answer: 2,
+    },
+    {
+      q: "4. Un agente comparó tres proveedores y armó una tabla. ¿Qué haces antes de enviarla a tu cliente?",
+      options: [
+        "La envío de inmediato.",
+        "Confío porque trabajó varios minutos.",
+        "Borro las fuentes para que no se vean.",
+        "Reviso el plan, abro las fuentes y compruebo las cifras importantes.",
+      ],
+      answer: 3,
+    },
+    {
+      q: "5. ¿Qué NO deberías subir a un Proyecto sin autorización?",
+      options: [
+        "El manual de tono de tu negocio.",
+        "Una plantilla de correo.",
+        "Datos personales de tus clientes o de menores de edad.",
+        "Tus propias instrucciones.",
+      ],
+      answer: 2,
+    },
+    {
+      q: "6. Un docente quiere dejar de repetir el mismo contexto en cada chat. ¿Qué paso es correcto?",
+      options: [
+        "Crear un Proyecto con instrucciones claras y los archivos necesarios, y probarlo con un caso real.",
+        "Pegar todo el contexto en cada chat.",
+        "Pedir un agente sin definir el objetivo.",
+        "Subir todos los archivos del computador.",
+      ],
+      answer: 0,
+    },
+  ],
+  en: [
+    {
+      q: "1. Every week you write a newsletter for families with the same tone and rules. What should you set up?",
+      options: [
+        "An agent that sends it on its own, with no review.",
+        "A Project with your instructions and a sample newsletter.",
+        "Writing it from scratch every week.",
+        "A file with the families' passwords.",
+      ],
+      answer: 1,
+    },
+    {
+      q: "2. What is the difference between a Project and an agent?",
+      options: [
+        "A Project keeps the context of a job; an agent does several steps in a row under your supervision.",
+        "An agent is always faster than a Project.",
+        "A Project only works offline.",
+        "There is no difference.",
+      ],
+      answer: 0,
+    },
+    {
+      q: "3. Your account warns that custom GPTs will stop working and you have one with your instructions. What do you do?",
+      options: [
+        "I ignore it: nothing will happen.",
+        "I delete all my work.",
+        "I copy its instructions and save them in a Project.",
+        "I share it with more people so they can use it now.",
+      ],
+      answer: 2,
+    },
+    {
+      q: "4. An agent compared three suppliers and built a table. What do you do before sending it to your client?",
+      options: [
+        "I send it right away.",
+        "I trust it because it worked for several minutes.",
+        "I delete the sources so they are not visible.",
+        "I review the plan, open the sources and check the key figures.",
+      ],
+      answer: 3,
+    },
+    {
+      q: "5. What should you NOT upload to a Project without permission?",
+      options: [
+        "Your business's tone manual.",
+        "An email template.",
+        "Personal data of your clients or of minors.",
+        "Your own instructions.",
+      ],
+      answer: 2,
+    },
+    {
+      q: "6. A teacher wants to stop repeating the same context in every chat. Which step is right?",
+      options: [
+        "Create a Project with clear instructions and the needed files, and test it with a real case.",
+        "Paste all the context into every chat.",
+        "Ask for an agent without defining the goal.",
+        "Upload every file on the computer.",
+      ],
+      answer: 0,
+    },
+  ],
+  pt: [
+    {
+      q: "1. Toda semana você escreve um informativo para as famílias com o mesmo tom e as mesmas regras. O que convém montar?",
+      options: [
+        "Um agente que envie sozinho, sem revisar.",
+        "Um Projeto com as suas instruções e um exemplo de informativo.",
+        "Escrever do zero toda semana.",
+        "Um arquivo com as senhas das famílias.",
+      ],
+      answer: 1,
+    },
+    {
+      q: "2. Qual a diferença entre um Projeto e um agente?",
+      options: [
+        "Um Projeto guarda o contexto de um trabalho; um agente faz vários passos seguidos sob a sua supervisão.",
+        "Um agente é sempre mais rápido que um Projeto.",
+        "O Projeto só funciona sem internet.",
+        "Não há diferença.",
+      ],
+      answer: 0,
+    },
+    {
+      q: "3. Sua conta avisa que os GPTs personalizados vão deixar de funcionar e você tem um com as suas instruções. O que faz?",
+      options: [
+        "Ignoro: com certeza não acontece nada.",
+        "Apago todo o meu trabalho.",
+        "Copio as instruções dele e guardo em um Projeto.",
+        "Compartilho com mais gente para usarem já.",
+      ],
+      answer: 2,
+    },
+    {
+      q: "4. Um agente comparou três fornecedores e montou uma tabela. O que você faz antes de enviá-la ao cliente?",
+      options: [
+        "Envio na hora.",
+        "Confio porque ele trabalhou vários minutos.",
+        "Apago as fontes para não aparecerem.",
+        "Reviso o plano, abro as fontes e confiro os números importantes.",
+      ],
+      answer: 3,
+    },
+    {
+      q: "5. O que você NÃO deve enviar a um Projeto sem autorização?",
+      options: [
+        "O manual de tom do seu negócio.",
+        "Um modelo de e-mail.",
+        "Dados pessoais de clientes ou de menores de idade.",
+        "As suas próprias instruções.",
+      ],
+      answer: 2,
+    },
+    {
+      q: "6. Um professor quer parar de repetir o mesmo contexto em cada chat. Qual passo é correto?",
+      options: [
+        "Criar um Projeto com instruções claras e os arquivos necessários, e testá-lo com um caso real.",
+        "Colar todo o contexto em cada chat.",
+        "Pedir um agente sem definir o objetivo.",
+        "Enviar todos os arquivos do computador.",
+      ],
+      answer: 0,
+    },
+  ],
+};
 
 QuizScreen.propTypes = {
   onNext: PropTypes.func,
@@ -75,7 +200,8 @@ QuizScreen.propTypes = {
 };
 
 export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const questions = QUESTIONS[locale] || QUESTIONS.es;
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);

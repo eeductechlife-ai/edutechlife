@@ -1,111 +1,119 @@
 export const tools = [
   {
     id: "browse",
-    title: "Busca na Web (Browse)",
+    title: "Pesquisa na web",
     icon: "Globe",
     iconColor: "text-blue-500",
-    desc: "Conecta o ChatGPT ao mundo real em tempo real. É a sua janela para a atualidade acadêmica e profissional.",
-    pros: ["Notícias 2025/2026", "Estatísticas atuais", "Verificação de fatos"],
-    cons: ["Conceitos teóricos básicos", "Redação criativa simples"],
+    desc: "Conecta o ChatGPT a informações recentes e mostra as fontes. Confira: abra pelo menos uma fonte e confirme a data antes de usar um número.",
+    pros: [
+      "Notícias e preços recentes",
+      "Normas e dados vigentes",
+      "Fontes que você pode abrir",
+    ],
+    cons: [
+      "Não serve para conceitos básicos que você já conhece",
+      "Uma resposta sem fontes é só uma hipótese",
+    ],
     prompt:
-      "Busque as regulamentações mais recentes de IA na Colômbia para 2025 e resuma os pontos principais.",
+      "Busque o preço atual de [produto] na minha cidade e me dê os links das fontes com a data.",
     audio:
-      "A busca na web permite que o ChatGPT acesse a internet em tempo real. Use-a para dados atualizados, notícias recentes ou para verificar informações que mudam rapidamente.",
+      "A pesquisa na web permite ao ChatGPT consultar informações recentes. Peça sempre as fontes e abra pelo menos uma antes de usar um número.",
     useCases: [
-      "Revisão de literatura recente",
-      "Atualização de marcos legais",
-      "Busca de cotações ao vivo",
+      "Comparar preços",
+      "Conferir normas vigentes",
+      "Confirmar uma notícia",
     ],
   },
   {
-    id: "code",
-    title: "Intérprete de Código",
+    id: "files",
+    title: "Análise de arquivos e dados",
     icon: "Code",
     iconColor: "text-emerald-500",
-    desc: "Um motor Python real dentro do chat. Ideal para cientistas de dados, engenheiros e estudantes de finanças.",
+    desc: "Lê seus PDFs, planilhas e tabelas para resumir, organizar ou transformar em gráfico. Confira: refaça uma linha à mão e peça a página de cada dado.",
     pros: [
-      "Análise de Excel/CSV",
-      "Gráficos profissionais",
-      "Cálculos matemáticos complexos",
+      "Resumir documentos longos",
+      "Organizar e graficar uma tabela",
+      "Responder perguntas sobre o seu arquivo",
     ],
-    cons: ["Não gera imagens artísticas", "Não acessa URLs privadas"],
+    cons: [
+      "Pode errar com tabelas muito bagunçadas",
+      "Não envie dados pessoais de terceiros",
+    ],
     prompt:
-      "Analise este Excel de vendas, gere um gráfico de barras por trimestre e identifique o produto destaque.",
+      "Revise esta planilha de vendas, faça uma tabela por mês e um gráfico de barras e me diga como calculou cada total.",
     audio:
-      "O intérprete de código executa Python real. É perfeito para analisar arquivos de dados, criar visualizações e realizar cálculos estatísticos avançados.",
+      "A análise de arquivos permite enviar um documento ou uma tabela e pedir um resumo ou um gráfico. Refaça uma linha à mão para conferir o resultado.",
     useCases: [
-      "Limpeza de bancos de dados",
-      "Modelos matemáticos",
-      "Conversão de formatos de arquivo",
+      "Resumir um relatório",
+      "Graficar as vendas do mês",
+      "Organizar uma lista de contatos sem dados sensíveis",
     ],
   },
   {
-    id: "dalle",
-    title: "DALL-E 3",
+    id: "images",
+    title: "Criação de imagens",
     icon: "ImageIcon",
     iconColor: "text-purple-500",
-    desc: "Transforme as suas ideias visuais em realidade. Crie material educacional e ilustrações personalizadas com precisão.",
-    pros: [
-      "Infográficos educacionais",
-      "Logos e conceitos",
-      "Fundos para apresentações",
+    desc: "Transforma uma descrição em uma ilustração. Confira: revise os textos dentro da imagem e os direitos; uma imagem ilustra, não prova.",
+    pros: ["Ilustrar uma ideia", "Fundos e capas", "Ideias visuais rápidas"],
+    cons: [
+      "Falha com textos longos dentro da imagem",
+      "Não copia logotipos nem marcas com exatidão",
     ],
-    cons: ["Texto denso dentro de imagens", "Marcas registradas exatas"],
     prompt:
-      "Gere uma ilustração em estilo infográfico do ciclo da água com as etapas claramente rotuladas.",
+      "Crie uma ilustração simples do ciclo da água com etapas claras e sem texto dentro da imagem.",
     audio:
-      "O DALL-E é o sistema de geração de imagens. Permite criar material visual original para as suas apresentações ou projetos acadêmicos.",
-    useCases: [
-      "Material didático visual",
-      "Capas para relatórios",
-      "Visualização de conceitos abstratos",
-    ],
+      "A criação de imagens serve para ilustrar ideias. Revise os detalhes, os textos e os direitos antes de publicar.",
+    useCases: ["Material didático visual", "Capas", "Visualizar um conceito"],
   },
   {
     id: "canvas",
     title: "Canvas",
     icon: "Layout",
     iconColor: "text-orange-500",
-    desc: "Um espaço de trabalho colaborativo. Edite texto e código em paralelo com a IA, como se tivesse um editor humano.",
+    desc: "Um painel ao lado do chat para editar um texto com você. Confira: leia cada mudança antes de aceitá-la.",
     pros: [
-      "Edição direta de documentos",
-      "Sugestões em tempo real",
-      "Ajuste de tom e extensão",
+      "Editar só um parágrafo",
+      "Ajustar tom e extensão",
+      "Manter o resto do documento",
     ],
-    cons: ["Disponível apenas nos modelos 4o", "Não é um editor de vídeo"],
+    cons: [
+      "Mais útil em textos longos",
+      "As mudanças precisam ser revisadas uma a uma",
+    ],
     prompt:
-      "Abra o Canvas e ajude-me a estruturar uma redação sobre o impacto da IA na saúde mental.",
+      "Abra o Canvas e me ajude a organizar um texto sobre o meu negócio; mude só o segundo parágrafo.",
     audio:
-      "O Canvas é um ambiente de edição colaborativa. Abre um editor ao lado do chat, onde você e a inteligência artificial podem trabalhar no mesmo documento simultaneamente.",
+      "O Canvas abre um painel ao lado do chat onde você e o ChatGPT trabalham no mesmo documento. Revise cada mudança antes de aceitá-la.",
     useCases: [
-      "Redação iterativa de redações",
-      "Revisão passo a passo de código",
-      "Adaptação de manuais técnicos",
+      "Reescrever uma seção",
+      "Melhorar um e-mail longo",
+      "Adaptar um manual",
     ],
   },
   {
-    id: "memory",
-    title: "Memória e Projetos",
-    icon: "Cpu",
+    id: "voice",
+    title: "Voz",
+    icon: "Mic",
     iconColor: "text-indigo-500",
-    desc: "Personalização e organização de longo prazo. O ChatGPT aprende as suas preferências e agrupa o seu trabalho por objetivos.",
+    desc: "Converse com o ChatGPT falando: serve para praticar, ditar e pensar em voz alta. Confira: confirme a transcrição antes de enviar algo importante.",
     pros: [
-      "Lembra o seu perfil acadêmico",
-      "Organiza teses e arquivos",
-      "Contexto compartilhado persistente",
+      "Praticar um idioma",
+      "Ditar ideias enquanto caminha",
+      "Brainstorming rápido",
     ],
     cons: [
-      "Requer configuração de privacidade",
-      "Uso otimizado nos planos Plus",
+      "Pode entender mal nomes e números",
+      "Depende do seu plano e dispositivo",
     ],
     prompt:
-      "Lembre-se de que sou estudante de Medicina e prefiro explicações técnicas com exemplos clínicos.",
+      "Vamos conversar em inglês sobre o meu dia de trabalho e me corrija quando eu errar.",
     audio:
-      "A memória permite que a inteligência artificial lembre as suas preferências. Os Projetos organizam vários chats e arquivos sob o mesmo contexto de trabalho.",
+      "A voz permite conversar com o ChatGPT. Confirme sempre a transcrição antes de usar algo importante.",
     useCases: [
-      "Tutor personalizado",
-      "Gestão de pesquisa",
-      "Manutenção do estilo de redação",
+      "Praticar um idioma",
+      "Ditar uma ideia",
+      "Preparar uma apresentação falando",
     ],
   },
 ];
@@ -113,114 +121,109 @@ export const tools = [
 export const quizScenarios = [
   {
     question:
-      "Você é um docente preparando um manual de laboratório de 20 páginas. Precisa que a IA ajude a reescrever apenas a seção de 'Normas de Segurança', ajustando o tom para adolescentes, sem alterar o restante do documento. Qual ambiente oferece o fluxo mais otimizado?",
-    options: [
-      "Projetos e Memória",
-      "Canvas",
-      "Intérprete de Código",
-      "Busca na Web",
-    ],
+      "Você é professor e prepara um manual de laboratório de 20 páginas. Precisa reescrever só a seção “Normas de segurança” com um tom para adolescentes, sem mexer no resto. Qual ferramenta serve melhor?",
+    options: ["Pesquisa na web", "Canvas", "Criação de imagens", "Voz"],
     correct: 1,
     explanation:
-      "O Canvas permite editar seções específicas de um documento longo de forma paralela em um editor lateral, mantendo o contexto sem regenerar todo o texto.",
+      "O Canvas permite editar uma seção específica de um documento longo em um painel lateral sem gerar todo o texto de novo. Revise cada mudança antes de aceitá-la.",
   },
   {
     question:
-      "Você tem um arquivo Excel com as notas de 3.000 estudantes, desorganizadas e com formatos inconsistentes. Quer limpar a base e prever a evasão. Qual ferramenta é indispensável?",
-    options: ["DALL-E 3", "Canvas", "Busca na Web", "Intérprete de Código"],
+      "Você tem uma planilha com as notas de um curso, bagunçadas. Quer uma tabela por matéria e um gráfico. Qual ferramenta usa?",
+    options: [
+      "Criação de imagens",
+      "Canvas",
+      "Pesquisa na web",
+      "Análise de arquivos e dados",
+    ],
     correct: 3,
     explanation:
-      "O Intérprete de Código executa Python, o que permite processar arquivos massivos, limpar dados e realizar cálculos estatísticos exatos.",
+      "A análise de arquivos lê sua planilha, organiza e faz o gráfico. Confira o resultado refazendo uma linha à mão.",
   },
   {
     question:
-      "Você orienta um estudante na sua tese de graduação. Quer que o ChatGPT lembre a metodologia, as correções e o referencial teórico em cada sessão, sem ter que explicar o contexto novamente. Qual função você usaria?",
-    options: [
-      "Memória e Projetos",
-      "Intérprete de Código",
-      "Canvas",
-      "Busca na Web",
-    ],
-    correct: 0,
-    explanation:
-      "Os Projetos agrupam conversas sob instruções comuns, e a Memória salva o contexto de forma persistente no longo prazo.",
-  },
-  {
-    question:
-      "Um estudante menciona uma flutuação do dólar que ocorreu há apenas uma hora. Você precisa que o ChatGPT gere uma análise sobre as causas imediatas. Qual ferramenta você ativa?",
+      "Um estudante menciona uma mudança de preço de uma hora atrás e você quer uma análise das causas imediatas. O que ativa?",
     options: [
       "Canvas",
-      "Busca na Web (Browse)",
-      "Memória",
-      "Intérprete de Código",
+      "Voz",
+      "Pesquisa na web, e abro as fontes",
+      "Criação de imagens",
     ],
-    correct: 1,
+    correct: 2,
     explanation:
-      "Para analisar eventos em tempo real ou notícias de última hora, é obrigatório usar a Busca na Web para acessar dados atuais fora do treinamento base.",
+      "Para fatos recentes você precisa da pesquisa na web. Uma resposta sem fontes é só uma hipótese: abra pelo menos uma antes de usá-la.",
   },
   {
     question:
-      "Você quer projetar o pôster da feira de ciências. Pede ao ChatGPT uma imagem com um parágrafo longo das bases do concurso e logos exatos dos patrocinadores. O que acontecerá?",
+      "Você quer um pôster para a feira de ciências com um parágrafo longo de regras e os logotipos exatos dos patrocinadores, tudo dentro da imagem. O que vai acontecer?",
     options: [
       "O pôster ficará perfeito e pronto para imprimir.",
-      "O intérprete de código bloqueará a solicitação por privacidade.",
-      "A imagem terá erros no texto longo e logos imprecisos.",
+      "A análise de arquivos bloqueará o pedido por privacidade.",
+      "A imagem terá erros no texto longo e logotipos inexatos.",
       "O Canvas abrirá um editor gráfico manual.",
     ],
     correct: 2,
     explanation:
-      "O DALL-E 3 é excelente para arte conceitual, mas tem dificuldades com textos longos e logos de marcas registradas exatos, devido a restrições legais e técnicas.",
+      "A criação de imagens ilustra bem, mas falha com textos longos e logotipos exatos. Coloque o texto à parte e revise a imagem antes de publicar.",
   },
   {
     question:
-      "Você é pesquisador e precisa gerar gráficos estatísticos a partir de dados de uma pesquisa em CSV. Além disso, quer que a IA valide os cálculos. Qual combinação de ferramentas é mais eficiente?",
+      "Você quer praticar inglês conversando e ditar ideias para um trabalho enquanto caminha. Qual ferramenta combina?",
     options: [
-      "Apenas o Canvas para editar o CSV visualmente.",
-      "Intérprete de Código para analisar e gerar gráficos, mais Busca na Web para contrastar metodologias.",
-      "DALL-E 3 para criar um infográfico dos resultados.",
-      "Memória e Projetos para salvar os resultados.",
+      "Voz",
+      "Canvas",
+      "Análise de arquivos e dados",
+      "Criação de imagens",
     ],
-    correct: 1,
+    correct: 0,
     explanation:
-      "O Intérprete de Código executa Python para uma análise estatística exata, e o Browse complementa com referências metodológicas atualizadas. É a combinação mais potente.",
+      "A voz serve para conversar e ditar. Confirme a transcrição antes de usar algo importante, sobretudo nomes e números.",
   },
   {
     question:
-      "Você está desenvolvendo um projeto de pesquisa de longo prazo. Precisa que a IA lembre o formato dos seus relatórios, as fontes já consultadas e mantenha tudo organizado por tema. Qual é a melhor configuração?",
+      "Você tem uma pesquisa em uma planilha e precisa de um gráfico e de contexto sobre como se fazem essas pesquisas. Qual combinação é melhor?",
     options: [
-      "Usar o Canvas para editar os relatórios.",
-      "Criar um Projeto com instruções personalizadas e ativar a Memória para lembrar preferências.",
-      "Usar o DALL-E 3 para ilustrar os relatórios.",
-      "Depender apenas da Busca na Web a cada vez.",
+      "Só o Canvas para editar a planilha.",
+      "Análise de arquivos para a tabela e o gráfico, e pesquisa na web para o contexto, conferindo uma linha à mão e as fontes.",
+      "Criação de imagens para desenhar os resultados.",
+      "Só voz para ditar os dados.",
     ],
     correct: 1,
     explanation:
-      "Os Projetos mantêm instruções e arquivos agrupados, enquanto a Memória lembra as suas preferências no longo prazo. É a configuração ideal para pesquisa contínua.",
+      "Combinar ferramentas funciona se você conferir cada passo: refaça uma linha da análise e abra as fontes da pesquisa.",
+  },
+  {
+    question:
+      "Você tem um PDF de 80 páginas e precisa das ideias principais com a localização. Como faz?",
+    options: [
+      "Colo o PDF e aceito o resumo porque soa seguro.",
+      "Envio o arquivo, peço o resumo com a página de cada ideia e abro duas páginas para conferir.",
+      "Peço que invente as páginas.",
+      "Resumo só com a pesquisa na web.",
+    ],
+    correct: 1,
+    explanation:
+      "Em arquivos longos peça a página de cada dado e abra algumas para conferir se dizem o que o resumo afirma.",
   },
 ];
 
 export const learningObjectives = [
-  "Identificar as ferramentas-chave do ecossistema ChatGPT",
-  "Selecionar a ferramenta adequada para cada tarefa acadêmica ou profissional",
-  "Avaliar as vantagens e limitações de cada ferramenta",
-  "Aplicar estratégias de uso combinado de ferramentas para maximizar resultados",
+  "Identificar as ferramentas do ChatGPT: pesquisa, arquivos, imagens, Canvas e voz",
+  "Escolher a ferramenta certa para a tarefa",
+  "Reconhecer os limites de cada ferramenta",
+  "Conferir o que cada ferramenta entrega antes de usar",
 ];
 
 export const furtherReading = [
   {
-    title: "OpenAI Documentation — Tools Overview",
-    url: "https://platform.openai.com/docs/overview",
-    description: "Documentação oficial de ferramentas e APIs da OpenAI.",
-  },
-  {
-    title: "ChatGPT Guide for Educators",
-    url: "https://openai.com/education/",
-    description: "Guia oficial da OpenAI para uso educacional do ChatGPT.",
-  },
-  {
-    title: "Prompt Engineering Guide",
-    url: "https://www.promptingguide.ai/",
+    title: "Central de Ajuda da OpenAI",
+    url: "https://help.openai.com/",
     description:
-      "Guia completo de engenharia de prompts com exemplos práticos.",
+      "Documentação oficial: funções e disponibilidade conforme a sua conta.",
+  },
+  {
+    title: "ChatGPT para educação",
+    url: "https://openai.com/education/",
+    description: "Informações oficiais sobre o uso do ChatGPT na educação.",
   },
 ];

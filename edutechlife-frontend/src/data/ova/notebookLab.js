@@ -8,4 +8,4 @@ const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 export const { contentScreens, questionsData, learningObjectives } = data;
 
 export const moduleContext =
-  "Aprender a usar NotebookLM para crear cuadernos de investigación basados en fuentes propias con respuestas fundamentadas.";
+  "Aprender a usar Gemini Notebook para crear cuadernos de investigación basados en fuentes propias con respuestas fundamentadas.";

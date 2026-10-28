@@ -8,4 +8,4 @@ const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 export const { tools, quizScenarios, learningObjectives } = data;
 
 export const moduleContext =
-  "Explorar las herramientas del ecosistema ChatGPT — búsqueda web, intérprete de código, DALL-E, Canvas y memoria — para potenciar el aprendizaje y la productividad.";
+  "Explorar las herramientas de ChatGPT (búsqueda web, archivos, imágenes, Canvas y voz) para elegir la adecuada y comprobar lo que entrega.";

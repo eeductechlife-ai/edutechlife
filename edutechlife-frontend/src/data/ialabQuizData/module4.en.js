@@ -89,80 +89,81 @@ export const MODULE_4_EN = [
   {
     id: "m4q4",
     question:
-      "Gemini Notebook cites your PDF and you read the original text. What should you do?",
+      "Gemini Notebook cites your PDF and you read the original text. What is best to do?",
     options: [
       {
         id: "m4q4_a",
-        label: "Compare the quote with the original document",
+        label: "Trust the citation if the PDF looks well formatted",
       },
       {
         id: "m4q4_b",
-        label: "Trust the quote without checking the original",
+        label: "Delete the PDF and ask for the answer again",
       },
       {
         id: "m4q4_c",
-        label: "Delete the PDF because the AI already interpreted it",
+        label: "Translate the citation and compare it with its translation",
       },
       {
         id: "m4q4_d",
-        label: "Translate the answer to check its quality",
+        label:
+          "Compare the citation with the original text of the PDF you uploaded",
       },
     ],
-    correctAnswer: "m4q4_a",
+    correctAnswer: "m4q4_d",
     topic: "Accuracy",
     difficulty: "hard",
     source: "Gemini Notebook Guide",
     feedback:
-      "Always check citations against the original: the AI gives speed and you give accuracy.",
+      "Comparing the citation with the original text confirms that the figure is there and says what is claimed.",
   },
   {
     id: "m4q5",
-    question:
-      "How do you best organize your sources in Gemini Notebook for research?",
+    question: "How should you name a research notebook?",
     options: [
       {
         id: "m4q5_a",
-        label: "Upload all the sources without ordering them",
+        label: "With the specific topic you are researching",
       },
       {
         id: "m4q5_b",
-        label: "Choose relevant sources and group them by topic",
+        label: "With your own name, so it is recognized",
       },
       {
         id: "m4q5_c",
-        label: "Upload only summaries, never full documents",
+        label: "With today's date only",
       },
       {
         id: "m4q5_d",
-        label: "Mix academic sources with blogs without distinction",
+        label: "With an empty title to change later",
       },
     ],
-    correctAnswer: "m4q5_b",
+    correctAnswer: "m4q5_a",
     topic: "Curation",
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "Well chosen and organized sources give better answers. Review the curation topic.",
+      "A name with the specific topic lets you find the notebook and know which sources it holds.",
   },
   {
     id: "m4q6",
-    question: "If two of your sources contradict each other, what do you do?",
+    question: "Two sources contradict each other. What do you do?",
     options: [
       {
         id: "m4q6_a",
-        label: "Analyze both sources carefully",
+        label: "I analyze both sources carefully and explain the difference",
       },
       {
         id: "m4q6_b",
-        label: "Delete both sources and look for others",
+        label: "I delete both sources and look for others without reading them",
       },
       {
         id: "m4q6_c",
-        label: "Keep only the most recent one",
+        label: "I keep only the most recent one, without comparing",
       },
       {
         id: "m4q6_d",
-        label: "Ignore the contradiction and move on",
+        label:
+          "I ignore the contradiction because the summary already looks good",
       },
     ],
     correctAnswer: "m4q6_a",
@@ -170,7 +171,7 @@ export const MODULE_4_EN = [
     difficulty: "hard",
     source: "Gemini Notebook Guide",
     feedback:
-      "Contradictions strengthen your research if you analyze them. Review the analysis simulator.",
+      "A contradiction is resolved by reading both sources and explaining the difference. Discarding or ignoring a source does not solve it.",
   },
   {
     id: "m4q7",
@@ -228,7 +229,7 @@ export const MODULE_4_EN = [
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "Gemini Notebook lets you share notebooks like Google Docs. Review the module lab.",
+      "Gemini Notebook lets you share notebooks like Google Docs. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q9",
@@ -291,24 +292,23 @@ export const MODULE_4_EN = [
   {
     id: "m4q11",
     question:
-      "What is the key difference between Gemini Notebook and a general chat?",
+      "You are going to upload a list of students with their grades to a notebook. What do you do?",
     options: [
       {
         id: "m4q11_a",
-        label: "It answers only with information from the sources you upload",
+        label: "Anonymize it: codes instead of names, and only what is needed",
       },
       {
         id: "m4q11_b",
-        label: "It searches the internet on its own for any new data",
+        label: "Upload it in full, because the notebook is private",
       },
       {
         id: "m4q11_c",
-        label: "It invents creative answers even with no sources loaded",
+        label: "Upload it with phone numbers so you can contact them later",
       },
       {
         id: "m4q11_d",
-        label:
-          "It automatically translates the documents into another language",
+        label: "Share it with the whole course without reviewing it",
       },
     ],
     correctAnswer: "m4q11_a",
@@ -316,7 +316,7 @@ export const MODULE_4_EN = [
     difficulty: "easy",
     source: "First Steps with Gemini Notebook",
     feedback:
-      "Gemini Notebook relies on your sources: if it is not in your documents, it will not answer. Review the video.",
+      "Anonymizing and uploading only what is needed protects students. A notebook is a working document, not a place without rules.",
   },
   {
     id: "m4q12",
@@ -348,31 +348,31 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q13",
-    question: "Which of these sources adds most to a formal research notebook?",
+    question: "What tells you that a source is reliable?",
     options: [
       {
         id: "m4q13_a",
-        label: "Peer-reviewed papers and reliable datasets",
+        label: "It has many visits and positive comments",
       },
       {
         id: "m4q13_b",
-        label: "Loose comments",
+        label: "It is the first search result",
       },
       {
         id: "m4q13_c",
-        label: "Memes and funny posts about the topic in question",
+        label: "An identifiable author, a date and verifiable references",
       },
       {
         id: "m4q13_d",
-        label: "Anonymous opinions with no source or declared date",
+        label: "It uses very confident and enthusiastic language",
       },
     ],
-    correctAnswer: "m4q13_a",
+    correctAnswer: "m4q13_c",
     topic: "Curation",
     difficulty: "easy",
     source: "The Grimoire",
     feedback:
-      "Prioritize reliable, verifiable sources. Practice in the notebook creation lab.",
+      "Author, date and references can be checked. Visits, search order or tone prove nothing.",
   },
   {
     id: "m4q14",
@@ -399,38 +399,38 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q14_a",
     topic: "Curation",
     difficulty: "medium",
-    source: "Smart Summaries with Gemini Notebook",
+    source: "Gemini Notebook: the notebook of the future",
     feedback:
-      "Less noise, better answers: prioritize relevance and reliability. Review the summaries infographic.",
+      "Less noise, better answers: prioritize relevance and reliability. Review the Gemini Notebook guide.",
   },
   {
     id: "m4q15",
     question:
-      "Gemini Notebook answers only from your documents. What does this imply?",
+      "You want the notebook to answer only about document 3. What do you do?",
     options: [
       {
         id: "m4q15_a",
-        label: "If a fact is not in your sources, it will not appear",
+        label: "Upload all the documents and hope it remembers",
       },
       {
         id: "m4q15_b",
-        label: "The notebook only accesses the internet to complete data",
+        label: "Ask it to also answer with internet data",
       },
       {
         id: "m4q15_c",
-        label: "It always knows more than the information you uploaded",
+        label: "Ask it to answer only from that document and cite the page",
       },
       {
         id: "m4q15_d",
-        label: "It can fill gaps with information from other users",
+        label: "Delete the other documents without telling anyone",
       },
     ],
-    correctAnswer: "m4q15_a",
+    correctAnswer: "m4q15_c",
     topic: "Scope",
     difficulty: "medium",
     source: "First Steps with Gemini Notebook",
     feedback:
-      "Gemini Notebook is faithful to your sources: that is why curation matters. Review the video.",
+      "Limiting the question to one document and asking for the page makes the answer verifiable. The other steps mix sources or lose traceability.",
   },
   {
     id: "m4q16",
@@ -523,60 +523,62 @@ export const MODULE_4_EN = [
   {
     id: "m4q19",
     question:
-      "Gemini Notebook gives a figure that appears in none of your documents. What do you do?",
+      "Gemini Notebook gives a figure that is not in your documents. What do you do?",
     options: [
       {
         id: "m4q19_a",
-        label: "Check your documents; if it is missing, do not use it",
+        label: "Use it with a note that it comes from the notebook",
       },
       {
         id: "m4q19_b",
-        label: "Use it, because it sounds credible and came from AI",
+        label: "Round it to a similar value and cite the notebook",
       },
       {
         id: "m4q19_c",
-        label: "Cite the notebook as the source and publish it that way",
+        label:
+          "Look for it in your documents and, if it is missing, do not use it",
       },
       {
         id: "m4q19_d",
-        label: "Ask it to round the number so it looks more precise",
+        label: "Use it because the AI gave it with confidence",
       },
     ],
-    correctAnswer: "m4q19_a",
+    correctAnswer: "m4q19_c",
     topic: "Accuracy",
     difficulty: "hard",
     source: "The Grimoire",
     feedback:
-      "A figure missing from your sources cannot be verified: do not use it until you confirm it. Practice in the notebook lab.",
+      "A figure that is not in your documents cannot be verified. Look for it and, if it is missing, do not use it.",
   },
   {
     id: "m4q20",
     question:
-      "Two sources contradict each other on a point. What is the most rigorous?",
+      "A report cites a source you cannot find in your notebook. What do you do?",
     options: [
       {
         id: "m4q20_a",
-        label: "Analyze both sources and document the key difference",
+        label: "I accept the citation because it is well written",
       },
       {
         id: "m4q20_b",
-        label: "Keep the most recent one and discard the other one",
+        label: "I check the upload and look for the original source",
       },
       {
         id: "m4q20_c",
-        label: "Ignore the contradiction so the report stays simple",
+        label:
+          "I remove the citation from the report without checking anything else",
       },
       {
         id: "m4q20_d",
-        label: "Delete both sources and keep no evidence of the point",
+        label: "I write the author's name myself",
       },
     ],
-    correctAnswer: "m4q20_a",
+    correctAnswer: "m4q20_b",
     topic: "Critical Analysis",
     difficulty: "hard",
     source: "The Crucible",
     feedback:
-      "Document the contradiction and look for additional evidence. Practice in the simulator.",
+      "A citation you cannot open does not back the figure. Look for the original source before using it.",
   },
   {
     id: "m4q21",
@@ -608,23 +610,24 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q22",
-    question: "For which situation is an Audio Overview most useful?",
+    question: "What is the best way to use an Audio Overview?",
     options: [
       {
         id: "m4q22_a",
-        label: "For reviewing while you commute and cannot read screens",
+        label:
+          "Listen to it first and then open the citations that interest you",
       },
       {
         id: "m4q22_b",
-        label: "For completely replacing reading and analysis",
+        label: "Use it as the only reading on the topic",
       },
       {
         id: "m4q22_c",
-        label: "For uploading more documents to the notebook in less time",
+        label: "Share it without reviewing what it says",
       },
       {
         id: "m4q22_d",
-        label: "For translating the documents into another unknown language",
+        label: "Use it to replace the original sources",
       },
     ],
     correctAnswer: "m4q22_a",
@@ -632,36 +635,35 @@ export const MODULE_4_EN = [
     difficulty: "easy",
     source: "The Alchemical Studio",
     feedback:
-      "Audio helps you learn on the move; it does not replace analysis. Practice in the podcast lab.",
+      "The audio works as a first pass while you are on the move. To trust what it says, open the citations.",
   },
   {
     id: "m4q23",
-    question:
-      "When generating a podcast with your documents, what control do you have?",
+    question: "What is the right step after listening to the audio?",
     options: [
       {
         id: "m4q23_a",
-        label: "You guide the angle and regenerate it",
+        label: "Consider the study finished without checking anything",
       },
       {
         id: "m4q23_b",
-        label: "No control at all",
+        label: "Upload the audio as a source for the notebook",
       },
       {
         id: "m4q23_c",
-        label: "You write word by word the final script of the audio",
+        label: "Write three ideas and compare them with the citations",
       },
       {
         id: "m4q23_d",
-        label: "You only choose the background music for the intro",
+        label: "Share it without listening to it again",
       },
     ],
-    correctAnswer: "m4q23_a",
+    correctAnswer: "m4q23_c",
     topic: "Audio Overview",
     difficulty: "medium",
     source: "The Alchemical Studio",
     feedback:
-      "You can guide the angle and regenerate. Practice in the AI podcast creation lab.",
+      "Writing the ideas in your own words and comparing them with the citations checks that you understood and that the audio is faithful.",
   },
   {
     id: "m4q24",
@@ -687,7 +689,7 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q24_a",
     topic: "Audio Overview",
     difficulty: "medium",
-    source: "The Transmutation",
+    source: "The Alchemical Studio",
     feedback:
       "Better sources and organization, better audio. Review document mastery to podcast.",
   },
@@ -722,52 +724,51 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q26",
-    question: "Who can access a notebook that you share?",
+    question: "What must you decide before sharing a notebook with your team?",
     options: [
       {
         id: "m4q26_a",
-        label: "Only the people you grant access to when sharing it",
+        label: "Nothing: it is shared with the whole world automatically",
       },
       {
         id: "m4q26_b",
-        label: "Any person in the world, with no invitation needed",
+        label: "Only the color of the notebook title",
       },
       {
         id: "m4q26_c",
-        label: "All Gemini Notebook users automatically and by default",
+        label: "That each person gets a different copy with their own data",
       },
       {
         id: "m4q26_d",
-        label: "Nobody, because a notebook can never be shared",
+        label: "Who can view it and who can edit it",
       },
     ],
-    correctAnswer: "m4q26_a",
+    correctAnswer: "m4q26_d",
     topic: "Collaboration",
     difficulty: "easy",
     source: "Gemini Notebook Guide",
     feedback:
-      "You share with whomever you decide, like a collaborative document. Review the guide.",
+      "Sharing well means deciding who views and who edits. Permissions prevent unwanted changes or access.",
   },
   {
     id: "m4q27",
-    question:
-      "You want to ask Gemini Notebook a precise question. Which one works best?",
+    question: "Which question works best to compare two sources?",
     options: [
       {
         id: "m4q27_a",
-        label: "A concrete question that asks for citations from sources",
+        label: "Where do these sources contradict, and from which document?",
       },
       {
         id: "m4q27_b",
-        label: "A single loose word with no context or defined intent",
+        label: "What do you think about everything?",
       },
       {
         id: "m4q27_c",
-        label: "Several different questions mixed into one single message",
+        label: "Give me everything about the topic in one line",
       },
       {
         id: "m4q27_d",
-        label: "A broad request with no relation to the loaded sources",
+        label: "Tell me anything you have",
       },
     ],
     correctAnswer: "m4q27_a",
@@ -775,93 +776,94 @@ export const MODULE_4_EN = [
     difficulty: "medium",
     source: "First Steps with Gemini Notebook",
     feedback:
-      "Concrete questions asking for citations give better results. Review the getting started video.",
+      "A specific question that asks for the point of contrast and its document produces a verifiable comparison.",
   },
   {
     id: "m4q28",
     question:
-      "A document has a data point that contradicts your conclusion. What do you do?",
+      "A document has a figure that contradicts your conclusion. What do you do?",
     options: [
       {
         id: "m4q28_a",
-        label: "Review the source again and adjust your conclusion",
+        label: "Ignore the figure because you already have your conclusion",
       },
       {
         id: "m4q28_b",
-        label: "Ignore the data because it does not fit what you thought",
+        label: "Review the source and adjust your conclusion",
       },
       {
         id: "m4q28_c",
-        label: "Delete the document so it does not appear in the notebook",
+        label: "Remove that document from the notebook without saying anything",
       },
       {
         id: "m4q28_d",
-        label: "Ask the AI to omit the data that contradicts you",
+        label: "Ask the AI to summarize without that figure",
       },
     ],
-    correctAnswer: "m4q28_a",
+    correctAnswer: "m4q28_b",
     topic: "Critical Analysis",
     difficulty: "hard",
     source: "The Crucible",
     feedback:
-      "Evidence rules: adjust your conclusion if the source warrants it. Practice in the simulator.",
+      "A figure that contradicts your conclusion means reviewing the source and, if it applies, adjusting the conclusion.",
   },
   {
     id: "m4q29",
     question:
-      "What is the difference between a notebook's knowledge base and a general chat?",
+      "Two documents from 2019 and 2025 give different figures. What do you do?",
     options: [
       {
         id: "m4q29_a",
-        label: "The notebook sticks strictly to the sources you uploaded",
+        label: "Use the 2019 figure because it was the first one that appeared",
       },
       {
         id: "m4q29_b",
-        label: "None: both always answer the same question identically",
+        label:
+          "Compare the dates, use the most recent reliable source and explain the change",
       },
       {
         id: "m4q29_c",
-        label: "The general chat only works with PDF files you have loaded",
+        label: "Average the two figures without looking at their dates",
       },
       {
         id: "m4q29_d",
-        label: "The notebook can invent data outside of your documents",
+        label: "Ignore the figures and write only the conclusion",
       },
     ],
-    correctAnswer: "m4q29_a",
+    correctAnswer: "m4q29_b",
     topic: "Scope",
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "The notebook is anchored to your sources; the general chat uses prior knowledge. Review the guide.",
+      "The dates explain why the figures change. Using the most recent source with an explanation is the rigorous path.",
   },
   {
     id: "m4q30",
-    question: "What does source curation achieve in a research project?",
+    question: "What is filtering sources before synthesizing for?",
     options: [
       {
         id: "m4q30_a",
-        label: "More reliable answers, grounded in relevant sources",
+        label: "So the notebook weighs more and looks better",
       },
       {
         id: "m4q30_b",
-        label: "Making the notebook heavier and harder to open",
+        label: "So the summary rests on what really matters",
       },
       {
         id: "m4q30_c",
-        label: "Making the AI invent more to fill the data gaps",
+        label: "So the AI invents what is missing",
       },
       {
         id: "m4q30_d",
-        label: "Allowing fewer documents to be loaded in each notebook",
+        label: "So you upload fewer sources for no reason",
       },
     ],
-    correctAnswer: "m4q30_a",
+    correctAnswer: "m4q30_b",
     topic: "Curation",
     difficulty: "easy",
-    source: "Smart Summaries with Gemini Notebook",
+    source: "Gemini Notebook: the notebook of the future",
     feedback:
-      "Curating is choosing well: better sources, better answers. Review the summaries infographic.",
+      "Filtering chooses the relevant, reliable sources before summarizing. The synthesis then rests on useful evidence.",
   },
   {
     id: "m4q31",
@@ -894,31 +896,31 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q32",
-    question: "What is a well-designed complete flow in Gemini Notebook?",
+    question: "What is a complete, well-planned flow in Gemini Notebook?",
     options: [
       {
         id: "m4q32_a",
-        label: "Curate the sources, analyze them and generate the audio",
+        label: "Upload documents and trust the first answer",
       },
       {
         id: "m4q32_b",
-        label: "Load documents at random and trust the first answer",
+        label: "Generate the audio and review the sources afterwards",
       },
       {
         id: "m4q32_c",
-        label: "Ignore the citations and publish the answers without review",
+        label: "Publish the answers without citations",
       },
       {
         id: "m4q32_d",
-        label: "Generate the audio before uploading any base document",
+        label: "Select sources, analyze their ideas and generate the audio",
       },
     ],
-    correctAnswer: "m4q32_a",
+    correctAnswer: "m4q32_d",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "The Transmutation",
+    source: "The Alchemical Studio",
     feedback:
-      "The ideal flow: curate → analyze/synthesize → audio to review. Review document mastery to podcast.",
+      "The right flow goes from selecting sources to analysis and, at the end, the audio. Reviewing afterwards leaves the risk in the result.",
   },
   {
     id: "m4q33",
@@ -975,36 +977,36 @@ export const MODULE_4_EN = [
     difficulty: "medium",
     source: "The Grimoire",
     feedback:
-      "A focused notebook answers better: remove what does not add. Practice in the lab.",
+      "A focused notebook answers better: remove what does not add. Practice in the activity The Crucible.",
   },
   {
     id: "m4q35",
     question:
-      "Gemini Notebook cannot find something you ask about in your sources. What does it mean?",
+      "What information does a Gemini Notebook citation give you to check a fact?",
     options: [
       {
         id: "m4q35_a",
-        label: "That the data does not appear anywhere in your documents",
+        label: "Only the notebook name, without the document",
       },
       {
         id: "m4q35_b",
-        label: "That the document has a format Gemini Notebook cannot read",
+        label: "Today's date, even if the document is old",
       },
       {
         id: "m4q35_c",
-        label: "That you should ask it to invent it anyway for you",
+        label: "The word count of the answer",
       },
       {
         id: "m4q35_d",
-        label: "That the data does exist even if it is in no document",
+        label: "The document and the passage the statement comes from",
       },
     ],
-    correctAnswer: "m4q35_a",
+    correctAnswer: "m4q35_d",
     topic: "Scope",
     difficulty: "medium",
     source: "First Steps with Gemini Notebook",
     feedback:
-      "If it is not in your sources, it does not answer: add the source or search elsewhere.",
+      "A citation gives the document and the passage. With it you can open the source and confirm the statement.",
   },
   {
     id: "m4q36",
@@ -1037,60 +1039,59 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q37",
-    question:
-      "You are about to base a decision on a Gemini Notebook synthesis. What do you do first?",
+    question: "What do you check before trusting a synthesis?",
     options: [
       {
         id: "m4q37_a",
-        label: "Open the cited sources and double-check the key points",
+        label: "That it has more than five well-written paragraphs",
       },
       {
         id: "m4q37_b",
-        label: "Decide right away because the AI is almost never wrong",
+        label: "That each key statement has a citation you can open",
       },
       {
         id: "m4q37_c",
-        label: "Change the data of the synthesis to suit your convenience",
+        label: "That the AI has signed it as correct",
       },
       {
         id: "m4q37_d",
-        label: "Ask for another synthesis and keep the longest one",
+        label: "That the answer is the first one that appeared",
       },
     ],
-    correctAnswer: "m4q37_a",
+    correctAnswer: "m4q37_b",
     topic: "Verification",
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "Before deciding, verify the key points in the cited sources. Review the Gemini Notebook guide.",
+      "A synthesis can be trusted when its key statements have a verifiable citation. Length or an AI signature does not guarantee it.",
   },
   {
     id: "m4q38",
-    question: "What characteristic defines a good Gemini Notebook notebook?",
+    question: "What makes a synthesis useful for making a decision?",
     options: [
       {
         id: "m4q38_a",
-        label: "Relevant sources, well organized",
+        label: "It is as long as possible",
       },
       {
         id: "m4q38_b",
-        label: "Many documents",
+        label: "It uses very technical words even without sources",
       },
       {
         id: "m4q38_c",
-        label: "A very long, eye-catching title with many emojis included",
+        label: "It has no date, so it stays valid",
       },
       {
         id: "m4q38_d",
-        label: "No sources loaded, to let the AI improvise on its own",
+        label: "Each conclusion has a citation you can open",
       },
     ],
-    correctAnswer: "m4q38_a",
+    correctAnswer: "m4q38_d",
     topic: "Curation",
     difficulty: "easy",
     source: "Gemini Notebook Guide",
     feedback:
-      "A focused, reliable notebook answers better. Review the Gemini Notebook guide.",
+      "A synthesis helps you decide when each conclusion can be verified. Length, jargon or a missing date do not make it useful.",
   },
   {
     id: "m4q39",
@@ -1099,11 +1100,11 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q39_a",
-        label: "It turns your conclusions into audio you can review",
+        label: "It turns the conclusions into audio to review them",
       },
       {
         id: "m4q39_b",
-        label: "It replaces source curation with a simple summary",
+        label: "It replaces source review with a simple summary",
       },
       {
         id: "m4q39_c",
@@ -1117,39 +1118,38 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q39_a",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "The Transmutation",
+    source: "The Alchemical Studio",
     feedback:
-      "Audio turns your conclusions into a listenable review. Review document mastery to podcast.",
+      "The Audio Overview helps review conclusions that are already curated. It does not replace checking the sources.",
   },
   {
     id: "m4q40",
     question:
-      "Case: turning 8 papers into a verifiable podcast on a topic. What is the best flow?",
+      "Case: you want a podcast from 8 documents that someone can verify. What do you include in the script?",
     options: [
       {
         id: "m4q40_a",
-        label: "Curate sources, synthesize and generate audio",
+        label: "Only background music and a pleasant voice",
       },
       {
         id: "m4q40_b",
-        label: "Upload the papers unordered",
+        label: "Statements with no source, so it sounds smoother",
       },
       {
         id: "m4q40_c",
         label:
-          "Generate the audio without checking that the citations are correct",
+          "The citations for each idea, so the listener can go to the source",
       },
       {
         id: "m4q40_d",
-        label:
-          "Choose the papers by social media popularity without reading them",
+        label: "Author names with no dates or documents",
       },
     ],
-    correctAnswer: "m4q40_a",
+    correctAnswer: "m4q40_c",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "The Transmutation",
+    source: "The Alchemical Studio",
     feedback:
-      "Curate → synthesize with citations → verify → audio: the complete, verifiable flow. Review the OVA.",
+      "A verifiable podcast gives the source of each idea. Music or smoothness do not replace evidence.",
   },
 ];

@@ -120,7 +120,7 @@ export const TOOL_CHROME_CONFIG = {
     subtle: "#f8f9ff",
   },
   notebooklm: {
-    label: "NotebookLM",
+    label: "Gemini Notebook",
     /* Banner del módulo */
     headerBg: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 60%, #1d4ed8 100%)",
     badgeBg: "rgba(245,158,11,0.15)",

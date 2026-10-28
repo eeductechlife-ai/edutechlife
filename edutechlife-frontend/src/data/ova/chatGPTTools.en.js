@@ -1,108 +1,112 @@
 export const tools = [
   {
     id: "browse",
-    title: "Web Search (Browse)",
+    title: "Web search",
     icon: "Globe",
     iconColor: "text-blue-500",
-    desc: "Connects ChatGPT to the real world in real time. Your window to current academic and professional events.",
-    pros: ["2025/2026 News", "Current statistics", "Fact checking"],
-    cons: ["Basic theoretical concepts", "Simple creative writing"],
-    prompt:
-      "Search for the latest AI regulations in Colombia for 2025 and summarize the key points.",
-    audio:
-      "Web search allows ChatGPT to access the internet in real time. Use it for updated data, recent news, or to verify rapidly changing information.",
-    useCases: [
-      "Recent literature review",
-      "Legal framework updates",
-      "Live quote lookup",
+    desc: "Connects ChatGPT to recent information and shows you the sources. Check: open at least one source and confirm the date before using a figure.",
+    pros: [
+      "Recent news and prices",
+      "Current rules and data",
+      "Sources you can open",
     ],
+    cons: [
+      "Not needed for basic concepts you already know",
+      "An answer without sources is only a hypothesis",
+    ],
+    prompt:
+      "Look up the current price of [product] in my city and give me the source links with the date.",
+    audio:
+      "Web search lets ChatGPT look up recent information. Always ask for the sources and open at least one before using a figure.",
+    useCases: ["Compare prices", "Check current rules", "Confirm a news item"],
   },
   {
-    id: "code",
-    title: "Code Interpreter",
+    id: "files",
+    title: "File and data analysis",
     icon: "Code",
     iconColor: "text-emerald-500",
-    desc: "A real Python engine inside the chat. Ideal for data scientists, engineers, and finance students.",
+    desc: "Reads your PDFs, spreadsheets and tables to summarize, sort or chart them. Check: recompute one row by hand and ask for the page of each fact.",
     pros: [
-      "Excel/CSV analysis",
-      "Professional charts",
-      "Complex math calculations",
+      "Summarize long documents",
+      "Sort and chart a table",
+      "Answer questions about your file",
     ],
-    cons: ["Does not generate artistic images", "No access to private URLs"],
+    cons: [
+      "It can slip on very messy tables",
+      "Do not upload other people's personal data",
+    ],
     prompt:
-      "Analyze this sales Excel, generate a quarterly bar chart, and identify the star product.",
+      "Review this sales sheet, make me a table by month and a bar chart, and tell me how you calculated each total.",
     audio:
-      "The code interpreter runs real Python. It's perfect for analyzing data files, creating visualizations, and performing advanced statistical calculations.",
+      "File analysis lets you upload a document or a table and ask for a summary or a chart. Recompute one row by hand to check the result.",
     useCases: [
-      "Database cleaning",
-      "Mathematical models",
-      "File format conversion",
+      "Summarize a report",
+      "Chart the month's sales",
+      "Sort a contact list without sensitive data",
     ],
   },
   {
-    id: "dalle",
-    title: "DALL-E 3",
+    id: "images",
+    title: "Image creation",
     icon: "ImageIcon",
     iconColor: "text-purple-500",
-    desc: "Transform your visual ideas into reality. Create educational material and custom illustrations with precision.",
+    desc: "Turns a description into an illustration. Check: review the text inside the image and the rights; an image illustrates, it does not prove.",
     pros: [
-      "Educational infographics",
-      "Logos and concepts",
-      "Presentation backgrounds",
+      "Illustrate an idea",
+      "Backgrounds and covers",
+      "Quick visual ideas",
     ],
-    cons: ["Dense text within images", "Exact trademarks"],
+    cons: [
+      "It struggles with long text inside the image",
+      "It does not copy logos or brands exactly",
+    ],
     prompt:
-      "Generate an infographic-style illustration of the water cycle with clearly labeled stages.",
+      "Create a simple illustration of the water cycle with clear stages and no text inside the image.",
     audio:
-      "Dall-e is the image generation system. It lets you create original visual material for your presentations or academic projects.",
-    useCases: [
-      "Visual teaching material",
-      "Report covers",
-      "Abstract concept visualization",
-    ],
+      "Image creation is for illustrating ideas. Review the details, the text and the rights before publishing.",
+    useCases: ["Visual teaching material", "Covers", "Visualize a concept"],
   },
   {
     id: "canvas",
     title: "Canvas",
     icon: "Layout",
     iconColor: "text-orange-500",
-    desc: "A collaborative workspace. Edit text and code in parallel with AI as if you had a human editor.",
+    desc: "A panel next to the chat to edit a text with you. Check: read each change before accepting it.",
     pros: [
-      "Direct document editing",
-      "Real-time suggestions",
-      "Tone and length adjustment",
+      "Edit just one paragraph",
+      "Adjust tone and length",
+      "Keep the rest of the document",
     ],
-    cons: ["Only available on 4o models", "Not a video editor"],
+    cons: ["Most useful for long texts", "Changes must be reviewed one by one"],
     prompt:
-      "Open Canvas and help me structure an essay on the impact of AI on mental health.",
+      "Open Canvas and help me organize a text about my business; change only the second paragraph.",
     audio:
-      "Canvas is a collaborative editing environment. It opens an editor alongside the chat where you and the AI can work on the same document simultaneously.",
-    useCases: [
-      "Iterative essay writing",
-      "Step-by-step code review",
-      "Technical manual adaptation",
-    ],
+      "Canvas opens a panel next to the chat where you and ChatGPT work on the same document. Review each change before accepting it.",
+    useCases: ["Rewrite a section", "Improve a long email", "Adapt a manual"],
   },
   {
-    id: "memory",
-    title: "Memory and Projects",
-    icon: "Cpu",
+    id: "voice",
+    title: "Voice",
+    icon: "Mic",
     iconColor: "text-indigo-500",
-    desc: "Long-term personalization and organization. ChatGPT learns your preferences and groups your work by goals.",
+    desc: "Talk to ChatGPT out loud: it works for practicing, dictating and thinking aloud. Check: confirm the transcript before sending something important.",
     pros: [
-      "Remembers your academic profile",
-      "Organizes theses and files",
-      "Persistent shared context",
+      "Practice a language",
+      "Dictate ideas while walking",
+      "Quick brainstorming",
     ],
-    cons: ["Requires privacy setup", "Optimized for Plus plans"],
+    cons: [
+      "It can mishear names and figures",
+      "It depends on your plan and device",
+    ],
     prompt:
-      "Remember that I am a Medical student and I prefer technical explanations with clinical examples.",
+      "Let's chat in English about my workday and correct me when I make a mistake.",
     audio:
-      "Memory allows the AI to remember your preferences. Projects organize multiple chats and files under the same work context.",
+      "Voice lets you talk to ChatGPT. Always confirm the transcript before using something important.",
     useCases: [
-      "Personalized tutor",
-      "Research management",
-      "Writing style maintenance",
+      "Practice a language",
+      "Dictate an idea",
+      "Prepare a talk out loud",
     ],
   },
 ];
@@ -110,109 +114,104 @@ export const tools = [
 export const quizScenarios = [
   {
     question:
-      "You are a teacher preparing a 20-page lab manual. You need the AI to help rewrite only the 'Safety Rules' section, adjusting the tone for teenagers, without altering the rest of the document. Which environment offers the most optimal workflow?",
-    options: [
-      "Projects and Memory",
-      "Canvas",
-      "Code Interpreter",
-      "Web Search",
-    ],
+      "You are a teacher preparing a 20-page lab manual. You need to rewrite only the “Safety rules” section in a teen-friendly tone, without touching the rest. Which tool serves you best?",
+    options: ["Web search", "Canvas", "Image creation", "Voice"],
     correct: 1,
     explanation:
-      "Canvas allows editing specific sections of a long document in a side panel, maintaining context without regenerating the entire text.",
+      "Canvas lets you edit one section of a long document in a side panel without regenerating the whole text. Review each change before accepting it.",
   },
   {
     question:
-      "You have an Excel file with 3,000 student grades, disorganized and with inconsistent formats. You need to clean the database and predict dropout rates. Which tool is essential?",
-    options: ["DALL-E 3", "Canvas", "Web Search", "Code Interpreter"],
+      "You have a spreadsheet with a course's grades, messy. You want a table by subject and a chart. Which tool do you use?",
+    options: [
+      "Image creation",
+      "Canvas",
+      "Web search",
+      "File and data analysis",
+    ],
     correct: 3,
     explanation:
-      "The Code Interpreter runs Python, allowing you to process massive files, clean data, and perform exact statistical calculations.",
+      "File analysis reads your sheet, sorts it and charts it. Check the result by recomputing one row by hand.",
   },
   {
     question:
-      "You advise a student on their thesis. You want ChatGPT to remember the methodology, corrections, and theoretical framework in each session without having to re-explain the context. Which feature would you use?",
+      "A student mentions a price change that happened an hour ago and you want an analysis of the immediate causes. What do you turn on?",
     options: [
-      "Memory and Projects",
-      "Code Interpreter",
       "Canvas",
-      "Web Search",
+      "Voice",
+      "Web search, and I open the sources",
+      "Image creation",
     ],
-    correct: 0,
+    correct: 2,
     explanation:
-      "Projects group conversations under common instructions, and Memory saves context persistently over the long term.",
+      "For recent events you need web search. An answer without sources is only a hypothesis: open at least one before using it.",
   },
   {
     question:
-      "A student mentions a dollar fluctuation that happened just an hour ago. You need ChatGPT to generate an analysis of the immediate causes. Which tool do you activate?",
-    options: ["Canvas", "Web Search (Browse)", "Memory", "Code Interpreter"],
-    correct: 1,
-    explanation:
-      "To analyze real-time events or breaking news, you must use Web Search to access current data outside the base training.",
-  },
-  {
-    question:
-      "You want to design the science fair poster. You ask ChatGPT for an image with a long paragraph of contest rules and exact sponsor logos. What will happen?",
+      "You want a poster for the science fair with a long paragraph of rules and the exact sponsor logos, all inside the image. What will happen?",
     options: [
       "The poster will be perfect and ready to print.",
-      "The code interpreter will block the request for privacy.",
-      "The image will have errors in long text and inaccurate logos.",
+      "File analysis will block the request for privacy.",
+      "The image will have errors in the long text and inexact logos.",
       "Canvas will open a manual graphic editor.",
     ],
     correct: 2,
     explanation:
-      "DALL-E 3 is excellent for concept art, but struggles with long texts and exact trademarked logos due to legal and technical restrictions.",
+      "Image creation illustrates well, but it fails with long text and exact logos. Put the text separately and review the image before publishing.",
   },
   {
     question:
-      "You are a researcher who needs to generate statistical charts from survey data in CSV. You also want the AI to validate the calculations. Which tool combination is most efficient?",
-    options: [
-      "Only Canvas to edit the CSV visually.",
-      "Code Interpreter to analyze and chart, plus Web Search to cross-reference methodologies.",
-      "DALL-E 3 to create an infographic of results.",
-      "Memory and Projects to save the results.",
-    ],
-    correct: 1,
+      "You want to practice English by talking and dictate ideas for a project while walking. Which tool fits?",
+    options: ["Voice", "Canvas", "File and data analysis", "Image creation"],
+    correct: 0,
     explanation:
-      "Code Interpreter runs Python for exact statistical analysis, and Browse complements with up-to-date methodological references. It is the most powerful combination.",
+      "Voice is for talking and dictating. Confirm the transcript before using something important, especially names and figures.",
   },
   {
     question:
-      "You are developing a long-term research project. You need the AI to remember your report format, the sources you have already consulted, and keep everything organized by topic. What is the best setup?",
+      "You have a survey in a spreadsheet and need a chart plus background on how these surveys are done. Which combination is best?",
     options: [
-      "Use Canvas to edit reports.",
-      "Create a Project with custom instructions and enable Memory to remember preferences.",
-      "Use DALL-E 3 to illustrate the reports.",
-      "Rely only on Web Search each time.",
+      "Only Canvas to edit the sheet.",
+      "File analysis for the table and chart, and web search for the background, checking one row by hand and the sources.",
+      "Image creation to draw the results.",
+      "Only voice to dictate the data.",
     ],
     correct: 1,
     explanation:
-      "Projects keep grouped instructions and files, while Memory remembers your long-term preferences. This is the ideal setup for ongoing research.",
+      "Combining tools works if you check each step: recompute one row of the analysis and open the search sources.",
+  },
+  {
+    question:
+      "You have an 80-page PDF and need the main ideas with their location. How do you do it?",
+    options: [
+      "I paste the PDF and accept the summary because it sounds sure.",
+      "I upload the file, ask for the summary with the page of each idea and open two pages to check them.",
+      "I ask it to make up the pages.",
+      "I summarize it with web search only.",
+    ],
+    correct: 1,
+    explanation:
+      "For long files ask for the page of each fact and open a few to check that they say what the summary claims.",
   },
 ];
 
 export const learningObjectives = [
-  "Identify key tools in the ChatGPT ecosystem",
-  "Select the right tool for each academic or professional task",
-  "Evaluate the advantages and limitations of each tool",
-  "Apply combined tool strategies to maximize results",
+  "Identify ChatGPT's tools: search, files, images, Canvas and voice",
+  "Pick the right tool for the task",
+  "Recognize each tool's limits",
+  "Check what each tool gives you before using it",
 ];
 
 export const furtherReading = [
   {
-    title: "OpenAI Documentation — Tools Overview",
-    url: "https://platform.openai.com/docs/overview",
-    description: "Official documentation for OpenAI tools and APIs.",
-  },
-  {
-    title: "ChatGPT Guide for Educators",
-    url: "https://openai.com/education/",
-    description: "Official OpenAI guide for educational use of ChatGPT.",
-  },
-  {
-    title: "Prompt Engineering Guide",
-    url: "https://www.promptingguide.ai/",
+    title: "OpenAI Help Center",
+    url: "https://help.openai.com/",
     description:
-      "Comprehensive prompt engineering guide with practical examples.",
+      "Official documentation: features and availability for your account.",
+  },
+  {
+    title: "ChatGPT for education",
+    url: "https://openai.com/education/",
+    description: "Official information on using ChatGPT in education.",
   },
 ];

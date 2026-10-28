@@ -339,9 +339,9 @@ const RESOURCES_EN = {
       {
         id: "gpts-ova-1",
         type: "ova_interactive",
-        title: "The Assistant Factory",
+        title: "The Project Workshop",
         description:
-          "Hands-on: build a GPT from scratch with guided exercises and feedback at every step. Like the architect supervising every detail of their creation.",
+          "Hands-on: build a Project with instructions and files, test it on a real case and decide when an agent or a plugin fits. Like the architect supervising every detail of their creation.",
         estimatedTime: "25 minutes",
         difficulty: "Advanced",
         interactiveElements: 8,
@@ -366,13 +366,12 @@ const RESOURCES_EN = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Gemini: Accelerated Detective Training",
-        url: "https://www.youtube.com/embed/Y5-5dI3Iero",
-        duration: "7:34",
-        thumbnail: "https://img.youtube.com/vi/XV-2xnFMJqI/maxresdefault.jpg",
-        provider: "youtube",
+        title:
+          "Multimodal Gemini: your lens for images, documents, audio and video",
+        url: "/videos/curso/modulo3-multimodal-gemini.mp4",
+        duration: "1:59",
         description:
-          "Discover the power of your new magnifying glass: from analyzing images like a forensics expert to writing code like a developer. Everything Gemini can do for you, explained in 7 minutes.",
+          "See how Gemini reads images, documents, audio and video, and how to ask it for evidence so you can check each figure. Narrated in Spanish by MAX.",
       },
       {
         id: "gemini-guide-1",
@@ -391,7 +390,8 @@ const RESOURCES_EN = {
         id: "gemini-multimodal-ova-1",
         type: "ova_interactive",
         title: "Testing the Magnifying Glass",
-        description: null,
+        description:
+          "See how Gemini works with images, text and data together: useful for real cases from your field, with verification of each figure.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 6,
@@ -464,9 +464,10 @@ const RESOURCES_EN = {
       {
         id: "gemini-cases-video-1",
         type: "video",
-        title: "Real Cases: Digital Detectives in Action",
+        title:
+          "Academic research with AI in minutes: Gemini and Deep Research without losing rigor",
         url: "https://www.youtube.com/embed/XAshixrvG5k",
-        duration: "16:30",
+        duration: "2:41",
         thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
         provider: "youtube",
         description:
@@ -515,7 +516,7 @@ const RESOURCES_EN = {
       {
         id: "notebooklm-video-1",
         type: "video",
-        title: "First Steps with Gemini Notebook",
+        title: "Complete NotebookLM guide: get the most out of it (2026)",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
         duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
@@ -670,7 +671,7 @@ const RESOURCES_EN = {
         provider: "youtube",
         title: "Introduction to Claude.ai (Spanish)",
         description:
-          'Official Anthropic video, in English (original title: "Getting started with Claude.ai"): how to get started with Claude.ai and have your first useful conversation.',
+          'Official Anthropic video, in English (original title: "Getting started with Claude.ai (Anthropic video, in English)"): how to get started with Claude.ai and have your first useful conversation.',
       },
       {
         id: "claude-guide-es",
@@ -689,7 +690,7 @@ const RESOURCES_EN = {
         id: "claude-first-request-ova-1",
         type: "ova_interactive",
         title: "The First Request",
-        description: null,
+        description: "Practice your first request with feedback at every step.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 3,

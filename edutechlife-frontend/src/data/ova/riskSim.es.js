@@ -38,6 +38,17 @@ export const gameData = [
     feedback:
       "¡Muy bien! Instruir explícitamente a la IA es una gran estrategia de mitigación.",
   },
+  {
+    q: "Quieres que la IA resuma un correo que trae la cédula y el teléfono de un cliente. ¿Qué haces?",
+    opts: [
+      "Pego el correo completo: es más rápido.",
+      "Pego el correo y le pido a la IA que borre los datos después.",
+      "Cambio los datos personales por [Cliente A], [documento] y [teléfono] antes de pegarlo.",
+    ],
+    correct: 2,
+    feedback:
+      "¡Muy bien! Lo que se pega en una IA sale de tu control. Anonimiza primero y compartes solo lo necesario.",
+  },
 ];
 
 export const accordionData = [
@@ -50,10 +61,10 @@ export const accordionData = [
   },
   {
     id: "acc2",
-    title: "Sesgo de Representación y Género (Experimento Stanford)",
+    title: "Sesgo de Representación y Género",
     icon: "👥",
     content:
-      'En 2023, investigadores pidieron a modelos de lenguaje: "Escribe la historia de un CEO exitoso". En el 78% de los casos, generó un hombre. Al pedir historias de "enfermeras", el 91% fueron mujeres. Esto muestra cómo los sesgos históricos se replican automáticamente.',
+      "Los estudios que han probado esto muestran que, al pedir la historia de «un director ejecutivo exitoso», los modelos suelen imaginar a un hombre, y al pedir la de «una enfermera», a una mujer. Así se repiten los estereotipos de los datos con los que aprendieron.",
   },
   {
     id: "acc3",

@@ -1,5 +1,5 @@
 export const learningObjectives = [
-  "Simular el uso de NotebookLM para organizar información",
+  "Simular el uso de Gemini Notebook para organizar información",
   "Practicar la carga y análisis de documentos en un entorno virtual",
   "Desarrollar habilidades de síntesis de información con IA",
   "Evaluar la calidad de las respuestas basadas en fuentes propias",
@@ -7,13 +7,13 @@ export const learningObjectives = [
 
 export const furtherReading = [
   {
-    title: "NotebookLM Help Center",
+    title: "Gemini Notebook Help Center",
     url: "https://support.google.com/notebooklm/",
-    description: "Centro de ayuda oficial de NotebookLM.",
+    description: "Centro de ayuda oficial de Gemini Notebook.",
   },
   {
     title: "AI-Powered Research Tools Comparison",
-    url: "https://www.edutechlife.com/blog/ai-research-tools",
+    url: "https://www.edutechlife.co/blog/ai-research-tools",
     description: "Comparativa de herramientas de investigación con IA.",
   },
 ];
@@ -52,7 +52,7 @@ export const contentScreens = [
     subtitle: "Conectar ideas entre múltiples documentos",
     objective: "Generar síntesis que integren información de diversas fuentes",
     maxText:
-      "El verdadero poder del análisis documental está en la capacidad de conectar ideas entre diferentes fuentes. Una síntesis cruzada te permite identificar patrones, contradicciones y complementos entre documentos que, vistos por separado, no serían evidentes. NotebookLM facilita este proceso al permitirte hacer preguntas que abarcan todas tus fuentes simultáneamente.",
+      "El verdadero poder del análisis documental está en la capacidad de conectar ideas entre diferentes fuentes. Una síntesis cruzada te permite identificar patrones, contradicciones y complementos entre documentos que, vistos por separado, no serían evidentes. Gemini Notebook facilita este proceso al permitirte hacer preguntas que abarcan todas tus fuentes simultáneamente.",
     achievements: [
       { text: "Identificar puntos en común entre diferentes autores" },
       { text: "Detectar contradicciones y debates académicos" },
@@ -104,7 +104,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=1000",
     question:
-      "¿Cuál es el primer paso recomendado antes de subir documentos a NotebookLM para análisis?",
+      "¿Cuál es el primer paso recomendado antes de subir documentos a Gemini Notebook para análisis?",
     options: [
       "Subir todos los documentos disponibles sin revisarlos.",
       "Seleccionar y curar las fuentes según su relevancia y calidad.",
@@ -153,9 +153,10 @@ export const questionsData = [
     id: 4,
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1000",
-    question: "¿Cuál es la mejor práctica al organizar fuentes en NotebookLM?",
+    question:
+      "¿Cuál es la mejor práctica al organizar fuentes en Gemini Notebook?",
     options: [
-      "Subir las 50 fuentes permitidas en un solo notebook sin clasificar.",
+      "Subir todas las fuentes en un solo notebook sin clasificarlas.",
       "Crear notebooks separados por temas o categorías con fuentes afines.",
       "Subir solo el resumen de cada documento, no el documento completo.",
       "Mezclar fuentes académicas con blogs sin distinción.",
@@ -170,16 +171,16 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000",
     question:
-      "¿Por qué es importante verificar las citas que proporciona NotebookLM?",
+      "¿Por qué es importante verificar las citas que proporciona Gemini Notebook?",
     options: [
       "Porque la IA a veces puede alucinar o interpretar incorrectamente el contexto.",
       "Porque las citas siempre están equivocadas.",
-      "Porque NotebookLM solo funciona si verificas cada cita manualmente.",
+      "Porque Gemini Notebook solo funciona si verificas cada cita manualmente.",
       "Porque las citas son decorativas y no necesitan verificación.",
     ],
     correct: 0,
     explanation:
-      "¡Muy bien! Aunque NotebookLM es muy preciso al citar, siempre debes verificar que la cita corresponda al contexto correcto dentro del documento original.",
+      "¡Muy bien! Aunque Gemini Notebook es muy preciso al citar, siempre debes verificar que la cita corresponda al contexto correcto dentro del documento original.",
     hint: "La IA es una herramienta poderosa, pero la verificación humana sigue siendo esencial.",
   },
   {
@@ -187,7 +188,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=1000",
     question:
-      "¿Qué estrategia es más efectiva al hacer preguntas a NotebookLM sobre múltiples fuentes?",
+      "¿Qué estrategia es más efectiva al hacer preguntas a Gemini Notebook sobre múltiples fuentes?",
     options: [
       "Hacer preguntas muy generales como '¿de qué tratan estos documentos?'",
       "Formular preguntas específicas que requieran comparar información entre fuentes.",
@@ -196,7 +197,7 @@ export const questionsData = [
     ],
     correct: 1,
     explanation:
-      "Correcto. Las preguntas específicas que requieren comparación entre fuentes aprovechan al máximo la capacidad de NotebookLM para hacer síntesis cruzadas.",
+      "Correcto. Las preguntas específicas que requieren comparación entre fuentes aprovechan al máximo la capacidad de Gemini Notebook para hacer síntesis cruzadas.",
     hint: "Mientras más específica sea tu pregunta, más útil será la respuesta de la IA.",
   },
   {
@@ -204,7 +205,7 @@ export const questionsData = [
     image:
       "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&q=80&w=1000",
     question:
-      "¿Cuál es el beneficio principal de usar NotebookLM para análisis documental?",
+      "¿Cuál es el beneficio principal de usar Gemini Notebook para análisis documental?",
     options: [
       "Reemplaza completamente la lectura de los documentos originales.",
       "Permite procesar y consultar múltiples fuentes simultáneamente con respuestas fundamentadas.",
@@ -213,7 +214,7 @@ export const questionsData = [
     ],
     correct: 1,
     explanation:
-      "¡Exacto! NotebookLM es un asistente que amplifica tu capacidad de análisis, permitiéndote trabajar con múltiples fuentes a la vez, pero siempre requiere tu supervisión y pensamiento crítico.",
+      "¡Exacto! Gemini Notebook es un asistente que amplifica tu capacidad de análisis, permitiéndote trabajar con múltiples fuentes a la vez, pero siempre requiere tu supervisión y pensamiento crítico.",
     hint: "La IA es una herramienta de aumento, no un reemplazo del pensamiento crítico humano.",
   },
 ];

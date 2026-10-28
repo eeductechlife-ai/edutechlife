@@ -235,7 +235,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q9_a",
-        label: "Contexto claro: objetivo, audiencia y tono de salida",
+        label: "Dar contexto claro: objetivo, audiencia y tono de salida",
       },
       {
         id: "m1q9_b",
@@ -259,24 +259,23 @@ export const MODULE_1 = [
   },
   {
     id: "m1q10",
-    question:
-      "Quieres que la IA te explique un tema complicado. ¿Cuál prompt pide una explicación más clara?",
+    question: "Quieres que la IA escriba mensajes con tu estilo. ¿Qué le das?",
     options: [
       {
         id: "m1q10_a",
-        label: '"Explícame con ejemplos sencillos, de la vida real."',
+        label: "Dos mensajes que ya escribiste y te gustaron",
       },
       {
         id: "m1q10_b",
-        label: '"Dame toda la teoría del tema en una sola respuesta."',
+        label: "Una frase vaga: escribe bonito",
       },
       {
         id: "m1q10_c",
-        label: '"Háblame del tema y también de otros similares."',
+        label: "Solo el nombre de la empresa",
       },
       {
         id: "m1q10_d",
-        label: '"Explica este tema como lo haría un experto avanzado."',
+        label: "Nada: la IA ya conoce tu estilo",
       },
     ],
     correctAnswer: "m1q10_a",
@@ -284,7 +283,7 @@ export const MODULE_1 = [
     difficulty: "medio",
     source: "El Cincel",
     feedback:
-      "Pedir ejemplos y lenguaje simple ayuda a que la explicación sea más clara y útil.",
+      "Ejemplos reales de tu estilo dan a la IA un modelo concreto. Una frase vaga o nada no le dan referencia.",
   },
   {
     id: "m1q11",
@@ -500,7 +499,7 @@ export const MODULE_1 = [
     options: [
       {
         id: "m1q18_a",
-        label: "Para ajustarla a tu situación real",
+        label: "Para que la respuesta se ajuste a tu situación real",
       },
       {
         id: "m1q18_b",
@@ -524,35 +523,31 @@ export const MODULE_1 = [
   },
   {
     id: "m1q19",
-    question: "¿Cuál prompt es MÁS específico?",
+    question: "¿Qué ayuda la instrucción «Actúa como un profesor de primaria»?",
     options: [
       {
         id: "m1q19_a",
-        label:
-          '"Resume en 5 viñetas los riesgos del sedentarismo para adultos mayores"',
+        label: "Hace que la IA responda más rápido",
       },
       {
         id: "m1q19_b",
-        label:
-          '"Háblame de la salud en general y de otros temas parecidos que se te ocurran"',
+        label: "Cambia el idioma de la respuesta sin avisar",
       },
       {
         id: "m1q19_c",
-        label:
-          '"Dame información variada y extensa sobre muchos temas de interés general"',
+        label: "Fija el punto de vista y el nivel con que responde",
       },
       {
         id: "m1q19_d",
-        label:
-          '"Escribe algo interesante y útil que pueda usar en mi trabajo diario"',
+        label: "Obliga a la IA a no usar ejemplos",
       },
     ],
-    correctAnswer: "m1q19_a",
+    correctAnswer: "m1q19_c",
     topic: "Claridad en Prompts",
     difficulty: "fácil",
     source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
-      "El prompt correcto define tema, formato y audiencia; los demás son vagos. Revisa 'Cómo Crear Prompts Efectivos'.",
+      "Asignar un rol define desde qué mirada y con qué nivel responde la IA. No cambia su velocidad ni su idioma.",
   },
   {
     id: "m1q20",
@@ -615,52 +610,51 @@ export const MODULE_1 = [
   {
     id: "m1q22",
     question:
-      "¿Qué ayuda a obtener mejores resultados cuando la IA tiene poco contexto?",
+      "¿Qué pasa si pegas en el chat una lista con nombres y teléfonos de clientes?",
     options: [
       {
         id: "m1q22_a",
-        label: "Pedirle que te haga preguntas antes de responder",
+        label: "La IA los borra al instante, sin dejar ningún rastro",
       },
       {
         id: "m1q22_b",
-        label: "Que responda más rápido sin pensar",
+        label: "Nada: el chat es privado y solo lo ves tú",
       },
       {
         id: "m1q22_c",
-        label: "Que no use ningún dato del pedido",
+        label: "La IA los usa para mejorar tu puntaje del curso",
       },
       {
         id: "m1q22_d",
-        label: "Que cambie de tema para ser más creativa y original",
+        label: "Esos datos salen de tu control y pueden quedar guardados",
       },
     ],
-    correctAnswer: "m1q22_a",
+    correctAnswer: "m1q22_d",
     topic: "Refinamiento de Prompts",
     difficulty: "fácil",
     source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Si le falta contexto, la IA puede suponer. Pedirle preguntas antes evita respuestas erróneas. Practica en el OVA El Cincel.",
+      "Un dato personal pegado en una herramienta sale de tu control y puede quedar guardado. Por eso se anonimiza antes de compartirlo.",
   },
   {
     id: "m1q23",
-    question:
-      "Quieres una explicación breve: 'en máximo 100 palabras'. ¿Qué estás usando?",
+    question: "Quieres una explicación para un niño de 10 años. ¿Qué precisas?",
     options: [
       {
         id: "m1q23_a",
-        label: "Un límite de longitud",
+        label: "El público: un niño de 10 años, con palabras sencillas",
       },
       {
         id: "m1q23_b",
-        label: "Un error que rompe la IA",
+        label: "El color del texto de la respuesta",
       },
       {
         id: "m1q23_c",
-        label: "Un tipo de archivo",
+        label: "El nombre de la herramienta que vas a usar",
       },
       {
         id: "m1q23_d",
-        label: "Una contraseña de la herramienta",
+        label: "Que use la mayor cantidad de palabras técnicas",
       },
     ],
     correctAnswer: "m1q23_a",
@@ -668,35 +662,36 @@ export const MODULE_1 = [
     difficulty: "fácil",
     source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
-      "Las restricciones (longitud, tono, público) acotan la respuesta al resultado deseado.",
+      "Indicar el público define el lenguaje de la respuesta. El color, el nombre de la herramienta o la jerga no dan esa referencia.",
   },
   {
     id: "m1q24",
-    question: "Pides una respuesta en pasos numerados. ¿Qué ventaja tiene?",
+    question:
+      "Quieres una respuesta que puedas pegar en un correo. ¿Qué indicas?",
     options: [
       {
         id: "m1q24_a",
-        label: "Permite revisar cada paso con calma",
+        label: "Que la responda en otro idioma",
       },
       {
         id: "m1q24_b",
-        label: "Hace que la IA ignore el tema del pedido",
+        label: "Que incluya muchos emojis",
       },
       {
         id: "m1q24_c",
-        label: "Obliga a la IA a responder en otro idioma",
+        label: "Que no use markdown ni tablas, solo texto",
       },
       {
         id: "m1q24_d",
-        label: "No cambia nada en el resultado",
+        label: "Que la escriba toda en mayúsculas",
       },
     ],
-    correctAnswer: "m1q24_a",
+    correctAnswer: "m1q24_c",
     topic: "Ejemplos en el Prompt",
     difficulty: "medio",
     source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Los pasos numerados hacen visible el razonamiento y permiten corregir una parte sin rehacer todo.",
+      "Pedir texto simple evita símbolos y tablas que se ven mal al pegar en un correo. Los emojis, el idioma o las mayúsculas no lo resuelven.",
   },
   {
     id: "m1q25",
@@ -730,31 +725,31 @@ export const MODULE_1 = [
   {
     id: "m1q26",
     question:
-      'Prompt: "Hazme algo sobre marketing." ¿Cuál es el principal problema?',
+      "En la fórmula RTF, ¿qué parte indica la acción concreta que debe hacer la IA?",
     options: [
       {
         id: "m1q26_a",
-        label: "Es ambiguo: no indica la tarea, el formato ni el objetivo",
+        label: "El color de la pantalla donde se lee la respuesta",
       },
       {
         id: "m1q26_b",
-        label: "Es demasiado largo y contiene muchos datos irrelevantes",
+        label: "La tarea",
       },
       {
         id: "m1q26_c",
-        label: "Incluye demasiados ejemplos que terminan confundiendo a la IA",
+        label: "El historial de compras del usuario",
       },
       {
         id: "m1q26_d",
-        label: "Usa un tono demasiado formal para el público objetivo",
+        label: "La velocidad del servidor que responde",
       },
     ],
-    correctAnswer: "m1q26_a",
+    correctAnswer: "m1q26_b",
     topic: "Evitar Ambigüedad",
     difficulty: "medio",
     source: "El Cincel",
     feedback:
-      "Sin tarea, formato ni objetivo, la IA adivina. Sé específico y acota el resultado.",
+      "En RTF, la tarea es la acción concreta. Las otras opciones no forman parte del prompt.",
   },
   {
     id: "m1q27",
@@ -787,93 +782,87 @@ export const MODULE_1 = [
   },
   {
     id: "m1q28",
-    question:
-      "Solo quieres que la IA use el texto que pegas y avise si falta algo. ¿Qué pedido funciona?",
+    question: "Escribes a un cliente y quieres un tono cercano. ¿Qué pides?",
     options: [
       {
         id: "m1q28_a",
-        label: "Usa solo el texto que pegué y dime si falta algo",
+        label: "Un tono de bibliografía académica, con citas",
       },
       {
         id: "m1q28_b",
-        label: "Completa lo que falte con lo que sepas de internet",
+        label: "Que la respuesta sea lo más técnica posible",
       },
       {
         id: "m1q28_c",
-        label: "Inventa ejemplos parecidos para ilustrar el texto",
+        label: "Un tono cercano, sin jerga y con una despedida breve",
       },
       {
         id: "m1q28_d",
-        label: "Resume sin leer el texto, con lo que te parezca",
+        label: "Que suene como un abogado, sin ninguna frase amable",
       },
     ],
-    correctAnswer: "m1q28_a",
+    correctAnswer: "m1q28_c",
     topic: "Aplicación RTF",
     difficulty: "medio",
     source: "El Cincel",
     feedback:
-      "Acotar la IA al texto que das evita que invente datos. Pedirle que avise de lo que falta es clave.",
+      "El tono se pide con palabras concretas: cercano, sin jerga, con despedida breve. Lo académico o lo técnico no sirven para un cliente.",
   },
   {
     id: "m1q29",
-    question:
-      "Quieres 10 ideas para una campaña. ¿Cuál prompt te dará mejores ideas?",
+    question: "Quieres 10 ideas para una campaña. ¿Qué pides?",
     options: [
       {
         id: "m1q29_a",
-        label:
-          '"Genera 10 ideas de campaña para una cafetería local, en viñetas"',
+        label: "Una sola idea, la mejor que tengas",
       },
       {
         id: "m1q29_b",
-        label:
-          '"Dame ideas variadas sobre marketing para negocios de cualquier tipo"',
+        label: "10 ideas, cada una con su razón de éxito",
       },
       {
         id: "m1q29_c",
-        label:
-          '"¿Qué opinas sobre el marketing y cómo se usa en las empresas?"',
+        label: "Ideas al azar, sin tema ni público",
       },
       {
         id: "m1q29_d",
-        label:
-          '"Escribe un ensayo largo y detallado sobre la publicidad moderna"',
+        label: "La campaña completa, sin preguntar nada",
       },
     ],
-    correctAnswer: "m1q29_a",
+    correctAnswer: "m1q29_b",
     topic: "Aplicación de Prompts",
     difficulty: "fácil",
     source: "Guía: Anatomía de un Prompt",
     feedback:
-      "El prompt correcto precisa cantidad, contexto y formato: eso enfoca las ideas hacia lo que necesitas.",
+      "Pedir la cantidad y una razón por idea permite comparar y elegir. Una sola idea o ideas al azar no dan dónde elegir.",
   },
   {
     id: "m1q30",
-    question: "Quieres aprender un tema paso a paso. ¿Cuál prompt ayuda más?",
+    question: "Quieres practicar un tema que acabas de leer. ¿Qué pides?",
     options: [
       {
         id: "m1q30_a",
-        label: '"Explícame paso a paso con un ejemplo"',
+        label: "Un resumen de una línea, sin preguntas",
       },
       {
         id: "m1q30_b",
-        label: '"Dame toda la teoría en un párrafo denso"',
+        label: "Que te dé la respuesta antes de que intentes",
       },
       {
         id: "m1q30_c",
-        label: '"Háblame de varios temas a la vez"',
+        label: "Que cambie de tema para no aburrirte",
       },
       {
         id: "m1q30_d",
-        label: '"Resume el tema en una sola frase"',
+        label: "Cinco preguntas de práctica, con las respuestas al final",
       },
     ],
-    correctAnswer: "m1q30_a",
+    correctAnswer: "m1q30_d",
     topic: "Aplicación de Prompts",
     difficulty: "medio",
     source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Pedir pasos, ejemplos y lenguaje sencillo produce una explicación más clara y aplicable.",
+      "Las preguntas de práctica con respuestas al final permiten comprobar lo aprendido. Dar la respuesta antes quita el esfuerzo.",
   },
   {
     id: "m1q31",
@@ -991,24 +980,23 @@ export const MODULE_1 = [
   },
   {
     id: "m1q35",
-    question:
-      "Quieres que la IA revise su propia respuesta antes de entregártela. ¿Qué le pides?",
+    question: "¿Qué debes hacer antes de compartir un texto que la IA redactó?",
     options: [
       {
         id: "m1q35_a",
-        label: "Que critique su respuesta y señale datos dudosos",
+        label: "Revisar datos, nombres y cifras, y declarar IA",
       },
       {
         id: "m1q35_b",
-        label: "Que la reescriba sin cambiar nada",
+        label: "Compartirlo tal cual, porque la IA no se equivoca",
       },
       {
         id: "m1q35_c",
-        label: "Que la entregue más rápido sin revisarla",
+        label: "Cambiar solo el logo del documento",
       },
       {
         id: "m1q35_d",
-        label: "Que se la envíe a otra persona sin decirte nada del cambio",
+        label: "Enviarlo a otra persona sin decir que lo generó la IA",
       },
     ],
     correctAnswer: "m1q35_a",
@@ -1016,7 +1004,7 @@ export const MODULE_1 = [
     difficulty: "medio",
     source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Pedir una autocrítica ayuda a detectar supuestos y datos dudosos antes de usar la respuesta.",
+      "La IA puede equivocarse en datos y nombres. Revisar el texto y declarar su uso es parte del trabajo responsable.",
   },
   {
     id: "m1q36",
@@ -1077,32 +1065,31 @@ export const MODULE_1 = [
   },
   {
     id: "m1q38",
-    question:
-      "La IA es un asistente, no un reemplazo. ¿Qué implica esto para el estudiante?",
+    question: "¿Qué debes indicar al entregar un trabajo con apoyo de IA?",
     options: [
       {
         id: "m1q38_a",
-        label: "Revisar y decidir con criterio propio el resultado final",
+        label: "Nada: el trabajo es tuyo aunque la IA lo haya escrito",
       },
       {
         id: "m1q38_b",
-        label: "Aceptar todo lo que la IA entregue sin revisarlo antes",
+        label: "Solo tu nombre, sin mencionar la herramienta",
       },
       {
         id: "m1q38_c",
-        label: "Delegar por completo en la IA todas las decisiones importantes",
+        label: "Qué herramienta usaste y en qué parte la usaste",
       },
       {
         id: "m1q38_d",
-        label: "Evitar aprender el tema porque la IA ya lo resuelve todo",
+        label: "Una copia completa de la conversación, sin revisar",
       },
     ],
-    correctAnswer: "m1q38_a",
+    correctAnswer: "m1q38_c",
     topic: "Uso Responsable",
     difficulty: "medio",
     source: "El Cincel",
     feedback:
-      "La IA acelera el trabajo, pero la revisión y la decisión final son tuyas.",
+      "Declarar la herramienta y la parte en que se usó es la forma honesta de hacerlo. Presentar el trabajo como si no hubiera IA no lo es.",
   },
   {
     id: "m1q39",
@@ -1193,7 +1180,7 @@ export const MODULE_1 = [
     difficulty: "medio",
     source: "OVA: El Espejo de la Verdad",
     feedback:
-      "Los datos históricos reflejaban una contratación pasada mayoritariamente masculina: el sesgo viene de los datos,. Repasa el OVA El Espejo de la Verdad.",
+      "Los datos históricos reflejaban una contratación pasada mayoritariamente masculina: el sesgo viene de los datos. Repasa el OVA El Espejo de la Verdad.",
   },
   {
     id: "m1e02",
@@ -1429,31 +1416,31 @@ export const MODULE_1 = [
   },
   {
     id: "m1e10",
-    question: "¿Qué busca la explicabilidad de un modelo de IA?",
+    question: "¿Qué dato no debes compartir con una IA pública?",
     options: [
       {
         id: "m1e10_a",
-        label: "Que las decisiones automáticas puedan justificarse",
+        label: "Un texto de ejemplo ya publicado en internet",
       },
       {
         id: "m1e10_b",
-        label: "Que el modelo explique por qué consume tantos recursos",
+        label: "Una pregunta general sobre historia",
       },
       {
         id: "m1e10_c",
-        label: "Que resuma sus respuestas en menos palabras",
+        label: "Una lista de ideas sin nombres",
       },
       {
         id: "m1e10_d",
-        label: "Que se puedan traducir sus respuestas a otros idiomas",
+        label: "Datos personales de estudiantes o clientes, sin anonimizar",
       },
     ],
-    correctAnswer: "m1e10_a",
+    correctAnswer: "m1e10_d",
     topic: "Explicabilidad",
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "La explicabilidad permite justificar decisiones ante las personas afectadas. Repasa la guía de ética.",
+      "Los datos personales sin anonimizar no deben ir a una herramienta pública. Los textos publicados y las ideas generales no son ese tipo de riesgo.",
   },
   {
     id: "m1e11",
@@ -1572,31 +1559,32 @@ export const MODULE_1 = [
   },
   {
     id: "m1e15",
-    question: "¿Qué es una auditoría de sesgo en un sistema de IA?",
+    question:
+      "¿Qué debe revisar una persona antes de usar un resultado que afecta a personas?",
     options: [
       {
         id: "m1e15_a",
-        label: "Revisar sistemáticamente si trata injustamente a un grupo",
+        label: "La velocidad con que el sistema lo generó",
       },
       {
         id: "m1e15_b",
-        label: "Medir solo la velocidad de respuesta del sistema completo",
+        label: "Si el resultado trata injustamente a algún grupo",
       },
       {
         id: "m1e15_c",
-        label: "Comprobar cuántos usuarios tiene registrados la plataforma",
+        label: "Cuántos usuarios tiene la plataforma",
       },
       {
         id: "m1e15_d",
-        label: "Verificar únicamente el costo mensual de la herramienta",
+        label: "Solo el costo mensual de la herramienta",
       },
     ],
-    correctAnswer: "m1e15_a",
+    correctAnswer: "m1e15_b",
     topic: "Auditoría",
     difficulty: "medio",
     source: "OVA: El Espejo de la Verdad",
     feedback:
-      "Auditar el sesgo es revisar si algún grupo resulta perjudicado. Practica en el OVA El Espejo de la Verdad.",
+      "Antes de usar un resultado sobre personas, revisa si trata injustamente a algún grupo: eso es un sesgo.",
   },
   {
     id: "m1e16",
@@ -1715,11 +1703,11 @@ export const MODULE_1 = [
   {
     id: "m1e20",
     question:
-      "Un empleado toma decisiones sobre personas con IA sin declararlo ni dejar que nadie revise. ¿Qué principio se incumple?",
+      "Un sistema trata a los usuarios sin decirles que participa una IA. ¿Qué principio se incumple?",
     options: [
       {
         id: "m1e20_a",
-        label: "Responsabilidad: una persona debe responder por la decisión",
+        label: "Transparencia: avisar cuando una IA participa en una decisión",
       },
       {
         id: "m1e20_b",
@@ -1731,8 +1719,7 @@ export const MODULE_1 = [
       },
       {
         id: "m1e20_d",
-        label:
-          "Ahorro: reducir el costo operativo de mantener la herramienta activa",
+        label: "Ahorro: reducir el costo operativo de la herramienta",
       },
     ],
     correctAnswer: "m1e20_a",
@@ -1740,6 +1727,6 @@ export const MODULE_1 = [
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "Sin una persona que responda por la decisión no hay responsabilidad. Repasa la guía de ética.",
+      "La transparencia exige avisar cuando una IA participa en una decisión. Velocidad, popularidad y ahorro no son el principio que se incumple.",
   },
 ];

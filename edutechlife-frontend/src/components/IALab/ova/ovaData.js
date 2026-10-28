@@ -14,155 +14,230 @@ export const SLIDE_ICONS = [
   "fa-question-circle",
 ];
 
-export const SLIDE_TITLES_ES = [
-  "Arquitectura de Gemini",
-  "Multimodalidad en Acción",
-  "Gemini con Deep Research",
-  "Gemini en Google Workspace",
-  "Quiz Final",
-];
+export const SLIDE_TITLES = {
+  es: [
+    "Arquitectura de Gemini",
+    "Multimodalidad en la práctica",
+    "Investigar con Deep Research",
+    "Gemini en tu día a día",
+    "Quiz final",
+  ],
+  en: [
+    "Gemini Architecture",
+    "Multimodality in practice",
+    "Research with Deep Research",
+    "Gemini in your day to day",
+    "Final quiz",
+  ],
+  pt: [
+    "Arquitetura do Gemini",
+    "Multimodalidade na prática",
+    "Pesquisar com Deep Research",
+    "Gemini no seu dia a dia",
+    "Quiz final",
+  ],
+};
 
-export const SLIDE_TITLES_EN = [
-  "Gemini Architecture",
-  "Multimodality in Action",
-  "Gemini with Deep Research",
-  "Gemini in Google Workspace",
-  "Final Quiz",
-];
+export const SLIDE_DESCRIPTIONS = {
+  es: [
+    "Cómo está pensado Gemini",
+    "Cómo trabaja con texto, imágenes, audio y video",
+    "Cómo pedir una investigación y comprobarla",
+    "Gemini dentro de tus herramientas",
+    "Pon a prueba lo aprendido",
+  ],
+  en: [
+    "How Gemini is designed",
+    "How it works with text, images, audio and video",
+    "How to ask for research and check it",
+    "Gemini inside your tools",
+    "Test what you learned",
+  ],
+  pt: [
+    "Como o Gemini foi pensado",
+    "Como trabalha com texto, imagens, áudio e vídeo",
+    "Como pedir uma pesquisa e conferi-la",
+    "O Gemini dentro das suas ferramentas",
+    "Teste o que aprendeu",
+  ],
+};
 
-export const SLIDE_DESCRIPTIONS_ES = [
-  "Cómo funciona Gemini por dentro",
-  "Ve cómo Gemini procesa texto, imágenes y video al mismo tiempo",
-  "Aprende a hacer research profundo con Gemini",
-  "Gemini integrado en tu día a día",
-  "Pon a prueba lo aprendido",
-];
-
-export const SLIDE_DESCRIPTIONS_EN = [
-  "How Gemini works internally",
-  "See how Gemini processes text, images and video at the same time",
-  "Learn to do deep research with Gemini",
-  "Gemini integrated into your daily life",
-  "Test what you have learned",
-];
-
-export const SLIDE_CONTENT_ES = [
-  {
-    title: "¿Qué hace especial a Gemini?",
-    paragraphs: [
-      "Gemini es un modelo de inteligencia artificial multimodal desarrollado por Google DeepMind. A diferencia de los modelos tradicionales que solo procesan texto, Gemini puede entender y combinar información de múltiples formatos: texto, imágenes, audio, video y código.",
-      'Su arquitectura está diseñada para razonar de manera similar a como lo hace un humano: integrando diferentes tipos de información para llegar a conclusiones más precisas. Esto le permite no solo "ver" una imagen, sino entender el contexto y relacionarlo con el texto que la acompaña.',
-      "Una de las innovaciones clave de Gemini es su capacidad de razonamiento multimodal nativo. Esto significa que desde su núcleo, el modelo está entrenado para trabajar con múltiples tipos de datos simultáneamente, en lugar de tener módulos separados para cada formato.",
-    ],
-    highlights: [
-      "Procesa texto, imágenes, audio y video",
-      "Razonamiento multimodal nativo",
-      "Desarrollado por Google DeepMind",
-      "Integra información de múltiples fuentes",
-    ],
-  },
-  {
-    title: "Procesamiento Multimodal en Tiempo Real",
-    paragraphs: [
-      "La multimodalidad de Gemini permite escenarios que antes requerían múltiples herramientas. Por ejemplo, puedes tomar una foto de un problema matemático escrito a mano, agregar un audio explicando tu duda, y Gemini te responderá con una solución paso a paso.",
-      "En el ámbito profesional, esto significa que puedes analizar gráficos financieros mientras lees un informe, o revisar un video tutorial mientras Gemini te genera un resumen escrito con los puntos clave.",
-      "Gemini también puede procesar video en tiempo real, identificando objetos, acciones y contextos. Esto es especialmente útil para aplicaciones educativas, de seguridad, y de análisis de contenido multimedia.",
-    ],
-    highlights: [
-      "Foto + audio = solución explicada",
-      "Analiza gráficos y texto simultáneamente",
-      "Procesa video en tiempo real",
-      "Ideal para educación y análisis multimedia",
-    ],
-  },
-  {
-    title: "Investigación Asistida por IA",
-    paragraphs: [
-      "Deep Research es una de las capacidades más avanzadas de Gemini. Te permite realizar investigaciones profundas sobre cualquier tema, analizando cientos de fuentes y generando informes estructurados con referencias verificables.",
-      "El proceso es simple: le das a Gemini una pregunta de investigación, y él se encarga de buscar, analizar, sintetizar y presentar la información de manera organizada. Incluye citas, referencias cruzadas y un análisis de credibilidad de las fuentes.",
-      "Esta función es revolucionaria para estudiantes e investigadores, ya que reduce drásticamente el tiempo de investigación preliminar y te permite enfocarte en el análisis crítico y la creación de nuevo conocimiento.",
-    ],
-    highlights: [
-      "Investigación profunda automatizada",
-      "Analiza cientos de fuentes simultáneamente",
-      "Genera informes con referencias verificables",
-      "Reducción drástica del tiempo de investigación",
-    ],
-  },
-  {
-    title: "Productividad en tu Día a Día",
-    paragraphs: [
-      "Gemini se integra directamente con Google Workspace, lo que significa que puedes usar sus capacidades directamente en Gmail, Google Docs, Sheets y Slides sin cambiar de aplicación.",
-      "En Gmail, Gemini puede resumir hilos de correo extensos, sugerir respuestas y ayudarte a redactar mensajes más claros. En Google Docs, puede generar contenido, revisar gramática y estilo, e incluso traducir documentos completos manteniendo el formato.",
-      "En Google Sheets, Gemini analiza datos, genera fórmulas complejas y crea visualizaciones automáticamente. Y en Slides, puede crear presentaciones completas a partir de un simple prompt, incluyendo imágenes generadas por IA.",
-    ],
-    highlights: [
-      "Integración nativa con Gmail, Docs, Sheets y Slides",
-      "Resume correos y sugiere respuestas",
-      "Genera fórmulas y visualizaciones en Sheets",
-      "Crea presentaciones completas desde un prompt",
-    ],
-  },
-];
-
-export const SLIDE_CONTENT_EN = [
-  {
-    title: "What Makes Gemini Special?",
-    paragraphs: [
-      "Gemini is a multimodal artificial intelligence model developed by Google DeepMind. Unlike traditional models that only process text, Gemini can understand and combine information from multiple formats: text, images, audio, video, and code.",
-      'Its architecture is designed to reason similarly to how a human does: integrating different types of information to reach more accurate conclusions. This allows it not only to "see" an image but to understand the context and relate it to accompanying text.',
-      "One of Gemini's key innovations is its native multimodal reasoning capability. This means that from its core, the model is trained to work with multiple types of data simultaneously, rather than having separate modules for each format.",
-    ],
-    highlights: [
-      "Processes text, images, audio and video",
-      "Native multimodal reasoning",
-      "Developed by Google DeepMind",
-      "Integrates information from multiple sources",
-    ],
-  },
-  {
-    title: "Real-time Multimodal Processing",
-    paragraphs: [
-      "Gemini's multimodality enables scenarios that previously required multiple tools. For example, you can take a photo of a handwritten math problem, add audio explaining your doubt, and Gemini will respond with a step-by-step solution.",
-      "In the professional realm, this means you can analyze financial charts while reading a report, or review a video tutorial while Gemini generates a written summary with key points.",
-      "Gemini can also process video in real-time, identifying objects, actions, and contexts. This is especially useful for educational applications, security, and multimedia content analysis.",
-    ],
-    highlights: [
-      "Photo + audio = explained solution",
-      "Analyze charts and text simultaneously",
-      "Real-time video processing",
-      "Ideal for education and multimedia analysis",
-    ],
-  },
-  {
-    title: "AI-Powered Research",
-    paragraphs: [
-      "Deep Research is one of Gemini's most advanced capabilities. It allows you to conduct deep research on any topic, analyzing hundreds of sources and generating structured reports with verifiable references.",
-      "The process is simple: give Gemini a research question, and it handles searching, analyzing, synthesizing, and presenting the information in an organized manner. It includes citations, cross-references, and credibility analysis of sources.",
-      "This feature is revolutionary for students and researchers, as it dramatically reduces preliminary research time and allows you to focus on critical analysis and the creation of new knowledge.",
-    ],
-    highlights: [
-      "Automated deep research",
-      "Analyzes hundreds of sources simultaneously",
-      "Generates reports with verifiable references",
-      "Dramatic reduction in research time",
-    ],
-  },
-  {
-    title: "Daily Productivity",
-    paragraphs: [
-      "Gemini integrates directly with Google Workspace, meaning you can use its capabilities directly in Gmail, Google Docs, Sheets, and Slides without switching applications.",
-      "In Gmail, Gemini can summarize lengthy email threads, suggest replies, and help you draft clearer messages. In Google Docs, it can generate content, review grammar and style, and even translate complete documents while preserving formatting.",
-      "In Google Sheets, Gemini analyzes data, generates complex formulas, and creates visualizations automatically. And in Slides, it can create complete presentations from a simple prompt, including AI-generated images.",
-    ],
-    highlights: [
-      "Native integration with Gmail, Docs, Sheets and Slides",
-      "Summarizes emails and suggests replies",
-      "Generates formulas and visualizations in Sheets",
-      "Creates complete presentations from a prompt",
-    ],
-  },
-];
+export const SLIDE_CONTENT = {
+  es: [
+    {
+      title: "¿Qué hace especial a Gemini?",
+      paragraphs: [
+        "Gemini es un modelo de IA multimodal desarrollado por Google DeepMind. Además de texto, puede recibir imágenes, audio y video, y combinarlos en una misma conversación.",
+        "La idea clave: en vez de juntar herramientas separadas para leer, escuchar y mirar, un mismo modelo trabaja con varios formatos a la vez.",
+        "Como toda IA, puede equivocarse con seguridad. La verificación de cifras, fechas y nombres sigue siendo tuya.",
+      ],
+      highlights: [
+        "Recibe texto, imágenes, audio y video",
+        "Combina formatos en una misma conversación",
+        "Desarrollado por Google DeepMind",
+        "Lo que ves depende de tu plan",
+      ],
+    },
+    {
+      title: "Multimodalidad en la práctica",
+      paragraphs: [
+        "Puedes subir la foto de un ejercicio escrito a mano y pedir una explicación paso a paso. Revisa cada paso: leer la letra puede fallar.",
+        "También sirve para leer un gráfico de un informe o transcribir la grabación de una clase. Después compara con la imagen o el audio originales.",
+        "Con un video corto puede describir lo que ocurre. Para decisiones importantes, mira tú los momentos que menciona.",
+      ],
+      highlights: [
+        "Foto + pregunta = explicación paso a paso",
+        "Lee gráficos y texto de un mismo informe",
+        "Describe videos cortos",
+        "Compara siempre con el original",
+      ],
+    },
+    {
+      title: "Investigar con Deep Research",
+      paragraphs: [
+        "Deep Research es una función que, según tu plan, busca fuentes en varias etapas y entrega un informe. Tú defines la pregunta y revisas el plan antes de que trabaje.",
+        "El informe debe traer fuentes. Ábrelas: confirma que existen y que dicen lo que el informe afirma.",
+        "Si una fuente no aparece o no dice eso, no uses esa conclusión.",
+      ],
+      highlights: [
+        "Pregunta clara primero",
+        "Revisa el plan antes de ejecutarlo",
+        "Abre al menos tres fuentes por conclusión",
+        "Disponible según tu plan",
+      ],
+    },
+    {
+      title: "Gemini en tu día a día",
+      paragraphs: [
+        "Dentro de Gmail, Docs, Sheets y Slides puedes pedir ayuda sin cambiar de aplicación, si tu cuenta lo incluye. Revisa qué funciones ves en tu cuenta.",
+        "En Gmail sirve para resumir un hilo largo y redactar una respuesta. Antes de enviar, revisa fechas y compromisos.",
+        "En Sheets puede sugerir fórmulas o gráficos: recalcula una fila a mano. En Slides puede hacer un borrador que tú ajustas.",
+      ],
+      highlights: [
+        "Ayuda dentro de Gmail, Docs, Sheets y Slides",
+        "Resume hilos: revisa antes de enviar",
+        "Sugiere fórmulas: recalcula una fila",
+        "Borradores que tú ajustas",
+      ],
+    },
+  ],
+  en: [
+    {
+      title: "What makes Gemini special?",
+      paragraphs: [
+        "Gemini is a multimodal AI model developed by Google DeepMind. Besides text, it can take images, audio and video and combine them in one conversation.",
+        "The key idea: instead of joining separate tools to read, listen and look, one model works with several formats at once.",
+        "Like any AI, it can be confidently wrong. Checking figures, dates and names is still your job.",
+      ],
+      highlights: [
+        "Takes text, images, audio and video",
+        "Combines formats in one conversation",
+        "Developed by Google DeepMind",
+        "What you see depends on your plan",
+      ],
+    },
+    {
+      title: "Multimodality in practice",
+      paragraphs: [
+        "You can upload a photo of a handwritten exercise and ask for a step-by-step explanation. Check each step: reading the handwriting can fail.",
+        "It can also read a chart from a report or transcribe a class recording. Then compare with the original image or audio.",
+        "With a short video it can describe what happens. For important decisions, watch the moments it mentions yourself.",
+      ],
+      highlights: [
+        "Photo + question = step-by-step explanation",
+        "Reads charts and text from the same report",
+        "Describes short videos",
+        "Always compare with the original",
+      ],
+    },
+    {
+      title: "Research with Deep Research",
+      paragraphs: [
+        "Deep Research is a feature that, depending on your plan, searches sources in several stages and delivers a report. You define the question and review the plan before it works.",
+        "The report must include sources. Open them: confirm they exist and say what the report claims.",
+        "If a source is missing or does not say that, do not use that conclusion.",
+      ],
+      highlights: [
+        "Start with a clear question",
+        "Review the plan before it runs",
+        "Open at least three sources per conclusion",
+        "Available depending on your plan",
+      ],
+    },
+    {
+      title: "Gemini in your day to day",
+      paragraphs: [
+        "Inside Gmail, Docs, Sheets and Slides you can ask for help without switching apps, if your account includes it. Check which features you see in your account.",
+        "In Gmail it helps summarize a long thread and draft a reply. Before sending, check dates and commitments.",
+        "In Sheets it can suggest formulas or charts: recompute one row by hand. In Slides it can make a draft that you adjust.",
+      ],
+      highlights: [
+        "Helps inside Gmail, Docs, Sheets and Slides",
+        "Summarizes threads: review before sending",
+        "Suggests formulas: recompute one row",
+        "Drafts that you adjust",
+      ],
+    },
+  ],
+  pt: [
+    {
+      title: "O que torna o Gemini especial?",
+      paragraphs: [
+        "O Gemini é um modelo de IA multimodal desenvolvido pelo Google DeepMind. Além de texto, pode receber imagens, áudio e vídeo e combiná-los em uma mesma conversa.",
+        "A ideia-chave: em vez de juntar ferramentas separadas para ler, ouvir e olhar, um mesmo modelo trabalha com vários formatos ao mesmo tempo.",
+        "Como toda IA, pode errar com segurança. Conferir números, datas e nomes continua sendo sua tarefa.",
+      ],
+      highlights: [
+        "Recebe texto, imagens, áudio e vídeo",
+        "Combina formatos em uma mesma conversa",
+        "Desenvolvido pelo Google DeepMind",
+        "O que você vê depende do seu plano",
+      ],
+    },
+    {
+      title: "Multimodalidade na prática",
+      paragraphs: [
+        "Você pode enviar a foto de um exercício escrito à mão e pedir uma explicação passo a passo. Revise cada passo: ler a letra pode falhar.",
+        "Também serve para ler um gráfico de um relatório ou transcrever a gravação de uma aula. Depois compare com a imagem ou o áudio originais.",
+        "Com um vídeo curto ele pode descrever o que acontece. Para decisões importantes, assista você mesmo aos momentos que ele menciona.",
+      ],
+      highlights: [
+        "Foto + pergunta = explicação passo a passo",
+        "Lê gráficos e textos de um mesmo relatório",
+        "Descreve vídeos curtos",
+        "Compare sempre com o original",
+      ],
+    },
+    {
+      title: "Pesquisar com Deep Research",
+      paragraphs: [
+        "Deep Research é uma função que, conforme o seu plano, busca fontes em várias etapas e entrega um relatório. Você define a pergunta e revisa o plano antes de ele trabalhar.",
+        "O relatório deve trazer fontes. Abra-as: confirme que existem e que dizem o que o relatório afirma.",
+        "Se uma fonte não aparece ou não diz isso, não use essa conclusão.",
+      ],
+      highlights: [
+        "Comece com uma pergunta clara",
+        "Revise o plano antes de executar",
+        "Abra pelo menos três fontes por conclusão",
+        "Disponível conforme o seu plano",
+      ],
+    },
+    {
+      title: "Gemini no seu dia a dia",
+      paragraphs: [
+        "Dentro do Gmail, Docs, Sheets e Slides você pode pedir ajuda sem trocar de aplicativo, se a sua conta incluir. Veja quais funções aparecem na sua conta.",
+        "No Gmail ajuda a resumir uma conversa longa e rascunhar uma resposta. Antes de enviar, confira datas e compromissos.",
+        "No Sheets pode sugerir fórmulas ou gráficos: refaça uma linha à mão. No Slides pode fazer um rascunho que você ajusta.",
+      ],
+      highlights: [
+        "Ajuda dentro do Gmail, Docs, Sheets e Slides",
+        "Resume conversas: revise antes de enviar",
+        "Sugere fórmulas: refaça uma linha",
+        "Rascunhos que você ajusta",
+      ],
+    },
+  ],
+};
 
 export const OVA_CATALOG = [
   {
@@ -212,11 +287,12 @@ export const OVA_CATALOG = [
   },
   {
     id: "gpts-ova-1",
-    title: "La Fábrica de Asistentes",
+    title: "El Taller de Proyectos",
     module: 2,
     icon: "fa-robot",
     duration: "25 min",
-    description: "Construye tu GPT personalizado.",
+    description:
+      "Construye un Proyecto, pruébalo y decide cuándo conviene un agente o un plugin.",
     component: "OVABuildGPT",
   },
   {
@@ -360,7 +436,8 @@ export const OVA_CATALOG = [
     module: 3,
     icon: "fa-eye",
     duration: "15 min",
-    description: "Elige la forma de trabajar cada material con Gemini para obtener un resultado verificable.",
+    description:
+      "Elige la forma de trabajar cada material con Gemini para obtener un resultado verificable.",
     component: "OVAMultimodalLab",
   },
   {
@@ -369,7 +446,8 @@ export const OVA_CATALOG = [
     module: 5,
     icon: "fa-comments",
     duration: "15 min",
-    description: "Elige el pedido que dice qué quieres, para quién, en qué formato y con qué límites.",
+    description:
+      "Elige el pedido que dice qué quieres, para quién, en qué formato y con qué límites.",
     component: "OVAClaudeFirstRequest",
   },
 ];
@@ -408,84 +486,63 @@ export const QUIZ_DATA = {
       question: "¿Qué significa que Gemini sea un modelo multimodal?",
       options: [
         { id: "a", text: "Que solo procesa texto" },
-        {
-          id: "b",
-          text: "Que puede entender y procesar texto, imágenes, audio y video",
-        },
-        { id: "c", text: "Que funciona sin conexión a internet" },
+        { id: "b", text: "Que funciona sin conexión a internet" },
+        { id: "c", text: "Que puede entender texto, imágenes, audio y video" },
         { id: "d", text: "Que solo está disponible en inglés" },
       ],
-      correct: "b",
-      explanation:
-        "Un modelo multimodal puede trabajar con diferentes tipos de datos (texto, imágenes, audio, video) simultáneamente, lo que le permite entender el mundo de manera más completa.",
+      correct: "c",
     },
     {
-      question:
-        "¿Cuál de las siguientes es una aplicación práctica de Gemini en Google Workspace?",
+      question: "¿Qué es cierto sobre Gemini en Gmail y Docs?",
       options: [
-        { id: "a", text: "Solo puede buscar en Google" },
         {
-          id: "b",
-          text: "Resumir hilos de correo en Gmail y generar contenido en Docs",
+          id: "a",
+          text: "Puede resumir hilos largos y sugerir borradores que debes revisar",
         },
-        {
-          id: "c",
-          text: "Solo está disponible en el plan de pago de Workspace",
-        },
-        { id: "d", text: "No tiene integración con Workspace" },
+        { id: "b", text: "No tiene ninguna integración con Workspace" },
+        { id: "c", text: "Solo funciona si cambias de aplicación" },
+        { id: "d", text: "Envía los correos sin preguntarte" },
       ],
-      correct: "b",
-      explanation:
-        "Gemini se integra nativamente con Gmail, Docs, Sheets y Slides, permitiendo resumir correos, generar contenido, analizar datos y crear presentaciones.",
+      correct: "a",
     },
     {
-      question: "¿Qué hace única a la función Deep Research de Gemini?",
+      question: "¿Qué debes hacer con un informe de Deep Research?",
       options: [
-        { id: "a", text: "Solo busca en Wikipedia" },
+        { id: "a", text: "Copiarlo tal cual, porque cita fuentes" },
+        { id: "b", text: "Confiar en el resumen sin abrir las fuentes" },
+        { id: "c", text: "Ignorar las fuentes porque ya están citadas" },
         {
-          id: "b",
-          text: "Analiza cientos de fuentes y genera informes estructurados con referencias verificables",
+          id: "d",
+          text: "Abrir las fuentes y comprobar que dicen lo que el informe afirma",
         },
-        { id: "c", text: "No puede citar fuentes" },
-        { id: "d", text: "Solo funciona con texto" },
       ],
-      correct: "b",
-      explanation:
-        "Deep Research automatiza la investigación profunda analizando múltiples fuentes y generando informes organizados con citas y referencias verificables.",
+      correct: "d",
     },
     {
-      question: "¿Qué ventaja ofrece Gemini al procesar video en tiempo real?",
+      question: "¿Qué ventaja ofrece Gemini al analizar un video?",
       options: [
         { id: "a", text: "Solo puede procesar imágenes estáticas" },
         {
           id: "b",
-          text: "Identifica objetos, acciones y contextos en movimiento",
+          text: "Puede describir lo que ocurre en un video corto, y tú verificas los momentos que menciona",
         },
         { id: "c", text: "No puede procesar video, solo texto" },
-        { id: "d", text: "Requiere conexión por cable para procesar video" },
+        { id: "d", text: "Requiere cable para procesar video" },
       ],
       correct: "b",
-      explanation:
-        "Gemini puede procesar video en tiempo real identificando objetos, acciones y contextos, lo que es útil para educación, seguridad y análisis multimedia.",
     },
     {
-      question:
-        "¿Cuál es la diferencia clave entre Gemini y los modelos tradicionales de IA?",
+      question: "¿Por qué Gemini es multimodal desde su núcleo?",
       options: [
+        { id: "a", text: "Solo es más rápido que los modelos tradicionales" },
+        { id: "b", text: "Los modelos tradicionales también son multimodales" },
         {
-          id: "a",
-          text: "Gemini solo es más rápido que los modelos tradicionales",
+          id: "c",
+          text: "Está entrenado para trabajar con varios tipos de datos a la vez",
         },
-        {
-          id: "b",
-          text: "Gemini tiene razonamiento multimodal nativo desde su núcleo",
-        },
-        { id: "c", text: "Los modelos tradicionales también son multimodales" },
-        { id: "d", text: "Gemini no procesa código, solo los tradicionales" },
+        { id: "d", text: "No procesa código, solo los tradicionales" },
       ],
-      correct: "b",
-      explanation:
-        "La innovación clave de Gemini es su razonamiento multimodal nativo: desde su núcleo está entrenado para trabajar con múltiples tipos de datos simultáneamente.",
+      correct: "c",
     },
   ],
   en: [
@@ -493,79 +550,130 @@ export const QUIZ_DATA = {
       question: "What does it mean that Gemini is a multimodal model?",
       options: [
         { id: "a", text: "It only processes text" },
-        {
-          id: "b",
-          text: "It can understand and process text, images, audio and video",
-        },
-        { id: "c", text: "It works without internet connection" },
+        { id: "b", text: "It works without an internet connection" },
+        { id: "c", text: "It can understand text, images, audio and video" },
         { id: "d", text: "It is only available in English" },
       ],
-      correct: "b",
-      explanation:
-        "A multimodal model can work with different types of data (text, images, audio, video) simultaneously, allowing it to understand the world more completely.",
+      correct: "c",
     },
     {
-      question:
-        "Which of the following is a practical application of Gemini in Google Workspace?",
+      question: "What is true about Gemini in Gmail and Docs?",
       options: [
-        { id: "a", text: "It can only search Google" },
         {
-          id: "b",
-          text: "Summarize email threads in Gmail and generate content in Docs",
+          id: "a",
+          text: "It can summarize long threads and suggest drafts that you must review",
         },
-        { id: "c", text: "It is only available in the paid Workspace plan" },
-        { id: "d", text: "It has no integration with Workspace" },
+        { id: "b", text: "It has no integration with Workspace" },
+        { id: "c", text: "It only works if you switch apps" },
+        { id: "d", text: "It sends emails without asking you" },
       ],
-      correct: "b",
-      explanation:
-        "Gemini integrates natively with Gmail, Docs, Sheets, and Slides, allowing you to summarize emails, generate content, analyze data, and create presentations.",
+      correct: "a",
     },
     {
-      question: "What makes Gemini's Deep Research feature unique?",
+      question: "What should you do with a Deep Research report?",
       options: [
-        { id: "a", text: "It only searches Wikipedia" },
+        { id: "a", text: "Copy it as is, because it cites sources" },
+        { id: "b", text: "Trust the summary without opening the sources" },
+        { id: "c", text: "Ignore the sources because they are already cited" },
         {
-          id: "b",
-          text: "It analyzes hundreds of sources and generates structured reports with verifiable references",
+          id: "d",
+          text: "Open the sources and check they say what the report claims",
         },
-        { id: "c", text: "It cannot cite sources" },
-        { id: "d", text: "It only works with text" },
       ],
-      correct: "b",
-      explanation:
-        "Deep Research automates in-depth research by analyzing multiple sources and generating organized reports with citations and verifiable references.",
+      correct: "d",
     },
     {
-      question:
-        "What advantage does Gemini offer when processing video in real time?",
+      question: "What advantage does Gemini offer when analyzing a video?",
       options: [
         { id: "a", text: "It can only process static images" },
         {
           id: "b",
-          text: "It identifies objects, actions, and contexts in motion",
+          text: "It can describe what happens in a short video, and you check the moments it mentions",
         },
         { id: "c", text: "It cannot process video, only text" },
-        { id: "d", text: "It requires a cable connection to process video" },
+        { id: "d", text: "It needs a cable to process video" },
       ],
       correct: "b",
-      explanation:
-        "Gemini can process video in real-time identifying objects, actions, and contexts, useful for education, security, and multimedia analysis.",
     },
     {
-      question:
-        "What is the key difference between Gemini and traditional AI models?",
+      question: "Why is Gemini multimodal at its core?",
       options: [
-        { id: "a", text: "Gemini is only faster than traditional models" },
-        { id: "b", text: "Gemini has native multimodal reasoning at its core" },
-        { id: "c", text: "Traditional models are also multimodal" },
+        { id: "a", text: "It is only faster than traditional models" },
+        { id: "b", text: "Traditional models are also multimodal" },
+        {
+          id: "c",
+          text: "It is trained to work with several types of data at once",
+        },
         {
           id: "d",
-          text: "Gemini does not process code, only traditional ones do",
+          text: "It does not process code, only traditional models do",
         },
       ],
+      correct: "c",
+    },
+  ],
+  pt: [
+    {
+      question: "O que significa dizer que o Gemini é um modelo multimodal?",
+      options: [
+        { id: "a", text: "Que só processa texto" },
+        { id: "b", text: "Que funciona sem conexão com a internet" },
+        { id: "c", text: "Que pode entender texto, imagens, áudio e vídeo" },
+        { id: "d", text: "Que só está disponível em inglês" },
+      ],
+      correct: "c",
+    },
+    {
+      question: "O que é verdade sobre o Gemini no Gmail e no Docs?",
+      options: [
+        {
+          id: "a",
+          text: "Pode resumir conversas longas e sugerir rascunhos que você deve revisar",
+        },
+        { id: "b", text: "Não tem nenhuma integração com o Workspace" },
+        { id: "c", text: "Só funciona se você trocar de aplicativo" },
+        { id: "d", text: "Envia os e-mails sem perguntar" },
+      ],
+      correct: "a",
+    },
+    {
+      question: "O que você deve fazer com um relatório do Deep Research?",
+      options: [
+        { id: "a", text: "Copiá-lo como está, porque cita fontes" },
+        { id: "b", text: "Confiar no resumo sem abrir as fontes" },
+        { id: "c", text: "Ignorar as fontes porque já estão citadas" },
+        {
+          id: "d",
+          text: "Abrir as fontes e conferir se dizem o que o relatório afirma",
+        },
+      ],
+      correct: "d",
+    },
+    {
+      question: "Que vantagem o Gemini oferece ao analisar um vídeo?",
+      options: [
+        { id: "a", text: "Só pode processar imagens estáticas" },
+        {
+          id: "b",
+          text: "Pode descrever o que acontece em um vídeo curto, e você confere os momentos que menciona",
+        },
+        { id: "c", text: "Não processa vídeo, só texto" },
+        { id: "d", text: "Precisa de cabo para processar vídeo" },
+      ],
       correct: "b",
-      explanation:
-        "Gemini's key innovation is its native multimodal reasoning: from its core, it is trained to work with multiple types of data simultaneously.",
+    },
+    {
+      question: "Por que o Gemini é multimodal desde o núcleo?",
+      options: [
+        { id: "a", text: "Só é mais rápido que os modelos tradicionais" },
+        { id: "b", text: "Os modelos tradicionais também são multimodais" },
+        {
+          id: "c",
+          text: "Foi treinado para trabalhar com vários tipos de dados ao mesmo tempo",
+        },
+        { id: "d", text: "Não processa código, só os tradicionais" },
+      ],
+      correct: "c",
     },
   ],
 };

@@ -11,12 +11,9 @@ import OvaGeminiQuiz from "./ova/OvaGeminiQuiz";
 import {
   GEMINI_SLIDE_TABS,
   SLIDE_ICONS,
-  SLIDE_TITLES_ES,
-  SLIDE_TITLES_EN,
-  SLIDE_DESCRIPTIONS_ES,
-  SLIDE_DESCRIPTIONS_EN,
-  SLIDE_CONTENT_ES,
-  SLIDE_CONTENT_EN,
+  SLIDE_TITLES,
+  SLIDE_DESCRIPTIONS,
+  SLIDE_CONTENT,
   QUIZ_DATA,
 } from "./ova/ovaData";
 
@@ -28,10 +25,12 @@ const OvaEdutechlife = ({ onComplete }) => {
   const [showResults, setShowResults] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  const slideTitles = locale === "es" ? SLIDE_TITLES_ES : SLIDE_TITLES_EN;
-  const slideDescs =
-    locale === "es" ? SLIDE_DESCRIPTIONS_ES : SLIDE_DESCRIPTIONS_EN;
-  const slideContent = locale === "es" ? SLIDE_CONTENT_ES : SLIDE_CONTENT_EN;
+  const lang = ["es", "en", "pt"].includes(String(locale).slice(0, 2))
+    ? String(locale).slice(0, 2)
+    : "es";
+  const slideTitles = SLIDE_TITLES[lang];
+  const slideDescs = SLIDE_DESCRIPTIONS[lang];
+  const slideContent = SLIDE_CONTENT[lang];
   const quiz = QUIZ_DATA[locale] || QUIZ_DATA.es;
 
   const goToSlide = (index) => {

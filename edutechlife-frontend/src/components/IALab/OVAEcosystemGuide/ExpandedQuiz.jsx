@@ -43,7 +43,9 @@ export default function ExpandedQuiz({ questions, onCompleted }) {
       setStep(step + 1);
     } else {
       setResult(getScore());
-      onCompleted?.();
+      // Se completa solo con al menos 3 de 5 respuestas correctas (3 puntos cada una).
+      if (newAnswers.reduce((sum, ans) => sum + ans.score, 0) >= 11)
+        onCompleted?.();
     }
   };
 

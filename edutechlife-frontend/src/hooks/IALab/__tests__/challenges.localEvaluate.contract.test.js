@@ -40,11 +40,11 @@ const GOOD = {
   5: {
     ej1: JSON.stringify({
       answers: {
-        t1: "review",
-        t2: "delegate",
+        t1: "delegate",
+        t2: "review",
         t3: "never",
-        t4: "review",
-        t5: "delegate",
+        t4: "delegate",
+        t5: "review",
         t6: "never",
       },
     }),

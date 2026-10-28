@@ -26,37 +26,37 @@ export const MODULE_2_EN = [
     difficulty: "medium",
     source: "The Toolbox",
     feedback:
-      "data analysis analyzes the CSV and Web Search brings market data. Practice in the tools lab.",
+      "data analysis analyzes the CSV and Web Search brings market data. Practice in the activity The Toolbox.",
   },
   {
     id: "m2q2",
     question:
-      "A law firm wants an assistant to draft contracts with legal templates and up-to-date case law. Which setup is right?",
+      "A law firm wants an assistant to draft contracts with its templates. Which setup is right?",
     options: [
       {
         id: "m2q2_a",
-        label: "Legal templates in a Project, reviewed by a person",
+        label: "Templates in a Project, reviewed by a person",
       },
       {
         id: "m2q2_b",
-        label: "A chat with no instructions, pasting the template every time",
+        label:
+          "A chat with no instructions, with the template pasted each time",
       },
       {
         id: "m2q2_c",
-        label:
-          "Asking it to draft without review, since it already knows the law",
+        label: "Ask it to draft without review, since it already knows the law",
       },
       {
         id: "m2q2_d",
-        label: "A generic internet search for the template",
+        label: "Copy the first result of a generic internet search",
       },
     ],
     correctAnswer: "m2q2_a",
     topic: "Custom GPTs",
     difficulty: "medium",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "A Project keeps instructions and templates; human review covers what the AI can get wrong.",
+      "A Project keeps templates and instructions for all its chats, and a person reviews the text before it is signed.",
   },
   {
     id: "m2q3",
@@ -83,7 +83,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q3_a",
     topic: "Projects",
     difficulty: "medium",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
       "A Project keeps files and instructions for one piece of work, so you don't paste them into every chat. Review the Projects topic.",
   },
@@ -111,26 +111,28 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q4_a",
     topic: "Custom GPTs",
     difficulty: "easy",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
       "Instructions set role, tone, scope and limits for every conversation in the Project.",
   },
   {
     id: "m2q5",
     question:
-      "A community manager gets many FAQs every day. How is it best automated?",
+      "A community manager gets many frequently asked questions every day. How do they answer them best?",
     options: [
       {
         id: "m2q5_a",
-        label: "A plugin linked to brand FAQs, with limits and human review",
+        label: "Replying to each comment by hand with a copied template",
       },
       {
         id: "m2q5_b",
-        label: "Answering every comment by hand with a copied template",
+        label:
+          "Letting each customer ask the generic chat without instructions",
       },
       {
         id: "m2q5_c",
-        label: "Letting each customer ask a generic chat with no instructions",
+        label:
+          "With answers based on the brand's FAQs, a defined tone and human review",
       },
       {
         id: "m2q5_d",
@@ -138,12 +140,12 @@ export const MODULE_2_EN = [
           "Posting the questions online and waiting for other users to answer",
       },
     ],
-    correctAnswer: "m2q5_a",
+    correctAnswer: "m2q5_c",
     topic: "Automation",
     difficulty: "medium",
     source: "The Assistant Factory",
     feedback:
-      "A plugin with your FAQs answers the repeated questions; the sensitive ones go to a person.",
+      "An assistant with the brand's FAQs, a defined tone and human review answers quickly without making things up. Answers with no instructions or no review are the mistake.",
   },
   {
     id: "m2q6",
@@ -206,31 +208,31 @@ export const MODULE_2_EN = [
   {
     id: "m2q8",
     question:
-      "You want your assistant to check a catalog that changes daily. What do you enable?",
+      "Your assistant must answer with prices that change every day. What is the least recommended option?",
     options: [
       {
         id: "m2q8_a",
-        label: "Knowledge base for stable facts, API for live data",
+        label: "Checking an updated price source each time",
       },
       {
         id: "m2q8_b",
-        label: "A PDF of the catalog from a year ago",
+        label: "Leaving the prices fixed in the instructions, never updated",
       },
       {
         id: "m2q8_c",
-        label: "Only the chat memory, which updates itself",
+        label: "Showing the date of each price in the answer",
       },
       {
         id: "m2q8_d",
-        label: "A fixed text in the instructions with today's prices",
+        label: "Reviewing the source before giving a figure to the client",
       },
     ],
-    correctAnswer: "m2q8_a",
+    correctAnswer: "m2q8_b",
     topic: "Custom GPTs",
     difficulty: "medium",
     source: "The Assistant Factory",
     feedback:
-      "Stable content goes in the knowledge base and what changes is queried through an API.",
+      "A figure that changes should not stay fixed in the instructions: it is checked in an updated source and shown with its date.",
   },
   {
     id: "m2q9",
@@ -257,38 +259,41 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q9_a",
     topic: "GPT Privacy",
     difficulty: "easy",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
       "Before sharing, the first thing is that it does not expose confidential information.",
   },
   {
     id: "m2q10",
     question:
-      "You want AI to detect urgent complaints on social media and alert support. Which combination do you use?",
+      "You want AI to detect urgent complaints on social media and alert support. What combination is most sensible?",
     options: [
       {
         id: "m2q10_a",
-        label: "A plugin with a webhook that alerts support",
+        label:
+          "An assistant that sorts the complaints and a person who gets the alert",
       },
       {
         id: "m2q10_b",
-        label: "Standard ChatGPT with web search turned on",
+        label:
+          "Letting the assistant reply and close complaints without review",
       },
       {
         id: "m2q10_c",
-        label: "Copying the complaints by hand every morning",
+        label: "A shared document the team reviews whenever it can",
       },
       {
         id: "m2q10_d",
-        label: "A shared document the team checks when it can",
+        label:
+          "Copying the complaints by hand each morning and answering all alike",
       },
     ],
-    correctAnswer: "m2q10_a",
+    correctAnswer: "m2q10_d",
     topic: "Automation",
     difficulty: "hard",
-    source: "The Assembly Line",
+    source: "The Toolbox",
     feedback:
-      "A plugin with a webhook automates the alert; a person makes the final decision.",
+      "The assistant sorts and alerts fast; a person reviews the reply to an urgent complaint. Closing complaints without review or waiting without an alert are the mistakes.",
   },
   {
     id: "m2q11",
@@ -375,29 +380,28 @@ export const MODULE_2_EN = [
     difficulty: "medium",
     source: "The Master Blueprint",
     feedback:
-      "Web Search brings updated information from the internet. Explore the ecosystem OVA.",
+      "Web Search brings updated information from the internet. Explore the activity The Master Blueprint.",
   },
   {
     id: "m2q14",
     question:
-      "You have a CSV and need to compute averages and trends. What do you use?",
+      "You have a CSV with sales and want a monthly bar chart. What do you use?",
     options: [
       {
         id: "m2q14_a",
-        label: "data analysis, which runs the analysis directly on the file",
+        label: "The Code Interpreter, which builds the chart from the file",
       },
       {
         id: "m2q14_b",
-        label: "Web Search to read articles about the industry sector",
+        label: "Web Search, to read articles about charts",
       },
       {
         id: "m2q14_c",
-        label:
-          "The image generator to turn the CSV into a nice bar chart image",
+        label: "The image generator, drawing the bars by hand",
       },
       {
         id: "m2q14_d",
-        label: "Canvas to rewrite every row of the file by hand carefully",
+        label: "Canvas, pasting each row into a table",
       },
     ],
     correctAnswer: "m2q14_a",
@@ -405,7 +409,7 @@ export const MODULE_2_EN = [
     difficulty: "medium",
     source: "The Toolbox",
     feedback:
-      "data analysis runs the calculation on the file. Practice in the ChatGPT tools lab.",
+      "The Code Interpreter reads the file and builds the chart; then check that the totals match your CSV.",
   },
   {
     id: "m2q15",
@@ -434,7 +438,7 @@ export const MODULE_2_EN = [
     difficulty: "medium",
     source: "The Toolbox",
     feedback:
-      "The image generator creates images from a detailed description. Review the tools lab.",
+      "The image generator creates images from a detailed description. Review the activity The Toolbox.",
   },
   {
     id: "m2q16",
@@ -468,31 +472,32 @@ export const MODULE_2_EN = [
   },
   {
     id: "m2q17",
-    question: "What is a Project in ChatGPT for?",
+    question: "What is the difference between Web Search and Data Analysis?",
     options: [
       {
         id: "m2q17_a",
-        label: "To group chats, files and instructions for one job",
+        label: "They are the same; only the menu name changes",
       },
       {
         id: "m2q17_b",
-        label: "To publish a GPT in the platform's official public store",
+        label: "Web Search generates images; Data Analysis writes emails",
       },
       {
         id: "m2q17_c",
-        label: "To generate images with a consistent brand visual style",
+        label:
+          "Web Search brings information from the internet; Data Analysis calculates on your file",
       },
       {
         id: "m2q17_d",
-        label: "To connect to the internet",
+        label: "Data Analysis only works with the internet turned on",
       },
     ],
-    correctAnswer: "m2q17_a",
+    correctAnswer: "m2q17_c",
     topic: "ChatGPT Projects",
     difficulty: "medium",
     source: "Complete ChatGPT Guide",
     feedback:
-      "Projects gather context and files so you can work on something continuously.",
+      "Web Search provides current data from the internet; Data Analysis calculates and charts the file you upload.",
   },
   {
     id: "m2q18",
@@ -527,63 +532,59 @@ export const MODULE_2_EN = [
   {
     id: "m2q19",
     question:
-      "data analysis gives you a sales chart. What is the most responsible step?",
+      "The Code Interpreter gives you a sales chart. What is the most responsible step?",
     options: [
       {
         id: "m2q19_a",
-        label: "Check that data and calculation match your real file",
+        label: "Publish it, because code rarely makes mistakes",
       },
       {
         id: "m2q19_b",
-        label: "Publish the chart without review because the code made it",
+        label: "Compare several rows of the chart with your original file",
       },
       {
         id: "m2q19_c",
-        label: "Assume that any output from code is always correct",
+        label: "Check only that the title and colors look right",
       },
       {
         id: "m2q19_d",
-        label: "Change the axes until the chart simply looks better",
+        label: "Ask it to chart again until the trend looks clear",
       },
     ],
-    correctAnswer: "m2q19_a",
+    correctAnswer: "m2q19_b",
     topic: "Data Analysis",
     difficulty: "hard",
     source: "The Toolbox",
     feedback:
-      "Verify inputs, assumptions and results before deciding with them. Review the tools lab.",
+      "Comparing some rows with the original file confirms that the calculation and the chart are correct before you use them.",
   },
   {
     id: "m2q20",
-    question:
-      "What is the difference between a chat's context and a Project's context?",
+    question: "What should you check in a report you built with Web Search?",
     options: [
       {
         id: "m2q20_a",
-        label:
-          "A Project keeps instructions and files for all its conversations",
+        label: "That it has many images, even if it cites nothing",
       },
       {
         id: "m2q20_b",
-        label: "They are the same; only the home screen color changes",
+        label: "That the title is eye-catching so you can share it",
       },
       {
         id: "m2q20_c",
-        label:
-          "A chat keeps more files than a Project, always and in every case",
+        label: "That the result is as long as the question",
       },
       {
         id: "m2q20_d",
-        label:
-          "Neither keeps anything, so every answer starts from zero no matter the case",
+        label: "That the source is primary, with author and date",
       },
     ],
-    correctAnswer: "m2q20_a",
+    correctAnswer: "m2q20_d",
     topic: "ChatGPT Tools",
     difficulty: "medium",
-    source: "The Assembly Line",
+    source: "The Toolbox",
     feedback:
-      "A Project gathers instructions and files for one job; a chat only remembers its own conversation.",
+      "A primary source with an author and a date lets you check the figure. Images and catchy titles prove nothing.",
   },
   {
     id: "m2q21",
@@ -598,25 +599,23 @@ export const MODULE_2_EN = [
       {
         id: "m2q21_b",
         label:
-          "Creating a new GPT every week without reviewing the previous one",
+          "A new instruction every week, without reviewing the previous one",
       },
       {
         id: "m2q21_c",
-        label:
-          "Opening a chat with no context each time and pasting everything the tool should already remember about your work",
+        label: "A new chat each time, pasting your work context again",
       },
       {
         id: "m2q21_d",
-        label:
-          "Sharing one account and its password so the whole team uses the same chat with no limits",
+        label: "One shared account for the whole team, with no limits",
       },
     ],
     correctAnswer: "m2q21_a",
     topic: "Custom GPTs",
     difficulty: "easy",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "GPTs are being retired; a Project with instructions and files does the same job.",
+      "A Project gathers instructions and files for one job; plugins connect tools. Pasting the context every time and sharing accounts are bad practices.",
   },
   {
     id: "m2q22",
@@ -642,7 +641,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q22_a",
     topic: "GPT Instructions",
     difficulty: "medium",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback: "Instructions are where the role and the rules are set.",
   },
   {
@@ -675,120 +674,119 @@ export const MODULE_2_EN = [
   },
   {
     id: "m2q24",
-    question:
-      "An assistant must check a catalog that changes every day. What do you use?",
+    question: "Which source fits a figure that changes every week?",
     options: [
       {
         id: "m2q24_a",
-        label: "A plugin with an API to pull live data",
+        label: "A PDF downloaded a year ago, just in case",
       },
       {
         id: "m2q24_b",
-        label: "A PDF of the catalog uploaded last month",
+        label: "A list written in the instructions that nobody reviews",
       },
       {
         id: "m2q24_c",
-        label: "A price list written in the instructions",
+        label:
+          "An online source with its date, checked at the moment you use it",
       },
       {
         id: "m2q24_d",
-        label: "Asking it to guess today's prices",
+        label: "The chat's memory, which the assistant recalls on its own",
       },
     ],
-    correctAnswer: "m2q24_a",
+    correctAnswer: "m2q24_c",
     topic: "Actions / APIs",
     difficulty: "hard",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "A plugin with an API brings up-to-date data at the moment of the query.",
+      "A changing figure needs a current source and a date. An old file or unreviewed memory can give you a number that is no longer valid.",
   },
   {
     id: "m2q25",
     question:
-      "You delegate to ChatGPT's agent the task of finding 10 suppliers and building a table. What do you do before using the result?",
+      "You delegate to ChatGPT's agent the search for 10 suppliers and a table. What do you do before using the result?",
     options: [
       {
         id: "m2q25_a",
-        label: "I check each source and figure before using it",
+        label: "I trust the agent's summary and check only the first row",
       },
       {
         id: "m2q25_b",
-        label: "I publish it as is, since the agent already verified it",
+        label: "I review each source and each figure before using it",
       },
       {
         id: "m2q25_c",
-        label: "I ask it to repeat the task without showing the sources",
+        label: "I share it with the team and fix it if someone warns me",
       },
       {
         id: "m2q25_d",
-        label: "I send it to every supplier unread",
+        label:
+          "I ask for another identical result and compare the form, not the data",
       },
     ],
-    correctAnswer: "m2q25_a",
+    correctAnswer: "m2q25_b",
     topic: "Agent",
     difficulty: "hard",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "The agent runs the steps, but you approve the result. Check sources and data before using them.",
+      "The agent saves steps, but every source and figure must be checked before you decide or publish.",
   },
   {
     id: "m2q26",
-    question:
-      "You share an assistant with other people. What does that involve?",
+    question: "Before you share an assistant with your team, what do you test?",
     options: [
       {
         id: "m2q26_a",
-        label: "Deciding who can use it and if it keeps sensitive data",
+        label: "Nothing: share it and fix it if someone complains",
       },
       {
         id: "m2q26_b",
-        label: "That it is published automatically and cannot be changed",
+        label: "That it has the biggest logo possible",
       },
       {
         id: "m2q26_c",
-        label: "That each person gets a copy with their own data",
+        label: "That only your friends at work use it",
       },
       {
         id: "m2q26_d",
-        label: "That its creator stops being responsible for its answers",
+        label: "A real case with fictitious data, to see how it answers",
       },
     ],
-    correctAnswer: "m2q26_a",
+    correctAnswer: "m2q26_d",
     topic: "GPT Store",
     difficulty: "medium",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "Sharing means deciding who has access and what information is exposed.",
+      "Testing with fictitious data shows how it answers before real data is exposed. Sharing without testing spreads mistakes across the team.",
   },
   {
     id: "m2q27",
     question:
-      "Which data must you protect before sharing a Project with an outside team?",
+      "A colleague wants to use your Project for their client. What do you do first?",
     options: [
       {
         id: "m2q27_a",
-        label: "Personal and confidential data of customers and of the company",
+        label: "Remove your clients' data and keep only the templates",
       },
       {
         id: "m2q27_b",
-        label: "The color of the company logo on the cover",
+        label: "Hand over the full Project with all its files",
       },
       {
         id: "m2q27_c",
-        label: "The number of conversations you had last week",
+        label: "Give them your account to use whenever they want",
       },
       {
         id: "m2q27_d",
-        label:
-          "The full list of tools you used this month on your computer and your phone",
+        label: "Share it without saying what it contains",
       },
     ],
     correctAnswer: "m2q27_a",
     topic: "GPT Privacy",
     difficulty: "medium",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "Before sharing, the first step is removing personal and confidential data.",
+      "Before sharing a Project, remove personal and confidential client data. What remains should be only what the colleague needs.",
   },
   {
     id: "m2q28",
@@ -815,7 +813,7 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q28_a",
     topic: "GPT Scope",
     difficulty: "easy",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
       "Limiting scope and sources, and allowing 'I do not know', prevents invented answers.",
   },
@@ -877,32 +875,31 @@ export const MODULE_2_EN = [
   },
   {
     id: "m2q31",
-    question:
-      "The support assistant answers with great confidence but sometimes gets things wrong. What do you do?",
+    question: "What tells you whether a support assistant answers well?",
     options: [
       {
         id: "m2q31_a",
-        label: "Add oversight and checks to the support flow",
+        label: "Counting how many answers it gave in a day",
       },
       {
         id: "m2q31_b",
-        label: "Ask it to answer faster, even if it is less accurate",
+        label: "Measuring only response time, even if it is wrong",
       },
       {
         id: "m2q31_c",
-        label: "Remove its knowledge base so it cannot be wrong",
+        label: "Reviewing a sample of answers against written criteria",
       },
       {
         id: "m2q31_d",
-        label: "Accept the errors without any review",
+        label: "Asking the assistant to grade itself",
       },
     ],
-    correctAnswer: "m2q31_a",
+    correctAnswer: "m2q31_c",
     topic: "Responsible Use",
     difficulty: "easy",
     source: "Complete ChatGPT Guide",
     feedback:
-      "A human verification step stops errors before they reach the customer.",
+      "A reviewed sample with written criteria measures quality. Volume and speed do not tell you whether an answer is right.",
   },
   {
     id: "m2q32",
@@ -929,67 +926,67 @@ export const MODULE_2_EN = [
     correctAnswer: "m2q32_a",
     topic: "GPT Privacy",
     difficulty: "medium",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
       "Using only what is needed and anonymizing it protects personal data.",
   },
   {
     id: "m2q33",
     question:
-      "You want to automate alerts for urgent complaints without losing human control. What is the best design?",
+      "When is it right for the assistant to answer alone, without a person?",
     options: [
       {
         id: "m2q33_a",
-        label: "A plugin that detects and notifies a person",
+        label: "For any complaint, even those with legal risk",
       },
       {
         id: "m2q33_b",
-        label: "A plugin that replies and closes the complaint with no review",
+        label: "For frequent questions with reviewed answers and a clear limit",
       },
       {
         id: "m2q33_c",
-        label: "A manual alert once a month, with no detection",
+        label: "Always, so nobody has to be involved",
       },
       {
         id: "m2q33_d",
-        label: "A chat with no review",
+        label: "Never, even when the questions are simple and repeated",
       },
     ],
-    correctAnswer: "m2q33_a",
+    correctAnswer: "m2q33_b",
     topic: "Automation",
     difficulty: "hard",
-    source: "The Assembly Line",
+    source: "The Toolbox",
     feedback:
-      "Automation detects and alerts; the decision stays with a person.",
+      "Automatic answers work for reviewed, frequent questions. Complaints with risk always go to a person.",
   },
   {
     id: "m2q34",
     question:
-      "You get many repeated questions every day. How do you automate them best?",
+      "You get many repeated questions every day. What do you do first?",
     options: [
       {
         id: "m2q34_a",
-        label: "Instructions, knowledge base and API",
+        label: "Answer each one by hand from scratch",
       },
       {
         id: "m2q34_b",
-        label: "Answering each one by hand from scratch",
+        label: "Ignore them to save time",
       },
       {
         id: "m2q34_c",
-        label: "Ignoring the questions to save time",
+        label: "Publish every answer in an unordered document",
       },
       {
         id: "m2q34_d",
-        label: "Posting all the answers in a disorganized document",
+        label: "Gather the most frequent questions and write reviewed answers",
       },
     ],
-    correctAnswer: "m2q34_a",
+    correctAnswer: "m2q34_d",
     topic: "Automation",
     difficulty: "medium",
     source: "The Assistant Factory",
     feedback:
-      "Instructions, a knowledge base and an API answer the repeated questions with control.",
+      "First identify the questions that repeat and write reviewed answers. Then automate.",
   },
   {
     id: "m2q35",
@@ -1046,20 +1043,20 @@ export const MODULE_2_EN = [
     difficulty: "medium",
     source: "The Master Blueprint",
     feedback:
-      "Tools cover one-off tasks; a GPT packages role, knowledge and actions. Explore the ecosystem.",
+      "Tools cover one-off tasks; a GPT packages role, knowledge and actions. Review the module guide.",
   },
   {
     id: "m2q37",
     question:
-      "Your assistant's information changes little but must always be available. What do you choose?",
+      "Your assistant needs data that changes often and rules that almost never change. How do you organize it?",
     options: [
       {
         id: "m2q37_a",
-        label: "Knowledge base plus API for changes",
+        label: "Rules in instructions, data in an updated source",
       },
       {
         id: "m2q37_b",
-        label: "Only instructions, with no documents",
+        label: "Everything in the instructions, with no source at all",
       },
       {
         id: "m2q37_c",
@@ -1067,101 +1064,101 @@ export const MODULE_2_EN = [
       },
       {
         id: "m2q37_d",
-        label: "Chat memory, which can be erased",
+        label: "Everything in the chat's memory, which can be erased",
       },
     ],
     correctAnswer: "m2q37_a",
     topic: "GPT Architecture",
     difficulty: "hard",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "Stable content goes in the knowledge base; what changes goes through an API.",
+      "Stable rules go in the instructions; data that changes is checked in an updated source.",
   },
   {
     id: "m2q38",
     question:
-      "What advantage does a plugin have over pasting data by hand into the chat?",
+      "What advantage does bringing data with a tool have over pasting it by hand into the chat?",
     options: [
       {
         id: "m2q38_a",
-        label: "It pulls current data from the source each time",
+        label: "None: pasting by hand is always better",
       },
       {
         id: "m2q38_b",
-        label: "None, pasting by hand is always better",
+        label: "It disappears when the session closes and leaves no record",
       },
       {
         id: "m2q38_c",
-        label: "It is erased when the session closes and leaves no record",
+        label: "The data comes from the current source each time it is checked",
       },
       {
         id: "m2q38_d",
-        label: "It only helps design logos and brand graphics for the team",
+        label: "It is only useful for designing brand logos and presentations",
       },
     ],
-    correctAnswer: "m2q38_a",
+    correctAnswer: "m2q38_c",
     topic: "ChatGPT Projects",
     difficulty: "medium",
     source: "Complete ChatGPT Guide",
     feedback:
-      "A plugin with an API queries live data; pasted data goes out of date as soon as it changes.",
+      "A tool checks the source at the moment, so the data does not go stale like text pasted weeks ago.",
   },
   {
     id: "m2q39",
     question:
-      "A support assistant invents policies that do not exist. What is the best fix?",
+      "What should an assistant do when it does not have the information?",
     options: [
       {
         id: "m2q39_a",
-        label: "Anchor answers to the knowledge base, cite sources",
+        label: "Invent a reasonable answer so it does not look bad",
       },
       {
         id: "m2q39_b",
-        label: "Giving it more freedom to answer creatively",
+        label: "Say so and refer the question to a person",
       },
       {
         id: "m2q39_c",
-        label: "Removing its instructions so it does not contradict itself",
+        label: "Answer with last year's policy",
       },
       {
         id: "m2q39_d",
-        label: "Asking for shorter answers without sources",
+        label: "Repeat the question until the customer gives up",
       },
     ],
-    correctAnswer: "m2q39_a",
+    correctAnswer: "m2q39_b",
     topic: "GPT Hallucinations",
     difficulty: "hard",
-    source: "ChatGPT apps and connectors guide",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "Anchoring and citing the source makes it visible where each answer comes from.",
+      "An assistant without the data says so and refers the question. Inventing a policy is the most serious error in support.",
   },
   {
     id: "m2q40",
     question:
-      "Case: build a support assistant that uses live data and hands complex cases to a person. What is the most complete design?",
+      "Case: a support assistant must use current data and refer complex cases. Which design is the most complete?",
     options: [
       {
         id: "m2q40_a",
-        label: "Instructions, knowledge base, API and handoff",
+        label: "Tone instructions only, with no data and no handoff",
       },
       {
         id: "m2q40_b",
-        label: "Only tone instructions, with no data and no handoff",
-      },
-      {
-        id: "m2q40_c",
         label: "A generic chat that answers everything with no limits",
       },
       {
-        id: "m2q40_d",
+        id: "m2q40_c",
         label: "A static document with last year's answers",
       },
+      {
+        id: "m2q40_d",
+        label: "Instructions, knowledge base, current data and a human handoff",
+      },
     ],
-    correctAnswer: "m2q40_a",
+    correctAnswer: "m2q40_d",
     topic: "GPT Architecture",
     difficulty: "hard",
-    source: "The Assembly Line",
+    source: "The Toolbox",
     feedback:
-      "The complete design combines rules, knowledge, live data and human handoff.",
+      "A good design combines rules, a knowledge base, current data and a route to a person when the case is complex.",
   },
 ];

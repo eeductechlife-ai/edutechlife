@@ -29,38 +29,37 @@ export const MODULE_2 = [
     difficulty: "medio",
     source: "La Caja de Herramientas",
     feedback:
-      'El Intérprete de Código analiza el CSV y Búsqueda Web trae datos del mercado. Practica en el OVA "Laboratorio: Herramientas ChatGPT".',
+      'El Intérprete de Código analiza el CSV y Búsqueda Web trae datos del mercado. Practica en la actividad "La Caja de Herramientas".',
   },
   {
     id: "m2q2",
     question:
-      "Un despacho quiere un asistente para redactar contratos con plantillas legales y jurisprudencia actualizada. ¿Qué configuración es la adecuada?",
+      "Un despacho quiere que un asistente redacte contratos con sus modelos. ¿Qué configuración es la adecuada?",
     options: [
       {
         id: "m2q2_a",
-        label: "Plantillas legales en un Proyecto, revisadas por una persona",
+        label: "Modelos en un Proyecto, con revisión de una persona",
       },
       {
         id: "m2q2_b",
-        label: "Un chat sin instrucciones, con la plantilla pegada cada vez",
+        label: "Un chat sin instrucciones, con el modelo pegado cada vez",
       },
       {
         id: "m2q2_c",
-        label:
-          "Pedirle que redacte sin revisar, porque ya conoce la ley de memoria",
+        label: "Pedirle que redacte sin revisar, porque ya conoce la ley",
       },
       {
         id: "m2q2_d",
         label:
-          "Usar una búsqueda genérica en internet y copiar el primer resultado",
+          "Copiar el primer resultado de una búsqueda genérica en internet",
       },
     ],
     correctAnswer: "m2q2_a",
     topic: "GPTs Personalizados",
     difficulty: "medio",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Un Proyecto guarda instrucciones y plantillas; la revisión humana cubre lo que la IA puede equivocar.",
+      "Un Proyecto guarda modelos e instrucciones para todos sus chats, y una persona revisa el texto antes de firmarlo.",
   },
   {
     id: "m2q3",
@@ -87,7 +86,7 @@ export const MODULE_2 = [
     correctAnswer: "m2q3_a",
     topic: "Proyectos",
     difficulty: "medio",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
       "Un Proyecto guarda archivos e instrucciones de un mismo trabajo, para no volver a pegarlos en cada chat. Revisa el tema de Proyectos.",
   },
@@ -115,41 +114,41 @@ export const MODULE_2 = [
     correctAnswer: "m2q4_a",
     topic: "GPTs Personalizados",
     difficulty: "fácil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
       "Las instrucciones dan rol, tono, alcance y límites a todas las conversaciones del Proyecto.",
   },
   {
     id: "m2q5",
     question:
-      "Un community manager recibe muchas preguntas frecuentes al día. ¿Cómo las automatiza mejor?",
+      "Un community manager recibe muchas preguntas frecuentes al día. ¿Cómo las responde mejor?",
     options: [
       {
         id: "m2q5_a",
-        label:
-          "Un plugin con las FAQs de la marca, tono definido y revisión humana",
+        label: "Respondiendo cada comentario a mano con una plantilla copiada",
       },
       {
         id: "m2q5_b",
-        label: "Responder cada comentario a mano con una plantilla copiada",
+        label:
+          "Dejando que cada cliente pregunte al chat genérico sin instrucciones",
       },
       {
         id: "m2q5_c",
         label:
-          "Dejar que cada cliente pregunte al chat genérico sin instrucciones",
+          "Con respuestas basadas en las FAQ de la marca, un tono definido y revisión humana",
       },
       {
         id: "m2q5_d",
         label:
-          "Publicar las preguntas en redes y esperar respuestas de otros usuarios",
+          "Publicando las preguntas en redes y esperando respuestas de otros usuarios",
       },
     ],
-    correctAnswer: "m2q5_a",
+    correctAnswer: "m2q5_c",
     topic: "Automatización",
     difficulty: "medio",
     source: "La Fábrica de Asistentes",
     feedback:
-      "Un plugin con tus FAQs responde lo repetido; lo delicado pasa a una persona.",
+      "Un asistente con las FAQ de la marca, un tono definido y revisión humana responde rápido sin inventar. Las respuestas sin instrucciones ni revisión son el error.",
   },
   {
     id: "m2q6",
@@ -212,31 +211,32 @@ export const MODULE_2 = [
   {
     id: "m2q8",
     question:
-      "Quieres que tu asistente consulte un catálogo que cambia a diario. ¿Qué activas?",
+      "Tu asistente debe responder con precios que cambian a diario. ¿Qué es lo menos recomendable?",
     options: [
       {
         id: "m2q8_a",
-        label: "Base para lo estable y API para lo que cambia",
+        label: "Consultar una fuente de precios actualizada cada vez",
       },
       {
         id: "m2q8_b",
-        label: "Un archivo PDF del catálogo de hace un año",
+        label:
+          "Dejar los precios fijos en las instrucciones, sin actualizarlos",
       },
       {
         id: "m2q8_c",
-        label: "Solo la memoria del chat, que se actualiza sola",
+        label: "Mostrar la fecha de cada precio en la respuesta",
       },
       {
         id: "m2q8_d",
-        label: "Un texto fijo en las instrucciones con los precios de hoy",
+        label: "Revisar la fuente antes de dar una cifra al cliente",
       },
     ],
-    correctAnswer: "m2q8_a",
+    correctAnswer: "m2q8_b",
     topic: "GPTs Personalizados",
     difficulty: "medio",
     source: "La Fábrica de Asistentes",
     feedback:
-      "Lo estable va en la base de conocimiento y lo que cambia se consulta por API.",
+      "Una cifra que cambia no debe quedar fija en las instrucciones: se consulta en una fuente actualizada y se muestra con su fecha.",
   },
   {
     id: "m2q9",
@@ -263,38 +263,40 @@ export const MODULE_2 = [
     correctAnswer: "m2q9_a",
     topic: "Privacidad GPT",
     difficulty: "fácil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
       "Antes de compartirlo, lo primero es que no exponga información confidencial.",
   },
   {
     id: "m2q10",
     question:
-      "Quieres que la IA detecte quejas urgentes en redes y avise al soporte. ¿Qué combinación usas?",
+      "Quieres que la IA detecte quejas urgentes en redes y avise a soporte. ¿Qué combinación es la más sensata?",
     options: [
       {
         id: "m2q10_a",
-        label: "Un plugin con webhook que detecta la queja y avisa",
+        label:
+          "Un asistente que clasifica las quejas y una persona que recibe el aviso",
       },
       {
         id: "m2q10_b",
-        label: "ChatGPT estándar con la búsqueda web activada",
+        label:
+          "Dejar que el asistente responda y cierre las quejas sin revisión",
       },
       {
         id: "m2q10_c",
-        label: "Copiar las quejas a mano cada mañana",
+        label: "Un documento compartido que el equipo revisa cuando puede",
       },
       {
         id: "m2q10_d",
-        label: "Un documento compartido que el equipo revisa cuando puede",
+        label: "Copiar las quejas a mano cada mañana y responder todas igual",
       },
     ],
-    correctAnswer: "m2q10_a",
+    correctAnswer: "m2q10_d",
     topic: "Automatización",
     difficulty: "difícil",
-    source: "La Línea de Montaje",
+    source: "La Caja de Herramientas",
     feedback:
-      "Un plugin con webhook automatiza el aviso; la decisión final la toma una persona.",
+      "El asistente clasifica y avisa rápido; una persona revisa la respuesta a una queja urgente. Cerrar quejas sin revisión o esperar sin aviso son los errores.",
   },
   {
     id: "m2q11",
@@ -379,30 +381,29 @@ export const MODULE_2 = [
     difficulty: "medio",
     source: "El Plano Maestro",
     feedback:
-      "La Búsqueda Web trae información actualizada de internet. Explora el OVA 'Explora el Ecosistema ChatGPT'.",
+      "La Búsqueda Web trae información actualizada de internet. Explora la actividad 'El Plano Maestro'.",
   },
   {
     id: "m2q14",
     question:
-      "Tienes un CSV y necesitas calcular promedios y tendencias. ¿Qué usas?",
+      "Tienes un CSV con ventas y quieres una gráfica de barras por mes. ¿Qué usas?",
     options: [
       {
         id: "m2q14_a",
         label:
-          "El Intérprete de Código, que ejecuta el análisis sobre el archivo",
+          "El Intérprete de Código, que genera la gráfica desde el archivo",
       },
       {
         id: "m2q14_b",
-        label: "La Búsqueda Web para leer artículos sobre el sector",
+        label: "La Búsqueda Web, para leer artículos sobre gráficas",
       },
       {
         id: "m2q14_c",
-        label:
-          "El generador de imágenes para convertir el CSV en una imagen de barras",
+        label: "El generador de imágenes, dibujando las barras a mano",
       },
       {
         id: "m2q14_d",
-        label: "Canvas para reescribir cada fila del archivo a mano",
+        label: "Canvas, pegando cada fila en una tabla",
       },
     ],
     correctAnswer: "m2q14_a",
@@ -410,7 +411,7 @@ export const MODULE_2 = [
     difficulty: "medio",
     source: "La Caja de Herramientas",
     feedback:
-      "El Intérprete de Código ejecuta el cálculo sobre el archivo. Practica en el laboratorio de herramientas ChatGPT.",
+      "El Intérprete de Código lee el archivo y genera la gráfica; después revisa que los totales coincidan con tu CSV.",
   },
   {
     id: "m2q15",
@@ -439,7 +440,7 @@ export const MODULE_2 = [
     difficulty: "medio",
     source: "La Caja de Herramientas",
     feedback:
-      "El generador de imágenes genera imágenes a partir de una descripción detallada. Revisa el laboratorio de herramientas.",
+      "El generador de imágenes genera imágenes a partir de una descripción detallada. Revisa la actividad La Caja de Herramientas.",
   },
   {
     id: "m2q16",
@@ -474,31 +475,33 @@ export const MODULE_2 = [
   },
   {
     id: "m2q17",
-    question: "¿Para qué sirve un Proyecto en ChatGPT?",
+    question: "¿Cuál es la diferencia entre Búsqueda Web y Análisis de Datos?",
     options: [
       {
         id: "m2q17_a",
-        label: "Para agrupar chats, archivos e instrucciones",
+        label: "Son lo mismo, solo cambia el nombre del menú",
       },
       {
         id: "m2q17_b",
-        label: "Para publicar un GPT en la tienda",
+        label:
+          "La Búsqueda Web genera imágenes; el Análisis de Datos escribe correos",
       },
       {
         id: "m2q17_c",
-        label: "Para generar imágenes de marca",
+        label:
+          "La Búsqueda Web trae información de internet; el Análisis de Datos calcula sobre tu archivo",
       },
       {
         id: "m2q17_d",
-        label: "Para conectarse a internet con la Búsqueda Web activada",
+        label: "El Análisis de Datos solo funciona con la internet activada",
       },
     ],
-    correctAnswer: "m2q17_a",
+    correctAnswer: "m2q17_c",
     topic: "Proyectos ChatGPT",
     difficulty: "medio",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Los Proyectos reúnen contexto y archivos para trabajar de forma continua. Repasa la Guía Completa de ChatGPT.",
+      "Búsqueda Web sirve para datos actuales de internet; Análisis de Datos calcula y grafica el archivo que subes.",
   },
   {
     id: "m2q18",
@@ -536,59 +539,56 @@ export const MODULE_2 = [
     options: [
       {
         id: "m2q19_a",
-        label: "Revisar que datos y cálculo coincidan con tu archivo",
+        label: "Publicarla, porque el código casi nunca se equivoca",
       },
       {
         id: "m2q19_b",
-        label: "Publicar la gráfica sin revisar porque la hizo el código",
+        label: "Comparar varias filas de la gráfica con tu archivo original",
       },
       {
         id: "m2q19_c",
-        label: "Asumir que cualquier resultado del código es correcto",
+        label: "Revisar solo que el título y los colores se vean bien",
       },
       {
         id: "m2q19_d",
-        label: "Cambiar los ejes hasta que la gráfica se vea mejor",
+        label:
+          "Pedir que la vuelva a graficar hasta que la tendencia se vea clara",
       },
     ],
-    correctAnswer: "m2q19_a",
+    correctAnswer: "m2q19_b",
     topic: "Análisis de Datos",
     difficulty: "difícil",
     source: "La Caja de Herramientas",
     feedback:
-      "Verifica entradas, supuestos y resultados antes de decidir con ellos. Revisa el laboratorio de herramientas.",
+      "Comparar algunas filas con el archivo original confirma que el cálculo y la gráfica son correctos antes de usarlos.",
   },
   {
     id: "m2q20",
-    question:
-      "¿Cuál es la diferencia entre el contexto de un chat y el de un Proyecto?",
+    question: "¿Qué debes revisar en un informe que armaste con Búsqueda Web?",
     options: [
       {
         id: "m2q20_a",
-        label:
-          "El Proyecto guarda instrucciones y archivos para todas sus conversaciones",
+        label: "Que tenga muchas imágenes, aunque no cite nada",
       },
       {
         id: "m2q20_b",
-        label: "Son lo mismo; solo cambia el color de la pantalla de inicio",
+        label: "Que el título sea llamativo para compartirlo",
       },
       {
         id: "m2q20_c",
-        label:
-          "El chat guarda más archivos que un Proyecto, siempre y en todos los casos",
+        label: "Que el resultado sea tan largo como la pregunta",
       },
       {
         id: "m2q20_d",
-        label:
-          "Ninguno guarda nada, así que cada respuesta empieza de cero sin importar el caso",
+        label: "Que la fuente sea primaria, con autor y fecha",
       },
     ],
-    correctAnswer: "m2q20_a",
+    correctAnswer: "m2q20_d",
     topic: "Herramientas ChatGPT",
     difficulty: "medio",
-    source: "La Línea de Montaje",
+    source: "La Caja de Herramientas",
     feedback:
-      "El Proyecto reúne instrucciones y archivos de un trabajo; el chat solo recuerda su propia conversación.",
+      "Una fuente primaria con autor y fecha permite comprobar el dato. Las imágenes y los títulos llamativos no prueban nada.",
   },
   {
     id: "m2q21",
@@ -602,25 +602,24 @@ export const MODULE_2 = [
       },
       {
         id: "m2q21_b",
-        label: "Crear un GPT nuevo cada semana, sin revisar el anterior",
+        label: "Una instrucción nueva cada semana, sin revisar la anterior",
       },
       {
         id: "m2q21_c",
         label:
-          "Abrir un chat sin contexto cada vez y volver a pegar todo lo que la herramienta ya debería saber recordar sobre tu trabajo",
+          "Un chat nuevo cada vez, pegando otra vez tu contexto de trabajo",
       },
       {
         id: "m2q21_d",
-        label:
-          "Compartir una cuenta única con la contraseña para que todo el equipo use el mismo chat sin límites",
+        label: "Una sola cuenta para todo el equipo, sin ningún límite",
       },
     ],
     correctAnswer: "m2q21_a",
     topic: "GPTs Personalizados",
     difficulty: "fácil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Los GPT se retiran; un Proyecto con instrucciones y archivos cumple la misma función.",
+      "Un Proyecto reúne instrucciones y archivos de un trabajo; los plugins conectan herramientas. Pegar el contexto cada vez y compartir cuentas son malas prácticas.",
   },
   {
     id: "m2q22",
@@ -647,7 +646,7 @@ export const MODULE_2 = [
     correctAnswer: "m2q22_a",
     topic: "Instrucciones GPT",
     difficulty: "medio",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
       "Las instrucciones son el lugar donde se fijan el rol y las reglas.",
   },
@@ -683,32 +682,32 @@ export const MODULE_2 = [
   },
   {
     id: "m2q24",
-    question:
-      "Un asistente debe consultar un catálogo que cambia todos los días. ¿Qué usas?",
+    question: "¿Qué fuente conviene para un dato que cambia cada semana?",
     options: [
       {
         id: "m2q24_a",
-        label: "Un plugin con API para traer datos vivos",
+        label: "Un PDF descargado hace un año, por si acaso",
       },
       {
         id: "m2q24_b",
-        label: "Un PDF del catálogo subido el mes pasado",
+        label: "Una lista escrita en las instrucciones que nadie revisa",
       },
       {
         id: "m2q24_c",
-        label: "Una lista de precios escrita en las instrucciones",
+        label:
+          "Una fuente en línea con su fecha, consultada en el momento de usarla",
       },
       {
         id: "m2q24_d",
-        label: "Pedirle que adivine los precios de hoy",
+        label: "La memoria del chat, que el asistente recuerda por su cuenta",
       },
     ],
-    correctAnswer: "m2q24_a",
+    correctAnswer: "m2q24_c",
     topic: "Actions / APIs",
     difficulty: "difícil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Un plugin con API trae los datos actualizados en el momento de la consulta.",
+      "Un dato que cambia necesita una fuente actual y una fecha. Un archivo viejo o una memoria sin revisar pueden dar una cifra que ya no vale.",
   },
   {
     id: "m2q25",
@@ -717,86 +716,84 @@ export const MODULE_2 = [
     options: [
       {
         id: "m2q25_a",
-        label: "Reviso cada fuente y cada dato antes de usarlo",
+        label: "Confío en el resumen del agente y reviso solo la primera fila",
       },
       {
         id: "m2q25_b",
-        label: "Lo publico tal cual, porque el agente ya lo verificó",
+        label: "Reviso cada fuente y cada dato antes de usarlo",
       },
       {
         id: "m2q25_c",
-        label: "Le pido que lo repita sin mostrar las fuentes",
+        label: "Lo comparto con el equipo y lo corrijo si alguien avisa",
       },
       {
         id: "m2q25_d",
-        label: "Lo envío a todos los proveedores sin leerlo",
+        label: "Le pido otro resultado igual y comparo la forma, no los datos",
       },
     ],
-    correctAnswer: "m2q25_a",
+    correctAnswer: "m2q25_b",
     topic: "Agente",
     difficulty: "difícil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "El agente ejecuta los pasos, pero tú apruebas el resultado. Revisa fuentes y datos antes de usarlos.",
+      "El agente ahorra pasos, pero cada fuente y cada dato deben comprobarse antes de decidir o publicar.",
   },
   {
     id: "m2q26",
-    question: "Compartes un asistente con otras personas. ¿Qué implica?",
+    question: "Antes de compartir un asistente con tu equipo, ¿qué pruebas?",
     options: [
       {
         id: "m2q26_a",
-        label: "Definir quién lo usa y si guarda datos sensibles",
+        label: "Nada: se comparte y se corrige si alguien se queja",
       },
       {
         id: "m2q26_b",
-        label: "Que se publica sola para todos",
+        label: "Que tenga el logo más grande posible",
       },
       {
         id: "m2q26_c",
-        label: "Que cada persona recibe una copia con sus propios datos",
+        label: "Que solo lo usen tus amigos del trabajo",
       },
       {
         id: "m2q26_d",
-        label: "Que el creador deja de ser responsable de sus respuestas",
+        label: "Un caso real con datos ficticios, para ver cómo responde",
       },
     ],
-    correctAnswer: "m2q26_a",
+    correctAnswer: "m2q26_d",
     topic: "GPT Store",
     difficulty: "medio",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Compartir implica decidir quién accede y qué información queda expuesta.",
+      "Probar con datos ficticios muestra cómo responde antes de exponer datos reales. Compartir sin probar lleva errores a todo el equipo.",
   },
   {
     id: "m2q27",
     question:
-      "¿Qué datos debes proteger antes de compartir un Proyecto con un equipo externo?",
+      "Un colega quiere usar tu Proyecto para su cliente. ¿Qué haces primero?",
     options: [
       {
         id: "m2q27_a",
-        label:
-          "Los datos personales y confidenciales de clientes y de la empresa",
+        label: "Quitar los datos de tus clientes y dejar solo las plantillas",
       },
       {
         id: "m2q27_b",
-        label: "El color del logo de la empresa en la portada",
+        label: "Pasarle el Proyecto completo con todos sus archivos",
       },
       {
         id: "m2q27_c",
-        label: "El número de conversaciones que tuviste la semana pasada",
+        label: "Darle tu cuenta para que lo use cuando quiera",
       },
       {
         id: "m2q27_d",
-        label:
-          "La lista completa de herramientas que usaste este mes en el computador y en el teléfono",
+        label: "Compartirlo sin decir lo que contiene",
       },
     ],
     correctAnswer: "m2q27_a",
     topic: "Privacidad GPT",
     difficulty: "medio",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Antes de compartir, lo primero es retirar datos personales y confidenciales.",
+      "Antes de compartir un Proyecto, retira los datos personales y confidenciales de clientes. Lo que queda debe ser solo lo que el colega necesita.",
   },
   {
     id: "m2q28",
@@ -823,7 +820,7 @@ export const MODULE_2 = [
     correctAnswer: "m2q28_a",
     topic: "Alcance del GPT",
     difficulty: "fácil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
       "Acotar alcance y fuentes, y permitir decir no lo sé, evita respuestas inventadas.",
   },
@@ -886,32 +883,31 @@ export const MODULE_2 = [
   },
   {
     id: "m2q31",
-    question:
-      "El asistente de soporte responde con mucha seguridad pero a veces se equivoca. ¿Qué haces?",
+    question: "¿Qué muestra si un asistente de soporte responde bien?",
     options: [
       {
         id: "m2q31_a",
-        label: "Añadir supervisión y verificación en el flujo",
+        label: "Contar cuántas respuestas dio en un día",
       },
       {
         id: "m2q31_b",
-        label: "Pedirle que responda más rápido, aunque sea menos preciso",
+        label: "Medir solo el tiempo de respuesta, aunque sea incorrecta",
       },
       {
         id: "m2q31_c",
-        label: "Quitarle la base de conocimiento para que no se equivoque",
+        label: "Revisar una muestra de respuestas con un criterio escrito",
       },
       {
         id: "m2q31_d",
-        label: "Aceptar los errores sin revisar",
+        label: "Pedir al asistente que se califique a sí mismo",
       },
     ],
-    correctAnswer: "m2q31_a",
+    correctAnswer: "m2q31_c",
     topic: "Uso Responsable",
     difficulty: "fácil",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Un paso de verificación humana detiene los errores antes de llegar al cliente.",
+      "Una muestra revisada con criterios escritos mide la calidad. El volumen y la rapidez no dicen si la respuesta es correcta.",
   },
   {
     id: "m2q32",
@@ -938,67 +934,69 @@ export const MODULE_2 = [
     correctAnswer: "m2q32_a",
     topic: "Privacidad GPT",
     difficulty: "medio",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
       "Usar solo lo necesario y anonimizar protege los datos personales.",
   },
   {
     id: "m2q33",
     question:
-      "Quieres automatizar alertas de quejas urgentes sin perder el control humano. ¿Cuál es el mejor diseño?",
+      "¿Cuándo conviene que el asistente responda solo, sin una persona?",
     options: [
       {
         id: "m2q33_a",
-        label: "Un plugin que detecta y notifica a una persona",
+        label: "En cualquier queja, incluso las de riesgo legal",
       },
       {
         id: "m2q33_b",
-        label: "Un plugin que responde y cierra la queja sin revisión",
+        label:
+          "En preguntas frecuentes con respuestas revisadas y un límite claro",
       },
       {
         id: "m2q33_c",
-        label: "Una alerta manual cada mes, sin detección",
+        label: "Siempre, para que nadie tenga que intervenir",
       },
       {
         id: "m2q33_d",
-        label: "Un chat donde nadie revisa las notificaciones",
+        label: "Nunca, aunque las preguntas sean simples y repetidas",
       },
     ],
-    correctAnswer: "m2q33_a",
+    correctAnswer: "m2q33_b",
     topic: "Automatización",
     difficulty: "difícil",
-    source: "La Línea de Montaje",
+    source: "La Caja de Herramientas",
     feedback:
-      "La automatización detecta y avisa; la decisión sigue en manos de una persona.",
+      "Las respuestas automáticas funcionan para preguntas frecuentes y revisadas. Las quejas con riesgo siempre pasan a una persona.",
   },
   {
     id: "m2q34",
     question:
-      "Recibes muchas preguntas repetidas cada día. ¿Cómo lo automatizas mejor?",
+      "Recibes muchas preguntas repetidas cada día. ¿Qué haces primero?",
     options: [
       {
         id: "m2q34_a",
-        label: "Instrucciones, base de conocimiento y API",
+        label: "Responder cada una a mano desde cero",
       },
       {
         id: "m2q34_b",
-        label: "Respondiendo cada una a mano desde cero",
+        label: "Ignorarlas para no gastar tiempo",
       },
       {
         id: "m2q34_c",
-        label: "Ignorando las preguntas para no gastar tiempo",
+        label: "Publicar todas las respuestas en un documento sin orden",
       },
       {
         id: "m2q34_d",
-        label: "Publicando todas las respuestas en un documento sin orden",
+        label:
+          "Reunir las preguntas más frecuentes y escribir respuestas revisadas",
       },
     ],
-    correctAnswer: "m2q34_a",
+    correctAnswer: "m2q34_d",
     topic: "Automatización",
     difficulty: "medio",
     source: "La Fábrica de Asistentes",
     feedback:
-      "Las instrucciones, la base de conocimiento y la API responden lo repetido con control.",
+      "Primero se identifican las preguntas que se repiten y se escriben respuestas revisadas. Después se automatiza.",
   },
   {
     id: "m2q35",
@@ -1055,20 +1053,20 @@ export const MODULE_2 = [
     difficulty: "medio",
     source: "El Plano Maestro",
     feedback:
-      "Las herramientas cubren tareas puntuales; un GPT empaqueta rol, conocimiento y acciones. Explora el ecosistema.",
+      "Las herramientas cubren tareas puntuales; un GPT empaqueta rol, conocimiento y acciones. Revisa la guía del módulo.",
   },
   {
     id: "m2q37",
     question:
-      "La información de tu asistente cambia poco, pero debe estar siempre disponible. ¿Qué eliges?",
+      "Tu asistente necesita datos que cambian seguido y reglas que casi nunca cambian. ¿Cómo lo organizas?",
     options: [
       {
         id: "m2q37_a",
-        label: "Conocimiento y API para lo que cambia",
+        label: "Reglas en instrucciones y datos en fuente actualizada",
       },
       {
         id: "m2q37_b",
-        label: "Solo instrucciones, sin ningún documento",
+        label: "Todo en las instrucciones, sin ninguna fuente",
       },
       {
         id: "m2q37_c",
@@ -1076,102 +1074,101 @@ export const MODULE_2 = [
       },
       {
         id: "m2q37_d",
-        label: "Memoria del chat, que puede borrarse",
+        label: "Todo en la memoria del chat, que puede borrarse",
       },
     ],
     correctAnswer: "m2q37_a",
     topic: "Arquitectura del GPT",
     difficulty: "difícil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Lo estable va a la base de conocimiento; lo que cambia, a una API.",
+      "Las reglas estables van en las instrucciones; los datos que cambian se consultan en una fuente actualizada.",
   },
   {
     id: "m2q38",
     question:
-      "¿Qué ventaja tiene un plugin frente a pegar datos a mano en el chat?",
+      "¿Qué ventaja tiene traer datos con una herramienta frente a pegarlos a mano en el chat?",
     options: [
       {
         id: "m2q38_a",
-        label: "Trae la información actual cada vez que se consulta",
+        label: "Ninguna: pegar a mano siempre es mejor",
       },
       {
         id: "m2q38_b",
-        label: "Ninguna, pegar a mano siempre es mejor",
+        label: "Se borran al cerrar la sesión y no dejan ningún registro",
       },
       {
         id: "m2q38_c",
-        label: "Se borra al cerrar la sesión y no deja ningún registro",
+        label: "Los datos salen de la fuente actual cada vez que se consultan",
       },
       {
         id: "m2q38_d",
-        label:
-          "Solo sirve para diseñar logos y presentaciones gráficas de la marca en el equipo",
+        label: "Solo sirven para diseñar logos y presentaciones de marca",
       },
     ],
-    correctAnswer: "m2q38_a",
+    correctAnswer: "m2q38_c",
     topic: "Proyectos ChatGPT",
     difficulty: "medio",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Un plugin con API consulta el dato vivo; pegarlo a mano queda desactualizado en cuanto cambia.",
+      "La herramienta consulta la fuente en el momento, así el dato no queda desactualizado como un texto pegado hace semanas.",
   },
   {
     id: "m2q39",
-    question:
-      "Un asistente de soporte inventa políticas que no existen. ¿Cuál es la mejor corrección?",
+    question: "¿Qué debe hacer un asistente cuando no tiene la información?",
     options: [
       {
         id: "m2q39_a",
-        label: "Anclar respuestas a la base y citar la fuente",
+        label: "Inventar una respuesta razonable para no quedar mal",
       },
       {
         id: "m2q39_b",
-        label: "Darle más libertad para que responda con creatividad",
+        label: "Decirlo y derivar la consulta a una persona",
       },
       {
         id: "m2q39_c",
-        label: "Quitarle las instrucciones para que no se contradiga",
+        label: "Responder con la política del año pasado",
       },
       {
         id: "m2q39_d",
-        label: "Pedirle respuestas más cortas sin fuentes",
+        label: "Repetir la pregunta hasta que el cliente se rinda",
       },
     ],
-    correctAnswer: "m2q39_a",
+    correctAnswer: "m2q39_b",
     topic: "Alucinaciones GPT",
     difficulty: "difícil",
-    source: "Guía de aplicaciones y conectores en ChatGPT",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Anclar y citar la fuente hace visible de dónde sale cada respuesta.",
+      "Un asistente sin el dato lo dice y deriva. Inventar una política es el error más grave en soporte.",
   },
   {
     id: "m2q40",
     question:
-      "Caso: montar un asistente de soporte que use datos vivos y derive casos complejos. ¿Cuál es el diseño más completo?",
+      "Caso: un asistente de soporte debe usar datos actuales y derivar los casos complejos. ¿Cuál es el diseño más completo?",
     options: [
       {
         id: "m2q40_a",
-        label: "Instrucciones, base, plugin con API y derivación humana",
-      },
-      {
-        id: "m2q40_b",
         label: "Solo instrucciones de tono, sin datos ni derivación",
       },
       {
-        id: "m2q40_c",
+        id: "m2q40_b",
         label: "Un chat genérico que responde a todo sin límites",
       },
       {
+        id: "m2q40_c",
+        label: "Un documento estático con las respuestas del año pasado",
+      },
+      {
         id: "m2q40_d",
-        label: "Un documento estático con todas las respuestas del año pasado",
+        label:
+          "Instrucciones, base de conocimiento, datos actuales y derivación humana",
       },
     ],
-    correctAnswer: "m2q40_a",
+    correctAnswer: "m2q40_d",
     topic: "Arquitectura del GPT",
     difficulty: "difícil",
-    source: "La Línea de Montaje",
+    source: "La Caja de Herramientas",
     feedback:
-      "El diseño completo combina reglas, conocimiento, datos vivos y derivación humana.",
+      "Un buen diseño combina reglas, base de conocimiento, datos actuales y una salida a una persona cuando el caso es complejo.",
   },
 ];

@@ -1,137 +1,133 @@
 export const learningObjectives = [
-  "Compreender a evolução dos modelos GPT e suas capacidades",
-  "Identificar os diferentes modos de operação do ChatGPT",
-  "Analisar as ferramentas integradas do ecossistema ChatGPT",
-  "Aplicar estratégias avançadas para otimizar o uso da IA",
+  "Entender o que o ChatGPT faz e como constrói uma resposta",
+  "Distinguir as formas de responder: rápida ou com mais raciocínio",
+  "Escolher a ferramenta certa para cada tarefa (pesquisa, arquivos, Canvas, Projetos)",
+  "Pedir uma tarefa do dia a dia e revisar a resposta antes de usá-la",
 ];
 
 export const furtherReading = [
   {
-    title: "OpenAI Model Reference",
-    url: "https://platform.openai.com/docs/models",
-    description: "Documentação oficial de todos os modelos OpenAI.",
-  },
-  {
-    title: "ChatGPT Ecosystem Evolution",
-    url: "https://openai.com/blog/",
-    description: "Blog oficial da OpenAI com anúncios de novos recursos.",
+    title: "Central de Ajuda da OpenAI",
+    url: "https://help.openai.com/",
+    description:
+      "Documentação oficial: funções, planos e disponibilidade conforme a sua conta.",
   },
 ];
 
 export const infographicData = {
   header: {
-    title: "Dominando o Ecossistema ChatGPT",
-    subtitle: "Da Teoria à Ação Profissional",
+    title: "A Planta Mestra: seu mapa do ChatGPT",
+    subtitle: "Do seu primeiro pedido a uma resposta útil",
   },
   sections: [
     {
       id: "evolution",
-      title: "Evolução do Motor de IA (Modelos GPT)",
+      title: "Como o ChatGPT responde",
       icon: "TrendingUp",
       content:
-        "O ChatGPT se tornou o aplicativo de crescimento mais rápido da história após o seu lançamento em novembro de 2022, alcançando 100 Milhões de Usuários em 2 meses.",
+        "O ChatGPT é um assistente de conversa: você lê a resposta, ajusta com a sua próxima mensagem e confere antes de usar.",
       details: [
         {
-          title: "GPT-4o",
-          date: "Maio 2024",
-          text: "Multimodal omni (texto, imagem, áudio).",
+          title: "1 · Seu pedido",
+          date: "Passo 1",
+          text: "Você escreve o que precisa, para quem e em que formato.",
           extendedText:
-            "Este modelo quebrou as barreiras de latência. Permite interações de voz em tempo real sem os atrasos típicos, pode 'ver' através da câmera de um smartphone e analisar o ambiente instantaneamente, e processa áudio de forma nativa em vez de convertê-lo previamente em texto.",
+            "Quanto mais claro o pedido, menos ele adivinha. Exemplo: “Me ajude a escrever uma mensagem de WhatsApp para confirmar uma consulta, tom amável, no máximo 3 linhas”.",
         },
         {
-          title: "GPT-5",
-          date: "Agosto 2025",
-          text: "Sistema otimizado, redução drástica das alucinações.",
+          title: "2 · A resposta dele",
+          date: "Passo 2",
+          text: "O ChatGPT constrói a resposta peça por peça.",
           extendedText:
-            "Um salto qualitativo rumo à confiabilidade empresarial. Foca em fluxos de trabalho orientados a agentes (Agentic Workflows), em que a IA pode interagir com mais segurança com bancos de dados externos e cometer significativamente menos erros lógicos ou inventar dados.",
+            "Ele não busca uma resposta guardada: constrói a partir de padrões. Por isso pode soar muito seguro mesmo errando.",
         },
         {
-          title: "GPT-5.5",
-          date: "Abril 2026",
-          text: "Raciocínio autônomo e planejamento passo a passo.",
+          title: "3 · Sua revisão",
+          date: "Passo 3",
+          text: "Você ajusta e confere.",
           extendedText:
-            "Representa o modelo mais inteligente da década. Pode receber um objetivo complexo (ex.: 'Crie uma campanha de marketing completa'), desdobrá-lo em tarefas pequenas, executar o código necessário, corrigir os próprios erros e usar múltiplas ferramentas web sem intervenção humana constante.",
+            "Peça mudanças pequenas (“deixe mais curto”) e confira datas, números e nomes antes de usar o resultado.",
         },
       ],
     },
     {
       id: "modes",
-      title: "Modos de Operação",
+      title: "Formas de responder",
       icon: "Cpu",
       content:
-        "A IA adapta a sua capacidade de processamento e o tempo de resposta conforme a complexidade da tarefa.",
+        "Conforme a sua conta, o ChatGPT pode oferecer diferentes formas de responder. Os nomes e as opções mudam: confira o seletor da sua.",
       details: [
         {
-          title: "Modo Fast (Rápido)",
-          text: "Respostas instantâneas para tarefas simples e diretas.",
+          title: "Resposta rápida",
+          text: "Para tarefas simples e diretas.",
           extendedText:
-            "Ideal para a produtividade diária: resumir longas cadeias de e-mails, gerar ideias rápidas de conteúdo (brainstorming), redigir respostas para clientes ou corrigir a gramática de um texto em segundos. Prioriza a velocidade em vez da análise profunda.",
+            "Ideal para resumir um e-mail, propor ideias, corrigir a redação ou traduzir. Prioriza a agilidade sobre a análise profunda.",
         },
         {
-          title: "Modo Thinking (Profundo)",
-          text: "Análises detalhadas e decisões estratégicas. Requer tempo de processamento.",
+          title: "Resposta com mais raciocínio",
+          text: "Para tarefas que exigem análise. Demora um pouco mais.",
           extendedText:
-            "A IA investe tempo em 'pensar' antes de escrever. É essencial para resolver bugs complexos de código, projetar arquiteturas de software, escrever ensaios acadêmicos analíticos ou modelar cenários financeiros em que um erro superficial seria custoso.",
+            "Útil quando há vários fatores: comparar opções, planejar uma viagem com restrições ou revisar um documento longo. É mais lenta, mas costuma ser mais cuidadosa.",
         },
       ],
     },
     {
       id: "tools",
-      title: "A Caixa de Ferramentas Integrada",
+      title: "A caixa de ferramentas",
       icon: "Wrench",
       content:
-        "O ChatGPT evoluiu de um simples chatbot para se tornar um ambiente de trabalho digital (Workspace) completo.",
+        "O ChatGPT é mais que um chat: traz ferramentas para pesquisar, ler seus arquivos, editar e guardar contexto. Quais você vê depende do seu plano.",
       details: [
         {
-          title: "Busca na Web e Intérprete de Código",
-          text: "Acesso a dados ao vivo e execução de scripts em Python.",
+          title: "Pesquisa na web e arquivos",
           icon: "Search",
+          text: "Dados recentes com fontes e leitura dos seus documentos.",
           extendedText:
-            "Você pode enviar um arquivo Excel bruto e pedir para limpar os dados, fazer análises estatísticas (como regressões) e gerar gráficos interativos. A IA escreve o código Python em segundo plano, executa-o e entrega o resultado visual.",
+            "Ative a pesquisa para preços, notícias ou normas vigentes e abra as fontes. Envie um PDF ou uma planilha para pedir um resumo ou uma tabela, e refaça uma linha à mão para conferir.",
         },
         {
-          title: "Canvas: Edição Colaborativa",
-          text: "Um ambiente de trabalho conjunto em uma janela lateral.",
+          title: "Canvas",
           icon: "Layout",
+          text: "Um painel ao lado do chat para editar um texto com você.",
           extendedText:
-            "Em vez de regenerar um texto inteiro no chat, o Canvas abre um documento lateral. Você pode selecionar um único parágrafo e pedir 'deixe este parágrafo mais profissional', ou editar o código diretamente enquanto a IA revisa as suas alterações. Ideal para projetos longos.",
+            "Em vez de gerar o texto todo de novo, você seleciona um parágrafo e pede “deixe mais formal”. Útil para documentos longos.",
         },
         {
-          title: "Memória e Projetos",
-          text: "Lembra preferências e organiza contextos complexos em 'Projetos'.",
+          title: "Projetos e memória",
           icon: "Database",
+          text: "Guardam instruções e arquivos de um trabalho.",
           extendedText:
-            "Se você configurar um 'Projeto' para a Edutechlife, pode enviar o manual da marca e as diretrizes. A partir daí, qualquer chat dentro desse projeto lembrará de usar as suas cores, o tom institucional e os formatos preferidos, sem ter que repetir tudo.",
+            "Um Projeto reúne o contexto de um trabalho (tom, regras, arquivos) para não repeti-lo em cada chat. Revise a memória de vez em quando e apague o que você não quer que ela guarde.",
         },
       ],
     },
     {
       id: "automation",
-      title: "Conectividade e Automação",
+      title: "Aplicativos e agentes, com a sua permissão",
       icon: "Share2",
       content:
-        "O verdadeiro poder surge ao conectar a sua IA com o mundo exterior e com os seus aplicativos do dia a dia.",
+        "O ChatGPT pode se conectar a outros aplicativos e fazer tarefas de vários passos, sempre com permissões que você aprova.",
       details: [
         {
-          title: "Zapier",
-          text: "Automações simples e intuitivas.",
+          title: "Conectores",
           icon: "Zap",
+          text: "Permissões para o ChatGPT usar seus aplicativos.",
           extendedText:
-            "Excelente para iniciantes. Exemplo: 'Sempre que eu receber um e-mail rotulado como Fatura no Gmail, use a IA para extrair o valor e adicione-o automaticamente a uma linha no Google Sheets'.",
+            "Um conector é uma permissão para o ChatGPT ler uma ferramenta sua, como a agenda ou os documentos. Leia quais permissões ele pede, conceda só as necessárias e desconecte o que não usa mais.",
         },
         {
-          title: "Make (Integromat)",
-          text: "Fluxos complexos e potentes (1.000 operações/mês gratuitas).",
+          title: "Agente",
           icon: "Settings",
+          text: "Tarefas de vários passos com a sua supervisão.",
           extendedText:
-            "Permite ramificações lógicas avançadas. Exemplo: 'Se entrar um lead pelo Facebook, analise a mensagem dele com IA. Se estiver irritado, notifique no Slack com urgência. Se for uma dúvida comum, envie um e-mail automático usando o manual da empresa'.",
+            "Você dá uma meta (por exemplo, comparar três opções e montar uma tabela). Revisa o plano, aprova as ações importantes e abre as fontes antes de usar o resultado.",
         },
         {
-          title: "Integração Nativa: Workspace e Slack",
-          text: "Capacidade de atuar diretamente nas suas plataformas corporativas.",
+          title: "Compartilhar com cuidado",
           icon: "MessageSquare",
+          text: "Antes de compartilhar um chat, veja o que ele contém.",
           extendedText:
-            "A IA já não vive apenas no seu aplicativo. Você pode usar @ChatGPT no Slack para resumir uma thread de 50 mensagens dos seus colegas enquanto estava em uma reunião, economizando minutos vitais de leitura.",
+            "Um link compartilhado mostra toda a conversa. Não inclua dados pessoais de terceiros, de menores nem documentos confidenciais.",
         },
       ],
     },
@@ -139,179 +135,117 @@ export const infographicData = {
   quiz: {
     questions: [
       {
-        question: "Qual é a principal vantagem do Modo Thinking do ChatGPT?",
+        question: "Quando vale a pena a opção com mais raciocínio?",
         options: [
           {
-            text: "Respostas mais rápidas que o modo normal",
+            text: "Para tarefas simples, como corrigir uma frase",
             score: 1,
             feedback:
-              "O Modo Thinking prioriza profundidade, não velocidade. Ele é projetado para ser mais lento, porém mais rigoroso.",
+              "Para isso basta a resposta rápida: o raciocínio extra demora mais e não acrescenta nada.",
           },
           {
-            text: "Análises detalhadas e raciocínio passo a passo antes de responder",
+            text: "Quando há vários fatores para comparar, como planejar uma viagem com restrições",
             score: 3,
             feedback:
-              "Correto! O Thinking investe tempo em raciocinar antes de responder, ideal para tarefas complexas.",
+              "Correto! Essa opção costuma ser mais cuidadosa em tarefas com vários fatores.",
           },
           {
-            text: "Consome menos recursos do servidor",
+            text: "Sempre, porque é melhor em tudo",
             score: 1,
             feedback:
-              "Na verdade, consome mais recursos porque realiza um processamento mais profundo antes de responder.",
+              "Nem sempre: é mais lenta e tarefas simples não precisam dela.",
           },
         ],
       },
       {
-        question: "Qual função o Canvas exerce no ChatGPT?",
+        question: "Qual a função do Canvas no ChatGPT?",
         options: [
           {
             text: "Gera imagens a partir de texto",
             score: 1,
             feedback:
-              "Isso quem faz é o DALL-E, não o Canvas. O Canvas é um editor colaborativo de texto e código.",
-          },
-          {
-            text: "Permite editar documentos de forma colaborativa em uma janela lateral",
-            score: 3,
-            feedback:
-              "Exato! O Canvas abre um documento lateral em que você pode editar e a IA revisa as alterações em tempo real.",
+              "A criação de imagens é outra ferramenta. O Canvas é um editor ao lado do chat.",
           },
           {
             text: "Conecta o ChatGPT às redes sociais",
             score: 1,
+            feedback: "Não: o Canvas não tem relação com redes sociais.",
+          },
+          {
+            text: "Permite editar um documento junto ao chat, em um painel lateral",
+            score: 3,
             feedback:
-              "Não, o Canvas nada tem a ver com redes sociais. É um espaço de trabalho colaborativo.",
+              "Exato! Você pode selecionar um parágrafo e pedir uma mudança sem gerar tudo de novo.",
           },
         ],
       },
       {
-        question:
-          "Como um docente se beneficiaria ao usar a função de Projetos no ChatGPT?",
+        question: "Como um professor se beneficiaria dos Projetos no ChatGPT?",
         options: [
           {
-            text: "Pode enviar o plano de ensino e os guias do curso para que a IA lembre o contexto",
+            text: "Pode guardar o plano de estudos e os guias do curso para não repetir o contexto em cada chat",
             score: 3,
             feedback:
-              "Correto! Os Projetos permitem carregar documentos de referência que a IA usará em todos os chats.",
+              "Correto! Um Projeto reúne as instruções e os arquivos de um trabalho.",
           },
           {
             text: "Cria provas automaticamente sem revisão",
             score: 1,
             feedback:
-              "A IA pode ajudar a criar provas, mas elas sempre exigem revisão humana para garantir precisão.",
+              "A IA ajuda a preparar provas, mas elas sempre precisam de revisão humana.",
           },
           {
-            text: "Substitui o docente em sessões ao vivo",
+            text: "Substitui o professor nas aulas",
             score: 1,
             feedback:
-              "O ChatGPT é uma ferramenta de apoio, não um substituto. O critério do docente é insubstituível.",
+              "O ChatGPT apoia, não substitui: o critério do professor é insubstituível.",
           },
         ],
       },
       {
-        question:
-          "Qual é a principal diferença entre o Zapier e o Make (Integromat)?",
+        question: "Antes de aprovar um conector, o que você faz?",
         options: [
           {
-            text: "O Make permite fluxos mais complexos com ramificações lógicas avançadas",
+            text: "Leio quais permissões ele pede e concedo só as necessárias",
             score: 3,
             feedback:
-              "Correto! O Make oferece ramificações lógicas (if/else) e transformações de dados mais potentes que o Zapier.",
+              "Correto! As permissões são suas: dê o mínimo e desconecte o que não usa mais.",
           },
           {
-            text: "O Zapier é mais caro que o Make",
+            text: "Aprovo tudo para não repetir a etapa",
             score: 1,
             feedback:
-              "Não necessariamente. Ambos têm modelos de preço diferentes. O Make oferece 1.000 operações gratuitas por mês.",
+              "Conceder mais permissões do que o necessário aumenta o risco.",
           },
           {
-            text: "O Make só funciona com o Google Workspace",
+            text: "Compartilho minha senha no chat para ele acessar",
             score: 1,
-            feedback:
-              "O Make se integra a centenas de aplicativos, não apenas ao Google Workspace.",
+            feedback: "Nunca dê senhas no chat.",
           },
         ],
       },
       {
-        question:
-          "Qual é a forma mais eficiente de começar a usar IA generativa na sala de aula?",
+        question: "Qual a melhor forma de começar com o ChatGPT?",
         options: [
           {
-            text: "Implementar a IA em todas as áreas de uma vez",
+            text: "Testar todas as funções no primeiro dia",
             score: 1,
-            feedback:
-              "Implementar tudo de uma vez pode ser avassalador. É melhor começar por uma área específica.",
+            feedback: "É cansativo e você não saberá o que ajudou.",
           },
           {
-            text: "Começar com uma tarefa específica (resumir, criar material) e ir expandindo",
+            text: "Começar com uma tarefa do dia a dia, revisar a resposta e melhorá-la",
             score: 3,
             feedback:
-              "Exato! A melhor estratégia é começar com uma tarefa concreta, dominá-la e depois expandir gradualmente.",
+              "Exato! Uma tarefa concreta, uma revisão e um ajuste: assim se aprende.",
           },
           {
-            text: "Esperar a tecnologia amadurecer antes de usá-la",
+            text: "Esperar a tecnologia amadurecer",
             score: 1,
             feedback:
-              "A IA já está madura o suficiente para muitas tarefas educacionais. Começar agora permite aprender progressivamente.",
+              "Ela já serve para muitas tarefas cotidianas; começar agora permite aprender aos poucos.",
           },
         ],
       },
     ],
   },
-};
-
-export const pricingSection = {
-  title: "Planos do ChatGPT: Qual escolher de acordo com o seu perfil?",
-  subtitle:
-    "Cada plano é projetado para um tipo de usuário. Compare e escolha o que melhor se adapta às suas necessidades.",
-  plans: [
-    {
-      name: "Gratuito",
-      price: "/tmp/agent_c_work.sh",
-      period: "/mês",
-      description:
-        "Ideal para iniciar no mundo da IA e explorar capacidades básicas.",
-      features: [
-        "Acesso ao GPT-4o mini",
-        "Limite de mensagens reduzido",
-        "Sem acesso a ferramentas avançadas",
-        "Sem DALL-E nem navegação na web",
-      ],
-      color: "from-gray-400 to-gray-500",
-      icon: "fa-rocket",
-    },
-    {
-      name: "ChatGPT Plus",
-      price: "0",
-      period: "/mês",
-      description:
-        "Perfeito para estudantes e profissionais que usam IA diariamente.",
-      features: [
-        "Acesso completo ao GPT-4o",
-        "Mensagens ilimitadas",
-        "Acesso a DALL-E, Browse e Análise de Dados",
-        "Criação de GPTs personalizados",
-        "Limite reduzido de voz e vídeo",
-      ],
-      popular: true,
-      color: "from-corporate to-petroleum",
-      icon: "fa-star",
-    },
-    {
-      name: "ChatGPT Pro",
-      price: "00",
-      period: "/mês",
-      description:
-        "Para pesquisadores e profissionais que precisam de capacidade de processamento ilimitada.",
-      features: [
-        "Tudo do Plus, sem limites",
-        "Acesso ilimitado a GPT-4o, o1 e o1-pro",
-        "Modo de voz e vídeo avançado",
-        "Prioridade em novos recursos",
-        "Suporte prioritário",
-      ],
-      color: "from-amber-500 to-orange-600",
-      icon: "fa-crown",
-    },
-  ],
 };

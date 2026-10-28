@@ -213,11 +213,11 @@ const CONTENT_ES = {
         icon: "fa-sliders",
       },
       {
-        text: "Crear GPTs y Proyectos que trabajan con tu contexto",
+        text: "Crear Proyectos y usar plugins que trabajan con tu contexto",
         icon: "fa-code",
       },
       {
-        text: "Construir tu propio GPT como un módulo arquitectónico",
+        text: "Organizar un Proyecto con instrucciones y archivos como módulo arquitectónico",
         icon: "fa-robot",
       },
       {
@@ -245,7 +245,7 @@ const CONTENT_ES = {
           title: "El Andamio del Arquitecto: Herramientas Integradas",
           icon: "fa-layer-group",
           resources: 3,
-          duration: "30 min",
+          duration: "20 min",
           outcome:
             "Elegir la herramienta de ChatGPT adecuada (búsqueda, archivos, imágenes o voz) y comprobar lo que te entrega.",
         },
@@ -255,7 +255,7 @@ const CONTENT_ES = {
           resources: 3,
           duration: "20 min",
           outcome:
-            "Organizar un trabajo repetido en un Proyecto y decidir cuándo conviene un GPT o un agente.",
+            "Organizar un trabajo repetido en un Proyecto y decidir cuándo conviene un Proyecto, un plugin o un agente.",
         },
       ],
     },
@@ -265,7 +265,7 @@ const CONTENT_ES = {
         title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
         description: "Los cimientos de toda gran construcción digital",
         detailedDescription:
-          "Todo edificio comienza con un plano. En esta lección conocerás ChatGPT de punta a punta: qué modelos existen, cuándo usar cada uno y cómo escribir prompts profesionales que obtienen resultados en el primer intento. La base que necesitas antes de automatizar cualquier cosa. Nota de vigencia: OpenAI retira los GPT personalizados el 11 de diciembre de 2026 y los reemplaza por plugins. Trabaja desde ya con Proyectos y con los plugins conectados a tu cuenta.",
+          "Todo edificio comienza con un plano. En esta lección conocerás ChatGPT de punta a punta: qué modelos existen, cuándo usar cada uno y cómo escribir prompts profesionales que obtienen resultados en el primer intento. La base que necesitas antes de automatizar cualquier cosa. Nota de vigencia: OpenAI programó retirar los GPT personalizados el 11 de diciembre de 2026 (fecha sujeta a cambios) y reemplazarlos por plugins. Empieza por Proyectos y plugins, y verifica el aviso de tu cuenta. Trabaja desde ya con Proyectos y con los plugins conectados a tu cuenta.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -289,7 +289,7 @@ const CONTENT_ES = {
         title: "La Fachada del Edificio: GPTs, Proyectos y Agentes",
         description: "Conecta tu obra con el mundo real",
         detailedDescription:
-          "La fachada es lo que el mundo ve. Aquí construyes asistentes a tu medida: GPTs con tus instrucciones y tu conocimiento, Proyectos que organizan cada trabajo y el agente de ChatGPT para tareas de varios pasos. Aprende a diseñarlos, probarlos y usarlos sin perder el control de cada decisión. OpenAI ha anunciado el retiro de los GPTs personalizados en fechas provisionales: revisa en tu cuenta si tu GPT sigue disponible y considera migrar sus instrucciones a un Proyecto.",
+          "La fachada es lo que el mundo ve. Aquí construyes asistentes a tu medida: Proyectos con tus instrucciones y tu conocimiento, plugins que conectan tus herramientas y el agente de ChatGPT para tareas de varios pasos. Aprende a diseñarlos, probarlos y usarlos sin perder el control de cada decisión. Revisa la nota de vigencia de la lección 1 y considera migrar las instrucciones de un GPT a un Proyecto.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -313,7 +313,7 @@ const CONTENT_ES = {
           },
           {
             icon: "fa-check",
-            text: "Seleccionar el modelo óptimo según costo y capacidad (GPT-6 Luna o Sol, según tu plan)",
+            text: "Seleccionar el modelo óptimo según costo y capacidad (el que muestre el selector de tu cuenta)",
           },
         ],
         warnings: [
@@ -334,7 +334,7 @@ const CONTENT_ES = {
           label: "Ejemplo práctico",
           weak: "❌ Aficionado: Usar el modelo más potente para todo, incluso para tareas que el modelo rápido resuelve en segundos",
           strong:
-            "✅ Arquitecto: GPT-6 Luna para borradores rápidos y resúmenes, GPT-6 Sol para análisis estructurales complejos — el material correcto para cada capa de la construcción, según tu plan",
+            "✅ Arquitecto: el modelo rápido para borradores y resúmenes, y el modo más potente para análisis estructurales complejos — el material correcto para cada capa de la construcción, según el selector de tu cuenta",
         },
       },
       2: {
@@ -379,7 +379,7 @@ const CONTENT_ES = {
       3: {
         objective: "🧱 La Fachada del Arquitecto",
         objectiveDesc:
-          "Crea GPTs y Proyectos a tu medida, y úsalos para que ChatGPT trabaje con tu contexto en cada tarea.",
+          "Crea Proyectos a tu medida, con instrucciones y archivos, para que ChatGPT trabaje con tu contexto en cada tarea.",
         achievements: [
           {
             icon: "fa-check",
@@ -405,7 +405,7 @@ const CONTENT_ES = {
           },
           {
             icon: "fa-times",
-            text: "Publicar un GPT sin probarlo con casos reales — como entregar una fachada sin inspección",
+            text: "Compartir un Proyecto o plugin sin probarlo con casos reales — como entregar una fachada sin inspección",
           },
         ],
         example: {
@@ -487,7 +487,7 @@ const CONTENT_ES = {
       },
       {
         id: 2,
-        title: "Grounding: Cuando la IA Toca el Mundo Real",
+        title: "Grounding: Cuando la Evidencia Toca Tierra",
         description:
           "Conecta tu lupa con la tierra firme: datos vivos del mundo real",
         detailedDescription:
@@ -682,7 +682,7 @@ const CONTENT_ES = {
           title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
           icon: "fa-podcast",
           resources: 3,
-          duration: "30 min",
+          duration: "20 min",
           outcome:
             "Generar un resumen en audio de tus documentos y organizar tus cuadernos para encontrar todo.",
         },

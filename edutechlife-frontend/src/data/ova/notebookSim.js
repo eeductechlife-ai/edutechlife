@@ -8,4 +8,4 @@ const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 export const { contentScreens, questionsData, learningObjectives } = data;
 
 export const moduleContext =
-  "Simular el uso de NotebookLM para practicar la carga, análisis y síntesis de información con fuentes propias.";
+  "Simular el uso de Gemini Notebook para practicar la carga, análisis y síntesis de información con fuentes propias.";
