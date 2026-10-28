@@ -84,7 +84,7 @@ export const MODULE_1_PART4 = [
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "Los sistemas de alto riesgo exigen transparencia, documentación y supervisión humana. Revisa la guía de ética. El Reglamento (UE) 2026/1744 está en vigor desde el 27 de julio de 2026; sus obligaciones de alto riesgo para sistemas independientes se aplican desde diciembre de 2027.",
+      "Los sistemas de alto riesgo exigen evaluación de conformidad y supervisión humana. Revisa la guía de ética. El Reglamento (UE) 2026/1744 está en vigor desde el 27 de julio de 2026; sus obligaciones de alto riesgo para sistemas independientes se aplican desde diciembre de 2027.",
   },
   {
     id: "m1e06",

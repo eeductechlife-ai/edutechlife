@@ -33,14 +33,9 @@ const ES = [
     def: "Las reglas base que definen el comportamiento del asistente.",
   },
   {
-    term: "Fábrica de asistentes",
-    tech: "GPT personalizado",
-    def: "Un asistente configurado con rol, conocimiento y capacidades.",
-  },
-  {
-    term: "Línea de montaje",
-    tech: "Function Calling / API",
-    def: "Conectar el asistente con servicios externos para ejecutar acciones.",
+    term: "Proyecto",
+    tech: "Proyectos de ChatGPT",
+    def: "Espacio con instrucciones y archivos de un trabajo repetido; los chats dentro de él usan ese contexto.",
   },
   {
     term: "Lupa",
@@ -58,7 +53,7 @@ const ES = [
     def: "Cuaderno que responde solo con las fuentes que tú cargas, citándolas.",
   },
   {
-    term: "Fórmula sonora",
+    term: "Resumen de audio",
     tech: "Audio Overview",
     def: "Resumen conversacional en audio de tus documentos.",
   },
@@ -66,11 +61,6 @@ const ES = [
     term: "Espejo de la verdad",
     tech: "Sesgo e IA",
     def: "Desviación sistemática que puede producir decisiones injustas.",
-  },
-  {
-    term: "Tribunal ético",
-    tech: "Explicabilidad",
-    def: "Poder entender y justificar las decisiones de un sistema.",
   },
   {
     term: "Guardián",
@@ -239,9 +229,9 @@ const PT = [
     def: "As regras base que definem o comportamento do assistente.",
   },
   {
-    term: "Fábrica de assistentes",
-    tech: "GPT personalizado",
-    def: "Um assistente configurado com papel, conhecimento e capacidades.",
+    term: "Projeto",
+    tech: "Projetos do ChatGPT",
+    def: "Espaço com instruções e arquivos de um trabalho repetido; os chats dentro dele usam esse contexto.",
   },
   {
     term: "Linha de montagem",
@@ -264,7 +254,7 @@ const PT = [
     def: "Caderno que responde só com as fontes que você envia, citando-as.",
   },
   {
-    term: "Fórmula sonora",
+    term: "Resumo em áudio",
     tech: "Audio Overview",
     def: "Resumo em áudio, em formato de conversa, dos seus documentos.",
   },
@@ -272,11 +262,6 @@ const PT = [
     term: "Espelho da verdade",
     tech: "Viés e IA",
     def: "Desvio sistemático que pode gerar decisões injustas.",
-  },
-  {
-    term: "Tribunal ético",
-    tech: "Explicabilidade",
-    def: "Poder entender e justificar as decisões de um sistema.",
   },
   {
     term: "Guardião",

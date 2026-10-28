@@ -84,7 +84,7 @@ export const MODULE_1_EN_PART4 = [
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "High-risk systems require transparency, documentation and human supervision. Review the ethics guide. Regulation (EU) 2026/1744 has been in force since 27 July 2026; its high-risk obligations for standalone systems apply from December 2027.",
+      "High-risk systems require a conformity assessment and human supervision. Review the ethics guide. Regulation (EU) 2026/1744 has been in force since 27 July 2026; its high-risk obligations for standalone systems apply from December 2027.",
   },
   {
     id: "m1e06",
