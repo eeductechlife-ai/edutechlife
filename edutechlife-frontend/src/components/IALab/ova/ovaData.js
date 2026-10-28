@@ -305,6 +305,16 @@ export const OVA_CATALOG = [
     component: "OvaEdutechlife",
   },
   {
+    id: "grounding-ova-1",
+    title: "El Ancla de Evidencia",
+    module: 3,
+    icon: "fa-link",
+    duration: "15 min",
+    description:
+      "Grounding: qué es, cómo leer una cita y cómo comprobar la fuente.",
+    component: "OVAGrounding",
+  },
+  {
     id: "gemini-cases-ova-1",
     title: "El Caso Abierto",
     module: 3,

@@ -448,6 +448,18 @@ const RESOURCES_ES = {
         thumbnailType: "premium",
         fullscreen: true,
       },
+      {
+        id: "grounding-ova-1",
+        type: "ova_interactive",
+        title: "El Ancla de Evidencia",
+        description:
+          "Qué es el grounding, por qué una cita no prueba que algo sea verdad y cómo abrir la fuente para comprobarla. Incluye práctica y evaluación.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 4,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
     ],
   },
   "Deep Research: La Caja de Herramientas Forenses": {
