@@ -85,7 +85,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Secret Formula: Audio Overviews and Document Management",
         description: "Your documents speak for themselves",
         detailedDescription:
-          "Transform your documents into podcast conversations with two AI voices. A sonic experience that sounds like professional radio. Perfect for learning on the go. Manage your digital library with superhuman intelligence: one notebook per project, with a clear name, so you can find everything. Before sharing a notebook, remove personal or sensitive data (anonymize lists of people) and decide who can view it and who can edit it.",
+          "Transform your documents into podcast conversations with two AI voices. A sonic experience that sounds like professional radio. Perfect for learning on the go. Manage your digital library with superhuman intelligence: one notebook per project, with a clear name, so you can find everything. Before sharing a notebook, remove personal or sensitive data (anonymize lists of people) and decide who can view it and who can edit it. The audio summarizes; to cite an idea, find it in the notebook's citations and cite the document, not the audio.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",

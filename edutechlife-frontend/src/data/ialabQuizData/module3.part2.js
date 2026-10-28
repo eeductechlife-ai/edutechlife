@@ -262,7 +262,7 @@ export const MODULE_3_PART2 = [
   {
     id: "m3q24",
     question:
-      "Vas a resolver con Gemini un problema que exige razonar varios pasos con cuidado. ¿Qué ajustas en el selector?",
+      "Tu plan de Gemini muestra los niveles de razonamiento y vas a resolver un problema que exige razonar varios pasos con cuidado. ¿Qué ajustas en el selector?",
     options: [
       {
         id: "m3q24_a",

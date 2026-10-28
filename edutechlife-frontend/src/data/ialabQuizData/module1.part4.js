@@ -115,7 +115,7 @@ export const MODULE_1_PART4 = [
     difficulty: "fácil",
     source: "Video «Podcast: ética de la IA»",
     feedback:
-      "Transparencia, equidad, responsabilidad, privacidad y veracidad son los cinco pilares. Repasa el podcast de ética y práctica.",
+      "Transparencia, equidad, responsabilidad, privacidad y veracidad son los cinco pilares. Repasa el podcast de ética de la IA.",
   },
   {
     id: "m1e07",

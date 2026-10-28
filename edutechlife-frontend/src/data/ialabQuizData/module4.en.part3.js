@@ -321,30 +321,31 @@ export const MODULE_4_EN_PART3 = [
   {
     id: "m4q40",
     question:
-      "Case: you want a podcast from 8 documents that someone can verify. What do you include in the script?",
+      "You listened to an Audio Overview of 8 documents and want to use one of its ideas in your report. What do you do?",
     options: [
       {
         id: "m4q40_a",
-        label: "The list of the 8 documents at the end of the episode",
+        label: "I cite the audio, because it summarizes the 8 documents",
       },
       {
         id: "m4q40_b",
-        label: "The authors' names at the start",
+        label: "I cite the minute of the audio where the idea is said",
       },
       {
         id: "m4q40_c",
-        label: "The source of each idea, so it can be checked",
+        label:
+          "I find the idea in the notebook's citations and cite the document",
       },
       {
         id: "m4q40_d",
-        label: "A separate written summary, with no citations in the audio",
+        label: "I cite all 8 documents at the end of the report",
       },
     ],
     correctAnswer: "m4q40_c",
-    topic: "Document-to-Podcast Flow",
+    topic: "Audio Overview",
     difficulty: "hard",
     source: "The Alchemical Studio",
     feedback:
-      "To verify a podcast, the listener needs to know where each idea comes from. A final list of documents or the authors at the start do not say which idea comes from which source, and a separate summary does not cite what is heard.",
+      "The audio summarizes; to cite an idea, find it in the notebook's citations and cite the document it comes from, not the audio.",
   },
 ];

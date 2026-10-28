@@ -13,38 +13,43 @@ const figure = (src, cap, w = "100%") => `<figure style="width:${w};margin:12px 
 
 export const ES_FACHADA = {
   lang: "es", chip: "Módulo 2 · ChatGPT", module: 2,
-  title: "GPTs, Proyectos y agentes", subtitle: "Cuándo usar cada uno, cómo diseñarlos y cómo probarlos antes de usarlos en serio",
+  title: "Proyectos, plugins y agentes", subtitle: "Cuándo usar cada uno, cómo configurarlos y cómo probarlos antes de usarlos en serio",
   edition: "Guía didáctica 2026", art: "/ialab-resources/modulo2/portada-chatgpt.jpg",
-  lead: "Un GPT, un Proyecto y un agente resuelven problemas distintos. El <strong>Proyecto</strong> guarda el contexto de un trabajo; el <strong>GPT</strong> guarda reglas y conocimiento para una tarea repetida; el <strong>agente</strong> ejecuta varios pasos bajo tu supervisión. Esta guía te ayuda a elegir y a probar cada uno.",
-  kpis: [["3", "herramientas comparadas"], ["5", "pruebas para evaluar un GPT"], ["1", "regla: tú apruebas cada paso"]],
+  lead: "Un Proyecto, un plugin y un agente resuelven problemas distintos. El <strong>Proyecto</strong> guarda el contexto de un trabajo; el <strong>plugin</strong> reúne reglas, archivos y apps para una tarea repetida; el <strong>agente</strong> ejecuta varios pasos bajo tu supervisión. Esta guía te ayuda a elegir, configurar y probar cada uno.",
+  kpis: [["3", "herramientas comparadas"], ["5", "pruebas antes de compartir"], ["1", "regla: tú apruebas cada paso"]],
   sections: [
-    { h: "Elegir entre Proyecto, GPT y agente", html: `${table(["Pregunta", "Usa un Proyecto", "Usa un GPT", "Usa un agente"], [
-      ["¿Qué guarda?", "Instrucciones y archivos de un trabajo", "Reglas y conocimiento para una tarea repetida", "Un plan de varios pasos"],
-      ["¿Quién decide?", "Tú, en cada conversación", "Tú, al definir las reglas", "Tú, aprobando cada paso"],
-      ["Ejemplo", "Propuestas comerciales de un cliente", "Asesor de propuestas con tu tono y tus precios", "Comparar cinco proveedores y armar una tabla"],
-    ])}${box("warn", "Estado de los GPTs", "<p>OpenAI anunció el retiro de los GPTs personalizados en fechas provisionales. Antes de construir uno, revisa en tu cuenta si la función sigue disponible; si ya tienes un GPT, considera migrar sus instrucciones a un Proyecto.</p>")}` },
+    { h: "Elegir entre Proyecto, plugin y agente", html: `${table(["Pregunta", "Usa un Proyecto", "Usa un plugin", "Usa un agente"], [
+      ["¿Qué guarda?", "Instrucciones y archivos de un trabajo", "Reglas, archivos y apps para una tarea repetida", "Un plan de varios pasos"],
+      ["¿Quién decide?", "Tú, en cada conversación", "Tú, al definir reglas y permisos", "Tú, aprobando cada paso"],
+      ["Ejemplo", "Propuestas comerciales de un cliente", "Asistente de propuestas con tu tono, tus plantillas y tu calendario", "Comparar cinco proveedores y armar una tabla"],
+    ])}${box("warn", "Estado de los GPT personalizados", "<p>OpenAI programó retirar los GPT personalizados el 11 de diciembre de 2026 (fecha sujeta a cambios; algunas cuentas Enterprise tienen otra fecha). Si usas uno: copia sus instrucciones y archivos a un Proyecto (o migra a un plugin si tu cuenta lo ofrece) y prueba el resultado con tres casos reales.</p>")}` },
     { h: "Un Proyecto bien armado", html: `<p>Un Proyecto agrupa lo que siempre se repite en un trabajo: instrucciones, archivos y conversaciones. Así no pegas el mismo contexto cada vez.</p>${steps([
-      "Dale un nombre que describa el trabajo, no el tema general.",
+      "Dale un nombre que describa el trabajo, no el tema general. Un Proyecto por objetivo o por cliente.",
       "Escribe instrucciones: rol, público, tono, límites y lo que siempre debe revisarse.",
-      "Sube solo los archivos necesarios y revisa qué contienen.",
-      "Usa una conversación por tarea dentro del Proyecto.",
+      "Reglas estables en las instrucciones; datos que cambian (precios, fechas), en una fuente actualizada.",
+      "Sube solo los archivos necesarios, revisa qué contienen y anonimiza los datos personales.",
     ])}` },
-    { h: "Probar un GPT antes de compartirlo", html: `<p>Un GPT puede parecer bueno en tu primera conversación y fallar en un caso real. Prueba estos cinco casos.</p>${table(["Prueba", "Qué debe hacer el GPT"], [
-      ["Caso normal", "Resolver bien la tarea para la que fue diseñado"],
+    { h: "Antes de conectar un plugin", html: `<p>Un plugin puede leer o actuar en tus apps. Antes de conectarlo, lee qué puede ver y qué puede hacer, y da solo el acceso que la tarea necesita.</p>${table(["Revisa", "Pregunta"], [
+      ["Permisos", "¿Qué datos lee y qué acciones puede ejecutar?"],
+      ["Alcance", "¿Necesita todo tu correo o solo una carpeta?"],
+      ["Datos sensibles", "¿Hay datos personales o de menores que no debería ver?"],
+    ])}${box("tip", "Regla", "<p>Si no entiendes un permiso, no lo apruebes. Revisa en tu cuenta qué plugins tienes disponibles.</p>")}` },
+    { h: "Probar antes de compartir", html: `<p>Un Proyecto o un plugin puede parecer bueno en tu primera conversación y fallar en un caso real. Prueba estos cinco casos, con datos ficticios.</p>${table(["Prueba", "Qué debe hacer"], [
+      ["Caso normal", "Resolver bien la tarea para la que fue configurado"],
       ["Caso límite", "Pedir la información que falta antes de responder"],
-      ["Fuera de alcance", "Decir que no puede ayudar y sugerir a quién consultar"],
+      ["Fuera de alcance", "Decir «no lo sé» y pasar el caso a una persona"],
       ["Dato sensible", "No pedir ni repetir datos personales o de menores"],
       ["Coherencia", "Mantener el tono y las reglas en toda la conversación"],
     ])}` },
-    { h: "El agente: varios pasos, tu aprobación", html: `<p>El agente ejecuta una secuencia (buscar, comparar, resumir, armar un entregable). Tu papel es definir el objetivo, fijar límites y aprobar cada paso antes de usar el resultado.</p>${box("warn", "Error frecuente", "<p>Aprobar el resultado final sin revisar las fuentes de los pasos intermedios. Un error temprano se propaga a todo el entregable.</p>")}` },
+    { h: "El agente: varios pasos, tu aprobación", html: `<p>El agente ejecuta una secuencia (buscar, comparar, resumir, armar un entregable). Primero propone un plan; tu papel es definir el objetivo, fijar límites y aprobar cada paso importante antes de usar el resultado.</p>${box("warn", "Error frecuente", "<p>Aprobar el resultado final sin revisar las fuentes de los pasos intermedios. Un error temprano se propaga a todo el entregable.</p>")}` },
     { h: "Caso práctico: una propuesta para un cliente", html: `${steps([
       "<b>Proyecto:</b> crea el Proyecto del cliente con sus instrucciones y su brief.",
-      "<b>GPT:</b> si la propuesta se repite, define un asesor con tu tono, tus plantillas y tu política de precios.",
+      "<b>Plugin:</b> si la propuesta se repite y necesitas tus apps, conecta un plugin con tu tono y tus plantillas, y revisa sus permisos.",
       "<b>Agente:</b> pídele comparar tres referencias del sector y armar una tabla con fuentes.",
       "<b>Verificación:</b> abre dos fuentes de la tabla y ajusta lo que no se confirme.",
     ])}` },
   ],
-  closing: `${checks(["Elijo Proyecto, GPT o agente según la pregunta del trabajo.", "Pruebo un GPT con cinco casos antes de usarlo.", "Apruebo cada paso de un agente y verifico sus fuentes."])}`,
+  closing: `${checks(["Elijo Proyecto, plugin o agente según la pregunta del trabajo.", "Leo los permisos de un plugin y doy solo el acceso necesario.", "Pruebo con cinco casos antes de compartir.", "Apruebo cada paso de un agente y verifico sus fuentes."])}`,
 };
 
 export const EN_FACHADA = {

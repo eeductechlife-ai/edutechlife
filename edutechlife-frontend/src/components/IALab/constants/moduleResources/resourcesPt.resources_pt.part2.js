@@ -41,8 +41,8 @@ export const RESOURCES_PT_PART2 = {
         title: "A Lupa à Prova",
         description:
           "Veja como o Gemini trabalha com imagens, texto e dados juntos: útil para analisar casos reais do seu contexto, com verificação de cada dado.",
-        estimatedTime: "15 minutes",
-        difficulty: "Intermediate",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermediário",
         interactiveElements: 6,
         thumbnailType: "premium",
         fullscreen: true,
@@ -347,8 +347,8 @@ export const RESOURCES_PT_PART2 = {
         title: "O Primeiro Pedido",
         description:
           "Pratique o seu primeiro pedido com retorno em cada etapa.",
-        estimatedTime: "15 minutes",
-        difficulty: "Intermediate",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermediário",
         interactiveElements: 3,
         thumbnailType: "premium",
         fullscreen: true,

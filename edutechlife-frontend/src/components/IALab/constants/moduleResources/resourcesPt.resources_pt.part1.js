@@ -175,7 +175,7 @@ export const RESOURCES_PT_PART1 = {
       {
         id: "bias-guide-1",
         type: "pdf",
-        title: "Ética da Inteligência Artificial",
+        title: "Ética da inteligência artificial",
         url: "/ialab-resources/modulo1/guia-etica-es.pdf",
         pages: 5,
         format: "PDF",
@@ -326,11 +326,11 @@ export const RESOURCES_PT_PART1 = {
       {
         id: "facade-guide-1",
         type: "pdf",
-        title: "Guia: GPTs, Projetos e agentes",
+        title: "Guia: Projetos, plugins e agentes",
         url: "/ialab-resources/modulo2/guia-fachada-es.pdf",
-        pages: 5,
+        pages: 4,
         format: "PDF",
-        size: "1.18 MB",
+        size: "0.93 MB",
         description:
           "Quando usar um Projeto, um GPT ou um agente, e como testar um GPT antes de compartilhar.",
         thumbnailType: "premium",

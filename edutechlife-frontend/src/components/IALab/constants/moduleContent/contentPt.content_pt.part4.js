@@ -86,7 +86,7 @@ export const CONTENT_PT_PART4 = {
         title: "A Fórmula Secreta: Audio Overviews e Gestão Documental",
         description: "Seus documentos falam por si só",
         detailedDescription:
-          "Transforme seus documentos em conversas de podcast com duas vozes de IA. Uma experiência sonora que parece rádio profissional. Ideal para aprender enquanto você se movimenta. Gerencie sua biblioteca digital com inteligência sobre-humana: um caderno por projeto, com um nome claro, para encontrar tudo. Antes de compartilhar um caderno, retire dados pessoais ou sensíveis (anonimize listas de pessoas) e decida quem pode vê-lo e quem pode editá-lo.",
+          "Transforme seus documentos em conversas de podcast com duas vozes de IA. Uma experiência sonora que parece rádio profissional. Ideal para aprender enquanto você se movimenta. Gerencie sua biblioteca digital com inteligência sobre-humana: um caderno por projeto, com um nome claro, para encontrar tudo. Antes de compartilhar um caderno, retire dados pessoais ou sensíveis (anonimize listas de pessoas) e decida quem pode vê-lo e quem pode editá-lo. O áudio resume; para citar uma ideia, procure-a nas citações do caderno e cite o documento, não o áudio.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",

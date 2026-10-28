@@ -217,7 +217,7 @@ export const MODULE_2_PART3 = [
       },
       {
         id: "m2q36_c",
-        label: "Solo cambian de nombre y pasan a llamarse plugins",
+        label: "OpenAI los migrará solos, sin que hagas nada",
       },
       {
         id: "m2q36_d",
