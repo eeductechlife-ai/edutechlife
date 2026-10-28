@@ -11,17 +11,35 @@
     "4": { "label": "Cuarto", "level": "Básica Primaria", "menRange": "4-5" },
     "5": { "label": "Quinto", "level": "Básica Primaria", "menRange": "4-5" },
     "6": { "label": "Sexto", "level": "Básica Secundaria", "menRange": "6-7" },
-    "7": { "label": "Séptimo", "level": "Básica Secundaria", "menRange": "6-7" },
+    "7": {
+      "label": "Séptimo",
+      "level": "Básica Secundaria",
+      "menRange": "6-7"
+    },
     "8": { "label": "Octavo", "level": "Básica Secundaria", "menRange": "8-9" },
     "9": { "label": "Noveno", "level": "Básica Secundaria", "menRange": "8-9" },
-    "10": { "label": "Décimo", "level": "Media Vocacional", "menRange": "10-11" },
-    "11": { "label": "Undécimo", "level": "Media Vocacional", "menRange": "10-11" }
+    "10": {
+      "label": "Décimo",
+      "level": "Media Vocacional",
+      "menRange": "10-11"
+    },
+    "11": {
+      "label": "Undécimo",
+      "level": "Media Vocacional",
+      "menRange": "10-11"
+    }
   },
   "subjects": {
     "matematicas": {
       "label": "Matemáticas",
       "emoji": "🔢",
-      "pensamientos": ["numérico", "espacial", "métrico", "aleatorio", "variacional"],
+      "pensamientos": [
+        "numérico",
+        "espacial",
+        "métrico",
+        "aleatorio",
+        "variacional"
+      ],
       "standards": {
         "1-3": {
           "objetivo": "Construir el pensamiento numérico básico, operar con números naturales y reconocer figuras geométricas y medidas simples.",
@@ -139,7 +157,12 @@
     "lenguaje": {
       "label": "Lengua Castellana",
       "emoji": "📖",
-      "ejes": ["comprensión lectora", "producción textual", "literatura", "medios de comunicación"],
+      "ejes": [
+        "comprensión lectora",
+        "producción textual",
+        "literatura",
+        "medios de comunicación"
+      ],
       "standards": {
         "1-3": {
           "objetivo": "Desarrollar el código lecto-escritor, la comprensión de textos sencillos y la comunicación oral básica.",
@@ -241,7 +264,11 @@
     "ciencias_naturales": {
       "label": "Ciencias Naturales",
       "emoji": "🔬",
-      "ejes": ["entorno vivo", "entorno físico", "ciencia, tecnología y sociedad"],
+      "ejes": [
+        "entorno vivo",
+        "entorno físico",
+        "ciencia, tecnología y sociedad"
+      ],
       "standards": {
         "1-3": {
           "objetivo": "Explorar el entorno natural cercano, identificar seres vivos y sus características, y comprender fenómenos físicos básicos.",
@@ -351,7 +378,12 @@
     "ciencias_sociales": {
       "label": "Ciencias Sociales",
       "emoji": "🌎",
-      "ejes": ["historia", "geografía", "constitución política", "economía y política"],
+      "ejes": [
+        "historia",
+        "geografía",
+        "constitución política",
+        "economía y política"
+      ],
       "standards": {
         "1-3": {
           "objetivo": "Reconocer el entorno social inmediato, la familia, la escuela, el municipio y los símbolos patrios.",
@@ -571,7 +603,12 @@
     "tecnologia": {
       "label": "Tecnología e Informática",
       "emoji": "💻",
-      "ejes": ["naturaleza de la tecnología", "apropiación", "solución de problemas", "tecnología y sociedad"],
+      "ejes": [
+        "naturaleza de la tecnología",
+        "apropiación",
+        "solución de problemas",
+        "tecnología y sociedad"
+      ],
       "standards": {
         "1-3": {
           "objetivo": "Reconocer herramientas tecnológicas del entorno y usarlas de forma segura y responsable.",
@@ -667,11 +704,46 @@
       "label": "Ética y Valores",
       "emoji": "💛",
       "standards": {
-        "1-3": { "temas": ["Respeto, honestidad, responsabilidad", "Convivencia en el aula", "Reglas del juego limpio", "Amistad y solidaridad"] },
-        "4-5": { "temas": ["Valores cívicos y ciudadanía", "Resolución pacífica de conflictos", "Equidad de género básica", "Cuidado del medio ambiente"] },
-        "6-7": { "temas": ["Proyecto de vida", "Identidad y autoestima", "Diversidad cultural y respeto", "Democracia participativa"] },
-        "8-9": { "temas": ["Filosofía moral: el bien, el deber, la justicia", "Derechos humanos y responsabilidad", "Sexualidad y afectividad responsable", "Dilemas éticos contemporáneos"] },
-        "10-11": { "temas": ["Ética profesional", "Bioética", "Filosofía política: liberalismo, comunitarismo", "Proyecto de vida y toma de decisiones"] }
+        "1-3": {
+          "temas": [
+            "Respeto, honestidad, responsabilidad",
+            "Convivencia en el aula",
+            "Reglas del juego limpio",
+            "Amistad y solidaridad"
+          ]
+        },
+        "4-5": {
+          "temas": [
+            "Valores cívicos y ciudadanía",
+            "Resolución pacífica de conflictos",
+            "Equidad de género básica",
+            "Cuidado del medio ambiente"
+          ]
+        },
+        "6-7": {
+          "temas": [
+            "Proyecto de vida",
+            "Identidad y autoestima",
+            "Diversidad cultural y respeto",
+            "Democracia participativa"
+          ]
+        },
+        "8-9": {
+          "temas": [
+            "Filosofía moral: el bien, el deber, la justicia",
+            "Derechos humanos y responsabilidad",
+            "Sexualidad y afectividad responsable",
+            "Dilemas éticos contemporáneos"
+          ]
+        },
+        "10-11": {
+          "temas": [
+            "Ética profesional",
+            "Bioética",
+            "Filosofía política: liberalismo, comunitarismo",
+            "Proyecto de vida y toma de decisiones"
+          ]
+        }
       }
     },
     "ciencias_sociales_economia": {
@@ -699,10 +771,53 @@
     }
   },
   "saberTests": {
-    "3": { "label": "Saber 3°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales"] },
-    "5": { "label": "Saber 5°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales"] },
-    "7": { "label": "Saber 7°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales", "ingles"] },
-    "9": { "label": "Saber 9°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales", "ingles"] },
-    "11": { "label": "Saber 11° (ICFES)", "subjects": ["lectura_critica", "matematicas", "ciencias_naturales", "ciencias_sociales_ciudadanas", "ingles"] }
+    "3": {
+      "label": "Saber 3°",
+      "subjects": [
+        "lenguaje",
+        "matematicas",
+        "ciencias_naturales",
+        "ciencias_sociales"
+      ]
+    },
+    "5": {
+      "label": "Saber 5°",
+      "subjects": [
+        "lenguaje",
+        "matematicas",
+        "ciencias_naturales",
+        "ciencias_sociales"
+      ]
+    },
+    "7": {
+      "label": "Saber 7°",
+      "subjects": [
+        "lenguaje",
+        "matematicas",
+        "ciencias_naturales",
+        "ciencias_sociales",
+        "ingles"
+      ]
+    },
+    "9": {
+      "label": "Saber 9°",
+      "subjects": [
+        "lenguaje",
+        "matematicas",
+        "ciencias_naturales",
+        "ciencias_sociales",
+        "ingles"
+      ]
+    },
+    "11": {
+      "label": "Saber 11° (ICFES)",
+      "subjects": [
+        "lectura_critica",
+        "matematicas",
+        "ciencias_naturales",
+        "ciencias_sociales_ciudadanas",
+        "ingles"
+      ]
+    }
   }
 }

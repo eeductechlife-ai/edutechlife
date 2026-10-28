@@ -113,9 +113,9 @@ export const MODULE_1_EN_PART4 = [
     correctAnswer: "m1e06_a",
     topic: "Ethical Principles",
     difficulty: "easy",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "Video «Podcast: AI ethics»",
     feedback:
-      "Transparency, fairness, accountability, privacy and truthfulness are the five pillars. Review the principles video.",
+      "Transparency, fairness, accountability, privacy and truthfulness are the five pillars. Review the ethics podcast.",
   },
   {
     id: "m1e07",
@@ -224,7 +224,7 @@ export const MODULE_1_EN_PART4 = [
       },
     ],
     correctAnswer: "m1e10_d",
-    topic: "Explainability",
+    topic: "Privacy",
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
@@ -255,7 +255,7 @@ export const MODULE_1_EN_PART4 = [
     correctAnswer: "m1e11_a",
     topic: "Human Supervision",
     difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "Video «Podcast: AI ethics»",
     feedback:
       "Recording who reviewed and decided allows auditing and assigns responsibility. Review the ethics guide.",
   },
@@ -285,7 +285,7 @@ export const MODULE_1_EN_PART4 = [
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Privacy is designed in from the start, not added at the end. Review the Privacy guide.",
+      "Privacy by design means deciding which data you need before collecting it: minimize, anonymize and limit access from the start. It is not added at the end. Review the ethics guide, annex, point 3.",
   },
   {
     id: "m1e13",
@@ -398,8 +398,8 @@ export const MODULE_1_EN_PART4 = [
     correctAnswer: "m1e16_a",
     topic: "Responsible Use",
     difficulty: "easy",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "Video «Podcast: AI ethics»",
     feedback:
-      "Impersonating identities with AI is unethical and can be illegal. Review the principles video.",
+      "Impersonating identities with AI is unethical and can be illegal. Review the ethics podcast.",
   },
 ];

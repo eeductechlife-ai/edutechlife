@@ -10,7 +10,7 @@ export const MODULE_3_PART2 = [
       },
       {
         id: "m3q15_b",
-        label: "Que el tono sea entusiasta y seguro",
+        label: "Que el tono sea entusiasta y que suene seguro",
       },
       {
         id: "m3q15_c",
@@ -54,9 +54,9 @@ export const MODULE_3_PART2 = [
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
     difficulty: "medio",
-    source: "El Espejo de la Verdad",
+    source: "Guía: Deep Research paso a paso",
     feedback:
-      "Delimitar tema, enfoque y fuentes mejora el informe. Practica en la actividad El Archivo Forense.",
+      "Delimitar tema, enfoque y tipo de fuentes mejora el informe. Repasa la Guía: Deep Research paso a paso.",
   },
   {
     id: "m3q17",
@@ -89,31 +89,31 @@ export const MODULE_3_PART2 = [
   {
     id: "m3q18",
     question:
-      "Vas a analizar varios documentos a la vez. ¿Qué pides primero a Gemini?",
+      "Tienes la foto de la pizarra, el audio de la clase y tus apuntes. ¿Cómo lo trabajas con Gemini?",
     options: [
       {
         id: "m3q18_a",
-        label: "Que responda sin indicar de dónde sale nada",
+        label: "Subo los tres y pido un análisis que los cruce",
       },
       {
         id: "m3q18_b",
-        label: "Que cite la sección de cada dato que usa",
+        label: "Pido un resumen de cada uno en chats separados",
       },
       {
         id: "m3q18_c",
-        label: "Que resuma antes de que alguien los lea",
+        label: "Subo solo los apuntes, que son lo más claro",
       },
       {
         id: "m3q18_d",
-        label: "Que guarde los documentos fuera de la conversación",
+        label: "Transcribo todo a mano y subo solo el texto",
       },
     ],
-    correctAnswer: "m3q18_b",
-    topic: "Documentos extensos y citas",
+    correctAnswer: "m3q18_a",
+    topic: "Multimodalidad",
     difficulty: "medio",
-    source: "Manual de Campo: Introducción a Gemini",
+    source: "La Lupa a Prueba",
     feedback:
-      "Citar la sección de cada dato permite comprobarlo en el documento. Sin cita no hay forma de verificarlo.",
+      "Gemini puede analizar imagen, audio y texto en un mismo pedido. Cruzarlos muestra lo que falta en tus apuntes o lo que no coincide. Practica en la actividad La Lupa a Prueba.",
   },
   {
     id: "m3q19",
@@ -147,32 +147,31 @@ export const MODULE_3_PART2 = [
   {
     id: "m3q20",
     question:
-      "Un informe cita una estadística sin fuente verificable. ¿Qué haces con Gemini?",
+      "Tienes la foto de la etiqueta de un producto y quieres saber si su precio de hoy en tiendas en línea es razonable. ¿Qué pedido es mejor?",
     options: [
       {
         id: "m3q20_a",
-        label: "Pedir fuentes del dato o descartarlo por completo",
+        label: "Lee la etiqueta, busca precios de hoy y cita cada tienda",
       },
       {
         id: "m3q20_b",
-        label: "Publicarlo igual si el número parece razonable",
+        label: "Lee la etiqueta y estima el precio con lo que sabes",
       },
       {
         id: "m3q20_c",
-        label: "Añadir un gráfico generado para darle credibilidad",
+        label: "Busca en la web el precio promedio de este tipo de producto",
       },
       {
         id: "m3q20_d",
-        label: "Atribuir el dato a una fuente genérica conocida",
+        label: "Describe la etiqueta y dime si el precio te parece bueno",
       },
     ],
     correctAnswer: "m3q20_a",
-    topic: "Verificación",
+    topic: "Grounding",
     difficulty: "difícil",
-    source:
-      "Investigación académica con IA en minutos: Gemini y Deep Research sin perder rigor",
+    source: "Grounding: respuestas que puedes comprobar",
     feedback:
-      "Sin fuente verificable, el dato no se usa. Pide respaldo o descártalo. Repasa el video de casos reales.",
+      "Este caso combina las dos piezas: la imagen identifica el producto exacto y la búsqueda trae precios actuales con su fuente. Estimar de memoria o buscar un promedio genérico deja fuera una de las dos.",
   },
   {
     id: "m3q21",
@@ -205,88 +204,89 @@ export const MODULE_3_PART2 = [
   {
     id: "m3q22",
     question:
-      "Quieres analizar una tabla de Sheets con Gemini. ¿Cuál es la mejor manera?",
+      "Una fórmula de tu hoja de Sheets da un resultado extraño. ¿Qué le pides a Gemini?",
     options: [
       {
         id: "m3q22_a",
-        label: "Pedir el análisis donde vive la hoja de cálculo",
+        label: "Que la explique paso a paso, y la pruebo con un caso",
       },
       {
         id: "m3q22_b",
-        label: "Copiar los datos a mano",
+        label: "Que escriba otra fórmula para reemplazar la actual",
       },
       {
         id: "m3q22_c",
-        label: "Convertir la tabla en imágenes para subirlas luego",
+        label: "Que me diga si la fórmula está bien o mal",
       },
       {
         id: "m3q22_d",
-        label: "Exportar todo y pedir el análisis en otra herramienta",
+        label: "Que borre la columna que da el resultado raro",
       },
     ],
     correctAnswer: "m3q22_a",
-    topic: "Google Workspace",
-    difficulty: "medio",
-    source: "La Lupa Multimodal",
-    feedback:
-      "Trabajar dentro de la app evita copiar datos y reduce errores. Repasa la actividad La Lupa Multimodal.",
-  },
-  {
-    id: "m3q23",
-    question: "¿Qué debes verificar cuando Gemini te da el precio de un vuelo?",
-    options: [
-      {
-        id: "m3q23_a",
-        label: "La fuente y la fecha del precio en el sitio oficial",
-      },
-      {
-        id: "m3q23_b",
-        label: "Nada: el precio que da Gemini es siempre definitivo",
-      },
-      {
-        id: "m3q23_c",
-        label: "Solo el color del logo de la aerolínea",
-      },
-      {
-        id: "m3q23_d",
-        label: "Que sea el más barato del mercado, sin comparar",
-      },
-    ],
-    correctAnswer: "m3q23_a",
-    topic: "Verificación de fuentes",
+    topic: "Análisis con Gemini",
     difficulty: "medio",
     source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Un precio cambia y puede tener condiciones. Confírmalo en el sitio oficial y revisa su fecha.",
+      "Entender cada paso de la fórmula muestra dónde está el error, y probarla con un caso cuyo resultado conoces lo confirma. Un sí o un no, o una fórmula nueva que no entiendes, no te dicen qué falló.",
+  },
+  {
+    id: "m3q23",
+    question:
+      "Gemini, con búsqueda web, te da los requisitos de una beca y cita su página oficial. Al abrirla, ves que es la convocatoria del año pasado. ¿Qué haces?",
+    options: [
+      {
+        id: "m3q23_a",
+        label: "Busco la convocatoria vigente y comparo los requisitos",
+      },
+      {
+        id: "m3q23_b",
+        label: "Uso los requisitos, porque la página es oficial",
+      },
+      {
+        id: "m3q23_c",
+        label: "Le pido a Gemini que confirme que siguen vigentes",
+      },
+      {
+        id: "m3q23_d",
+        label: "Uso los requisitos y aclaro que vienen de Gemini",
+      },
+    ],
+    correctAnswer: "m3q23_a",
+    topic: "Grounding",
+    difficulty: "medio",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
+    feedback:
+      "El grounding también puede equivocarse: una página oficial puede estar desactualizada. Busca la convocatoria vigente y compara antes de usar los requisitos.",
   },
   {
     id: "m3q24",
     question:
-      "Debes formular una pregunta de investigación sólida. ¿Cuál es la mejor?",
+      "Vas a resolver con Gemini un problema que exige razonar varios pasos con cuidado. ¿Qué ajustas en el selector?",
     options: [
       {
         id: "m3q24_a",
-        label: "Un interrogante específico y verificable",
+        label: "Subo el nivel de razonamiento a Medio o Alto",
       },
       {
         id: "m3q24_b",
-        label: "Un tema amplio",
+        label: "Dejo el razonamiento en Bajo, que es más rápido",
       },
       {
         id: "m3q24_c",
-        label: "Una afirmación que la IA deba confirmar de todas formas",
+        label: "Elijo Flash-Lite para que piense con más calma",
       },
       {
         id: "m3q24_d",
-        label: "Varias preguntas distintas mezcladas en un solo texto",
+        label: "Activo Deep Research para resolver el problema",
       },
     ],
     correctAnswer: "m3q24_a",
-    topic: "Investigación Profesional",
+    topic: "Gemini Básico",
     difficulty: "medio",
     source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Una buena pregunta es específica y verificable. Revisa el manual de campo.",
+      "El nivel de razonamiento (Bajo, Medio o Alto; por defecto, Bajo) define cuánto piensa el modelo antes de responder: para varios pasos conviene subirlo. Flash-Lite es la opción más ligera y Deep Research sirve para investigar fuentes, no para razonar un problema.",
   },
   {
     id: "m3q25",
@@ -294,15 +294,16 @@ export const MODULE_3_PART2 = [
     options: [
       {
         id: "m3q25_a",
-        label: "Usar el dato porque la cita tiene buen formato",
+        label:
+          "Buscarla en Google Académico y, si no aparece, citar la más parecida",
       },
       {
         id: "m3q25_b",
-        label: "Escribir una cita parecida con el mismo autor",
+        label: "Pedirle a Gemini que corrija la cita y usar la que proponga",
       },
       {
         id: "m3q25_c",
-        label: "Publicarlo igual para no quedar mal",
+        label: "Mantener el dato y citar la página principal del sitio",
       },
       {
         id: "m3q25_d",
@@ -312,39 +313,38 @@ export const MODULE_3_PART2 = [
     correctAnswer: "m3q25_d",
     topic: "Verificación de Fuentes",
     difficulty: "difícil",
-    source: "El Espejo de la Verdad",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Una cita que no existe no respalda nada. Retira el dato o busca una fuente verificable.",
+      "Una cita que no existe no respalda nada. Citar algo parecido, aceptar la cita que proponga Gemini o citar la portada de un sitio deja el dato sin respaldo. Retíralo y busca otra fuente verificable.",
   },
   {
     id: "m3q26",
     question:
-      "¿Qué práctica muestra un uso responsable de Gemini al trabajar en equipo?",
+      "Revisas un texto de Gemini para separar hechos de alucinaciones. ¿Qué método usas?",
     options: [
       {
         id: "m3q26_a",
-        label: "No mencionar la IA para evitar discusiones",
+        label: "Marco cada afirmación sin respaldo y la compruebo",
       },
       {
         id: "m3q26_b",
-        label: "Enviar la respuesta al grupo sin leerla",
+        label: "Marco solo las afirmaciones que me suenan raras",
       },
       {
         id: "m3q26_c",
-        label: "Dejar que Gemini decida el reparto de tareas",
+        label: "Le pido a Gemini que marque sus propios errores",
       },
       {
         id: "m3q26_d",
-        label:
-          "Declarar qué partes vienen de Gemini y revisarlas con el equipo",
+        label: "Reviso que el texto suene coherente y seguro",
       },
     ],
-    correctAnswer: "m3q26_d",
-    topic: "Uso Responsable",
+    correctAnswer: "m3q26_a",
+    topic: "Verificación",
     difficulty: "fácil",
     source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Declarar el uso y revisar el resultado en conjunto da transparencia al grupo. Ocultar la IA o delegar sin revisión no lo hace.",
+      "Una alucinación puede sonar normal y segura. Por eso se marca toda afirmación sin respaldo y se comprueba en una fuente, no solo las que parecen raras.",
   },
   {
     id: "m3q27",
@@ -352,11 +352,11 @@ export const MODULE_3_PART2 = [
     options: [
       {
         id: "m3q27_a",
-        label: "Lo resume a mano primero y no usa la IA para nada",
+        label: "Pide un resumen por capítulos y cita el resumen",
       },
       {
         id: "m3q27_b",
-        label: "Lo convierte en imágenes sueltas para cada pregunta",
+        label: "Lo divide en partes y acepta las respuestas de cada parte",
       },
       {
         id: "m3q27_c",
@@ -364,7 +364,7 @@ export const MODULE_3_PART2 = [
       },
       {
         id: "m3q27_d",
-        label: "Pide un resumen general sin indicar de qué parte sale",
+        label: "Pide citas textuales para pegarlas en su trabajo",
       },
     ],
     correctAnswer: "m3q27_c",
@@ -372,7 +372,7 @@ export const MODULE_3_PART2 = [
     difficulty: "difícil",
     source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
-      "Pedir secciones y páginas permite verificar lo que usarás. Un resumen sin origen no sirve para una cita.",
+      "Pedir sección y página permite ir al original y verificar lo que usarás. Un resumen, respuestas por partes o citas que no comparas con el documento no confirman lo que dice el texto.",
   },
   {
     id: "m3q28",
@@ -389,7 +389,7 @@ export const MODULE_3_PART2 = [
       },
       {
         id: "m3q28_c",
-        label: "Que no vuelva a mirar la imagen",
+        label: "Que no vuelva a mirar la imagen y responda igual",
       },
       {
         id: "m3q28_d",

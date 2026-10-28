@@ -54,9 +54,9 @@ export const MODULE_3_EN_PART2 = [
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
     difficulty: "medium",
-    source: "The Mirror of Truth",
+    source: "Guide: Deep Research, step by step",
     feedback:
-      "Defining topic, angle and sources improves the report. Practice in the activity The Forensic Archive.",
+      "Defining topic, angle and source type improves the report. Review the Guide: Deep Research, step by step.",
   },
   {
     id: "m3q17",
@@ -90,31 +90,32 @@ export const MODULE_3_EN_PART2 = [
   {
     id: "m3q18",
     question:
-      "You will analyze several documents at once. What do you ask Gemini first?",
+      "You have a photo of the whiteboard, the class audio and your notes. How do you work with Gemini?",
     options: [
       {
         id: "m3q18_a",
-        label: "That it answers without saying where anything comes from",
+        label:
+          "Upload all three and ask for an analysis that cross-checks them",
       },
       {
         id: "m3q18_b",
-        label: "That it cites the section of each data point it uses",
+        label: "Ask for a summary of each one in separate chats",
       },
       {
         id: "m3q18_c",
-        label: "That it summarizes before anyone has read them",
+        label: "Upload only the notes, since they are the clearest",
       },
       {
         id: "m3q18_d",
-        label: "That it keeps the documents outside the conversation",
+        label: "Type everything by hand and upload only the text",
       },
     ],
-    correctAnswer: "m3q18_b",
-    topic: "Long documents and citations",
+    correctAnswer: "m3q18_a",
+    topic: "Multimodality",
     difficulty: "medium",
-    source: "Field Guide: Introduction to Gemini",
+    source: "Testing the Magnifying Glass",
     feedback:
-      "Citing the section of each data point lets you check it in the document. Without a citation there is no way to verify it.",
+      "Gemini can analyze image, audio and text in a single request. Cross-checking them shows what is missing from your notes or what does not match. Practice in the activity Testing the Magnifying Glass.",
   },
   {
     id: "m3q19",
@@ -148,32 +149,31 @@ export const MODULE_3_EN_PART2 = [
   {
     id: "m3q20",
     question:
-      "A report cites a statistic with no verifiable source. What do you do with Gemini?",
+      "You have a photo of a product label and want to know whether its price today in online stores is reasonable. Which request is best?",
     options: [
       {
         id: "m3q20_a",
-        label: "Ask for sources or discard the data",
+        label: "Read the label, search today's prices and cite each store",
       },
       {
         id: "m3q20_b",
-        label: "Publish it anyway if the number seems reasonable enough",
+        label: "Read the label and estimate the price from what you know",
       },
       {
         id: "m3q20_c",
-        label: "Add a generated chart to make it look more credible",
+        label: "Search the web for the average price of this kind of product",
       },
       {
         id: "m3q20_d",
-        label: "Attribute the data to a source",
+        label: "Describe the label and tell me if the price seems good",
       },
     ],
     correctAnswer: "m3q20_a",
-    topic: "Verification",
+    topic: "Grounding",
     difficulty: "hard",
-    source:
-      "Academic research with AI in minutes: Gemini and Deep Research without losing rigor",
+    source: "Grounding: Answers You Can Check",
     feedback:
-      "Without a verifiable source, the data is not used. Ask for support or discard it.",
+      "This case combines both pieces: the image identifies the exact product and the search brings current prices with their source. Estimating from memory or searching a generic average leaves one of them out.",
   },
   {
     id: "m3q21",
@@ -206,88 +206,89 @@ export const MODULE_3_EN_PART2 = [
   {
     id: "m3q22",
     question:
-      "You want to analyze a Sheets table with Gemini. What is the best way?",
+      "A formula in your Sheets spreadsheet gives an odd result. What do you ask Gemini?",
     options: [
       {
         id: "m3q22_a",
-        label: "Ask for the analysis where the spreadsheet lives",
+        label: "To explain it step by step, and I test it with a case",
       },
       {
         id: "m3q22_b",
-        label: "Copy the data by hand",
+        label: "To write another formula to replace the current one",
       },
       {
         id: "m3q22_c",
-        label: "Convert the table into images and then upload those",
+        label: "To tell me whether the formula is right or wrong",
       },
       {
         id: "m3q22_d",
-        label: "Export everything and ask for analysis in another tool",
+        label: "To delete the column that gives the odd result",
       },
     ],
     correctAnswer: "m3q22_a",
-    topic: "Google Workspace",
-    difficulty: "medium",
-    source: "The Multimodal Lens",
-    feedback:
-      "Working inside the app avoids copying data and reduces errors. Review the activity The Multimodal Lens.",
-  },
-  {
-    id: "m3q23",
-    question: "What should you check when Gemini gives you a flight price?",
-    options: [
-      {
-        id: "m3q23_a",
-        label: "The source and the date of the price on the official site",
-      },
-      {
-        id: "m3q23_b",
-        label: "Nothing: the price Gemini gives is always final",
-      },
-      {
-        id: "m3q23_c",
-        label: "Only the color of the airline's logo",
-      },
-      {
-        id: "m3q23_d",
-        label: "That it is the cheapest in the market, without comparing",
-      },
-    ],
-    correctAnswer: "m3q23_a",
-    topic: "Source verification",
+    topic: "Analysis with Gemini",
     difficulty: "medium",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "A price changes and may have conditions. Confirm it on the official site and check its date.",
+      "Understanding each step of the formula shows where the error is, and testing it with a case whose result you know confirms it. A yes or no, or a new formula you do not understand, does not tell you what failed.",
+  },
+  {
+    id: "m3q23",
+    question:
+      "Gemini, with web search, gives you a scholarship's requirements and cites its official page. When you open it, you see it is last year's call. What do you do?",
+    options: [
+      {
+        id: "m3q23_a",
+        label: "Find the current call and compare the requirements",
+      },
+      {
+        id: "m3q23_b",
+        label: "Use the requirements, since the page is official",
+      },
+      {
+        id: "m3q23_c",
+        label: "Ask Gemini to confirm they are still current",
+      },
+      {
+        id: "m3q23_d",
+        label: "Use them and note that they come from Gemini",
+      },
+    ],
+    correctAnswer: "m3q23_a",
+    topic: "Grounding",
+    difficulty: "medium",
+    source: "Gemini in Practice: Field Exercises",
+    feedback:
+      "Grounding can also be wrong: an official page can be outdated. Find the current call and compare before using the requirements.",
   },
   {
     id: "m3q24",
     question:
-      "You must formulate a solid research question. Which one is best?",
+      "You will use Gemini to solve a problem that requires careful multi-step reasoning. What do you adjust in the selector?",
     options: [
       {
         id: "m3q24_a",
-        label: "A specific, bounded, verifiable question",
+        label: "Raise the reasoning level to Medium or High",
       },
       {
         id: "m3q24_b",
-        label: "A broad topic",
+        label: "Keep reasoning on Low, since it is faster",
       },
       {
         id: "m3q24_c",
-        label: "A statement that the AI must confirm one way or another",
+        label: "Choose Flash-Lite so it thinks more calmly",
       },
       {
         id: "m3q24_d",
-        label: "Several different questions mixed into a single text",
+        label: "Turn on Deep Research to solve the problem",
       },
     ],
     correctAnswer: "m3q24_a",
-    topic: "Professional Research",
+    topic: "Gemini Basics",
     difficulty: "medium",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "A good question is specific and verifiable. Review the field manual.",
+      "The reasoning level (Low, Medium or High; Low by default) sets how much the model thinks before answering: for several steps, raise it. Flash-Lite is the lightest option and Deep Research is for researching sources, not for reasoning through a problem.",
   },
   {
     id: "m3q25",
@@ -296,15 +297,16 @@ export const MODULE_3_EN_PART2 = [
     options: [
       {
         id: "m3q25_a",
-        label: "Use the data because the citation looks well formatted",
+        label:
+          "Search Google Scholar and, if it is not there, cite the closest one",
       },
       {
         id: "m3q25_b",
-        label: "Write a similar citation with the same author",
+        label: "Ask Gemini to fix the citation and use the one it suggests",
       },
       {
         id: "m3q25_c",
-        label: "Publish it anyway so you do not look bad",
+        label: "Keep the data and cite the website's home page",
       },
       {
         id: "m3q25_d",
@@ -314,38 +316,38 @@ export const MODULE_3_EN_PART2 = [
     correctAnswer: "m3q25_d",
     topic: "Source Verification",
     difficulty: "hard",
-    source: "The Mirror of Truth",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "A citation that does not exist supports nothing. Remove the data or find a verifiable source.",
+      "A citation that does not exist supports nothing. Citing something similar, accepting the citation Gemini suggests or citing a site's home page leaves the data unsupported. Remove it and find another verifiable source.",
   },
   {
     id: "m3q26",
     question:
-      "Which practice shows responsible use of Gemini when working in a team?",
+      "You review a Gemini text to separate facts from hallucinations. Which method do you use?",
     options: [
       {
         id: "m3q26_a",
-        label: "Not mentioning AI to avoid arguments",
+        label: "Mark every unsupported claim and check it",
       },
       {
         id: "m3q26_b",
-        label: "Sending the answer to the whole group without reading it",
+        label: "Mark only the claims that sound odd to me",
       },
       {
         id: "m3q26_c",
-        label: "Letting Gemini decide how tasks are split",
+        label: "Ask Gemini to mark its own mistakes",
       },
       {
         id: "m3q26_d",
-        label: "Declaring the AI parts and reviewing them as a team",
+        label: "Check that the text sounds coherent and confident",
       },
     ],
-    correctAnswer: "m3q26_d",
-    topic: "Responsible Use",
+    correctAnswer: "m3q26_a",
+    topic: "Verification",
     difficulty: "easy",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Declaring the use and reviewing the result together gives the group transparency. Hiding AI or delegating without review does not.",
+      "A hallucination can sound normal and confident. That is why you mark every unsupported claim and check it in a source, not only the ones that seem odd.",
   },
   {
     id: "m3q27",
@@ -353,11 +355,11 @@ export const MODULE_3_EN_PART2 = [
     options: [
       {
         id: "m3q27_a",
-        label: "Summarizes it by hand first and does not use AI at all",
+        label: "Asks for a chapter summary and cites the summary",
       },
       {
         id: "m3q27_b",
-        label: "Turns it into loose images for each question",
+        label: "Splits it into parts and accepts each part's answers",
       },
       {
         id: "m3q27_c",
@@ -366,8 +368,7 @@ export const MODULE_3_EN_PART2 = [
       },
       {
         id: "m3q27_d",
-        label:
-          "Asks for a general summary without saying which part it came from",
+        label: "Asks for verbatim quotes to paste into the work",
       },
     ],
     correctAnswer: "m3q27_c",
@@ -375,7 +376,7 @@ export const MODULE_3_EN_PART2 = [
     difficulty: "hard",
     source: "Gemini in Practice: Field Exercises",
     feedback:
-      "Asking for sections and pages lets you verify what you will use. A summary with no origin is no good for a citation.",
+      "Asking for section and page lets you go to the original and verify what you will use. A summary, answers by parts or quotes you do not compare with the document do not confirm what the text says.",
   },
   {
     id: "m3q28",

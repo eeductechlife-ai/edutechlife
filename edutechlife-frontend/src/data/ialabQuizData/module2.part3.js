@@ -2,59 +2,60 @@ export const MODULE_2_PART3 = [
   {
     id: "m2q29",
     question:
-      "Un asistente de atención debe responder con el tono de la marca. ¿Qué configuras?",
+      "Quieres que el asistente responda con el tono de tu marca. ¿Qué pones en sus instrucciones?",
     options: [
       {
         id: "m2q29_a",
-        label: "Tono definido con ejemplos de marca",
+        label: "Dos o tres respuestas de ejemplo con ese tono",
       },
       {
         id: "m2q29_b",
-        label: "Solo el logo de la marca en cada respuesta",
+        label: "La frase «usa un tono cercano y profesional»",
       },
       {
         id: "m2q29_c",
-        label: "Ninguna instrucción, para que suene natural",
+        label: "El nombre de la marca, para que deduzca su estilo",
       },
       {
         id: "m2q29_d",
-        label: "Una respuesta copiada",
+        label: "Una lista larga de palabras prohibidas",
       },
     ],
     correctAnswer: "m2q29_a",
-    topic: "Instrucciones GPT",
-    difficulty: "medio",
-    source: "Guía Completa de ChatGPT",
-    feedback:
-      "Las instrucciones de tono con ejemplos enseñan la voz de la marca.",
-  },
-  {
-    id: "m2q30",
-    question: "Después de crear un asistente, ¿cuál es un buen siguiente paso?",
-    options: [
-      {
-        id: "m2q30_a",
-        label: "Probarlo con casos reales y ajustarlo",
-      },
-      {
-        id: "m2q30_b",
-        label: "Publicarlo de inmediato sin probarlo",
-      },
-      {
-        id: "m2q30_c",
-        label: "Borrar las instrucciones para ahorrar espacio",
-      },
-      {
-        id: "m2q30_d",
-        label: "Compartirlo con todos sin revisar sus respuestas",
-      },
-    ],
-    correctAnswer: "m2q30_a",
-    topic: "Iteración de GPT",
+    topic: "Instrucciones",
     difficulty: "medio",
     source: "El Taller de Proyectos",
     feedback:
-      "Probar con casos reales revela errores que las instrucciones no previeron.",
+      "Los ejemplos muestran el tono en acción y enseñan más que los adjetivos: «cercano» o «profesional» significan cosas distintas para cada quien. El nombre de la marca o una lista de palabras prohibidas no le muestran cómo debe sonar.",
+  },
+  {
+    id: "m2q30",
+    question:
+      "Le pides al agente reservar una sala y enviar la invitación a 20 personas. ¿Cómo lo supervisas?",
+    options: [
+      {
+        id: "m2q30_a",
+        label: "Reviso su plan y apruebo los pasos clave, como el envío",
+      },
+      {
+        id: "m2q30_b",
+        label: "Le doy acceso total y reviso el resultado al final",
+      },
+      {
+        id: "m2q30_c",
+        label: "Le pido que lo haga rápido y me avise si algo falla",
+      },
+      {
+        id: "m2q30_d",
+        label: "Lo dejo trabajar solo, porque es una tarea sencilla",
+      },
+    ],
+    correctAnswer: "m2q30_a",
+    topic: "Agente",
+    difficulty: "medio",
+    source: "Guía: GPTs, Proyectos y agentes",
+    feedback:
+      "El agente ejecuta y tú apruebas: revisar su plan y confirmar los pasos con efecto, como enviar invitaciones, evita errores que ya no se pueden deshacer. Revisar al final o esperar un aviso de falla llega tarde.",
   },
   {
     id: "m2q31",
@@ -91,7 +92,7 @@ export const MODULE_2_PART3 = [
     options: [
       {
         id: "m2q32_a",
-        label: "Minimizar y anonimizar datos, y limitar el acceso",
+        label: "Usar solo los datos necesarios y anonimizarlos",
       },
       {
         id: "m2q32_b",
@@ -111,7 +112,7 @@ export const MODULE_2_PART3 = [
     difficulty: "medio",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Usar solo lo necesario y anonimizar protege los datos personales.",
+      "Usar solo lo necesario y anonimizarlo protege los datos personales de tus clientes.",
   },
   {
     id: "m2q33",
@@ -120,7 +121,7 @@ export const MODULE_2_PART3 = [
     options: [
       {
         id: "m2q33_a",
-        label: "En cualquier queja, incluso las de riesgo legal",
+        label: "En quejas sencillas, si ya respondió bien casos parecidos",
       },
       {
         id: "m2q33_b",
@@ -129,11 +130,12 @@ export const MODULE_2_PART3 = [
       },
       {
         id: "m2q33_c",
-        label: "Siempre, para que nadie tenga que intervenir",
+        label:
+          "En preguntas frecuentes, con respuestas que redacta en el momento",
       },
       {
         id: "m2q33_d",
-        label: "Nunca, aunque las preguntas sean simples y repetidas",
+        label: "En todas las consultas fuera del horario de atención",
       },
     ],
     correctAnswer: "m2q33_b",
@@ -141,37 +143,36 @@ export const MODULE_2_PART3 = [
     difficulty: "difícil",
     source: "La Caja de Herramientas",
     feedback:
-      "Las respuestas automáticas funcionan para preguntas frecuentes y revisadas. Las quejas con riesgo siempre pasan a una persona.",
+      "Puede responder solo cuando las preguntas son frecuentes, las respuestas ya están revisadas y hay un límite claro de qué contesta; lo demás pasa a una persona. Una queja, aunque parezca sencilla, puede esconder un riesgo, y una respuesta redactada en el momento nadie la revisó.",
   },
   {
     id: "m2q34",
     question:
-      "Recibes muchas preguntas repetidas cada día. ¿Qué haces primero?",
+      "Un tutorial de hace seis meses recomienda un modelo que no aparece en tu cuenta. ¿Qué haces?",
     options: [
       {
         id: "m2q34_a",
-        label: "Responder cada una a mano desde cero",
+        label: "Busco la forma de activar ese modelo exacto",
       },
       {
         id: "m2q34_b",
-        label: "Ignorarlas para no gastar tiempo",
+        label: "Uso los que muestra hoy el selector de mi cuenta",
       },
       {
         id: "m2q34_c",
-        label: "Publicar todas las respuestas en un documento sin orden",
+        label: "Espero a que ese modelo vuelva antes de empezar",
       },
       {
         id: "m2q34_d",
-        label:
-          "Reunir las preguntas más frecuentes y escribir respuestas revisadas",
+        label: "Sigo el tutorial con el modelo de nombre más parecido",
       },
     ],
-    correctAnswer: "m2q34_d",
-    topic: "Automatización",
+    correctAnswer: "m2q34_b",
+    topic: "Modelos",
     difficulty: "medio",
-    source: "El Taller de Proyectos",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Primero se identifican las preguntas que se repiten y se escriben respuestas revisadas. Después se automatiza.",
+      "Los modelos cambian con frecuencia y el selector de tu cuenta muestra los que puedes usar hoy. Perseguir o esperar el modelo de un tutorial viejo te frena, y un nombre parecido no garantiza el mismo modelo.",
   },
   {
     id: "m2q35",
@@ -197,38 +198,38 @@ export const MODULE_2_PART3 = [
     correctAnswer: "m2q35_a",
     topic: "ChatGPT Básico",
     difficulty: "fácil",
-    source: "ChatGPT desde Cero en 6 Minutos",
+    source: "ChatGPT en la práctica",
     feedback:
       "Tarea, contexto y formato: una instrucción clara rinde mejor. Repasa el video de introducción.",
   },
   {
     id: "m2q36",
     question:
-      "¿Cuál es la diferencia principal entre las herramientas integradas y un GPT personalizado?",
+      "Encuentras un tutorial que enseña a crear un GPT personalizado. ¿Qué dato de vigencia tienes en cuenta?",
     options: [
       {
         id: "m2q36_a",
-        label: "Una herramienta hace una tarea; un GPT reúne rol y reglas",
+        label: "OpenAI programó retirarlos el 11 de diciembre de 2026",
       },
       {
         id: "m2q36_b",
-        label: "Ninguna: son exactamente la misma función con distinto nombre",
+        label: "OpenAI anunció que seguirán sin cambios en 2027",
       },
       {
         id: "m2q36_c",
-        label: "La herramienta es de pago y el GPT siempre es gratuito",
+        label: "Solo cambian de nombre y pasan a llamarse plugins",
       },
       {
         id: "m2q36_d",
-        label: "La herramienta genera imágenes y el GPT solo escribe código",
+        label: "OpenAI los retiró en 2024 y ya no funcionan",
       },
     ],
     correctAnswer: "m2q36_a",
-    topic: "Ecosistema ChatGPT",
+    topic: "Vigencia de los GPT",
     difficulty: "medio",
-    source: "El Plano Maestro",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Las herramientas cubren tareas puntuales; un GPT empaqueta rol, conocimiento y acciones. Revisa la guía del módulo.",
+      "La nota de vigencia de la lección 1 indica que OpenAI programó retirar los GPT personalizados el 11 de diciembre de 2026 (fecha sujeta a cambios). Verifica el aviso de tu cuenta y trabaja con Proyectos y plugins.",
   },
   {
     id: "m2q37",
@@ -241,109 +242,109 @@ export const MODULE_2_PART3 = [
       },
       {
         id: "m2q37_b",
-        label: "Todo en las instrucciones, sin ninguna fuente",
+        label: "Reglas y datos en las instrucciones, actualizándolas cada mes",
       },
       {
         id: "m2q37_c",
-        label: "Un PDF viejo que nadie actualiza",
+        label: "Reglas y datos en un archivo del Proyecto subido al crearlo",
       },
       {
         id: "m2q37_d",
-        label: "Todo en la memoria del chat, que puede borrarse",
+        label: "Reglas en un archivo del Proyecto y datos pegados en cada chat",
       },
     ],
     correctAnswer: "m2q37_a",
-    topic: "Arquitectura del GPT",
+    topic: "Diseño del asistente",
     difficulty: "difícil",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Las reglas estables van en las instrucciones; los datos que cambian se consultan en una fuente actualizada.",
+      "Las reglas estables van en las instrucciones, que se aplican a cada chat; los datos que cambian se consultan en una fuente actualizada. Actualizar cada mes o subir un archivo al crear el Proyecto deja datos viejos, y pegarlos a mano en cada chat depende de que nadie lo olvide.",
   },
   {
     id: "m2q38",
     question:
-      "¿Qué ventaja tiene traer datos con una herramienta frente a pegarlos a mano en el chat?",
+      "Un plugin pide acceso a tu correo y tu calendario para resumir tus reuniones. ¿Qué haces antes de conectarlo?",
     options: [
       {
         id: "m2q38_a",
-        label: "Ninguna: pegar a mano siempre es mejor",
+        label: "Lo conecto, porque aparece dentro de ChatGPT",
       },
       {
         id: "m2q38_b",
-        label: "Se borran al cerrar la sesión y no dejan ningún registro",
+        label: "Lo conecto y reviso después qué hizo en mi cuenta",
       },
       {
         id: "m2q38_c",
-        label: "Los datos salen de la fuente actual cada vez que se consultan",
+        label: "Le pido a ChatGPT que me diga si el plugin es seguro",
       },
       {
         id: "m2q38_d",
-        label: "Solo sirven para diseñar logos y presentaciones de marca",
+        label: "Leo qué puede ver y hacer, y doy solo lo necesario",
       },
     ],
-    correctAnswer: "m2q38_c",
-    topic: "Proyectos ChatGPT",
+    correctAnswer: "m2q38_d",
+    topic: "Permisos de plugins",
     difficulty: "medio",
-    source: "Guía Completa de ChatGPT",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "La herramienta consulta la fuente en el momento, así el dato no queda desactualizado como un texto pegado hace semanas.",
+      "Los permisos dicen qué puede ver y qué puede hacer el plugin en tu cuenta; da solo los que la tarea necesita. Que aparezca dentro de ChatGPT o que ChatGPT lo recomiende no te dice a qué datos accede, y revisar después llega tarde.",
   },
   {
     id: "m2q39",
-    question: "¿Qué debe hacer un asistente cuando no tiene la información?",
+    question:
+      "Preparas un informe con cifras actuales del mercado, una infografía con esas cifras y un texto final que la comenta. ¿En qué orden usas las herramientas?",
     options: [
       {
         id: "m2q39_a",
-        label: "Inventar una respuesta razonable para no quedar mal",
+        label: "Búsqueda Web, Análisis de Datos, imagen y Canvas",
       },
       {
         id: "m2q39_b",
-        label: "Decirlo y derivar la consulta a una persona",
+        label: "Análisis de Datos, Búsqueda Web, imagen y Canvas",
       },
       {
         id: "m2q39_c",
-        label: "Responder con la política del año pasado",
+        label: "Búsqueda Web, imagen, Análisis de Datos y Canvas",
       },
       {
         id: "m2q39_d",
-        label: "Repetir la pregunta hasta que el cliente se rinda",
+        label: "Búsqueda Web, Análisis de Datos, Canvas e imagen",
       },
     ],
-    correctAnswer: "m2q39_b",
-    topic: "Alucinaciones GPT",
+    correctAnswer: "m2q39_a",
+    topic: "Flujos de herramientas",
     difficulty: "difícil",
-    source: "Guía Completa de ChatGPT",
+    source: "Las Herramientas Integradas de ChatGPT",
     feedback:
-      "Un asistente sin el dato lo dice y deriva. Inventar una política es el error más grave en soporte.",
+      "Primero traes las cifras con Búsqueda Web, luego las procesas con Análisis de Datos, después haces la infografía con esos resultados y al final escribes en Canvas el texto que la comenta. Analizar antes de buscar no tiene datos, la infografía antes del análisis muestra cifras sin procesar y el texto antes de la imagen no puede comentarla.",
   },
   {
     id: "m2q40",
     question:
-      "Caso: un asistente de soporte debe usar datos actuales y derivar los casos complejos. ¿Cuál es el diseño más completo?",
+      "Un asistente de soporte tiene instrucciones claras, la base de conocimiento y los precios del día. ¿Qué le falta?",
     options: [
       {
         id: "m2q40_a",
-        label: "Solo instrucciones de tono, sin datos ni derivación",
+        label: "Más documentos y ejemplos en la base de conocimiento",
       },
       {
         id: "m2q40_b",
-        label: "Un chat genérico que responde a todo sin límites",
+        label: "Un tono más cercano, con ejemplos de la marca",
       },
       {
         id: "m2q40_c",
-        label: "Un documento estático con las respuestas del año pasado",
+        label: "Permiso para resolver también los casos complejos",
       },
       {
         id: "m2q40_d",
-        label:
-          "Instrucciones, base de conocimiento, datos actuales y derivación humana",
+        label: "Una ruta para pasar los casos complejos a una persona",
       },
     ],
     correctAnswer: "m2q40_d",
-    topic: "Arquitectura del GPT",
+    topic: "Diseño del asistente",
     difficulty: "difícil",
-    source: "La Caja de Herramientas",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "Un buen diseño combina reglas, base de conocimiento, datos actuales y una salida a una persona cuando el caso es complejo.",
+      "Un buen asistente tiene un alcance acotado y pasa a una persona lo que no puede resolver. Ya tiene reglas, conocimiento y datos del día; le falta esa ruta. Más documentos o un tono más cercano no cubren los casos complejos, y resolverlos solo aumenta el riesgo.",
   },
 ];

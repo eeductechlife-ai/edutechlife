@@ -126,14 +126,9 @@ const EN = [
     def: "The base rules that define the assistant's behavior.",
   },
   {
-    term: "Assistant factory",
-    tech: "Custom GPT",
-    def: "An assistant configured with role, knowledge and capabilities.",
-  },
-  {
-    term: "Assembly line",
-    tech: "Function Calling / API",
-    def: "Connecting the assistant to external services to take actions.",
+    term: "Project",
+    tech: "ChatGPT Projects",
+    def: "A space with instructions and files for a recurring job; the chats inside it use that context.",
   },
   {
     term: "Magnifier",
@@ -151,7 +146,7 @@ const EN = [
     def: "A notebook that answers only from the sources you upload, citing them.",
   },
   {
-    term: "Sound formula",
+    term: "Audio overview",
     tech: "Audio Overview",
     def: "A conversational audio summary of your documents.",
   },
@@ -159,11 +154,6 @@ const EN = [
     term: "Mirror of truth",
     tech: "Bias and AI",
     def: "A systematic deviation that can produce unfair decisions.",
-  },
-  {
-    term: "Ethical court",
-    tech: "Explainability",
-    def: "Being able to understand and justify a system's decisions.",
   },
   {
     term: "Guardian",
@@ -232,11 +222,6 @@ const PT = [
     term: "Projeto",
     tech: "Projetos do ChatGPT",
     def: "Espaço com instruções e arquivos de um trabalho repetido; os chats dentro dele usam esse contexto.",
-  },
-  {
-    term: "Linha de montagem",
-    tech: "Function Calling / API",
-    def: "Conectar o assistente a serviços externos para executar ações.",
   },
   {
     term: "Lupa",

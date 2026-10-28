@@ -68,7 +68,7 @@ export const CONTENT_ES_PART1 = {
         title: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
         description: "Entiende la herramienta antes de usarla",
         detailedDescription:
-          "Antes de pedirle algo a la IA, conviene saber cómo funciona. Verás qué es la IA generativa, por qué responde con seguridad aunque a veces se equivoque, qué hace bien y cuáles son sus límites. Con esa base podrás usarla con criterio desde el primer día, aunque nunca la hayas usado. Repasarás también cómo empezó la IA, desde sus primeros modelos hasta hoy, para entender de dónde vienen sus límites.",
+          "Antes de pedirle algo a la IA, conviene saber cómo funciona. Verás qué es la IA generativa, qué hace bien y cuáles son sus límites: por qué puede inventar datos con seguridad (las llamadas alucinaciones) y por qué puede no conocer lo más reciente si no busca en la web. Con esa base podrás usarla con criterio desde el primer día, aunque nunca la hayas usado. Repasarás también cómo empezó la IA, desde sus primeros modelos hasta hoy, para entender de dónde vienen sus límites.",
         duration: "20 min",
         format: "Video",
         icon: "fa-brain",
@@ -80,7 +80,7 @@ export const CONTENT_ES_PART1 = {
         title: "El Cincel del Artesano: ¿Qué es un Prompt?",
         description: "Pide exactamente lo que necesitas",
         detailedDescription:
-          "Un prompt es la instrucción que le das a la IA. Aprenderás la fórmula RTF (Rol + Tarea + Formato), a sumar el contexto que la IA no conoce y a mejorar una respuesta pidiendo ajustes en lugar de empezar de cero. Practicarás con casos de estudio, trabajo y vida diaria hasta obtener resultados útiles a la primera.",
+          "Un prompt es la instrucción que le das a la IA. Aprenderás la fórmula RTF (Rol + Tarea + Formato), a sumar el contexto que la IA no conoce y a mejorar una respuesta pidiendo ajustes en lugar de empezar de cero. Sumarás el tono y la extensión, darás un ejemplo del estilo que quieres, dividirás una tarea grande en pasos, quitarás lo que no aporta y guardarás tus mejores prompts como plantillas. Practicarás con casos de estudio, trabajo y vida diaria hasta obtener resultados útiles a la primera.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-comments",

@@ -9,7 +9,7 @@ export const MODULE_1_PT_PART1 = [
       },
       {
         id: "m1q1_b",
-        label: "Respostas úteis e alinhadas ao que preciso",
+        label: "Para obter respostas úteis e alinhadas ao que preciso",
       },
       {
         id: "m1q1_c",
@@ -25,7 +25,7 @@ export const MODULE_1_PT_PART1 = [
     difficulty: "fácil",
     source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
     feedback:
-      "Um bom prompt é uma instrução clara. Reveja o vídeo e o guia de anatomia do prompt.",
+      "Um bom prompt diz à IA o que você precisa, para quem e como você quer; por isso a resposta se ajusta ao seu objetivo. Ser mais longo ou mais rápido não é o que melhora.",
   },
   {
     id: "m1q2",
@@ -58,23 +58,23 @@ export const MODULE_1_PT_PART1 = [
   },
   {
     id: "m1q3",
-    question: "O que o método RTF (Papel, Tarefa, Formato) proporciona?",
+    question: "O que significam as três partes do método RTF?",
     options: [
       {
         id: "m1q3_a",
-        label: "Transforma a instrução em um prompt mais curto",
+        label: "Papel, Tom e Formato",
       },
       {
         id: "m1q3_b",
-        label: "Organiza o pedido para uma resposta clara",
+        label: "Papel, Tarefa e Formato",
       },
       {
         id: "m1q3_c",
-        label: "Elimina a necessidade de qualquer contexto extra",
+        label: "Resposta, Tema e Formato",
       },
       {
         id: "m1q3_d",
-        label: "Garante que a IA responda sem revisão",
+        label: "Papel, Tarefa e Fonte",
       },
     ],
     correctAnswer: "m1q3_b",
@@ -82,38 +82,36 @@ export const MODULE_1_PT_PART1 = [
     difficulty: "fácil",
     source: "O Cinzel",
     feedback:
-      "O RTF organiza o pedido em Papel, Tarefa e Formato. Pratique na OVA O Cinzel.",
+      "RTF significa Papel (o ponto de vista com que a IA responde), Tarefa (a ação concreta) e Formato (como ela entrega a resposta). O tom e a extensão se somam à parte. Pratique na OVA O Cinzel.",
   },
   {
     id: "m1q4",
     question:
-      "Você precisa de um resumo sobre o ciclo da água. Qual prompt dá o melhor resultado?",
+      "Você suspeita que uma IA descreve as pessoas de forma diferente conforme a origem delas. Que teste simples você pode fazer?",
     options: [
       {
         id: "m1q4_a",
-        label:
-          '"Atue como professor de ciências e resuma o ciclo em 4 etapas."',
+        label: "Pedir a mesma tarefa com perfis diferentes e comparar",
       },
       {
         id: "m1q4_b",
-        label:
-          '"Explique tudo o que você sabe sobre o ciclo da água, sem limites."',
+        label: "Perguntar à IA se ela tem viés e acreditar nela",
       },
       {
         id: "m1q4_c",
-        label: '"Ciclo da água. Dê informações gerais e variadas."',
+        label: "Repetir o mesmo prompt várias vezes com o mesmo perfil",
       },
       {
         id: "m1q4_d",
-        label: '"Fale sobre a água e sobre outros temas da natureza."',
+        label: "Pedir que responda mais curto para reduzir o viés",
       },
     ],
     correctAnswer: "m1q4_a",
-    topic: "Estrutura de Prompts",
+    topic: "Detectar Vieses",
     difficulty: "médio",
-    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
+    source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "A resposta correta define papel, tarefa e formato. As demais são vagas ou misturam temas.",
+      "Se você muda só o perfil e a resposta trata cada pessoa de forma diferente, encontrou um viés. Perguntar à IA se ela é neutra ou repetir o mesmo perfil não mostra essa diferença. Revise o guia de ética, seção 4.",
   },
   {
     id: "m1q5",
@@ -232,31 +230,32 @@ export const MODULE_1_PT_PART1 = [
   {
     id: "m1q9",
     question:
-      "A IA devolve uma resposta genérica ou fora do tema. Qual é a melhor próxima ação?",
+      "Você pede à IA um plano de estudo e ela dá um genérico que não serve. O que falta ao prompt?",
     options: [
       {
         id: "m1q9_a",
-        label: "Contexto: objetivo, público e o formato",
+        label:
+          "Sua situação: quanto tempo você tem, seu nível e a data da prova",
       },
       {
         id: "m1q9_b",
-        label: "Repetir o mesmo prompt sem mudar nada",
+        label: 'Um papel mais chamativo, como "aja como um gênio"',
       },
       {
         id: "m1q9_c",
-        label: "Escolher outra IA sem entender o problema",
+        label: "Que o plano fique mais longo e com muito mais detalhes",
       },
       {
         id: "m1q9_d",
-        label: "Perguntar de novo até melhorar sozinha",
+        label: 'Palavras gentis como "por favor" para que se esforce',
       },
     ],
     correctAnswer: "m1q9_a",
-    topic: "Refinamento de Prompts",
+    topic: "Contexto",
     difficulty: "fácil",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Refine o prompt acrescentando contexto. Pratique com o guia Anatomia de um Prompt.",
+      'A IA não conhece a sua situação. O contexto (seu tempo, seu nível e seu prazo) é o que transforma um plano genérico em um útil. Um papel chamativo, mais extensão ou palavras gentis não dão essa informação. Revise o "Guia: Anatomia de um Prompt".',
   },
   {
     id: "m1q10",
@@ -290,31 +289,31 @@ export const MODULE_1_PT_PART1 = [
   {
     id: "m1q11",
     question:
-      "Caso: seu chefe pede um resumo de um relatório de 40 páginas para amanhã. Qual pedido à IA dá o resultado mais útil?",
+      "Você pede exemplos de profissões e todos mostram homens da cidade. Nenhum dado é falso. Que pergunta ajuda você a ver o problema?",
     options: [
       {
         id: "m1q11_a",
-        label: "Resuma o relatório em 5 tópicos com os números-chave",
+        label: "Que pessoas ou perspectivas ficam de fora?",
       },
       {
         id: "m1q11_b",
-        label: "Resuma o relatório completo para hoje",
+        label: "Algum dos dados da resposta é falso?",
       },
       {
         id: "m1q11_c",
-        label: "Faça o que puder com o relatório, sem limites nem formato",
+        label: "A resposta cita alguma fonte confiável?",
       },
       {
         id: "m1q11_d",
-        label: "Escreva algo sobre o relatório para o chefe",
+        label: "As profissões da lista existem de verdade?",
       },
     ],
     correctAnswer: "m1q11_a",
-    topic: "IA Generativa",
+    topic: "Viés por Omissão",
     difficulty: "fácil",
-    source: "O que é a IA e como ela está mudando o mundo",
+    source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "Um bom pedido define formato, extensão e o que incluir. Com 'resuma' sozinho, a IA improvisa.",
+      "O viés às vezes não está no que a resposta diz, mas no que ela omite. Perguntar que pessoas ou perspectivas ficam de fora o revela; verificar se os dados são verdadeiros ou se há fontes não o mostra. Revise o guia de ética, seção 4.",
   },
   {
     id: "m1q12",

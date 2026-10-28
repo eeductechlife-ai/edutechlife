@@ -68,7 +68,7 @@ export const CONTENT_EN_PART1 = {
         title: "The Artisan's Foundations: What is Generative AI?",
         description: "Understand the tool before you use it",
         detailedDescription:
-          "Before you ask AI for anything, it helps to know how it works. You will see what generative AI is, why it answers confidently even when it is wrong, what it does well and where its limits are. With that foundation you can use it with judgment from day one, even if you have never used it before. You will also review how AI began, from its first models to today, to understand where its limits come from.",
+          "Before you ask AI for anything, it helps to know how it works. You will see what generative AI is, what it does well and where its limits are: why it can make up data with confidence (so-called hallucinations) and why it may not know the most recent information if it does not search the web. With that foundation you can use it with judgment from day one, even if you have never used it before. You will also review how AI began, from its first models to today, to understand where its limits come from.",
         duration: "20 min",
         format: "Video",
         icon: "fa-brain",
@@ -80,7 +80,7 @@ export const CONTENT_EN_PART1 = {
         title: "The Artisan's Chisel: What is a Prompt?",
         description: "Ask for exactly what you need",
         detailedDescription:
-          "A prompt is the instruction you give the AI. You will learn the RTF formula (Role + Task + Format), how to add the context the AI does not have, and how to improve an answer by asking for adjustments instead of starting over. You will practice with study, work and everyday cases until you get useful results on the first try.",
+          "A prompt is the instruction you give the AI. You will learn the RTF formula (Role + Task + Format), how to add the context the AI does not have, and how to improve an answer by asking for adjustments instead of starting over. You will add tone and length, give an example of the style you want, split a big task into steps, remove what adds nothing and save your best prompts as templates. You will practice with study, work and everyday cases until you get useful results on the first try.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-comments",
@@ -92,7 +92,7 @@ export const CONTENT_EN_PART1 = {
         title: "The Guardian's Shield: What You Should Not Share",
         description: "Protect your data and other people's data",
         detailedDescription:
-          "Everything you paste into an AI leaves your computer. You will learn which data you never share (identity, health, minors, passwords), how to anonymize a text before pasting it and what to do if you already shared something sensitive. That protects your privacy and other people's.",
+          "Everything you paste into an AI leaves your computer. You will learn which data you never share (identity, health, minors, passwords), how to anonymize a text before pasting it and what to do if you already shared something sensitive. That protects your privacy and other people's. What the law says: in Colombia, Law 1581 of 2012 regulates personal data; anonymizing it before sharing it with an AI is a good practice that reduces risk.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-lock",

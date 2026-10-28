@@ -26,36 +26,36 @@ export const MODULE_4_EN_PART1 = [
     difficulty: "medium",
     source: "Complete NotebookLM guide: get the most out of it (2026)",
     feedback:
-      "Gemini Notebook answers from your documents and cites the source. Watch the getting started video.",
+      "Gemini Notebook answers from your documents and cites the source. Watch the video Complete NotebookLM guide: get the most out of it (2026).",
   },
   {
     id: "m4q2",
     question:
-      "You have papers, news, blogs and datasets about a topic. Which sources do you prioritize in your notebook?",
+      "You are researching coffee growing in Caldas and have two reliable sources: a study on coffee in Brazil and a report on Caldas. Which one do you prioritize?",
     options: [
       {
         id: "m4q2_a",
-        label: "Peer-reviewed papers and trusted datasets",
+        label: "The report on Caldas, because it answers your question",
       },
       {
         id: "m4q2_b",
-        label: "All the sources because there is space",
+        label: "The Brazil study, because Brazil produces more coffee",
       },
       {
         id: "m4q2_c",
-        label: "Only the blogs because of their simple language",
+        label: "The one with more pages, because it has more data",
       },
       {
         id: "m4q2_d",
-        label: "Only the news because it is the most recent",
+        label: "Both equally, because both are reliable",
       },
     ],
     correctAnswer: "m4q2_a",
-    topic: "Gemini Notebook",
+    topic: "Curation",
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "Source quality defines answer quality. Choose reliable and relevant sources.",
+      "Besides being reliable, a source must be relevant to your question. The Caldas report covers what you are researching; the Brazil study can give context, but it is not the basis.",
   },
   {
     id: "m4q3",
@@ -82,31 +82,31 @@ export const MODULE_4_EN_PART1 = [
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
     difficulty: "medium",
-    source: "Complete NotebookLM guide: get the most out of it (2026)",
+    source:
+      "Complete guide to Google's NotebookLM: research and study without AI hallucinations",
     feedback:
-      "Audio Overview turns your documents into a podcast to review without reading.",
+      "Audio Overview turns your documents into a podcast to review without reading. Watch the video Complete guide to Google's NotebookLM: research and study without AI hallucinations.",
   },
   {
     id: "m4q4",
     question:
-      "Gemini Notebook cites your PDF and you read the original text. What is best to do?",
+      "A classmate says: “Gemini Notebook answers from my documents, so I no longer need to check anything.” What do you reply?",
     options: [
       {
         id: "m4q4_a",
-        label: "Trust the citation if the PDF looks well formatted",
+        label: "They are right if the documents are reliable",
       },
       {
         id: "m4q4_b",
-        label: "Delete the PDF and ask for the answer again",
+        label: "They are right as long as the answer has citations",
       },
       {
         id: "m4q4_c",
-        label: "Translate the citation and compare it with its translation",
+        label: "You only need to check when two sources contradict",
       },
       {
         id: "m4q4_d",
-        label:
-          "Compare the citation with the original text of the PDF you uploaded",
+        label: "Using your sources reduces errors, but does not eliminate them",
       },
     ],
     correctAnswer: "m4q4_d",
@@ -114,7 +114,7 @@ export const MODULE_4_EN_PART1 = [
     difficulty: "hard",
     source: "Gemini Notebook Guide",
     feedback:
-      "Comparing the citation with the original text confirms that the figure is there and says what is claimed.",
+      "Answering from your documents reduces the risk of error, but does not eliminate it. Neither citations nor good sources guarantee that the answer says the same as the document: open the citation and check.",
   },
   {
     id: "m4q5",
@@ -130,7 +130,7 @@ export const MODULE_4_EN_PART1 = [
       },
       {
         id: "m4q5_c",
-        label: "With today's date only",
+        label: "With only today's date, nothing else",
       },
       {
         id: "m4q5_d",
@@ -146,61 +146,62 @@ export const MODULE_4_EN_PART1 = [
   },
   {
     id: "m4q6",
-    question: "Two sources contradict each other. What do you do?",
+    question:
+      "You are going to create an Audio Overview of 5 technical papers for parents with no background in the topic. What do you do?",
     options: [
       {
         id: "m4q6_a",
-        label: "I analyze both sources carefully and explain the difference",
+        label: "Ask for a casual conversational tone, with examples",
       },
       {
         id: "m4q6_b",
-        label: "I delete both sources and look for others without reading them",
+        label: "Ask for a deep academic tone, so as not to lose rigor",
       },
       {
         id: "m4q6_c",
-        label: "I keep only the most recent one, without comparing",
+        label: "Remove the most technical papers so it sounds simple",
       },
       {
         id: "m4q6_d",
         label:
-          "I ignore the contradiction because the summary already looks good",
+          "Keep whatever tone comes out, since the audience does not matter",
       },
     ],
     correctAnswer: "m4q6_a",
-    topic: "Critical Analysis",
+    topic: "Audio Overview",
     difficulty: "hard",
-    source: "Gemini Notebook Guide",
+    source: "Guide: Audio and documents, in order",
     feedback:
-      "A contradiction is resolved by reading both sources and explaining the difference. Discarding or ignoring a source does not solve it.",
+      "The lesson shows that you can choose the tone: academic or casual. For an audience with no background in the topic, a casual conversation with examples is easier to follow, and the technical sources stay as backing. Check in your account how to guide the audio.",
   },
   {
     id: "m4q7",
     question:
-      "What should you always do when Gemini Notebook answers with citations?",
+      "You have an exam and your notes are already in the notebook. What do you ask it for to study?",
     options: [
       {
         id: "m4q7_a",
-        label: "Verify citations in the original",
+        label: "A study guide with the key ideas and their citations",
       },
       {
         id: "m4q7_b",
-        label: "Copy the answer without checking it",
+        label: "A summary from a general chat on the same topic",
       },
       {
         id: "m4q7_c",
-        label: "Delete the original documents",
+        label: "A copy of your notes in another format",
       },
       {
         id: "m4q7_d",
-        label: "Translate the answer to validate it",
+        label: "A list of topics, with no explanation or sources",
       },
     ],
     correctAnswer: "m4q7_a",
-    topic: "Verification",
+    topic: "Summaries",
     difficulty: "medium",
-    source: "Complete NotebookLM guide: get the most out of it (2026)",
+    source: "Gemini Notebook Guide",
     feedback:
-      "The AI is your assistant, but you are the final person in charge. Review the module OVA.",
+      "A study guide with the key ideas and their citations helps you review and lets you check each point in your notes. A general chat does not use your sources, and a copy or a bare list does not organize what matters. Review the Gemini Notebook Guide.",
   },
   {
     id: "m4q8",
@@ -209,7 +210,7 @@ export const MODULE_4_EN_PART1 = [
     options: [
       {
         id: "m4q8_a",
-        label: "One shared notebook the whole team edits",
+        label: "One notebook shared with the whole team",
       },
       {
         id: "m4q8_b",
@@ -229,7 +230,7 @@ export const MODULE_4_EN_PART1 = [
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "Gemini Notebook lets you share notebooks like Google Docs. Review the Gemini Notebook guide.",
+      "A shared notebook gathers the same sources for the whole team: everyone asks about the same documents and nobody works with different versions. Check in your account how to share it.",
   },
   {
     id: "m4q9",
@@ -258,7 +259,7 @@ export const MODULE_4_EN_PART1 = [
     difficulty: "medium",
     source: "Complete NotebookLM guide: get the most out of it (2026)",
     feedback:
-      "Specific questions with citations save you from reading everything. Review the getting started video.",
+      "A specific question that asks for citations brings you only what you are looking for and lets you check it, without reading everything. Watch the video Complete NotebookLM guide: get the most out of it (2026).",
   },
   {
     id: "m4q10",
@@ -287,7 +288,7 @@ export const MODULE_4_EN_PART1 = [
     difficulty: "easy",
     source: "Gemini Notebook Guide",
     feedback:
-      "The Audio Overview is conversational and can be regenerated or guided. Review the module video.",
+      "You do not write the script, but you can guide the audio and generate it again if it does not work for you. Check in your account which options your version has, and watch the video Complete guide to Google's NotebookLM: research and study without AI hallucinations.",
   },
   {
     id: "m4q11",
@@ -320,31 +321,32 @@ export const MODULE_4_EN_PART1 = [
   },
   {
     id: "m4q12",
-    question: "What does Gemini Notebook need in order to answer usefully?",
+    question:
+      "You have already grouped your sources by topic. What do you add to each group so the notebook uses them better?",
     options: [
       {
         id: "m4q12_a",
-        label: "Quality sources uploaded, checked and well organized",
+        label: "A context note on what the group contributes",
       },
       {
         id: "m4q12_b",
-        label: "A very long question with no document loaded at all",
+        label: "An extra copy of each document in the group",
       },
       {
         id: "m4q12_c",
-        label: "Turning off the citations so it answers more creatively",
+        label: "A title in capital letters to highlight it",
       },
       {
         id: "m4q12_d",
-        label: "Changing the notebook language before you ask a question",
+        label: "More documents on the topic, even unread ones",
       },
     ],
     correctAnswer: "m4q12_a",
-    topic: "Gemini Notebook",
+    topic: "Curation",
     difficulty: "easy",
-    source: "Gemini Notebook Guide",
+    source: "The Art of Source Curation",
     feedback:
-      "The quality of your sources determines the quality of the answers. Review the Gemini Notebook guide.",
+      "In the lesson's curation example, each group of sources has a context note that explains what it contributes. That context organizes the notebook; copies, eye-catching titles or more unread documents do not provide it.",
   },
   {
     id: "m4q13",
@@ -356,7 +358,7 @@ export const MODULE_4_EN_PART1 = [
       },
       {
         id: "m4q13_b",
-        label: "It is the first search result",
+        label: "It is the first result in the search engine",
       },
       {
         id: "m4q13_c",
@@ -370,7 +372,7 @@ export const MODULE_4_EN_PART1 = [
     correctAnswer: "m4q13_c",
     topic: "Curation",
     difficulty: "easy",
-    source: "The Grimoire",
+    source: "Gemini Notebook Guide",
     feedback:
       "Author, date and references can be checked. Visits, search order or tone prove nothing.",
   },

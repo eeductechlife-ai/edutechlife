@@ -2,34 +2,32 @@ export const MODULE_5_EN_PART2 = [
   {
     id: "m5q14",
     question:
-      "You want Claude to create a presentation for your board. What do you provide first?",
+      "You are working in your brand's Project and want to ask a personal question that is not kept in your history or in Claude's memory. What do you do?",
     options: [
       {
         id: "m5q14_a",
-        label: "The topic and the number of slides; Claude decides the message",
+        label: "I open an incognito chat inside the same Project",
       },
       {
         id: "m5q14_b",
-        label: "The quarter's figures so Claude chooses what to highlight",
+        label:
+          "I ask in the Project and then delete that memory in the settings",
       },
       {
         id: "m5q14_c",
-        label:
-          "The main message, who will see it, the checked figures and the length",
+        label: "I leave the Project and open an incognito chat",
       },
       {
         id: "m5q14_d",
-        label:
-          "A previous presentation from another company so it copies the design and the content",
+        label: "I ask Claude, inside the Project, not to save the conversation",
       },
     ],
     correctAnswer: "m5q14_c",
-    topic: "Creating with Claude",
+    topic: "Privacy and data",
     difficulty: "medium",
-    source:
-      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
-      "A good presentation starts with the message and the audience. If Claude chooses what to highlight, the decision is its own, not yours; and the figures are checked before they go on a slide.",
+      "An incognito chat is not saved to your history or to memory, and it is only available outside Projects: that is why you leave the Project to open it. Deleting the memory afterwards does not remove the conversation from your history, and asking Claude not to save it does not change how the tool works.",
   },
   {
     id: "m5q15",
@@ -51,7 +49,7 @@ export const MODULE_5_EN_PART2 = [
       },
       {
         id: "m5q15_d",
-        label: "Go back to your version without checking what changed",
+        label: "Go back to your version, since you had already reviewed it",
       },
     ],
     correctAnswer: "m5q15_b",
@@ -87,7 +85,8 @@ export const MODULE_5_EN_PART2 = [
     correctAnswer: "m5q16_b",
     topic: "Limits and errors",
     difficulty: "medium",
-    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
       "A small, specific change improves the result without redoing what already works. Starting over or accepting a tone you do not want are the common mistakes.",
   },
@@ -142,7 +141,7 @@ export const MODULE_5_EN_PART2 = [
       },
       {
         id: "m5q18_d",
-        label: "Ask Claude for a summary and send it without reviewing it",
+        label: "Send it by internal email, since they work at the same company",
       },
     ],
     correctAnswer: "m5q18_c",
@@ -155,34 +154,36 @@ export const MODULE_5_EN_PART2 = [
   {
     id: "m5q19",
     question:
-      "You need a decision that only you can make, such as approving a proposal. What does the AI do?",
+      "You are going to prepare a six-slide presentation for the board with Claude, using the quarter's figures. In what order do you work?",
     options: [
       {
         id: "m5q19_a",
         label:
-          "It approves it if the report is well written and nicely presented",
+          "First the message of each slide, then the outline and finally the charts",
       },
       {
         id: "m5q19_b",
         label:
-          "It prepares the options and the risks; the final decision is yours",
+          "First the outline, then the message of each slide and finally the charts",
       },
       {
         id: "m5q19_c",
-        label: "It marks it as pending and waits for someone else to decide",
+        label:
+          "First the charts with the figures, then the outline and finally the message of each slide",
       },
       {
         id: "m5q19_d",
         label:
-          "It recommends it as approved, because most proposals get approved",
+          "First the outline, then the charts with the figures and finally the message of each slide",
       },
     ],
     correctAnswer: "m5q19_b",
-    topic: "Delegating with Claude",
+    topic: "Creating with Claude",
     difficulty: "hard",
-    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
-      "AI speeds up the preparation, but a decision with consequences stays yours. Delegating the approval is the mistake.",
+      "The outline sets the structure; the message of each slide says what the board should understand; the charts, with checked figures, come last to support that message. If the charts come before the message, the figures end up deciding what is said; and without an outline, the messages have no order.",
   },
   {
     id: "m5q20",
@@ -217,60 +218,62 @@ export const MODULE_5_EN_PART2 = [
   {
     id: "m5q21",
     question:
-      "You are going to ask Claude for a report with a group's average grades. What do you share?",
+      "Claude built you an installment calculator for your clients in an Artifact. What do you do before sharing it?",
     options: [
       {
         id: "m5q21_a",
-        label: "Full names and grades, so the report is accurate",
+        label: "I check that the design looks good on a phone",
       },
       {
         id: "m5q21_b",
-        label: "Only the group averages, with no names or identifiable data",
+        label: "I test it with cases whose result I already know",
       },
       {
         id: "m5q21_c",
-        label: "The list with phone numbers, to contact families later",
+        label: "I ask Claude to confirm that the calculations work",
       },
       {
         id: "m5q21_d",
-        label: "The full file, with each student's data, to review it later",
+        label: "I give it to a trusted client so they can test it",
       },
     ],
     correctAnswer: "m5q21_b",
-    topic: "Privacy and data",
+    topic: "Creating with Claude",
     difficulty: "easy",
-    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
-      "Group averages allow the analysis without identifying anyone. Personal data about minors is not shared with an AI tool (Colombian Law 1581 of 2012).",
+      "An interactive piece can look good and calculate wrong: test it with cases whose result you already know before sharing it. The design does not prove the calculation, Claude's confirmation does not replace your test and a client should not be the one who finds the error.",
   },
   {
     id: "m5q22",
     question:
-      "You need a six-page document that you will edit several times. Where do you ask for it?",
+      "Every Friday you need Claude to prepare the same weekly summary without you having to ask for it. What do you use?",
     options: [
       {
         id: "m5q22_a",
-        label: "In one long message, pasting the document into every reply",
+        label: "A Skill with the summary steps, which you run every Friday",
       },
       {
         id: "m5q22_b",
-        label: "In an Artifact, to view and edit it beside the chat",
+        label: "A scheduled task that prepares the summary every Friday",
       },
       {
         id: "m5q22_c",
-        label: "In an incognito chat, so it is not saved",
+        label: "A Project with the summary instructions and the week's files",
       },
       {
         id: "m5q22_d",
-        label: "In a short message, then copy the text by hand",
+        label:
+          "An Artifact with the summary, which you update every Friday with new data",
       },
     ],
     correctAnswer: "m5q22_b",
-    topic: "Limits and errors",
+    topic: "Delegating with Claude",
     difficulty: "medium",
-    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
+    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
-      "An Artifact is a piece that lives beside the chat: you view it, edit it and download it without losing the thread of the conversation.",
+      "A scheduled task automates recurring work: it prepares the summary every Friday without you asking. A Skill, a Project or an Artifact save you steps, but you are the one who has to start them. As with everything you delegate, you review the summary before sending it.",
   },
   {
     id: "m5q23",
@@ -279,7 +282,7 @@ export const MODULE_5_EN_PART2 = [
       {
         id: "m5q23_a",
         label:
-          "Ask for every feature in one very long message so you never have to iterate",
+          "Ask for every feature in one very long message so you do not have to iterate",
       },
       {
         id: "m5q23_b",
@@ -292,7 +295,7 @@ export const MODULE_5_EN_PART2 = [
       },
       {
         id: "m5q23_d",
-        label: "Share it with the team as soon as it appears and fix it later",
+        label: "Ask for the design first and decide later what data it takes",
       },
     ],
     correctAnswer: "m5q23_b",
@@ -301,7 +304,7 @@ export const MODULE_5_EN_PART2 = [
     source:
       "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
-      "Describe the use, the input data and the result, improve it with small changes and test the piece before sharing it.",
+      "Describing the result before asking for the content (what it is for, what data it takes and what it shows) gives Claude what it needs; then you improve it with small changes. Asking for everything at once, letting Claude choose or starting with the design moves the piece away from what you need.",
   },
   {
     id: "m5q24",
@@ -337,60 +340,67 @@ export const MODULE_5_EN_PART2 = [
   {
     id: "m5q25",
     question:
-      "You will use the same instructions in several chats of one job. Where do you leave them?",
+      'A coworker says Claude "is a faster search engine". What do you clarify?',
     options: [
       {
         id: "m5q25_a",
-        label: "Pasted into each new chat, one by one",
+        label:
+          "That Claude checks more pages than a search engine, so it gets more right",
       },
       {
         id: "m5q25_b",
-        label: "In a Project, so all its chats use them",
+        label:
+          "That a search engine shows you pages and Claude writes an answer to your request",
       },
       {
         id: "m5q25_c",
-        label: "In an Artifact shared with all the chats",
+        label:
+          "That Claude answers only with the information in the files you upload",
       },
       {
         id: "m5q25_d",
-        label: "In a separate chat that nobody else can see",
+        label:
+          "That they are right: Claude finds the answer and copies it from a page",
       },
     ],
     correctAnswer: "m5q25_b",
-    topic: "Connectors and Skills",
+    topic: "Getting to know Claude",
     difficulty: "medium",
-    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
-      "A Project stores instructions and files that apply to all its chats. Pasting them each time repeats work, and it is easy to forget one.",
+      "A search engine shows you pages so you can read and compare; Claude writes its own answer based on your request. Writing is not the same as being right: the answer can sound confident and still contain errors. It also does not copy a page or limit itself to the files you upload.",
   },
   {
     id: "m5q26",
     question:
-      "You have the case of a student with special needs. What do you do?",
+      "After several adjustments, Claude gives you the invitation to the graduation ceremony. What do you check before sending it?",
     options: [
       {
         id: "m5q26_a",
-        label: "I ask Claude for the decision and apply it",
+        label: "That the tone and design look the way you asked at the start",
       },
       {
         id: "m5q26_b",
-        label: "I decide with the team; AI only helps to write",
+        label: "Each name, date and place against the original data",
       },
       {
         id: "m5q26_c",
-        label: "I send Claude the full name so it can review it",
+        label:
+          "Only the changes from the last adjustment, since the rest was already fine",
       },
       {
         id: "m5q26_d",
-        label: "I leave it to AI, because it is more objective",
+        label:
+          "The spelling, since you typed the details yourself at the start",
       },
     ],
     correctAnswer: "m5q26_b",
-    topic: "Delegating with Claude",
+    topic: "Oversight",
     difficulty: "easy",
-    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
+    source:
+      "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
-      "Decisions about people, and especially about minors, are human. AI can help write, but not decide or receive identifiable data.",
+      "With each adjustment Claude rewrites the text and can change a name, a date or a place even if you did not ask. That is why, before sending, you compare those details with the original source. The tone, the spelling or the last change do not tell you whether the details are still right.",
   },
   {
     id: "m5q27",
@@ -399,7 +409,8 @@ export const MODULE_5_EN_PART2 = [
     options: [
       {
         id: "m5q27_a",
-        label: "Ask directly for the final conclusion to save time",
+        label:
+          "Ask for the conclusion and a table with the totals that support it",
       },
       {
         id: "m5q27_b",
@@ -407,11 +418,12 @@ export const MODULE_5_EN_PART2 = [
       },
       {
         id: "m5q27_c",
-        label: "Ask Claude to confirm the result twice",
+        label:
+          "Ask Claude to review the analysis and point out possible errors",
       },
       {
         id: "m5q27_d",
-        label: "Ask for a chart: if it looks consistent, the data is right",
+        label: "Run the analysis in two chats and use it if the results match",
       },
     ],
     correctAnswer: "m5q27_b",
@@ -420,6 +432,6 @@ export const MODULE_5_EN_PART2 = [
     source:
       "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
-      "Ask for the method and check a sample with an independent calculation. Claude confirming or a chart looking good does not prove the data is right.",
+      "Only an independent calculation checks the data: you ask for the steps and validate a sample yourself. The totals table, Claude's review and two matching answers come from the same tool and can repeat the same error.",
   },
 ];

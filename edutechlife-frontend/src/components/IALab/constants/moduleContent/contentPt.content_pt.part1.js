@@ -68,7 +68,7 @@ export const CONTENT_PT_PART1 = {
         title: "Os Fundamentos do Artesão: O que é IA Generativa?",
         description: "Entenda a ferramenta antes de usá-la",
         detailedDescription:
-          "Antes de pedir algo à IA, vale saber como ela funciona. Você verá o que é a IA generativa, por que ela responde com segurança mesmo quando erra, o que faz bem e quais são seus limites. Com essa base, você poderá usá-la com critério desde o primeiro dia, mesmo que nunca a tenha usado. Você também verá como a IA começou, dos primeiros modelos até hoje, para entender de onde vêm seus limites.",
+          "Antes de pedir algo à IA, vale saber como ela funciona. Você verá o que é a IA generativa, o que faz bem e quais são seus limites: por que ela pode inventar dados com segurança (as chamadas alucinações) e por que pode não conhecer o mais recente se não pesquisar na web. Com essa base, você poderá usá-la com critério desde o primeiro dia, mesmo que nunca a tenha usado. Você também verá como a IA começou, dos primeiros modelos até hoje, para entender de onde vêm seus limites.",
         duration: "20 min",
         format: "Video",
         icon: "fa-brain",
@@ -80,7 +80,7 @@ export const CONTENT_PT_PART1 = {
         title: "O Cinzel do Artesão: O que é um Prompt?",
         description: "Peça exatamente o que você precisa",
         detailedDescription:
-          "Um prompt é a instrução que você dá à IA. Você vai aprender a fórmula RTF (Papel + Tarefa + Formato), a acrescentar o contexto que a IA não conhece e a melhorar uma resposta pedindo ajustes em vez de começar do zero. Vai praticar com casos de estudo, trabalho e vida diária até obter resultados úteis de primeira.",
+          "Um prompt é a instrução que você dá à IA. Você vai aprender a fórmula RTF (Papel + Tarefa + Formato), a acrescentar o contexto que a IA não conhece e a melhorar uma resposta pedindo ajustes em vez de começar do zero. Você vai somar o tom e a extensão, dar um exemplo do estilo que quer, dividir uma tarefa grande em etapas, tirar o que não acrescenta e guardar seus melhores prompts como modelos. Vai praticar com casos de estudo, trabalho e vida diária até obter resultados úteis de primeira.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-comments",
@@ -92,7 +92,7 @@ export const CONTENT_PT_PART1 = {
         title: "O Escudo do Guardião: O Que Você Não Deve Compartilhar",
         description: "Proteja seus dados e os de outras pessoas",
         detailedDescription:
-          "Tudo o que você cola em uma IA sai do seu computador. Você vai aprender quais dados nunca compartilha (identidade, saúde, menores, senhas), como anonimizar um texto antes de colá-lo e o que fazer se já compartilhou algo sensível. Assim você protege a sua privacidade e a de outras pessoas.",
+          "Tudo o que você cola em uma IA sai do seu computador. Você vai aprender quais dados nunca compartilha (identidade, saúde, menores, senhas), como anonimizar um texto antes de colá-lo e o que fazer se já compartilhou algo sensível. Assim você protege a sua privacidade e a de outras pessoas. O que diz a lei: na Colômbia, a Lei 1581 de 2012 regula os dados pessoais; anonimizá-los antes de compartilhá-los com uma IA é uma boa prática que reduz o risco.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-lock",

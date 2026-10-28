@@ -64,7 +64,7 @@ export const MODULE_1_PART4 = [
     options: [
       {
         id: "m1e05_a",
-        label: "Evaluación de conformidad y supervisión",
+        label: "Evaluación de conformidad y supervisión humana",
       },
       {
         id: "m1e05_b",
@@ -113,9 +113,9 @@ export const MODULE_1_PART4 = [
     correctAnswer: "m1e06_a",
     topic: "Principios Éticos",
     difficulty: "fácil",
-    source: "Video: IA Ética: Principios y Práctica",
+    source: "Video «Podcast: ética de la IA»",
     feedback:
-      "Transparencia, equidad, responsabilidad, privacidad y veracidad son los cinco pilares. Repasa el video de principios y práctica.",
+      "Transparencia, equidad, responsabilidad, privacidad y veracidad son los cinco pilares. Repasa el podcast de ética y práctica.",
   },
   {
     id: "m1e07",
@@ -224,7 +224,7 @@ export const MODULE_1_PART4 = [
       },
     ],
     correctAnswer: "m1e10_d",
-    topic: "Explicabilidad",
+    topic: "Privacidad",
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
@@ -255,13 +255,13 @@ export const MODULE_1_PART4 = [
     correctAnswer: "m1e11_a",
     topic: "Supervisión Humana",
     difficulty: "medio",
-    source: "Video: IA Ética: Principios y Práctica",
+    source: "Video «Podcast: ética de la IA»",
     feedback:
       "Registrar quién revisó y decidió permite auditar y atribuir responsabilidad. Repasa la guía de ética.",
   },
   {
     id: "m1e12",
-    question: "¿Qué es la privacidad por diseño?",
+    question: "¿Qué es la privacidad desde el diseño?",
     options: [
       {
         id: "m1e12_a",
@@ -281,11 +281,11 @@ export const MODULE_1_PART4 = [
       },
     ],
     correctAnswer: "m1e12_a",
-    topic: "Privacidad por Diseño",
+    topic: "Privacidad desde el diseño",
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "La privacidad se diseña desde el inicio, no se agrega al final. Repasa la Guía de privacidad.",
+      "La privacidad desde el diseño decide qué datos necesitas antes de recolectarlos: minimiza, anonimiza y limita el acceso desde el inicio. No se agrega al final. Repasa la guía de ética, anexo, punto 3.",
   },
   {
     id: "m1e13",
@@ -398,8 +398,8 @@ export const MODULE_1_PART4 = [
     correctAnswer: "m1e16_a",
     topic: "Uso Responsable",
     difficulty: "fácil",
-    source: "Video: IA Ética: Principios y Práctica",
+    source: "Video «Podcast: ética de la IA»",
     feedback:
-      "Suplantar identidades con IA es un uso no ético y puede ser ilegal. Repasa el video de principios.",
+      "Suplantar identidades con IA es un uso no ético y puede ser ilegal. Repasa el podcast de ética.",
   },
 ];

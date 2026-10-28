@@ -60,7 +60,7 @@ export const CONTENT_PT_PART3 = {
         description:
           "Gemini: sua lupa versátil que vê, lê e escuta ao mesmo tempo",
         detailedDescription:
-          "Imagine uma lupa que não só vê imagens, mas também lê documentos, escuta áudios e analisa vídeos — tudo ao mesmo tempo. Esse é o Gemini. Nesta lição, você aprenderá a usar esse superpoder multimodal para analisar, criar e resolver casos que antes exigiam 4 ferramentas diferentes.",
+          "Imagine uma lupa que não só vê imagens, mas também lê documentos, escuta áudios e analisa vídeos — tudo ao mesmo tempo. Esse é o Gemini. Nesta lição, você aprenderá a usar esse superpoder multimodal para analisar, criar e resolver casos que antes exigiam 4 ferramentas diferentes. Use-o também como tutor: que ele explique, faça perguntas e coloque você para praticar. Diferente de um buscador, que dá uma lista de links, o Gemini redige uma resposta à sua pergunta; por isso você a confere. Com um áudio, peça a transcrição e compare com a gravação as frases que vai citar.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-google",
@@ -73,7 +73,7 @@ export const CONTENT_PT_PART3 = {
         description:
           "Conecte sua lupa ao solo firme: dados vivos do mundo real",
         detailedDescription:
-          "De que adianta uma lupa se você não pode verificar o que vê? O grounding conecta o Gemini a informações vivas da internet. Aprenda a combinar imagens, documentos e dados em tempo real para obter respostas que não são apenas inteligentes — são verificáveis.",
+          "De que adianta uma lupa se você não pode verificar o que vê? O grounding (conectar a IA a fontes verificáveis: a web em tempo real e seus próprios arquivos do Workspace) faz o Gemini responder com dados vivos, não com conhecimento congelado. Aprenda a combinar imagens, documentos e dados em tempo real para obter respostas que não são apenas inteligentes — são verificáveis. Peça também que explique uma fórmula do Sheets passo a passo e teste-a com um caso cujo resultado você conhece. Antes de enviar dados internos, revise a política da sua organização e anonimize o confidencial; declare quais partes vêm do Gemini.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -86,7 +86,7 @@ export const CONTENT_PT_PART3 = {
         description:
           "Cave até encontrar a verdade com ferramentas de pesquisa profunda",
         detailedDescription:
-          "Os casos mais complexos exigem as ferramentas mais poderosas. Domine a pesquisa profunda com IA: Deep Research para explorar temas em sua totalidade, verificação de fontes para verificar cada fonte e geração de relatórios técnicos que qualquer especialista assinaria.",
+          "Os casos mais complexos exigem as ferramentas mais poderosas. Domine a pesquisa profunda com IA: Deep Research para explorar temas em sua totalidade, verificação de fontes para verificar cada fonte e geração de relatórios técnicos que qualquer especialista assinaria. Antes de começar, o Deep Research mostra o plano de pesquisa: revise-o e ajuste-o. Se ele não aparecer na sua conta, faça o mesmo pedido em uma conversa normal e verifique cada fonte. Uma alucinação é um dado que a IA inventa com segurança: marque cada afirmação sem respaldo e confira. Apresente as projeções como estimativas, com a fonte em que se baseiam.",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -106,7 +106,7 @@ export const CONTENT_PT_PART3 = {
           },
           {
             icon: "fa-check",
-            text: "Configurar seu arsenal: Gemini Advanced, Google AI Studio e todas as ferramentas do detetive",
+            text: "Configurar seu arsenal: no app, o seletor oferece seleção automática de modelo, Flash-Lite, Flash e Pro (conforme seu plano; veja na sua conta) e níveis de raciocínio Baixo, Médio e Alto (por padrão, Baixo). Aumente-o para problemas de vários passos",
           },
           {
             icon: "fa-check",
@@ -159,7 +159,7 @@ export const CONTENT_PT_PART3 = {
           },
           {
             icon: "fa-times",
-            text: "Confiar no grounding sem verificar — até a melhor fonte pode errar",
+            text: "Confiar no grounding sem verificar — até a melhor fonte pode errar ou estar desatualizada: confira a data",
           },
           {
             icon: "fa-times",
@@ -176,7 +176,7 @@ export const CONTENT_PT_PART3 = {
       3: {
         objective: "🔍 Deep Research",
         objectiveDesc:
-          "Para casos complexos: investigações profundas com fontes verificáveis e verificação de fontes.",
+          "Para casos complexos: investigações profundas com fontes verificáveis e verificação de fontes. Confirme cada dado-chave com uma fonte independente. Antes de citar um autor, confira quem ele é e se o dado está no texto dele.",
         achievements: [
           {
             icon: "fa-check",
@@ -202,7 +202,7 @@ export const CONTENT_PT_PART3 = {
           },
           {
             icon: "fa-times",
-            text: "Não contrastar com fontes primárias — pesquisa de qualidade é feita com documentos originais",
+            text: "Não contrastar com fontes primárias (quem produziu o dado, não quem o comenta) — pesquisa de qualidade é feita com documentos originais",
           },
         ],
         example: {

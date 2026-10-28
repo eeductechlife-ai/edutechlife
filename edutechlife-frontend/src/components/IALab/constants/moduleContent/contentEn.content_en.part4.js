@@ -61,7 +61,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Document Alchemist: Your First Spell with Gemini Notebook",
         description: "Where PDFs come to life",
         detailedDescription:
-          "Meet Gemini Notebook, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with exact citations. It doesn't hallucinate. It doesn't make things up. It's your librarian with superpowers.",
+          "Meet Gemini Notebook, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with citations you can verify. It reduces the risk of error, but does not eliminate it: each statement is checked against its citation. If you ask about something that is not in your sources, add a reliable source; for general ideas with no documents, a general chat works better. It's your librarian with superpowers.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -73,7 +73,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Art of Curation: How to Choose and Synthesize Sources",
         description: "Quality over quantity, always",
         detailedDescription:
-          "Learn to select the best sources like a jeweler picks gemstones, organize them by topic, and weave ideas across documents to create professional-level summaries and analyses.",
+          "Learn to select the best sources like a jeweler picks gemstones, organize them by topic, and weave ideas across documents to create professional-level summaries and analyses. A reliable source has an identifiable author, a date and references you can check. Include sources with different positions, so your synthesis does not show a single view.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -85,7 +85,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Secret Formula: Audio Overviews and Document Management",
         description: "Your documents speak for themselves",
         detailedDescription:
-          "Transform your documents into podcast conversations with two AI voices. A sonic experience that sounds like professional radio. Perfect for learning on the go. Manage your digital library with superhuman intelligence.",
+          "Transform your documents into podcast conversations with two AI voices. A sonic experience that sounds like professional radio. Perfect for learning on the go. Manage your digital library with superhuman intelligence: one notebook per project, with a clear name, so you can find everything. Before sharing a notebook, remove personal or sensitive data (anonymize lists of people) and decide who can view it and who can edit it.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",
@@ -97,7 +97,7 @@ export const CONTENT_EN_PART4 = {
       1: {
         objective: "🎯 The First Spell",
         objectiveDesc:
-          "Gemini Notebook only talks about what it knows: your sources. AI that revolutionizes knowledge management.",
+          "Gemini Notebook answers based on your sources and shows you where each answer comes from. The AI that transforms knowledge management.",
         achievements: [
           {
             icon: "fa-check",

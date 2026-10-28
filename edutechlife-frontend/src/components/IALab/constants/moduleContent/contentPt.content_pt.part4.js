@@ -62,7 +62,7 @@ export const CONTENT_PT_PART4 = {
           "O Alquimista de Documentos: Seu Primeiro Feitiço com o Gemini Notebook",
         description: "Onde os PDFs ganham vida",
         detailedDescription:
-          "Conheça o Gemini Notebook, a ferramenta do Google que transforma seus PDFs, artigos e anotações em um assistente pessoal que responde com citações exatas. Ele não alucina. Não inventa. É o seu bibliotecário com superpoderes.",
+          "Conheça o Gemini Notebook, a ferramenta do Google que transforma seus PDFs, artigos e anotações em um assistente pessoal que responde com citações que você pode verificar. Reduz o risco de erro, mas não o elimina: cada afirmação é conferida com a sua citação. Se você perguntar algo que não está nas suas fontes, acrescente uma fonte confiável; para ideias gerais sem documentos, um chat geral funciona melhor. É o seu bibliotecário com superpoderes.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -74,7 +74,7 @@ export const CONTENT_PT_PART4 = {
         title: "A Arte da Curadoria: Como Escolher e Sintetizar Fontes",
         description: "Qualidade sobre quantidade, sempre",
         detailedDescription:
-          "Aprenda a selecionar as melhores fontes como um joalheiro escolhe gemas, organizá-las por temas e conectar ideias entre documentos para criar resumos e análises de nível profissional.",
+          "Aprenda a selecionar as melhores fontes como um joalheiro escolhe gemas, organizá-las por temas e conectar ideias entre documentos para criar resumos e análises de nível profissional. Uma fonte confiável tem autor identificável, data e referências que você pode conferir. Inclua fontes com posições diferentes, para que sua síntese não mostre um só olhar.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -86,7 +86,7 @@ export const CONTENT_PT_PART4 = {
         title: "A Fórmula Secreta: Audio Overviews e Gestão Documental",
         description: "Seus documentos falam por si só",
         detailedDescription:
-          "Transforme seus documentos em conversas de podcast com duas vozes de IA. Uma experiência sonora que parece rádio profissional. Ideal para aprender enquanto você se movimenta. Gerencie sua biblioteca digital com inteligência sobre-humana.",
+          "Transforme seus documentos em conversas de podcast com duas vozes de IA. Uma experiência sonora que parece rádio profissional. Ideal para aprender enquanto você se movimenta. Gerencie sua biblioteca digital com inteligência sobre-humana: um caderno por projeto, com um nome claro, para encontrar tudo. Antes de compartilhar um caderno, retire dados pessoais ou sensíveis (anonimize listas de pessoas) e decida quem pode vê-lo e quem pode editá-lo.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",
@@ -98,7 +98,7 @@ export const CONTENT_PT_PART4 = {
       1: {
         objective: "🎯 O Feitiço Inicial",
         objectiveDesc:
-          "O Gemini Notebook só fala do que sabe: suas fontes. A IA que revoluciona a gestão do conhecimento.",
+          "O Gemini Notebook responde com base nas suas fontes e mostra de onde sai cada resposta. A IA que transforma a gestão do conhecimento.",
         achievements: [
           {
             icon: "fa-check",

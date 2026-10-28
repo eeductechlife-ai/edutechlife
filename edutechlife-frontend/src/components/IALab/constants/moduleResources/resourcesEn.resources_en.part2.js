@@ -264,7 +264,8 @@ export const RESOURCES_EN_PART2 = {
       {
         id: "notebook-audio-video-1",
         type: "video",
-        title: "Create Your Own Podcast",
+        title:
+          "Complete guide to Google's NotebookLM: research and study without AI hallucinations (in Spanish)",
         url: "https://www.youtube.com/embed/JdiLO6z9oXY",
         duration: "2:16",
         thumbnail: "https://img.youtube.com/vi/JdiLO6z9oXY/maxresdefault.jpg",
@@ -318,9 +319,9 @@ export const RESOURCES_EN_PART2 = {
         duration: "5:19",
         thumbnail: "https://img.youtube.com/vi/0vZ_UVLhSQQ/maxresdefault.jpg",
         provider: "youtube",
-        title: "Introduction to Claude.ai (Spanish)",
+        title: "Getting started with Claude.ai (Anthropic video)",
         description:
-          'Official Anthropic video, in English (original title: "Getting started with Claude.ai (Anthropic video, in English)"): how to get started with Claude.ai and have your first useful conversation.',
+          'Official Anthropic video, in English (original title: "Getting started with Claude.ai"): how to get started with Claude.ai and have your first useful conversation.',
       },
       {
         id: "claude-guide-es",

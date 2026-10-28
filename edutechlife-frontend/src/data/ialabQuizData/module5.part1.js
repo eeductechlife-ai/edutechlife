@@ -58,39 +58,38 @@ export const MODULE_5_PART1 = [
     source:
       "Lección 2 · Crea con Claude: Artifacts, documentos y presentaciones",
     feedback:
-      "Un Artifact es una pieza (documento, tabla o pequeña app) que vive al lado del chat: la ves, la mejoras por partes y la exportas. Las instrucciones fijas van en un Proyecto, las preferencias en la memoria y el acceso a tus apps en los conectores.",
+      "Un Artifact es una pieza (documento, tabla o pequeña app) que vive al lado del chat: la ves y la mejoras por partes. Las instrucciones fijas van en un Proyecto, las preferencias en la memoria y el acceso a tus apps en los conectores.",
   },
   {
     id: "m5q3",
     question:
-      "Claude te entrega una tabla con cifras de ventas. ¿Qué haces antes de presentarla al equipo?",
+      "Hoy debes corregir la ortografía de 20 correos cortos y, aparte, analizar un contrato largo con cláusulas complejas. ¿Cómo eliges el modelo de Claude?",
     options: [
       {
         id: "m5q3_a",
         label:
-          "Pedirle a Claude que revise sus propias cifras y confiar en su respuesta",
+          "El más capaz para las dos tareas, para asegurar la mejor calidad",
       },
       {
         id: "m5q3_b",
-        label:
-          "Comparar cada cifra con la fuente original y rehacer un cálculo",
+        label: "Uno rápido para los correos y uno más capaz para el contrato",
       },
       {
         id: "m5q3_c",
-        label:
-          "Revisar ortografía y formato, porque las cifras salen del archivo",
+        label: "Uno rápido para las dos, porque ambas son tareas de texto",
       },
       {
         id: "m5q3_d",
-        label: "Pedirle que agregue la fuente de cada dato y presentarla así",
+        label:
+          "El más capaz para los correos, porque son más, y uno rápido para el contrato",
       },
     ],
     correctAnswer: "m5q3_b",
-    topic: "Supervisión",
+    topic: "Conocer a Claude",
     difficulty: "medio",
-    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
+    source: "Lección 1 · Conoce a Claude: la IA que trabaja contigo",
     feedback:
-      "Claude puede equivocarse con cifras y sonar seguro, incluso cuando se revisa a sí mismo. Citar una fuente no es verificarla: compara con el dato original antes de presentar.",
+      "Un modelo rápido basta para tareas simples y repetidas, como corregir correos cortos; uno más capaz conviene para un texto largo que exige razonar, como el contrato. Usar el más potente para todo gasta sin ganar, y uno rápido puede quedarse corto con el contrato.",
   },
   {
     id: "m5q4",
@@ -158,27 +157,24 @@ export const MODULE_5_PART1 = [
   },
   {
     id: "m5q6",
-    question: "¿Qué diferencia hay entre una Skill y un Proyecto?",
+    question:
+      "Para que Claude revise tu plataforma de ventas, un compañero te sugiere escribir en el chat tu usuario y tu contraseña. ¿Qué haces?",
     options: [
       {
         id: "m5q6_a",
-        label:
-          "Una Skill guarda los archivos de un trabajo; un Proyecto guarda los pasos de un procedimiento que se repite",
+        label: "La comparto y la cambio apenas Claude termine la revisión",
       },
       {
         id: "m5q6_b",
-        label:
-          "Una Skill guarda las charlas de un trabajo; un Proyecto guarda tu tono y tus preferencias",
+        label: "La escribo en un chat de incógnito para que no quede guardada",
       },
       {
         id: "m5q6_c",
-        label:
-          "Una Skill guarda un procedimiento con pasos y plantillas; un Proyecto, el contexto de un trabajo",
+        label: "Uso un conector para esa plataforma y leo qué permisos pide",
       },
       {
         id: "m5q6_d",
-        label:
-          "Son lo mismo con otro nombre: ambos guardan instrucciones y archivos de un trabajo",
+        label: "Se la doy a Claude en las instrucciones de un Proyecto privado",
       },
     ],
     correctAnswer: "m5q6_c",
@@ -186,7 +182,7 @@ export const MODULE_5_PART1 = [
     difficulty: "medio",
     source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
-      "Una Skill guarda un procedimiento que haces siempre igual: pasos, plantillas y ejemplos. Un Proyecto guarda el contexto de un trabajo que se repite, con sus instrucciones y archivos. Los conectores dan acceso a tus apps.",
+      "Una contraseña abre toda tu cuenta y no se escribe en un chat, sea de incógnito o de un Proyecto. Para dar acceso a una herramienta se usa un conector, y antes de aprobarlo lees qué permisos pide. Cambiarla después no deshace que ya la compartiste.",
   },
   {
     id: "m5q7",
@@ -206,7 +202,7 @@ export const MODULE_5_PART1 = [
       {
         id: "m5q7_c",
         label:
-          "Usar un chat de incógnito para que Claude empiece siempre limpio",
+          "Usar un chat de incógnito para que Claude empiece cada lunes desde cero",
       },
       {
         id: "m5q7_d",
@@ -222,35 +218,34 @@ export const MODULE_5_PART1 = [
   },
   {
     id: "m5q8",
-    question: "¿Qué significa 'delegar con criterio' a Claude?",
+    question:
+      "Le pides a Claude una tarea de varios pasos: revisar tu agenda, redactar invitaciones y enviarlas a 30 clientes. ¿Dónde pones el punto de control?",
     options: [
       {
         id: "m5q8_a",
-        label:
-          "Delegar solo las tareas fáciles y hacer tú todas las importantes",
+        label: "Al final: reviso el resumen de lo que hizo cuando termine",
       },
       {
         id: "m5q8_b",
-        label:
-          "Delegar todo lo que Claude hace bien y revisar solo si algo falla",
+        label: "Al inicio: le doy instrucciones detalladas y lo dejo trabajar",
       },
       {
         id: "m5q8_c",
         label:
-          "Entregar la tarea y la decisión si el pedido tiene las cinco partes",
+          "En la redacción: apruebo el texto modelo y dejo que envíe el resto",
       },
       {
         id: "m5q8_d",
         label:
-          "Entregar el borrador, revisar lo que sale y conservar la decisión",
+          "Antes de enviar: reviso las invitaciones y confirmo yo el envío",
       },
     ],
     correctAnswer: "m5q8_d",
     topic: "Delegar con Claude",
-    difficulty: "fácil",
+    difficulty: "medio",
     source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
-      "Delegar no es desentenderse: entregas la forma y el borrador, revisas lo que sale a terceros y conservas la decisión. Un buen pedido mejora el resultado, pero no traslada la responsabilidad.",
+      "En una tarea de varios pasos, las acciones importantes, como enviar algo a clientes, se confirman antes de que pasen, porque después no se pueden deshacer. Revisar al final llega tarde, unas buenas instrucciones no reemplazan la revisión y aprobar el modelo no revisa cada invitación.",
   },
   {
     id: "m5q9",
@@ -270,12 +265,12 @@ export const MODULE_5_PART1 = [
       {
         id: "m5q9_c",
         label:
-          "Escribir siempre en incógnito, aunque necesites que recuerde tu tono",
+          "Pasar tu trabajo a chats de incógnito, aunque quieras que recuerde tu tono",
       },
       {
         id: "m5q9_d",
         label:
-          "Pedirle que guarde todo, porque más memoria siempre da mejores respuestas en todos los chats",
+          "Pedirle que guarde todo, porque con más memoria da mejores respuestas",
       },
     ],
     correctAnswer: "m5q9_a",

@@ -59,7 +59,7 @@ export const CONTENT_PT_PART5 = {
         title: "Conheça o Claude: a IA que trabalha com você",
         description: "Como pensar e pedir como um maestro",
         detailedDescription:
-          "Antes de dar instruções, conheça o instrumento. O que é o Claude, em que se diferencia de um buscador, como escrever um pedido com objetivo, público e formato, como funciona a memória e quando escolher um modelo mais rápido ou um mais capaz. A memória é revisada e ajustada nas configurações; um chat anônimo não fica salvo no histórico nem na memória, e só existe fora dos Projetos (central de ajuda do Claude, verificado em outubro de 2026).",
+          "Antes de dar instruções, conheça o instrumento. O que é o Claude, em que se diferencia de um buscador, como escrever um pedido com objetivo, público e formato, como funciona a memória e quando escolher um modelo mais rápido ou um mais capaz. Um buscador mostra páginas para você ler e comparar; o Claude redige uma resposta própria ao seu pedido, que pode soar segura e ter erros ou não conhecer mudanças recentes: confirme os dados-chave em uma fonte atual. Para tarefas simples e repetidas basta um modelo rápido; um mais capaz convém para textos longos ou que exigem raciocínio. A memória é revisada e ajustada nas configurações; um chat incógnito não fica salvo no histórico nem na memória, e só existe fora dos Projetos (central de ajuda do Claude, verificado em outubro de 2026).",
         duration: "20 min",
         format: "Reading",
         icon: "fa-comments",
@@ -72,7 +72,7 @@ export const CONTENT_PT_PART5 = {
         description:
           "De uma ideia a um documento ou peça pronta para compartilhar",
         detailedDescription:
-          "Os Artifacts são peças que você vê e edita ao lado da conversa: documentos, gráficos, apresentações e pequenos aplicativos. Aprenda a descrever o resultado, iterar com ajustes pequenos, comparar versões e revisar antes de compartilhar.",
+          "Os Artifacts são peças que você vê e edita ao lado da conversa: documentos, gráficos, apresentações e pequenos aplicativos. Aprenda a descrever o resultado, iterar com ajustes pequenos, comparar versões e revisar antes de compartilhar. Com números, peça os passos do cálculo e confira uma parte por conta própria; depois de cada ajuste, revise se nomes, datas e lugares continuam certos, e teste uma peça interativa com casos cujo resultado você já conhece antes de compartilhá-la.",
         duration: "25 min",
         format: "Lab",
         icon: "fa-pen-nib",
@@ -84,7 +84,7 @@ export const CONTENT_PT_PART5 = {
         title: "Delegue com o Claude: Projetos, conectores e Skills",
         description: "Trabalho recorrente sem perder o controle",
         detailedDescription:
-          "Um Projeto guarda o contexto de um trabalho; os conectores dão acesso às suas ferramentas com permissões que você aprova; uma Skill reutiliza um procedimento; as tarefas programadas automatizam o recorrente. Delegar é definir objetivo, limites e revisão: a decisão final continua sendo sua.",
+          "Um Projeto guarda o contexto de um trabalho; os conectores dão acesso às suas ferramentas com permissões que você aprova, e você pode desconectá-los quando não precisar mais deles; uma Skill reutiliza um procedimento; as tarefas programadas automatizam o recorrente. Delegar é definir objetivo, limites e revisão: a decisão final continua sendo sua. Ao entregar, declare como usou a IA e quem responde pelo conteúdo.",
         duration: "30 min",
         format: "Video",
         icon: "fa-diagram-project",

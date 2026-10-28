@@ -113,7 +113,8 @@ export const RESOURCES_ES_PART1 = {
       {
         id: "privacy-video-1",
         type: "video",
-        title: "Privacidad y IA: Lo que Debes Saber",
+        title:
+          "¡Cuidado con la IA! Riesgos, sesgos y el peligro de depender de ella",
         url: "https://www.youtube.com/embed/BoR5KjsRK9U",
         duration: "9:20",
         thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
@@ -163,7 +164,7 @@ export const RESOURCES_ES_PART1 = {
       {
         id: "ethics-video-1",
         type: "video",
-        title: "IA Ética: Principios y Práctica",
+        title: "Podcast: ética de la IA",
         url: "https://www.youtube.com/embed/idplIgnLStI",
         duration: "6:05",
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
@@ -214,7 +215,7 @@ export const RESOURCES_ES_PART1 = {
       {
         id: "chatgpt-video-1",
         type: "video",
-        title: "ChatGPT desde Cero en 6 Minutos",
+        title: "ChatGPT en la práctica",
         url: "https://www.youtube.com/embed/yQKR-jRF5pQ",
         duration: "5:43",
         thumbnail: "https://img.youtube.com/vi/yQKR-jRF5pQ/maxresdefault.jpg",

@@ -7,7 +7,7 @@ export const OVA_CATALOG = [
     icon: "fa-brain",
     duration: "15 min",
     description: "Fundamentos del prompt y su anatomía.",
-    component: "OVAIntroPrompt",
+    component: "OVAExplicativo",
   },
   {
     id: "prompt-lab-ova-1",
@@ -25,7 +25,7 @@ export const OVA_CATALOG = [
     icon: "fa-sitemap",
     duration: "20 min",
     description: "Mapa del ecosistema ChatGPT.",
-    component: "OVAEcosystemGuide",
+    component: "OVAExplicativo",
   },
   {
     id: "workflow-ova-herramientas",
@@ -34,7 +34,7 @@ export const OVA_CATALOG = [
     icon: "fa-wand-magic-sparkles",
     duration: "25 min",
     description: "Arsenal integrado de ChatGPT.",
-    component: "OVAChatGPTTools",
+    component: "OVAExplicativo",
   },
   {
     id: "automation-flows-ova-1",
@@ -53,7 +53,7 @@ export const OVA_CATALOG = [
     duration: "25 min",
     description:
       "Construye un Proyecto, pruébalo y decide cuándo conviene un agente o un plugin.",
-    component: "OVABuildGPT",
+    component: "OVAExplicativo",
   },
   {
     id: "workspace-ova-1",
@@ -80,7 +80,7 @@ export const OVA_CATALOG = [
     icon: "fa-magnifying-glass",
     duration: "25 min",
     description: "Investigación profunda y verificación de fuentes.",
-    component: "OVAGeminiDeepResearch",
+    component: "OVAExplicativo",
   },
   {
     id: "notebooklm-ova-1",
@@ -89,7 +89,7 @@ export const OVA_CATALOG = [
     icon: "fa-flask-vial",
     duration: "15 min",
     description: "Construye tu notebook inteligente.",
-    component: "OVANotebookLab",
+    component: "OVAExplicativo",
   },
   {
     id: "notebook-summary-ova-1",
@@ -98,7 +98,7 @@ export const OVA_CATALOG = [
     icon: "fa-file-text",
     duration: "20 min",
     description: "Simulador de análisis documental.",
-    component: "OVANotebookSimulator",
+    component: "OVAExplicativo",
   },
   {
     id: "notebook-audio-guide-1",
@@ -116,7 +116,7 @@ export const OVA_CATALOG = [
     icon: "fa-microphone",
     duration: "15 min",
     description: "Crea tu podcast IA.",
-    component: "OVAPodcastStudio",
+    component: "OVAExplicativo",
   },
   {
     id: "document-mastery-ova-1",
@@ -143,7 +143,7 @@ export const OVA_CATALOG = [
     icon: "fa-exclamation-triangle",
     duration: "15 min",
     description: "Detector de sesgos algorítmicos.",
-    component: "OVABiasLab",
+    component: "OVAExplicativo",
   },
   {
     id: "privacy-ova-1",
@@ -152,7 +152,7 @@ export const OVA_CATALOG = [
     icon: "fa-shield-alt",
     duration: "20 min",
     description: "Privacidad y evaluación de riesgos.",
-    component: "OVARiskSimulator",
+    component: "OVAExplicativo",
   },
   {
     id: "ethics-ova-1",
@@ -179,7 +179,7 @@ export const OVA_CATALOG = [
     icon: "fa-pen-nib",
     duration: "15 min",
     description: "Arma el pedido perfecto para Claude.",
-    component: "OVAClaudeArtifacts",
+    component: "OVAExplicativo",
   },
   {
     id: "claude-delegation-ova-1",
@@ -188,7 +188,7 @@ export const OVA_CATALOG = [
     icon: "fa-diagram-project",
     duration: "15 min",
     description: "Qué delegar, qué delegar con revisión y qué nunca delegar.",
-    component: "OVAClaudeDelegation",
+    component: "OVAExplicativo",
   },
   {
     id: "gemini-multimodal-ova-1",
@@ -208,6 +208,6 @@ export const OVA_CATALOG = [
     duration: "15 min",
     description:
       "Elige el pedido que dice qué quieres, para quién, en qué formato y con qué límites.",
-    component: "OVAClaudeFirstRequest",
+    component: "OVAExplicativo",
   },
 ];

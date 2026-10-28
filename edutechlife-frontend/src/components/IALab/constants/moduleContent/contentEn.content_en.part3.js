@@ -60,7 +60,7 @@ export const CONTENT_EN_PART3 = {
         description:
           "Gemini: your all-terrain magnifying glass that sees, reads, and listens simultaneously",
         detailedDescription:
-          "Imagine a magnifying glass that doesn't just see images — it reads documents, listens to audio, and analyzes video, all at the same time. That's Gemini. In this lesson, you'll learn to wield this multimodal superpower to analyze, create, and crack cases that used to require 4 different tools.",
+          "Imagine a magnifying glass that doesn't just see images — it reads documents, listens to audio, and analyzes video, all at the same time. That's Gemini. In this lesson, you'll learn to wield this multimodal superpower to analyze, create, and crack cases that used to require 4 different tools. Use it as a tutor too: have it explain, quiz you and make you practice. Unlike a search engine, which gives you a list of links, Gemini drafts an answer to your question; that is why you check it. With an audio file, ask for the transcript and compare the lines you will quote with the recording.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-google",
@@ -73,7 +73,7 @@ export const CONTENT_EN_PART3 = {
         description:
           "Connect your magnifying glass to solid ground: live data from the real world",
         detailedDescription:
-          "What good is a magnifying glass if you can't verify what you see? Grounding connects Gemini to live internet information. Learn to combine images, documents, and real-time data to get answers that aren't just smart — they're verifiable.",
+          "What good is a magnifying glass if you can't verify what you see? Grounding (connecting the AI to verifiable sources: the live web and your own Workspace files) makes Gemini answer with live data, not frozen knowledge. Learn to combine images, documents, and real-time data to get answers that aren't just smart — they're verifiable. Also ask it to explain a Sheets formula step by step, and test it with a case whose result you know. Before uploading internal data, check your organization's policy and anonymize anything confidential; declare which parts come from Gemini.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -86,7 +86,7 @@ export const CONTENT_EN_PART3 = {
         description:
           "Dig until you find the truth with deep investigation tools",
         detailedDescription:
-          "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, source verification to verify every source, and technical report generation any expert would endorse.",
+          "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, source verification to verify every source, and technical report generation any expert would endorse. Before starting, Deep Research shows you its research plan: review and adjust it. If it does not appear in your account, make the same request in a normal conversation and verify each source. A hallucination is a fact the AI makes up with confidence: mark every unsupported claim and check it. Present projections as estimates, with the source they are based on.",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -106,7 +106,7 @@ export const CONTENT_EN_PART3 = {
           },
           {
             icon: "fa-check",
-            text: "Configure your arsenal: Gemini Advanced, Google AI Studio, and every detective tool available",
+            text: "Configure your arsenal: in the app, the selector offers automatic model selection, Flash-Lite, Flash and Pro (depending on your plan; check your account) and Low, Medium and High reasoning levels (Low by default). Raise it for multi-step problems",
           },
           {
             icon: "fa-check",
@@ -159,7 +159,7 @@ export const CONTENT_EN_PART3 = {
           },
           {
             icon: "fa-times",
-            text: "Blindly trusting grounding without verification — even the best source can be wrong",
+            text: "Blindly trusting grounding without verification — even the best source can be wrong or outdated: check its date",
           },
           {
             icon: "fa-times",
@@ -176,7 +176,7 @@ export const CONTENT_EN_PART3 = {
       3: {
         objective: "🔍 Deep Research",
         objectiveDesc:
-          "For complex cases: deep investigations with verifiable sources and source verification.",
+          "For complex cases: deep investigations with verifiable sources and source verification. Confirm every key fact with an independent source. Before citing an author, check who they are and that the fact is in their text.",
         achievements: [
           {
             icon: "fa-check",
@@ -202,7 +202,7 @@ export const CONTENT_EN_PART3 = {
           },
           {
             icon: "fa-times",
-            text: "Not cross-referencing with primary sources — quality investigation works with original documents",
+            text: "Not cross-referencing with primary sources (whoever produced the data, not whoever comments on it) — quality investigation works with original documents",
           },
         ],
         example: {

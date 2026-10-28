@@ -113,7 +113,8 @@ export const RESOURCES_EN_PART1 = {
       {
         id: "privacy-video-1",
         type: "video",
-        title: "Privacy and AI: What You Need to Know",
+        title:
+          "Watch out for AI! Risks, biases and the danger of depending on it (in Spanish)",
         url: "https://www.youtube.com/embed/BoR5KjsRK9U",
         duration: "9:20",
         thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
@@ -163,7 +164,7 @@ export const RESOURCES_EN_PART1 = {
       {
         id: "ethics-video-1",
         type: "video",
-        title: "Ethical AI: Principles and Practice",
+        title: "Podcast: AI ethics (in Spanish)",
         url: "https://www.youtube.com/embed/idplIgnLStI",
         duration: "6:05",
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
@@ -214,7 +215,7 @@ export const RESOURCES_EN_PART1 = {
       {
         id: "chatgpt-video-1",
         type: "video",
-        title: "ChatGPT from Scratch in 6 Minutes",
+        title: "ChatGPT in practice (in Spanish)",
         url: "https://www.youtube.com/embed/yQKR-jRF5pQ",
         duration: "5:43",
         thumbnail: "https://img.youtube.com/vi/yQKR-jRF5pQ/maxresdefault.jpg",

@@ -28,8 +28,10 @@ const normalizeDifficulty = (value) =>
 export const DEFAULT_QUESTION_WEIGHT = 1;
 
 export function questionWeight(question) {
-  return WEIGHT_BY_KEY[normalizeDifficulty(question?.difficulty)] ??
-    DEFAULT_QUESTION_WEIGHT;
+  return (
+    WEIGHT_BY_KEY[normalizeDifficulty(question?.difficulty)] ??
+    DEFAULT_QUESTION_WEIGHT
+  );
 }
 
 /**
@@ -46,7 +48,11 @@ export function pickRandomQuestions(bank = [], count = 10, rng = Math.random) {
   return pool.slice(0, Math.min(count, pool.length));
 }
 
-export function calculateWeightedScore(questions, answers = {}, passingScore = 80) {
+export function calculateWeightedScore(
+  questions,
+  answers = {},
+  passingScore = 80,
+) {
   let earned = 0;
   let total = 0;
   let correctCount = 0;

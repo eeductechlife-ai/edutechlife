@@ -2,33 +2,31 @@ export const MODULE_4_EN_PART2 = [
   {
     id: "m4q15",
     question:
-      "A notebook summary includes a figure you do not remember reading. What do you do?",
+      "Your notebook on AI tools has guides from three years ago. What do you do before studying with it?",
     options: [
       {
         id: "m4q15_a",
-        label:
-          "I accept it because the notebook states it with great confidence",
+        label: "Use them anyway, since they are already in the notebook",
       },
       {
         id: "m4q15_b",
-        label: "I ask the notebook if it is sure and accept its answer",
+        label: "Ask the notebook to update them on its own",
       },
       {
         id: "m4q15_c",
-        label:
-          "I ask for the source citation of that figure and check it in the document",
+        label: "Find current versions and replace the outdated ones",
       },
       {
         id: "m4q15_d",
-        label: "I change it to a round number that sounds more credible",
+        label: "Add new guides and leave the old ones unmarked",
       },
     ],
     correctAnswer: "m4q15_c",
-    topic: "Citation check",
+    topic: "Curation",
     difficulty: "medium",
-    source: "Complete NotebookLM guide: get the most out of it (2026)",
+    source: "The Art of Source Curation",
     feedback:
-      "Asking for the citation and checking it in the document is the only way to know whether the figure is in the source.",
+      "Knowledge expires, and faster in AI. The notebook answers with what you give it: if the sources grow old, so do its answers. Find current versions and replace the outdated ones; mixing old and new without marking them is confusing.",
   },
   {
     id: "m4q16",
@@ -57,7 +55,7 @@ export const MODULE_4_EN_PART2 = [
     difficulty: "easy",
     source: "Gemini Notebook: the notebook of the future",
     feedback:
-      "Summaries guide your reading; they do not replace the original source. Review the PDF.",
+      "Summaries guide your reading; they do not replace the original source. Review the guide Gemini Notebook: the notebook of the future.",
   },
   {
     id: "m4q17",
@@ -66,7 +64,7 @@ export const MODULE_4_EN_PART2 = [
     options: [
       {
         id: "m4q17_a",
-        label: "A synthesis where each contribution carries its citation",
+        label: "A synthesis that connects the ideas of all of them",
       },
       {
         id: "m4q17_b",
@@ -87,36 +85,36 @@ export const MODULE_4_EN_PART2 = [
     difficulty: "medium",
     source: "The Crucible",
     feedback:
-      "A synthesis connects sources and cites them. Practice in the document analysis simulator.",
+      "A synthesis weaves the ideas of several documents into a single analysis; a summary per document keeps them apart. Practice in the activity The Crucible.",
   },
   {
     id: "m4q18",
     question:
-      "What do Gemini Notebook's grounding/citations add to your research?",
+      "You ask your notebook something that is not in any of your sources. What do you do?",
     options: [
       {
         id: "m4q18_a",
-        label: "They show which document each individual claim came from",
+        label: "Add a reliable source on that topic and ask again",
       },
       {
         id: "m4q18_b",
-        label: "They hide the sources to protect the author's privacy",
+        label: "Accept whatever it answers, since it comes from the notebook",
       },
       {
         id: "m4q18_c",
-        label: "They make the answers longer and much more detailed",
+        label: "Repeat the question until it gives me an answer",
       },
       {
         id: "m4q18_d",
-        label: "They print the documents so that the files become physical",
+        label: "Ask it to answer without using my sources",
       },
     ],
     correctAnswer: "m4q18_a",
-    topic: "Verification",
+    topic: "Scope",
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "Citations let you go back to the original document and check. Review the Gemini Notebook guide.",
+      "The notebook answers with what you give it: if the topic is not in your sources, it has nothing to rely on. Add a reliable source on that topic. If you still get an answer, look for it in your documents before using it.",
   },
   {
     id: "m4q19",
@@ -138,7 +136,7 @@ export const MODULE_4_EN_PART2 = [
       },
       {
         id: "m4q19_d",
-        label: "Use it because the AI gave it with confidence",
+        label: "Use it if it matches what you remember about the topic",
       },
     ],
     correctAnswer: "m4q19_c",
@@ -155,20 +153,21 @@ export const MODULE_4_EN_PART2 = [
     options: [
       {
         id: "m4q20_a",
-        label: "I accept the citation because it is well written",
+        label:
+          "I keep the citation because the report comes from a trusted person",
       },
       {
         id: "m4q20_b",
-        label: "I check the upload and look for the original source",
+        label: "I check whether I uploaded it and look for the original source",
       },
       {
         id: "m4q20_c",
-        label:
-          "I remove the citation from the report without checking anything else",
+        label: "I replace it with the most similar source in my notebook",
       },
       {
         id: "m4q20_d",
-        label: "I write the author's name myself",
+        label:
+          "I remove the citation and keep the figure because it sounds right",
       },
     ],
     correctAnswer: "m4q20_b",
@@ -176,7 +175,7 @@ export const MODULE_4_EN_PART2 = [
     difficulty: "hard",
     source: "The Crucible",
     feedback:
-      "A citation you cannot open does not back the figure. Look for the original source before using it.",
+      "A citation you cannot find in your notebook does not back the figure. Check whether you uploaded that source and, if not, look for the original before using it. A report coming from someone trusted does not prove the citation.",
   },
   {
     id: "m4q21",
@@ -202,38 +201,39 @@ export const MODULE_4_EN_PART2 = [
     correctAnswer: "m4q21_a",
     topic: "Audio Overview",
     difficulty: "easy",
-    source: "Create Your Own Podcast",
+    source:
+      "Complete guide to Google's NotebookLM: research and study without AI hallucinations",
     feedback:
-      "The Audio Overview is an audio conversation generated from your sources. Review the podcast video.",
+      "The Audio Overview is an audio conversation generated from your sources. Watch the video Complete guide to Google's NotebookLM: research and study without AI hallucinations.",
   },
   {
     id: "m4q22",
-    question: "What is the best way to use an Audio Overview?",
+    question:
+      "You created your first notebook for a class assignment. What is the right order to get started?",
     options: [
       {
         id: "m4q22_a",
-        label:
-          "Listen to it first and then open the citations that interest you",
+        label: "Upload your documents and then ask it questions",
       },
       {
         id: "m4q22_b",
-        label: "Use it as the only reading on the topic",
+        label: "Ask it questions and then upload the documents",
       },
       {
         id: "m4q22_c",
-        label: "Share it without reviewing what it says",
+        label: "Request an Audio Overview and then upload documents",
       },
       {
         id: "m4q22_d",
-        label: "Use it to replace the original sources",
+        label: "Share it with the team and then upload documents",
       },
     ],
     correctAnswer: "m4q22_a",
-    topic: "Audio Overview",
+    topic: "Gemini Notebook",
     difficulty: "easy",
-    source: "The Alchemical Studio",
+    source: "Gemini Notebook Guide",
     feedback:
-      "The audio works as a first pass while you are on the move. To trust what it says, open the citations.",
+      "The notebook answers with what you give it, so your documents come first. Then you ask questions and open the citations to check. Review the first-notebook steps in the Gemini Notebook Guide.",
   },
   {
     id: "m4q23",
@@ -245,7 +245,7 @@ export const MODULE_4_EN_PART2 = [
       },
       {
         id: "m4q23_b",
-        label: "Upload the audio as a source for the notebook",
+        label: "Upload the audio as one more source for the notebook",
       },
       {
         id: "m4q23_c",
@@ -265,31 +265,32 @@ export const MODULE_4_EN_PART2 = [
   },
   {
     id: "m4q24",
-    question: "How is a better Audio Overview generated?",
+    question:
+      "You only have two paragraphs of source material and want a 30-minute Audio Overview. What do you expect?",
     options: [
       {
         id: "m4q24_a",
-        label: "With quality sources that are well organized in the notebook",
+        label: "That it has little to say, so I add quality sources",
       },
       {
         id: "m4q24_b",
-        label: "With a single two-paragraph source and no context of your own",
+        label: "That the AI fills the gaps with its own data",
       },
       {
         id: "m4q24_c",
-        label: "With lots of messy documents unrelated to the topic",
+        label: "That it lasts 30 minutes if I ask for it",
       },
       {
         id: "m4q24_d",
-        label: "With no source loaded, letting it improvise freely",
+        label: "That it is as complete as with ten sources",
       },
     ],
     correctAnswer: "m4q24_a",
     topic: "Audio Overview",
     difficulty: "medium",
-    source: "The Alchemical Studio",
+    source: "Guide: Audio and documents, in order",
     feedback:
-      "Better sources and organization, better audio. Review document mastery to podcast.",
+      "The lesson warns about this: expecting a 30-minute podcast from just two paragraphs is a mistake. The audio relies on your sources, so with so little material it has little to say. Add quality sources. Practice in the activity The Alchemical Studio.",
   },
   {
     id: "m4q25",
@@ -322,31 +323,32 @@ export const MODULE_4_EN_PART2 = [
   },
   {
     id: "m4q26",
-    question: "What must you decide before sharing a notebook with your team?",
+    question:
+      "You have three class projects on different topics. How do you organize your notebooks?",
     options: [
       {
         id: "m4q26_a",
-        label: "Nothing: it is shared with the whole world automatically",
+        label: "A single notebook with the sources of all three",
       },
       {
         id: "m4q26_b",
-        label: "Only the color of the notebook title",
+        label: "One notebook per week, regardless of the project",
       },
       {
         id: "m4q26_c",
-        label: "That each person gets a different copy with their own data",
+        label: "One notebook for each document you upload",
       },
       {
         id: "m4q26_d",
-        label: "Who can view it and who can edit it",
+        label: "One notebook per project, with its own sources",
       },
     ],
     correctAnswer: "m4q26_d",
-    topic: "Collaboration",
+    topic: "Document management",
     difficulty: "easy",
-    source: "Gemini Notebook Guide",
+    source: "Guide: Audio and documents, in order",
     feedback:
-      "Sharing well means deciding who views and who edits. Permissions prevent unwanted changes or access.",
+      "One notebook per project, with a clear name, lets you find everything and keeps the notebook from answering with a mix of sources from different topics. One per document does not let you connect ideas, and one per week mixes projects.",
   },
   {
     id: "m4q27",
@@ -358,7 +360,7 @@ export const MODULE_4_EN_PART2 = [
       },
       {
         id: "m4q27_b",
-        label: "What do you think about everything?",
+        label: "What do you think about everything the sources say?",
       },
       {
         id: "m4q27_c",
@@ -366,7 +368,7 @@ export const MODULE_4_EN_PART2 = [
       },
       {
         id: "m4q27_d",
-        label: "Tell me anything you have",
+        label: "Tell me about anything you have on the topic",
       },
     ],
     correctAnswer: "m4q27_a",
@@ -383,19 +385,19 @@ export const MODULE_4_EN_PART2 = [
     options: [
       {
         id: "m4q28_a",
-        label: "Ignore the figure because you already have your conclusion",
+        label: "I keep the conclusion and mention the figure in a footnote",
       },
       {
         id: "m4q28_b",
-        label: "Review the source and adjust your conclusion",
+        label: "I review the source and adjust my conclusion if needed",
       },
       {
         id: "m4q28_c",
-        label: "Remove that document from the notebook without saying anything",
+        label: "I look for another source that supports my conclusion",
       },
       {
         id: "m4q28_d",
-        label: "Ask the AI to summarize without that figure",
+        label: "I ask the AI to explain why the figure is wrong",
       },
     ],
     correctAnswer: "m4q28_b",
@@ -403,6 +405,6 @@ export const MODULE_4_EN_PART2 = [
     difficulty: "hard",
     source: "The Crucible",
     feedback:
-      "A figure that contradicts your conclusion means reviewing the source and, if it applies, adjusting the conclusion.",
+      "A figure that contradicts your conclusion means reviewing the source and, if needed, adjusting the conclusion. Pushing it into a footnote, looking only for what proves you right or asking for it to be refuted keeps your idea without evaluating it.",
   },
 ];

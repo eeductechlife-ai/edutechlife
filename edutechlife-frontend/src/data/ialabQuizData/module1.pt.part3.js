@@ -57,31 +57,34 @@ export const MODULE_1_PT_PART3 = [
   },
   {
     id: "m1q31",
-    question: "O que você deve cuidar ao compartilhar um prompt com um colega?",
+    question:
+      "Segundo a Lei 1581 de 2012 da Colômbia, o que você pode fazer como titular dos seus dados pessoais?",
     options: [
       {
         id: "m1q31_a",
-        label: "Tirar dados pessoais e sensíveis antes de compartilhá-lo",
+        label:
+          "Conhecer, atualizar, retificar e suprimir seus dados, e revogar a autorização",
       },
       {
         id: "m1q31_b",
-        label: "Colar também suas senhas e acessos para que ele reproduza",
+        label: "Só pedir uma cópia dos seus dados uma vez por ano",
       },
       {
         id: "m1q31_c",
-        label: "Compartilhá-lo sem revisar a resposta que ele deu",
+        label:
+          "Conhecer seus dados, mas não corrigi-los nem pedir que os apaguem",
       },
       {
         id: "m1q31_d",
-        label: "Enviá-lo como se a resposta fosse de sua autoria",
+        label: "Pedir que os apaguem, só se a empresa concordar",
       },
     ],
     correctAnswer: "m1q31_a",
-    topic: "Erros Comuns",
+    topic: "Lei 1581 de 2012",
     difficulty: "médio",
-    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
+    source: "Manual de Privacidade em IA",
     feedback:
-      "Um prompt pode conter dados de outras pessoas. Anonimize-o antes de compartilhar.",
+      "Como titular, a Lei 1581 de 2012 permite conhecer, atualizar, retificar e suprimir seus dados, e revogar a autorização que você deu. Esses direitos vão além de pedir uma cópia ou só conhecer os dados. Revise o «Manual de Privacidade em IA».",
   },
   {
     id: "m1q32",
@@ -143,60 +146,60 @@ export const MODULE_1_PT_PART3 = [
   {
     id: "m1q34",
     question:
-      "A IA dá duas respostas diferentes ao mesmo prompt. Qual é o passo mais crítico?",
+      "Você já trocou os nomes por papéis em um relatório e vai subi-lo como arquivo para uma IA. O que mais você revisa antes?",
     options: [
       {
         id: "m1q34_a",
-        label: "Comparar e validar as informações obtidas",
+        label: "Cabeçalhos, assinaturas e dados ocultos do arquivo",
       },
       {
         id: "m1q34_b",
-        label: "Escolher a mais longa sem ler o conteúdo dela",
+        label: "O tamanho do arquivo, para carregar rápido",
       },
       {
         id: "m1q34_c",
-        label: "Confiar na primeira que aparecer na tela",
+        label: "A ortografia, para a IA entender melhor",
       },
       {
         id: "m1q34_d",
-        label: "Perguntar a outra IA qual das duas ela prefere",
+        label: "Que esteja em PDF, porque assim ninguém vê os dados",
       },
     ],
     correctAnswer: "m1q34_a",
-    topic: "Avaliação Crítica",
+    topic: "Anonimizar documentos",
     difficulty: "médio",
-    source: "O Cinzel",
+    source: "Manual de Privacidade em IA",
     feedback:
-      "Diante de respostas divergentes, valide os dados e use seu critério.",
+      "Um arquivo pode levar nomes e dados em cabeçalhos, assinaturas ou informações ocultas mesmo com o texto já anonimizado. Revisá-los antes de subir é o quarto passo para anonimizar. O tamanho, a ortografia ou o formato PDF não protegem esses dados. Revise o «Manual de Privacidade em IA».",
   },
   {
     id: "m1q35",
     question:
-      "O que você deve fazer antes de compartilhar um texto que a IA redigiu?",
+      "Uma IA dá a você um dado chamativo e você quer compartilhá-lo. O que você revisa antes?",
     options: [
       {
         id: "m1q35_a",
-        label: "Revisar dados, nomes e números, e declarar o uso",
+        label: "A fonte original, a data e o autor, e outra fonte independente",
       },
       {
         id: "m1q35_b",
-        label: "Compartilhar como está, porque a IA não erra",
+        label: "Que muitas pessoas já o tenham compartilhado nas redes sociais",
       },
       {
         id: "m1q35_c",
-        label: "Trocar só o logo do documento",
+        label: "Que o texto esteja bem escrito e sem erros de ortografia",
       },
       {
         id: "m1q35_d",
-        label: "Enviar para outra pessoa sem dizer que a IA gerou",
+        label: "Que a IA confirme que o dado é verdadeiro",
       },
     ],
     correctAnswer: "m1q35_a",
-    topic: "Uso Responsável",
+    topic: "Verificar antes de compartilhar",
     difficulty: "médio",
-    source: "Guia: Anatomia de um Prompt",
+    source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "A IA pode errar em dados e nomes. Revisar o texto e declarar o uso faz parte do trabalho responsável.",
+      "Antes de compartilhar, o guia de ética pede três verificações: abrir a fonte original, conferir se a data é recente e o autor confiável, e buscar pelo menos outra fonte independente que o confirme. Ser popular, estar bem escrito ou ser confirmado pela IA não torna o dado verdadeiro.",
   },
   {
     id: "m1q36",
@@ -229,31 +232,31 @@ export const MODULE_1_PT_PART3 = [
   },
   {
     id: "m1q37",
-    question: "Qual é o uso mais honesto da IA num trabalho acadêmico?",
+    question: "Em um trabalho escolar, qual destes usos da IA é aceitável?",
     options: [
       {
         id: "m1q37_a",
-        label: "Usá-la como apoio e declarar quando a usou",
+        label: "Pedir explicações e exemplos do tema para entendê-lo",
       },
       {
         id: "m1q37_b",
-        label: "Entregar a saída dela como sua sem nenhuma revisão",
+        label: "Entregar uma redação que a IA escreveu, depois de lê-la",
       },
       {
         id: "m1q37_c",
-        label: "Copiar sem citar nenhuma parte do conteúdo gerado",
+        label: "Responder uma prova com respostas que a IA gera ao vivo",
       },
       {
         id: "m1q37_d",
-        label: "Usá-la para se passar por outra pessoa",
+        label: "Apresentar como seu um texto da IA que você não entende bem",
       },
     ],
     correctAnswer: "m1q37_a",
-    topic: "Ética e Uso Responsável",
+    topic: "Honestidade acadêmica",
     difficulty: "fácil",
-    source: "Guia: Anatomia de um Prompt",
+    source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "A IA é apoio: revise, acrescente valor próprio e seja transparente sobre o uso.",
+      "Pedir explicações e exemplos ajuda você a aprender, e o texto final continua sendo seu. Entregar uma redação da IA mesmo depois de lê-la, responder uma prova com ela ou apresentar como seu o que você não entende engana quem avalia e prejudica sua formação. Revise o guia de ética, seção 3.",
   },
   {
     id: "m1q38",
@@ -299,11 +302,11 @@ export const MODULE_1_PT_PART3 = [
       },
       {
         id: "m1q39_c",
-        label: "Proibida pelas ferramentas usadas",
+        label: "Pouco útil: cada ajuste confunde mais a IA",
       },
       {
         id: "m1q39_d",
-        label: "Opcional, só se a primeira resposta sair errada",
+        label: "Desnecessária se o prompt segue a fórmula RTF",
       },
     ],
     correctAnswer: "m1q39_a",
@@ -311,7 +314,7 @@ export const MODULE_1_PT_PART3 = [
     difficulty: "médio",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Iterar é normal e eficaz: cada ajuste aproxima a resposta do que você precisa.",
+      "Iterar é normal e eficaz: cada ajuste aproxima a resposta do que você precisa, mesmo quando você já usou a fórmula RTF.",
   },
   {
     id: "m1q40",
@@ -373,7 +376,7 @@ export const MODULE_1_PT_PART3 = [
     difficulty: "médio",
     source: "OVA: O Espelho da Verdade",
     feedback:
-      "Os dados históricos refletiam uma contratação passada majoritariamente masculina: o viés vem dos dados,. Reveja a atividade O Espelho da Verdade.",
+      "Os dados históricos refletiam uma contratação passada majoritariamente masculina: o viés vem dos dados. Reveja a atividade O Espelho da Verdade.",
   },
   {
     id: "m1e02",
@@ -400,7 +403,7 @@ export const MODULE_1_PT_PART3 = [
     correctAnswer: "m1e02_a",
     topic: "Responsabilidade",
     difficulty: "médio",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    source: "Vídeo «Podcast: ética da IA»",
     feedback:
       "Pedir os critérios permite avaliar se a recomendação serve para você. Revise a guia de ética.",
   },

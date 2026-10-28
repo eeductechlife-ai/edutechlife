@@ -59,7 +59,7 @@ export const CONTENT_ES_PART5 = {
         title: "Conoce a Claude: la IA que trabaja contigo",
         description: "Cómo pensar y pedir como un director de orquesta",
         detailedDescription:
-          "Antes de dar instrucciones, conoce el instrumento. Qué es Claude, en qué se diferencia de un buscador, cómo escribir un pedido con objetivo, audiencia y formato, cómo funciona la memoria y cuándo elegir un modelo más rápido o uno más capaz. La memoria se revisa y se ajusta en la configuración; un chat de incógnito no se guarda en el historial ni en la memoria, y solo existe fuera de los Proyectos (centro de ayuda de Claude, verificado en octubre de 2026).",
+          "Antes de dar instrucciones, conoce el instrumento. Qué es Claude, en qué se diferencia de un buscador, cómo escribir un pedido con objetivo, audiencia y formato, cómo funciona la memoria y cuándo elegir un modelo más rápido o uno más capaz. Un buscador te muestra páginas para que leas y compares; Claude redacta una respuesta propia a tu pedido, que puede sonar segura y tener errores o no conocer cambios recientes: confirma los datos clave en una fuente actual. Para tareas simples y repetidas basta un modelo rápido; uno más capaz conviene para textos largos o que exigen razonar. La memoria se revisa y se ajusta en la configuración; un chat de incógnito no se guarda en el historial ni en la memoria, y solo existe fuera de los Proyectos (centro de ayuda de Claude, verificado en octubre de 2026).",
         duration: "20 min",
         format: "Reading",
         icon: "fa-comments",
@@ -72,7 +72,7 @@ export const CONTENT_ES_PART5 = {
         description:
           "De una idea a un documento o una pieza lista para compartir",
         detailedDescription:
-          "Los Artifacts son piezas que ves y editas al lado de la conversación: documentos, gráficos, presentaciones y pequeñas aplicaciones. Aprende a describir el resultado, iterar con ajustes pequeños, comparar versiones y revisar antes de compartir.",
+          "Los Artifacts son piezas que ves y editas al lado de la conversación: documentos, gráficos, presentaciones y pequeñas aplicaciones. Aprende a describir el resultado, iterar con ajustes pequeños, comparar versiones y revisar antes de compartir. Con cifras, pide los pasos del cálculo y comprueba una parte por tu cuenta; después de cada ajuste, revisa que nombres, fechas y lugares sigan bien, y prueba una pieza interactiva con casos cuyo resultado ya conoces antes de compartirla.",
         duration: "25 min",
         format: "Lab",
         icon: "fa-pen-nib",
@@ -84,7 +84,7 @@ export const CONTENT_ES_PART5 = {
         title: "Delega con Claude: Proyectos, conectores y Skills",
         description: "Trabajo recurrente sin perder el control",
         detailedDescription:
-          "Un Proyecto guarda el contexto de un trabajo; los conectores dan acceso a tus herramientas con permisos que apruebas; una Skill reutiliza un procedimiento; las tareas programadas automatizan lo recurrente. Delegar es definir el objetivo, los límites y la revisión: la decisión final sigue siendo tuya.",
+          "Un Proyecto guarda el contexto de un trabajo; los conectores dan acceso a tus herramientas con permisos que apruebas, y puedes desconectarlos cuando ya no los necesites; una Skill reutiliza un procedimiento; las tareas programadas automatizan lo recurrente. Delegar es definir el objetivo, los límites y la revisión: la decisión final sigue siendo tuya. Al entregar, declara cómo usaste la IA y quién responde por el contenido.",
         duration: "30 min",
         format: "Video",
         icon: "fa-diagram-project",

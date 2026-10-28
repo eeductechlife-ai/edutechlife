@@ -22,7 +22,10 @@
       "path": "/ialab-academic",
       "modules": [
         { "name": "Artesano Digital: Prompts", "lessons": 12 },
-        { "name": "Arquitecto Digital: ChatGPT (GPTs y Function Calling)", "lessons": 15 },
+        {
+          "name": "Arquitecto Digital: ChatGPT (GPTs y Function Calling)",
+          "lessons": 15
+        },
         { "name": "Detective de Datos: Gemini (Deep Research)", "lessons": 10 },
         { "name": "Alquimista Digital: NotebookLM", "lessons": 8 },
         { "name": "Guardián Digital: Ética de la IA", "lessons": 6 }
@@ -113,14 +116,38 @@
     "socialMedia": "Redes sociales oficiales de EdutechLife"
   },
   "faq": [
-    { "q": "¿Qué es EdutechLife?", "a": "EdutechLife es una compañía que aplica pedagogía e inteligencia artificial para mejorar el proceso educativo. Nuestro método: ADN de Aprendizaje (diagnóstico VAK) potenciado con IA. Productos principales: IALab (curso de IA con MAX), IngenIA para niños y jóvenes, el ADN de Aprendizaje gratuito e IA para empresas. No enseñamos programación ni robótica." },
-    { "q": "¿Qué es IALab / AI Lab?", "a": "Es el curso de IA de EdutechLife (AI Lab Academic). Son 5 módulos prácticos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA), guiados por MAX, el coach IA. Incluye laboratorios, examen y certificado." },
-    { "q": "¿Qué es IngenIA?", "a": "IngenIA es el espacio de EdutechLife para niños y jóvenes (6-16 años): acompañamiento académico y emocional con el tutor virtual Dani, misiones, diagnóstico VAK y reportes para los padres." },
-    { "q": "¿Cómo funciona el Diagnóstico VAK?", "a": "Es gratuito y 100% online: identifica tu estilo de aprendizaje (Visual, Auditivo o Kinestésico). Toma 10-30 minutos y entrega recomendaciones personalizadas." },
-    { "q": "¿Cuánto cuesta y en qué moneda?", "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito e IngenIA tiene 7 días de prueba sin tarjeta. Para el valor vigente de cada plan escribe por WhatsApp +57 323 836 5517." },
-    { "q": "¿Cómo funciona el coaching con MAX?", "a": "MAX es el coach de IA de IALab: responde sobre el curso, guía laboratorios, explica conceptos y da ejemplos prácticos, por texto o voz." },
-    { "q": "¿Cómo usan la IA para mejorar el aprendizaje?", "a": "La IA es una herramienta al servicio de la pedagogía: el ADN de Aprendizaje identifica cómo aprende cada estudiante y la IA (coach MAX en IALab y tutor Dani en IngenIA) acompaña, organiza el estudio y personaliza el contenido. No enseñamos programación ni robótica." },
-    { "q": "¿Cómo me inscribo?", "a": "Empieza con el diagnóstico VAK gratuito o escribe por WhatsApp +57 323 836 5517. Un asesor te guía y resuelve tus dudas." }
+    {
+      "q": "¿Qué es EdutechLife?",
+      "a": "EdutechLife es una compañía que aplica pedagogía e inteligencia artificial para mejorar el proceso educativo. Nuestro método: ADN de Aprendizaje (diagnóstico VAK) potenciado con IA. Productos principales: IALab (curso de IA con MAX), IngenIA para niños y jóvenes, el ADN de Aprendizaje gratuito e IA para empresas. No enseñamos programación ni robótica."
+    },
+    {
+      "q": "¿Qué es IALab / AI Lab?",
+      "a": "Es el curso de IA de EdutechLife (AI Lab Academic). Son 5 módulos prácticos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA), guiados por MAX, el coach IA. Incluye laboratorios, examen y certificado."
+    },
+    {
+      "q": "¿Qué es IngenIA?",
+      "a": "IngenIA es el espacio de EdutechLife para niños y jóvenes (6-16 años): acompañamiento académico y emocional con el tutor virtual Dani, misiones, diagnóstico VAK y reportes para los padres."
+    },
+    {
+      "q": "¿Cómo funciona el Diagnóstico VAK?",
+      "a": "Es gratuito y 100% online: identifica tu estilo de aprendizaje (Visual, Auditivo o Kinestésico). Toma 10-30 minutos y entrega recomendaciones personalizadas."
+    },
+    {
+      "q": "¿Cuánto cuesta y en qué moneda?",
+      "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito e IngenIA tiene 7 días de prueba sin tarjeta. Para el valor vigente de cada plan escribe por WhatsApp +57 323 836 5517."
+    },
+    {
+      "q": "¿Cómo funciona el coaching con MAX?",
+      "a": "MAX es el coach de IA de IALab: responde sobre el curso, guía laboratorios, explica conceptos y da ejemplos prácticos, por texto o voz."
+    },
+    {
+      "q": "¿Cómo usan la IA para mejorar el aprendizaje?",
+      "a": "La IA es una herramienta al servicio de la pedagogía: el ADN de Aprendizaje identifica cómo aprende cada estudiante y la IA (coach MAX en IALab y tutor Dani en IngenIA) acompaña, organiza el estudio y personaliza el contenido. No enseñamos programación ni robótica."
+    },
+    {
+      "q": "¿Cómo me inscribo?",
+      "a": "Empieza con el diagnóstico VAK gratuito o escribe por WhatsApp +57 323 836 5517. Un asesor te guía y resuelve tus dudas."
+    }
   ],
   "sales_scripts": {
     "qualification": {

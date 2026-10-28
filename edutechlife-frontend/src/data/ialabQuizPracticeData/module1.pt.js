@@ -11,35 +11,49 @@ export const MODULE_1_PT = [
     correctAnswer: "pp-m1-1_c",
     topic: "RTF",
     difficulty: "easy",
-    feedback: "RTF são Papel, Tarefa e Formato. O papel indica de qual perspectiva a IA deve responder.",
+    feedback:
+      "RTF são Papel, Tarefa e Formato. O papel indica de qual perspectiva a IA deve responder.",
   },
   {
     id: "pp-m1-2",
     question: "Por que vale a pena dar contexto em um prompt?",
     options: [
       { id: "pp-m1-2_a", label: "Para que a resposta fique mais longa" },
-      { id: "pp-m1-2_b", label: "Para que a IA adivinhe menos o público e o objetivo" },
+      {
+        id: "pp-m1-2_b",
+        label: "Para que a IA adivinhe menos o público e o objetivo",
+      },
       { id: "pp-m1-2_c", label: "Para gastar mais tokens" },
-      { id: "pp-m1-2_d", label: "Porque a IA não consegue responder sem contexto" },
+      {
+        id: "pp-m1-2_d",
+        label: "Porque a IA não consegue responder sem contexto",
+      },
     ],
     correctAnswer: "pp-m1-2_b",
     topic: "Contexto",
     difficulty: "easy",
-    feedback: "O contexto reduz suposições: o modelo sabe para quem é e para que serve o resultado.",
+    feedback:
+      "O contexto reduz suposições: o modelo sabe para quem é e para que serve o resultado.",
   },
   {
     id: "pp-m1-3",
-    question: "Você recebeu uma resposta fraca. Qual é a melhor forma de melhorá-la?",
+    question:
+      "Você recebeu uma resposta fraca. Qual é a melhor forma de melhorá-la?",
     options: [
       { id: "pp-m1-3_a", label: "Refazer o prompt do zero sem mudar nada" },
-      { id: "pp-m1-3_b", label: "Acrescentar o elemento que faltou e comparar com a versão anterior" },
+      {
+        id: "pp-m1-3_b",
+        label:
+          "Acrescentar o elemento que faltou e comparar com a versão anterior",
+      },
       { id: "pp-m1-3_c", label: "Pedir à IA que seja mais inteligente" },
       { id: "pp-m1-3_d", label: "Aceitar a resposta se ela for curta" },
     ],
     correctAnswer: "pp-m1-3_b",
     topic: "Iteração",
     difficulty: "medium",
-    feedback: "Mudar uma coisa por vez mostra o que de fato melhorou o resultado.",
+    feedback:
+      "Mudar uma coisa por vez mostra o que de fato melhorou o resultado.",
   },
   {
     id: "pp-m1-4",
@@ -47,17 +61,22 @@ export const MODULE_1_PT = [
     options: [
       { id: "pp-m1-4_a", label: "Um texto de exemplo sem dados pessoais" },
       { id: "pp-m1-4_b", label: "Um rascunho seu" },
-      { id: "pp-m1-4_c", label: "Um CPF, uma senha ou um número de conta bancária" },
+      {
+        id: "pp-m1-4_c",
+        label: "Um CPF, uma senha ou um número de conta bancária",
+      },
       { id: "pp-m1-4_d", label: "Uma lista de temas de estudo" },
     ],
     correctAnswer: "pp-m1-4_c",
     topic: "Privacidade",
     difficulty: "easy",
-    feedback: "Documentos de identidade, senhas e dados financeiros nunca devem ser compartilhados com uma ferramenta de IA.",
+    feedback:
+      "Documentos de identidade, senhas e dados financeiros nunca devem ser compartilhados com uma ferramenta de IA.",
   },
   {
     id: "pp-m1-5",
-    question: "Antes de usar um dado gerado pela IA em um trabalho, o que você deve fazer?",
+    question:
+      "Antes de usar um dado gerado pela IA em um trabalho, o que você deve fazer?",
     options: [
       { id: "pp-m1-5_a", label: "Compartilhá-lo como está" },
       { id: "pp-m1-5_b", label: "Verificá-lo em uma fonte original" },
@@ -67,34 +86,44 @@ export const MODULE_1_PT = [
     correctAnswer: "pp-m1-5_b",
     topic: "Verificação",
     difficulty: "easy",
-    feedback: "A IA pode errar com segurança: a checagem é feita na fonte original.",
+    feedback:
+      "A IA pode errar com segurança: a checagem é feita na fonte original.",
   },
   {
     id: "pp-m1-6",
     question: "O que significa declarar o uso da IA?",
     options: [
       { id: "pp-m1-6_a", label: "Esconder que você a usou" },
-      { id: "pp-m1-6_b", label: "Dizer quando e como foi usada, e o que você revisou" },
+      {
+        id: "pp-m1-6_b",
+        label: "Dizer quando e como foi usada, e o que você revisou",
+      },
       { id: "pp-m1-6_c", label: "Pagar uma licença especial" },
       { id: "pp-m1-6_d", label: "Usá-la apenas em inglês" },
     ],
     correctAnswer: "pp-m1-6_b",
     topic: "Transparência",
     difficulty: "easy",
-    feedback: "A transparência gera confiança: explica-se o uso e a parte que a pessoa revisou.",
+    feedback:
+      "A transparência gera confiança: explica-se o uso e a parte que a pessoa revisou.",
   },
   {
     id: "pp-m1-7",
-    question: "Um estudante entrega uma redação escrita quase toda pela IA. Qual é o problema principal?",
+    question:
+      "Um estudante entrega uma redação escrita quase toda pela IA. Qual é o problema principal?",
     options: [
       { id: "pp-m1-7_a", label: "A IA escreve mal" },
       { id: "pp-m1-7_b", label: "A redação é muito curta" },
-      { id: "pp-m1-7_c", label: "Não há aprendizado próprio nem honestidade acadêmica" },
+      {
+        id: "pp-m1-7_c",
+        label: "Não há aprendizado próprio nem honestidade acadêmica",
+      },
       { id: "pp-m1-7_d", label: "Não foi usado um editor de texto" },
     ],
     correctAnswer: "pp-m1-7_c",
     topic: "Honestidade acadêmica",
     difficulty: "medium",
-    feedback: "O problema central é que o estudante não aprende nem representa o próprio trabalho.",
+    feedback:
+      "O problema central é que o estudante não aprende nem representa o próprio trabalho.",
   },
 ];

@@ -26,36 +26,36 @@ export const MODULE_4_PT_PART1 = [
     difficulty: "médio",
     source: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
     feedback:
-      "O Gemini Notebook responde a partir dos seus documentos e cita a fonte. Veja o vídeo de primeiros passos.",
+      "O Gemini Notebook responde a partir dos seus documentos e cita a fonte. Veja no vídeo «Guia completo do NotebookLM: aproveite ao máximo (2026)».",
   },
   {
     id: "m4q2",
     question:
-      "Você tem artigos, notícias, blogs e dados sobre um tema. Quais fontes você prioriza no seu caderno?",
+      "Você pesquisa o cultivo de café em Caldas e tem duas fontes confiáveis: um estudo sobre café no Brasil e um relatório sobre Caldas. Qual você prioriza?",
     options: [
       {
         id: "m4q2_a",
-        label: "Artigos revisados e dados confiáveis",
+        label: "O relatório sobre Caldas, porque responde à sua pergunta",
       },
       {
         id: "m4q2_b",
-        label: "Todas as fontes porque há espaço de sobra",
+        label: "O estudo do Brasil, porque o Brasil produz mais café",
       },
       {
         id: "m4q2_c",
-        label: "Só os blogs pela linguagem simples",
+        label: "O que tiver mais páginas, porque traz mais dados",
       },
       {
         id: "m4q2_d",
-        label: "Só as notícias por serem as mais recentes",
+        label: "Os dois por igual, porque ambos são confiáveis",
       },
     ],
     correctAnswer: "m4q2_a",
-    topic: "Gemini Notebook",
+    topic: "Curadoria",
     difficulty: "médio",
     source: "Guia do Gemini Notebook",
     feedback:
-      "A qualidade das fontes define a qualidade das respostas. Escolha fontes confiáveis e relevantes.",
+      "Além de confiável, uma fonte precisa ser relevante para a sua pergunta. O relatório de Caldas trata do que você pesquisa; o estudo do Brasil pode dar contexto, mas não é a base.",
   },
   {
     id: "m4q3",
@@ -82,30 +82,31 @@ export const MODULE_4_PT_PART1 = [
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
     difficulty: "médio",
-    source: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
+    source:
+      "Guia completo do NotebookLM do Google: pesquise e estude sem alucinações de IA",
     feedback:
-      "O Audio Overview transforma seus documentos em um podcast para revisar sem ler. Veja o vídeo.",
+      "O Audio Overview transforma seus documentos em um podcast para revisar sem ler. Veja no vídeo «Guia completo do NotebookLM do Google: pesquise e estude sem alucinações de IA».",
   },
   {
     id: "m4q4",
     question:
-      "O Gemini Notebook cita o seu PDF e você lê o texto original. O que convém fazer?",
+      "Um colega diz: «O Gemini Notebook responde com os meus documentos, então não preciso mais revisar nada». O que você responde?",
     options: [
       {
         id: "m4q4_a",
-        label: "Confiar na citação se o PDF tiver boa formatação",
+        label: "Ele tem razão se os documentos forem confiáveis",
       },
       {
         id: "m4q4_b",
-        label: "Apagar o PDF e pedir a resposta de novo",
+        label: "Ele tem razão desde que a resposta traga citações",
       },
       {
         id: "m4q4_c",
-        label: "Traduzir a citação e comparar com a tradução",
+        label: "Só é preciso revisar quando duas fontes se contradizem",
       },
       {
         id: "m4q4_d",
-        label: "Comparar a citação com o texto original do PDF que você subiu",
+        label: "Usar suas fontes reduz o erro, mas não o elimina",
       },
     ],
     correctAnswer: "m4q4_d",
@@ -113,7 +114,7 @@ export const MODULE_4_PT_PART1 = [
     difficulty: "difícil",
     source: "Guia do Gemini Notebook",
     feedback:
-      "Comparar a citação com o texto original confirma que o dado está lá e que diz o que se afirma.",
+      "Responder a partir dos seus documentos reduz o risco de erro, mas não o elimina. Nem as citações nem boas fontes garantem que a resposta diga o mesmo que o documento: abra a citação e confira.",
   },
   {
     id: "m4q5",
@@ -129,7 +130,7 @@ export const MODULE_4_PT_PART1 = [
       },
       {
         id: "m4q5_c",
-        label: "Só com a data de hoje",
+        label: "Só com a data de hoje, sem mais dados",
       },
       {
         id: "m4q5_d",
@@ -145,60 +146,61 @@ export const MODULE_4_PT_PART1 = [
   },
   {
     id: "m4q6",
-    question: "Duas fontes se contradizem. O que você faz?",
+    question:
+      "Você vai criar um Audio Overview de 5 artigos técnicos para pais sem formação no tema. O que você faz?",
     options: [
       {
         id: "m4q6_a",
-        label: "Analiso as duas fontes com cuidado e explico a diferença",
+        label: "Pede um tom de conversa casual, com exemplos",
       },
       {
         id: "m4q6_b",
-        label: "Apago as duas fontes e busco outras sem lê-las",
+        label: "Pede um tom acadêmico profundo, para não perder rigor",
       },
       {
         id: "m4q6_c",
-        label: "Fico só com a mais recente, sem comparar",
+        label: "Remove os artigos mais técnicos para soar simples",
       },
       {
         id: "m4q6_d",
-        label: "Ignoro a contradição porque o resumo já ficou bom",
+        label: "Deixa o tom que sair, porque o público não influi",
       },
     ],
     correctAnswer: "m4q6_a",
-    topic: "Análise Crítica",
+    topic: "Audio Overview",
     difficulty: "difícil",
-    source: "Guia do Gemini Notebook",
+    source: "Guia: Áudio e documentos com ordem",
     feedback:
-      "Uma contradição se resolve lendo as duas fontes e explicando a diferença. Descartar ou ignorar uma fonte não resolve.",
+      "A lição mostra que você pode escolher o tom: acadêmico ou casual. Para um público sem formação no tema, a conversa casual com exemplos é mais fácil de entender, e as fontes técnicas ficam como respaldo. Confira na sua conta como orientar o áudio.",
   },
   {
     id: "m4q7",
     question:
-      "O que você deve sempre fazer quando o Gemini Notebook responde com citações?",
+      "Você tem prova e suas anotações já estão no caderno. O que você pede para estudar?",
     options: [
       {
         id: "m4q7_a",
-        label: "Verificar as citações na original",
+        label: "Um guia de estudo com as ideias-chave e suas citações",
       },
       {
         id: "m4q7_b",
-        label: "Copiar a resposta sem conferir",
+        label: "Um resumo de um chat geral sobre o mesmo tema",
       },
       {
         id: "m4q7_c",
-        label: "Apagar os documentos originais",
+        label: "Uma cópia das suas anotações em outro formato",
       },
       {
         id: "m4q7_d",
-        label: "Traduzir a resposta para validá-la",
+        label: "Uma lista de temas, sem explicação nem fontes",
       },
     ],
     correctAnswer: "m4q7_a",
-    topic: "Verificação",
+    topic: "Resumos",
     difficulty: "médio",
-    source: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
+    source: "Guia do Gemini Notebook",
     feedback:
-      "A IA é sua assistente, mas você é o responsável final. Reveja a guia do módulo.",
+      "Um guia de estudo com as ideias-chave e suas citações ajuda você a revisar e permite conferir cada ponto nas suas anotações. Um chat geral não usa suas fontes, e uma cópia ou uma lista sem explicação não organizam o essencial. Revise o «Guia do Gemini Notebook».",
   },
   {
     id: "m4q8",
@@ -207,7 +209,7 @@ export const MODULE_4_PT_PART1 = [
     options: [
       {
         id: "m4q8_a",
-        label: "Um caderno compartilhado que a equipe edita",
+        label: "Um caderno compartilhado com a equipe",
       },
       {
         id: "m4q8_b",
@@ -227,7 +229,7 @@ export const MODULE_4_PT_PART1 = [
     difficulty: "médio",
     source: "Guia do Gemini Notebook",
     feedback:
-      "O Gemini Notebook permite compartilhar cadernos como no Google Docs. Reveja o guia de Gemini Notebook.",
+      "Um caderno compartilhado reúne as mesmas fontes para toda a equipe: todos perguntam sobre os mesmos documentos e ninguém trabalha com versões diferentes. Confira na sua conta como compartilhá-lo.",
   },
   {
     id: "m4q9",
@@ -256,7 +258,7 @@ export const MODULE_4_PT_PART1 = [
     difficulty: "médio",
     source: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
     feedback:
-      "Perguntas específicas com citações evitam ler tudo. Reveja o vídeo de primeiros passos.",
+      "Uma pergunta específica que pede as citações traz só o que você procura e permite conferir, sem ler tudo. Veja no vídeo «Guia completo do NotebookLM: aproveite ao máximo (2026)».",
   },
   {
     id: "m4q10",
@@ -285,7 +287,7 @@ export const MODULE_4_PT_PART1 = [
     difficulty: "fácil",
     source: "Guia do Gemini Notebook",
     feedback:
-      "O Audio Overview é conversacional e pode ser regerado ou orientado. Reveja o vídeo do módulo.",
+      "Você não escreve o roteiro, mas pode orientar o áudio e gerá-lo de novo se não servir. Confira na sua conta quais opções a sua versão tem e veja no vídeo «Guia completo do NotebookLM do Google: pesquise e estude sem alucinações de IA».",
   },
   {
     id: "m4q11",
@@ -318,31 +320,32 @@ export const MODULE_4_PT_PART1 = [
   },
   {
     id: "m4q12",
-    question: "O que o Gemini Notebook precisa para responder de forma útil?",
+    question:
+      "Você já agrupou suas fontes por tema. O que acrescenta a cada grupo para que o caderno as use melhor?",
     options: [
       {
         id: "m4q12_a",
-        label: "Fontes de qualidade carregadas e organizadas por tema",
+        label: "Uma nota de contexto sobre o que o grupo traz",
       },
       {
         id: "m4q12_b",
-        label: "Uma pergunta muito longa sem nenhum documento carregado",
+        label: "Uma cópia extra de cada documento do grupo",
       },
       {
         id: "m4q12_c",
-        label: "Desativar as citações para ele responder mais criativo",
+        label: "Um título em maiúsculas para destacá-lo",
       },
       {
         id: "m4q12_d",
-        label: "Mudar o idioma do caderno antes de fazer a pergunta",
+        label: "Mais documentos do tema, mesmo sem tê-los lido",
       },
     ],
     correctAnswer: "m4q12_a",
-    topic: "Gemini Notebook",
+    topic: "Curadoria",
     difficulty: "fácil",
-    source: "Guia do Gemini Notebook",
+    source: "A arte da curadoria de fontes",
     feedback:
-      "A qualidade das suas fontes determina a qualidade das respostas. Revise a guia.",
+      "No exemplo de curadoria da lição, cada grupo de fontes tem uma nota de contexto que explica o que ele traz. Esse contexto organiza o caderno; cópias, títulos chamativos ou mais documentos não lidos não o oferecem.",
   },
   {
     id: "m4q13",
@@ -354,12 +357,11 @@ export const MODULE_4_PT_PART1 = [
       },
       {
         id: "m4q13_b",
-        label: "É o primeiro resultado da busca",
+        label: "É o primeiro resultado que o buscador mostra",
       },
       {
         id: "m4q13_c",
-        label:
-          "Autor identificável, data e referências que possam ser conferidas",
+        label: "Autor identificável, data e referências verificáveis",
       },
       {
         id: "m4q13_d",
@@ -369,7 +371,7 @@ export const MODULE_4_PT_PART1 = [
     correctAnswer: "m4q13_c",
     topic: "Curadoria",
     difficulty: "fácil",
-    source: "O Grimório",
+    source: "Guia do Gemini Notebook",
     feedback:
       "Autor, data e referências podem ser conferidos. Visitas, ordem da busca ou tom não provam nada.",
   },
@@ -400,6 +402,6 @@ export const MODULE_4_PT_PART1 = [
     difficulty: "médio",
     source: "Gemini Notebook: o caderno do futuro",
     feedback:
-      "Menos ruído, melhores respostas: priorize relevância e confiabilidade. Revise o infográfico.",
+      "Menos ruído, melhores respostas: priorize relevância e confiabilidade. Revise o guia do Gemini Notebook.",
   },
 ];

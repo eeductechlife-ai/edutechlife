@@ -1,60 +1,61 @@
 export const MODULE_3_PART1 = [
   {
     id: "m3q1",
-    question: "¿Qué hace la herramienta Deep Research de Gemini?",
+    question:
+      "Antes de empezar, Deep Research te muestra su plan de investigación. ¿Qué haces?",
     options: [
       {
         id: "m3q1_a",
-        label: "Investiga a fondo y arma informes con fuentes",
+        label: "Lo reviso y ajusto lo que sobra o falta",
       },
       {
         id: "m3q1_b",
-        label: "Hace búsquedas rápidas y superficiales en Google",
+        label: "Lo apruebo de una vez para ganar tiempo",
       },
       {
         id: "m3q1_c",
-        label: "Convierte cualquier pregunta en un juego",
+        label: "Le pido que haga el plan más largo",
       },
       {
         id: "m3q1_d",
-        label: "Instala extensiones nuevas en tu navegador",
+        label: "Lo cancelo y pido un resumen corto",
       },
     ],
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "fácil",
-    source:
-      "Investigación académica con IA en minutos: Gemini y Deep Research sin perder rigor",
+    source: "Guía: Deep Research paso a paso",
     feedback:
-      "Deep Research investiga en varias fuentes y entrega un informe con citas. Míralo en el video de casos reales.",
+      "El plan muestra qué va a buscar. Revisarlo y ajustarlo antes de que empiece evita un informe que no responde tu pregunta. Repasa la Guía: Deep Research paso a paso.",
   },
   {
     id: "m3q2",
-    question: "¿Por qué conviene verificar las fuentes que cita Gemini?",
+    question:
+      "Vas a pedirle a Gemini que lea la foto de un tablero lleno de notas. ¿Qué haces primero?",
     options: [
       {
         id: "m3q2_a",
-        label: "Para confirmar fuentes y datos",
+        label: "Tomo una foto nítida y le digo qué es",
       },
       {
         id: "m3q2_b",
-        label: "Porque las citas de Gemini siempre son falsas",
+        label: "Subo la foto como salió y pido que la lea",
       },
       {
         id: "m3q2_c",
-        label: "Porque Gemini no cita",
+        label: "Subo varias fotos parecidas para que elija",
       },
       {
         id: "m3q2_d",
-        label: "Porque las fuentes solo sirven en otro idioma",
+        label: "Le pido que complete lo que no se lee bien",
       },
     ],
     correctAnswer: "m3q2_a",
-    topic: "Verificación de Fuentes",
+    topic: "Multimodalidad",
     difficulty: "medio",
-    source: "El Espejo de la Verdad",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Gemini puede equivocarse o citar mal: abrir la fuente confirma si el dato existe y dice lo que afirma.",
+      "Una foto nítida y una frase de contexto le dan a Gemini pistas claras. Con evidencia borrosa o sin contexto, la lectura puede fallar.",
   },
   {
     id: "m3q3",
@@ -143,90 +144,89 @@ export const MODULE_3_PART1 = [
   {
     id: "m3q6",
     question:
-      "Un gráfico aparece en la pantalla de una reunión y no alcanzas a leer las cifras. ¿Qué le pides a Gemini?",
+      "Necesitas que Gemini revise el diagrama de un proceso de tu trabajo. ¿Qué pedido es mejor?",
     options: [
       {
         id: "m3q6_a",
-        label: "Que señale de dónde sale cada cifra y que la abras",
+        label: "Analízalo como auditor: pasos, fallas y prioridades",
       },
       {
         id: "m3q6_b",
-        label: "Que te diga la cifra sin mostrar nada",
+        label: "Analiza este diagrama y dime qué opinas",
       },
       {
         id: "m3q6_c",
-        label: "Que cambie la cifra por otra parecida",
+        label: "Describe con detalle todo lo que ves en el diagrama",
       },
       {
         id: "m3q6_d",
-        label: "Que lo deje para después sin revisarlo",
+        label: "Dime si el diagrama está bien o está mal",
       },
     ],
     correctAnswer: "m3q6_a",
-    topic: "Video y audio con Gemini",
+    topic: "Multimodalidad",
     difficulty: "medio",
-    source: "La Lupa Multimodal",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Pedir el origen de cada cifra permite abrir la fuente y comprobarla. Una cifra sin origen no se usa.",
+      "Decir qué análisis necesitas y desde qué rol orienta a Gemini hacia lo que te sirve. «Analiza esto» o «describe todo» dejan el análisis sin dirección.",
   },
   {
     id: "m3q7",
     question:
-      "Debes investigar tendencias de IA para un informe. ¿Qué flujo de trabajo da el mejor resultado verificable?",
+      "Necesitas la cifra oficial de desempleo de Colombia. ¿Cuál es la fuente primaria?",
     options: [
       {
         id: "m3q7_a",
-        label: "Deep Research y luego verificar cada fuente",
+        label: "El boletín del DANE que publicó la cifra",
       },
       {
         id: "m3q7_b",
-        label: "Preguntar una vez y aceptar la primera respuesta",
+        label: "Una noticia que cita el boletín del DANE",
       },
       {
         id: "m3q7_c",
-        label: "Copiar los primeros resultados de Google",
+        label: "El resumen de Gemini sobre el boletín",
       },
       {
         id: "m3q7_d",
-        label: "Pedir un resumen sin solicitar fuentes",
+        label: "Un blog de economía que comenta la cifra",
       },
     ],
     correctAnswer: "m3q7_a",
     topic: "Investigación Profesional",
     difficulty: "medio",
-    source:
-      "Investigación académica con IA en minutos: Gemini y Deep Research sin perder rigor",
+    source: "Guía: Deep Research paso a paso",
     feedback:
-      "Combina Deep Research con verificación de fuentes. Míralo en el video de casos reales.",
+      "La fuente primaria es quien produjo el dato, en este caso el DANE. Una noticia, un blog o un resumen solo lo comentan. Repasa la Guía: Deep Research paso a paso.",
   },
   {
     id: "m3q8",
     question:
-      "Un periodista tiene dos horas para una nota con datos. ¿Qué prioriza?",
+      "Tu informe ejecutivo incluye una proyección de mercado a tres años. ¿Cómo la presentas?",
     options: [
       {
         id: "m3q8_a",
-        label: "La cantidad de datos, aunque no pueda verificarlos",
+        label: "Como estimación, con la fuente en que se basa",
       },
       {
         id: "m3q8_b",
-        label: "Publicar rápido y corregir después si alguien avisa",
+        label: "Como un hecho, porque la calculó Deep Research",
       },
       {
         id: "m3q8_c",
-        label: "Los datos que puede verificar con fuentes que puede abrir",
+        label: "Como dato exacto, con las cifras redondeadas",
       },
       {
         id: "m3q8_d",
-        label: "Un titular llamativo antes de revisar nada",
+        label: "Como conclusión principal del informe",
       },
     ],
-    correctAnswer: "m3q8_c",
-    topic: "Deep Research",
+    correctAnswer: "m3q8_a",
+    topic: "Investigación Profesional",
     difficulty: "medio",
-    source: "El Espejo de la Verdad",
+    source: "Guía: Deep Research paso a paso",
     feedback:
-      "En una nota, cada dato debe poder comprobarse. La cantidad sin verificación no da credibilidad.",
+      "Una proyección no es un hecho: es una estimación y debe mostrar su fuente. Presentarla como dato exacto o como conclusión confunde a quien decide.",
   },
   {
     id: "m3q9",
@@ -288,31 +288,32 @@ export const MODULE_3_PART1 = [
   },
   {
     id: "m3q11",
-    question: "¿Qué puede hacer Gemini con la foto de un recibo?",
+    question:
+      "Gemini responde tu pregunta de investigación con una explicación general. ¿Qué haces?",
     options: [
       {
         id: "m3q11_a",
-        label: "Enviarlo a tu correo sin que lo veas",
+        label: "Pido detalles, ejemplos y las fuentes de cada punto",
       },
       {
         id: "m3q11_b",
-        label: "Borrarlo de tu teléfono por completo",
+        label: "La uso tal cual, porque responde la pregunta",
       },
       {
         id: "m3q11_c",
-        label: "Leer importes y fecha, y preguntar lo dudoso",
+        label: "Repito la misma pregunta hasta que cambie",
       },
       {
         id: "m3q11_d",
-        label: "Publicarlo en internet con tus datos",
+        label: "Le pido que la escriba más larga y formal",
       },
     ],
-    correctAnswer: "m3q11_c",
-    topic: "Multimodalidad",
+    correctAnswer: "m3q11_a",
+    topic: "Pensamiento Crítico",
     difficulty: "medio",
     source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Gemini lee los datos visibles del recibo y pregunta lo dudoso; no envía ni publica nada sin tu orden.",
+      "La primera respuesta suele ser general. Preguntar por detalles, ejemplos y fuentes te lleva a la segunda capa, donde puedes comprobar cada punto.",
   },
   {
     id: "m3q12",
@@ -344,31 +345,32 @@ export const MODULE_3_PART1 = [
   },
   {
     id: "m3q13",
-    question: "¿Qué pasa si una respuesta de Gemini no tiene fuentes?",
+    question:
+      "Grabaste una entrevista y vas a citar al entrevistado en tu informe. ¿Qué le pides a Gemini?",
     options: [
       {
         id: "m3q13_a",
-        label: "Es confiable porque la IA es muy avanzada",
+        label: "La transcripción, y comparo las citas con el audio",
       },
       {
         id: "m3q13_b",
-        label: "Se puede usar en un informe sin cambios",
+        label: "Un resumen de las ideas para citarlo de ahí",
       },
       {
         id: "m3q13_c",
-        label: "La tratas como hipótesis y la compruebas antes de usarla",
+        label: "Que mejore la redacción de las frases que dijo",
       },
       {
         id: "m3q13_d",
-        label: "Basta con que suene segura y tenga números",
+        label: "Las frases más llamativas de la entrevista",
       },
     ],
-    correctAnswer: "m3q13_c",
-    topic: "Grounding",
+    correctAnswer: "m3q13_a",
+    topic: "Video y audio con Gemini",
     difficulty: "medio",
-    source: "Gemini a la Práctica: Ejercicios de Campo",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Sin fuente, la respuesta es una hipótesis. Antes de usarla, búscala en fuentes que puedas abrir.",
+      "La transcripción te da las palabras exactas, y compararlas con la grabación confirma que la cita es fiel. Un resumen o una frase mejorada ya no es lo que dijo la persona.",
   },
   {
     id: "m3q14",
@@ -395,7 +397,7 @@ export const MODULE_3_PART1 = [
     correctAnswer: "m3q14_a",
     topic: "Verificación de Fuentes",
     difficulty: "medio",
-    source: "El Espejo de la Verdad",
+    source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
       "Verifica abriendo la fuente: una cita con formato no garantiza que el dato sea correcto.",
   },

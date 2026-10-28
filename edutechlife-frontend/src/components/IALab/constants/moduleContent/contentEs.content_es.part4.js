@@ -62,7 +62,7 @@ export const CONTENT_ES_PART4 = {
           "El Alquimista de Documentos: Tu Primer Hechizo con Gemini Notebook",
         description: "Donde los PDFs cobran vida",
         detailedDescription:
-          "Conoce Gemini Notebook, la herramienta de Google que convierte tus PDFs, artículos y apuntes en un asistente personal que responde con citas que puedes verificar. Reduce el riesgo de error, pero no lo elimina: cada afirmación se comprueba con su cita. Es tu bibliotecario con superpoderes.",
+          "Conoce Gemini Notebook, la herramienta de Google que convierte tus PDFs, artículos y apuntes en un asistente personal que responde con citas que puedes verificar. Reduce el riesgo de error, pero no lo elimina: cada afirmación se comprueba con su cita. Si preguntas algo que no está en tus fuentes, agrega una fuente confiable; para ideas generales sin documentos, un chat general sirve más. Es tu bibliotecario con superpoderes.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -74,7 +74,7 @@ export const CONTENT_ES_PART4 = {
         title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
         description: "Calidad sobre cantidad, siempre",
         detailedDescription:
-          "Aprende a seleccionar las mejores fuentes como un joyero elige gemas, organizarlas por temas y conectar ideas entre documentos para crear resúmenes y análisis de nivel profesional.",
+          "Aprende a seleccionar las mejores fuentes como un joyero elige gemas, organizarlas por temas y conectar ideas entre documentos para crear resúmenes y análisis de nivel profesional. Una fuente confiable tiene autor identificable, fecha y referencias que puedes comprobar. Incluye fuentes con distintas posturas, para que tu síntesis no muestre una sola mirada.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -86,7 +86,7 @@ export const CONTENT_ES_PART4 = {
         title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
         description: "Tus documentos hablan por sí solos",
         detailedDescription:
-          "Transforma tus documentos en conversaciones de podcast con dos voces IA. Una experiencia sonora que parece radio profesional. Ideal para aprender mientras te mueves. Gestiona tu biblioteca digital con inteligencia sobrehumana.",
+          "Transforma tus documentos en conversaciones de podcast con dos voces IA. Una experiencia sonora que parece radio profesional. Ideal para aprender mientras te mueves. Gestiona tu biblioteca digital con inteligencia sobrehumana: un cuaderno por proyecto, con un nombre claro, para encontrar todo. Antes de compartir un cuaderno, quita datos personales o sensibles (anonimiza listas de personas) y decide quién puede verlo y quién editarlo.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",

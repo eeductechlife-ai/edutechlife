@@ -6,7 +6,7 @@ export const MODULE_2_EN_PART1 = [
     options: [
       {
         id: "m2q1_a",
-        label: "data analysis for the CSV and Web Search for trends",
+        label: "Data Analysis for the CSV and Web Search for trends",
       },
       {
         id: "m2q1_b",
@@ -26,37 +26,36 @@ export const MODULE_2_EN_PART1 = [
     difficulty: "medium",
     source: "The Toolbox",
     feedback:
-      "data analysis analyzes the CSV and Web Search brings market data. Practice in the activity The Toolbox.",
+      "Data Analysis calculates on the CSV and Web Search brings market data. Practice in the activity The Toolbox.",
   },
   {
     id: "m2q2",
     question:
-      "A law firm wants an assistant to draft contracts with its templates. Which setup is right?",
+      "A law firm uses a Project with its templates to draft contracts. If a contract comes out with an error, who is responsible?",
     options: [
       {
         id: "m2q2_a",
-        label: "Templates in a Project, reviewed by a person",
+        label: "The lawyer who reviewed and signed the contract",
       },
       {
         id: "m2q2_b",
-        label:
-          "A chat with no instructions, with the template pasted each time",
+        label: "OpenAI, because its model drafted the text",
       },
       {
         id: "m2q2_c",
-        label: "Ask it to draft without review, since it already knows the law",
+        label: "Whoever set up the Project with the templates",
       },
       {
         id: "m2q2_d",
-        label: "Copy the first result of a generic internet search",
+        label: "The client, because they agreed to the use of AI",
       },
     ],
     correctAnswer: "m2q2_a",
-    topic: "Custom GPTs",
+    topic: "Accountability",
     difficulty: "medium",
-    source: "Complete ChatGPT Guide",
+    source: "Guide: GPTs, Projects and agents",
     feedback:
-      "A Project keeps templates and instructions for all its chats, and a person reviews the text before it is signed.",
+      "AI prepares the draft, but whoever reviews and signs it is responsible for it. Neither the tool, nor whoever set up the Project, nor the client takes on that responsibility.",
   },
   {
     id: "m2q3",
@@ -73,7 +72,7 @@ export const MODULE_2_EN_PART1 = [
       },
       {
         id: "m2q3_c",
-        label: "It edits your files",
+        label: "ChatGPT changes your files without telling you",
       },
       {
         id: "m2q3_d",
@@ -109,7 +108,7 @@ export const MODULE_2_EN_PART1 = [
       },
     ],
     correctAnswer: "m2q4_a",
-    topic: "Custom GPTs",
+    topic: "Instructions",
     difficulty: "easy",
     source: "Complete ChatGPT Guide",
     feedback:
@@ -118,63 +117,60 @@ export const MODULE_2_EN_PART1 = [
   {
     id: "m2q5",
     question:
-      "A community manager gets many frequently asked questions every day. How do they answer them best?",
+      "You want ChatGPT to work with the documents you already keep in your cloud, without downloading and uploading them each time. What fits best?",
     options: [
       {
         id: "m2q5_a",
-        label: "Replying to each comment by hand with a copied template",
+        label: "A Project with a copy of each document",
       },
       {
         id: "m2q5_b",
-        label:
-          "Letting each customer ask the generic chat without instructions",
+        label: "A plugin that connects that tool to your account",
       },
       {
         id: "m2q5_c",
-        label:
-          "With answers based on the brand's FAQs, a defined tone and human review",
+        label: "The agent, so it downloads them for you each time",
       },
       {
         id: "m2q5_d",
-        label:
-          "Posting the questions online and waiting for other users to answer",
+        label: "A new chat, pasting the text of each document",
       },
     ],
-    correctAnswer: "m2q5_c",
-    topic: "Automation",
+    correctAnswer: "m2q5_b",
+    topic: "Projects, plugins and agents",
     difficulty: "medium",
     source: "The Project Workshop",
     feedback:
-      "An assistant with the brand's FAQs, a defined tone and human review answers quickly without making things up. Answers with no instructions or no review are the mistake.",
+      "A plugin connects ChatGPT with your tools so it works with what you already have there. A Project is for repeated work with files you upload, and the agent is for multi-step tasks. Check in your account which plugins you have available.",
   },
   {
     id: "m2q6",
     question:
-      "A complaints assistant sometimes gives wrong data about returns. What is the most responsible practice?",
+      "A complaints assistant sometimes gives return details you don't recognize. What do you ask for in its instructions so you can check them?",
     options: [
       {
         id: "m2q6_a",
-        label: "Human oversight and alerts when it doubts a data point",
+        label: "To state which file and section each detail comes from",
       },
       {
         id: "m2q6_b",
-        label: "Letting it answer alone, since it is almost always right",
+        label: "To add a final notice saying it may be wrong",
       },
       {
         id: "m2q6_c",
-        label: "Removing the return policies so it does not invent",
+        label: "To explain each answer in more detail",
       },
       {
         id: "m2q6_d",
-        label: "Changing its tone so it sounds more confident",
+        label: "To use a more confident tone about returns",
       },
     ],
     correctAnswer: "m2q6_a",
-    topic: "Responsible Use",
+    topic: "Checking answers",
     difficulty: "medium",
-    source: "Complete ChatGPT Guide",
+    source: "Guide: GPTs, Projects and agents",
     feedback:
-      "Alerts and human oversight stop a wrong data point from reaching the customer.",
+      "If it states which file and section each detail comes from, you can open it and confirm whether your policy says it or it was made up. A general notice, more detail or a more confident tone don't let you check anything.",
   },
   {
     id: "m2q7",
@@ -208,60 +204,60 @@ export const MODULE_2_EN_PART1 = [
   {
     id: "m2q8",
     question:
-      "Your assistant must answer with prices that change every day. What is the least recommended option?",
+      "You must summarize 30 short emails and, separately, analyze a complex contract. How do you choose the model?",
     options: [
       {
         id: "m2q8_a",
-        label: "Checking an updated price source each time",
+        label: "The most powerful one for both, to ensure quality",
       },
       {
         id: "m2q8_b",
-        label: "Leaving the prices fixed in the instructions, never updated",
+        label: "The fast one for both, so as to save time",
       },
       {
         id: "m2q8_c",
-        label: "Showing the date of each price in the answer",
+        label: "The fast one for the emails, the powerful one for the contract",
       },
       {
         id: "m2q8_d",
-        label: "Reviewing the source before giving a figure to the client",
+        label: "The default one, because they all perform the same",
       },
     ],
-    correctAnswer: "m2q8_b",
-    topic: "Custom GPTs",
+    correctAnswer: "m2q8_c",
+    topic: "Models",
     difficulty: "medium",
-    source: "The Project Workshop",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "A figure that changes should not stay fixed in the instructions: it is checked in an updated source and shown with its date.",
+      "The fast model is enough for short summaries and the more powerful one pays off in a complex analysis: the right material for each layer. The most powerful one for everything is slower and doesn't improve the summaries; the fast one for everything falls short on the contract.",
   },
   {
     id: "m2q9",
     question:
-      "You plan to share an assistant you use at work with other people. What do you check first?",
+      "You share a Project with other teachers and want to upload your students' reports, and they are minors. What do you do first?",
     options: [
       {
         id: "m2q9_a",
-        label: "That it does not expose sensitive data",
+        label: "Check who sees the Project and whether my school allows it",
       },
       {
         id: "m2q9_b",
-        label: "The number of stars it has in the public store",
+        label: "Upload them, because my colleagues are teachers too",
       },
       {
         id: "m2q9_c",
-        label: "That it has the biggest logo possible",
+        label: "Upload them and ask ChatGPT not to show them",
       },
       {
         id: "m2q9_d",
-        label: "How many times you used it last week",
+        label: "Upload only this term's reports, so there are fewer",
       },
     ],
     correctAnswer: "m2q9_a",
-    topic: "GPT Privacy",
-    difficulty: "easy",
-    source: "Complete ChatGPT Guide",
+    topic: "Minors' data",
+    difficulty: "medium",
+    source: "Guide: GPTs, Projects and agents",
     feedback:
-      "Before sharing, the first thing is that it does not expose confidential information.",
+      "Minors' data is uploaded only if you know who will be able to see it and your institution authorizes it. Being colleagues does not grant access to that data, asking ChatGPT not to show it does not control who opens the Project, and uploading fewer reports still exposes them.",
   },
   {
     id: "m2q10",
@@ -271,21 +267,21 @@ export const MODULE_2_EN_PART1 = [
       {
         id: "m2q10_a",
         label:
-          "An assistant that sorts the complaints and a person who gets the alert",
+          "An assistant that sorts complaints and answers only urgent ones",
       },
       {
         id: "m2q10_b",
         label:
-          "Letting the assistant reply and close complaints without review",
+          "An assistant that answers all and sends support a weekly summary",
       },
       {
         id: "m2q10_c",
-        label: "A shared document the team reviews whenever it can",
+        label: "A person reviews every complaint and uses AI only for drafting",
       },
       {
         id: "m2q10_d",
         label:
-          "Copying the complaints by hand each morning and answering all alike",
+          "An assistant that sorts the complaints and a person who gets the alert",
       },
     ],
     correctAnswer: "m2q10_d",
@@ -293,7 +289,7 @@ export const MODULE_2_EN_PART1 = [
     difficulty: "hard",
     source: "The Toolbox",
     feedback:
-      "The assistant sorts and alerts fast; a person reviews the reply to an urgent complaint. Closing complaints without review or waiting without an alert are the mistakes.",
+      "Urgent cases need an immediate alert to a person: the assistant sorts and alerts, and support decides. Answering only the urgent ones or summarizing every week leaves the risk unreviewed in time.",
   },
   {
     id: "m2q11",
@@ -309,7 +305,7 @@ export const MODULE_2_EN_PART1 = [
       },
       {
         id: "m2q11_c",
-        label: "A search engine that returns links",
+        label: "A search engine that returns internet links",
       },
       {
         id: "m2q11_d",
@@ -319,38 +315,38 @@ export const MODULE_2_EN_PART1 = [
     correctAnswer: "m2q11_a",
     topic: "ChatGPT Basics",
     difficulty: "easy",
-    source: "ChatGPT from Scratch in 6 Minutes",
+    source: "ChatGPT in practice",
     feedback:
-      "ChatGPT is a conversational model: you give instructions and it generates text. Watch the video.",
+      "ChatGPT is a language model: it generates text from your instructions. Review it in lesson 1 and in the video 'ChatGPT in practice'.",
   },
   {
     id: "m2q12",
     question:
-      "By default, what should you remember about the information ChatGPT gives?",
+      "You asked ChatGPT for an email to your team and it came out too formal. What do you do?",
     options: [
       {
         id: "m2q12_a",
-        label: "It may be outdated; verify critical data first",
+        label: "Tell it that it sounds too formal and ask to adjust only that",
       },
       {
         id: "m2q12_b",
-        label: "It always knows the news",
+        label: "Open a new chat and repeat the same request",
       },
       {
         id: "m2q12_c",
-        label: "It never makes mistakes with exact dates or exact figures",
+        label: "Ask it to generate three other different versions",
       },
       {
         id: "m2q12_d",
-        label: "It only answers with verified links to official public portals",
+        label: "Fix it by hand, because AI can't handle tone",
       },
     ],
     correctAnswer: "m2q12_a",
-    topic: "Models and Capabilities",
+    topic: "Prompts",
     difficulty: "easy",
     source: "Complete ChatGPT Guide",
     feedback:
-      "Without search tools, its knowledge has a cutoff date: verify what matters.",
+      "Telling it what is wrong and asking it to change only that part keeps what was already good. Repeating the request or asking for new versions without saying what to change leaves the result to chance, and AI does adjust the tone if you ask.",
   },
   {
     id: "m2q13",
@@ -372,7 +368,7 @@ export const MODULE_2_EN_PART1 = [
       },
       {
         id: "m2q13_d",
-        label: "To create a custom GPT",
+        label: "To create a custom GPT with its own actions",
       },
     ],
     correctAnswer: "m2q13_a",
@@ -397,7 +393,7 @@ export const MODULE_2_EN_PART1 = [
       },
       {
         id: "m2q14_c",
-        label: "Web search to replace the section",
+        label: "Web Search, to replace that section",
       },
       {
         id: "m2q14_d",

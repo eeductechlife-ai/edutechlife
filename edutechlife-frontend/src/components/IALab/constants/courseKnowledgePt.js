@@ -38,7 +38,7 @@ const COURSE_KNOWLEDGE_PT = [
           },
           {
             type: "ova",
-            title: "O Juramento",
+            title: "A Matéria-Prima",
             estimatedTime: "10 minutos",
           },
         ],
@@ -134,7 +134,7 @@ const COURSE_KNOWLEDGE_PT = [
             duration: "18:45",
           },
           { type: "image", title: "Guia de GPTs e Ações" },
-          { type: "ova", title: "A Fábrica de Assistentes" },
+          { type: "ova", title: "A Oficina de Projetos" },
         ],
       },
     ],

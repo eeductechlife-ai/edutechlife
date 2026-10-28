@@ -59,7 +59,7 @@ export const CONTENT_EN_PART5 = {
         title: "Get to Know Claude: the AI That Works With You",
         description: "How to think and ask like an orchestra conductor",
         detailedDescription:
-          "Before giving instructions, know the instrument. What Claude is, how it differs from a search engine, how to write a request with goal, audience and format, how memory works and when to choose a faster model or a more capable one. Memory is reviewed and adjusted in the settings; an incognito chat is not saved to your history or to memory, and it is only available outside Projects (Claude help center, checked in October 2026).",
+          "Before giving instructions, know the instrument. What Claude is, how it differs from a search engine, how to write a request with goal, audience and format, how memory works and when to choose a faster model or a more capable one. A search engine shows you pages to read and compare; Claude writes its own answer to your request, which can sound confident and still contain errors or miss recent changes: confirm key facts in a current source. A fast model is enough for simple, repetitive tasks; a more capable one is better for long texts or tasks that require reasoning. Memory is reviewed and adjusted in the settings; an incognito chat is not saved to your history or to memory, and it is only available outside Projects (Claude help center, checked in October 2026).",
         duration: "20 min",
         format: "Reading",
         icon: "fa-comments",
@@ -71,7 +71,7 @@ export const CONTENT_EN_PART5 = {
         title: "Create with Claude: Artifacts, Documents and Presentations",
         description: "From an idea to a document or piece ready to share",
         detailedDescription:
-          "Artifacts are pieces you see and edit next to the conversation: documents, charts, presentations and small applications. Learn to describe the result, iterate with small adjustments, compare versions and review before sharing.",
+          "Artifacts are pieces you see and edit next to the conversation: documents, charts, presentations and small applications. Learn to describe the result, iterate with small adjustments, compare versions and review before sharing. With figures, ask for the calculation steps and check part of it yourself; after each adjustment, check that names, dates and places are still right, and test an interactive piece with cases whose result you already know before sharing it.",
         duration: "25 min",
         format: "Lab",
         icon: "fa-pen-nib",
@@ -83,7 +83,7 @@ export const CONTENT_EN_PART5 = {
         title: "Delegate with Claude: Projects, Connectors and Skills",
         description: "Recurring work without losing control",
         detailedDescription:
-          "A Project keeps the context of one piece of work; connectors give access to your tools with permissions you approve; a Skill reuses a procedure; scheduled tasks automate recurring work. Delegating means defining the goal, the limits and the review: the final decision is still yours.",
+          "A Project keeps the context of one piece of work; connectors give access to your tools with permissions you approve, and you can disconnect them when you no longer need them; a Skill reuses a procedure; scheduled tasks automate recurring work. Delegating means defining the goal, the limits and the review: the final decision is still yours. When you deliver, disclose how you used AI and who answers for the content.",
         duration: "30 min",
         format: "Video",
         icon: "fa-diagram-project",

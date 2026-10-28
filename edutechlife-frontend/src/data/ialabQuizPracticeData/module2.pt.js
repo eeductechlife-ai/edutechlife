@@ -154,8 +154,7 @@ export const MODULE_2_PT = [
   },
   {
     id: "pp-m2-7",
-    question:
-      "Como você escolhe o modelo adequado para uma tarefa?",
+    question: "Como você escolhe o modelo adequado para uma tarefa?",
     options: [
       {
         id: "pp-m2-7_a",
@@ -168,7 +167,8 @@ export const MODULE_2_PT = [
       },
       {
         id: "pp-m2-7_c",
-        label: "Sempre o mais barato, porque a qualidade é igual em todas as tarefas",
+        label:
+          "Sempre o mais barato, porque a qualidade é igual em todas as tarefas",
       },
       {
         id: "pp-m2-7_d",

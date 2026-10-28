@@ -6,8 +6,7 @@ export const MODULE_2_PART1 = [
     options: [
       {
         id: "m2q1_a",
-        label:
-          "Intérprete de Código para el CSV y Búsqueda Web para tendencias",
+        label: "Análisis de Datos para el CSV y Búsqueda Web para tendencias",
       },
       {
         id: "m2q1_b",
@@ -29,37 +28,36 @@ export const MODULE_2_PART1 = [
     difficulty: "medio",
     source: "La Caja de Herramientas",
     feedback:
-      'El Intérprete de Código analiza el CSV y Búsqueda Web trae datos del mercado. Practica en la actividad "La Caja de Herramientas".',
+      'Análisis de Datos calcula sobre el CSV y Búsqueda Web trae datos del mercado. Practica en la actividad "La Caja de Herramientas".',
   },
   {
     id: "m2q2",
     question:
-      "Un despacho quiere que un asistente redacte contratos con sus modelos. ¿Qué configuración es la adecuada?",
+      "Un despacho usa un Proyecto con sus modelos para redactar contratos. Si un contrato sale con un error, ¿quién responde?",
     options: [
       {
         id: "m2q2_a",
-        label: "Modelos en un Proyecto, con revisión de una persona",
+        label: "El abogado que revisó y firmó el contrato",
       },
       {
         id: "m2q2_b",
-        label: "Un chat sin instrucciones, con el modelo pegado cada vez",
+        label: "OpenAI, porque su modelo redactó el texto",
       },
       {
         id: "m2q2_c",
-        label: "Pedirle que redacte sin revisar, porque ya conoce la ley",
+        label: "Quien armó el Proyecto con los modelos",
       },
       {
         id: "m2q2_d",
-        label:
-          "Copiar el primer resultado de una búsqueda genérica en internet",
+        label: "El cliente, porque aceptó que se usara IA",
       },
     ],
     correctAnswer: "m2q2_a",
-    topic: "GPTs Personalizados",
+    topic: "Responsabilidad",
     difficulty: "medio",
-    source: "Guía Completa de ChatGPT",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "Un Proyecto guarda modelos e instrucciones para todos sus chats, y una persona revisa el texto antes de firmarlo.",
+      "La IA prepara el borrador, pero quien lo revisa y lo firma responde por él. Ni la herramienta, ni quien armó el Proyecto, ni el cliente asumen esa responsabilidad.",
   },
   {
     id: "m2q3",
@@ -112,7 +110,7 @@ export const MODULE_2_PART1 = [
       },
     ],
     correctAnswer: "m2q4_a",
-    topic: "GPTs Personalizados",
+    topic: "Instrucciones",
     difficulty: "fácil",
     source: "Guía Completa de ChatGPT",
     feedback:
@@ -121,63 +119,60 @@ export const MODULE_2_PART1 = [
   {
     id: "m2q5",
     question:
-      "Un community manager recibe muchas preguntas frecuentes al día. ¿Cómo las responde mejor?",
+      "Quieres que ChatGPT trabaje con los documentos que ya tienes en tu nube, sin descargarlos y subirlos cada vez. ¿Qué conviene?",
     options: [
       {
         id: "m2q5_a",
-        label: "Respondiendo cada comentario a mano con una plantilla copiada",
+        label: "Un Proyecto con una copia de cada documento",
       },
       {
         id: "m2q5_b",
-        label:
-          "Dejando que cada cliente pregunte al chat genérico sin instrucciones",
+        label: "Un plugin que conecte esa herramienta a tu cuenta",
       },
       {
         id: "m2q5_c",
-        label:
-          "Con respuestas basadas en las FAQ de la marca, un tono definido y revisión humana",
+        label: "El agente, para que los descargue por ti cada vez",
       },
       {
         id: "m2q5_d",
-        label:
-          "Publicando las preguntas en redes y esperando respuestas de otros usuarios",
+        label: "Un chat nuevo, pegando el texto de cada documento",
       },
     ],
-    correctAnswer: "m2q5_c",
-    topic: "Automatización",
+    correctAnswer: "m2q5_b",
+    topic: "Proyectos, plugins y agentes",
     difficulty: "medio",
     source: "El Taller de Proyectos",
     feedback:
-      "Un asistente con las FAQ de la marca, un tono definido y revisión humana responde rápido sin inventar. Las respuestas sin instrucciones ni revisión son el error.",
+      "Un plugin conecta ChatGPT con tus herramientas para trabajar con lo que ya tienes allí. Un Proyecto sirve para un trabajo repetido con archivos que subes, y el agente, para tareas de varios pasos. Revisa en tu cuenta qué plugins tienes disponibles.",
   },
   {
     id: "m2q6",
     question:
-      "Un asistente de quejas da a veces datos incorrectos sobre devoluciones. ¿Cuál es la mejor práctica responsable?",
+      "Un asistente de quejas a veces da datos de devoluciones que no reconoces. ¿Qué le pides en sus instrucciones para poder comprobarlos?",
     options: [
       {
         id: "m2q6_a",
-        label: "Supervisión humana y alertas cuando dude de un dato",
+        label: "Que diga de qué archivo y sección sale cada dato",
       },
       {
         id: "m2q6_b",
-        label: "Dejarlo responder solo, sin revisar",
+        label: "Que agregue al final un aviso de que puede fallar",
       },
       {
         id: "m2q6_c",
-        label: "Quitar las políticas de devolución para que no invente",
+        label: "Que explique cada respuesta con más detalle",
       },
       {
         id: "m2q6_d",
-        label: "Cambiar el tono del asistente para que suene más seguro",
+        label: "Que use un tono más seguro en las devoluciones",
       },
     ],
     correctAnswer: "m2q6_a",
-    topic: "Uso Responsable",
+    topic: "Comprobar respuestas",
     difficulty: "medio",
-    source: "Guía Completa de ChatGPT",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "Las alertas y la supervisión humana evitan que un dato incorrecto llegue al cliente.",
+      "Si indica de qué archivo y sección sale cada dato, puedes abrirlo y confirmar si lo dice tu política o si lo inventó. Un aviso general, más detalle o un tono más seguro no te dejan comprobar nada.",
   },
   {
     id: "m2q7",
@@ -211,61 +206,60 @@ export const MODULE_2_PART1 = [
   {
     id: "m2q8",
     question:
-      "Tu asistente debe responder con precios que cambian a diario. ¿Qué es lo menos recomendable?",
+      "Debes resumir 30 correos cortos y, aparte, analizar un contrato complejo. ¿Cómo eliges el modelo?",
     options: [
       {
         id: "m2q8_a",
-        label: "Consultar una fuente de precios actualizada cada vez",
+        label: "El más potente para ambos, para asegurar la calidad",
       },
       {
         id: "m2q8_b",
-        label:
-          "Dejar los precios fijos en las instrucciones, sin actualizarlos",
+        label: "El rápido para ambos, para ahorrar tiempo",
       },
       {
         id: "m2q8_c",
-        label: "Mostrar la fecha de cada precio en la respuesta",
+        label: "El rápido para los correos y el más potente para el contrato",
       },
       {
         id: "m2q8_d",
-        label: "Revisar la fuente antes de dar una cifra al cliente",
+        label: "El que venga por defecto, porque todos rinden igual",
       },
     ],
-    correctAnswer: "m2q8_b",
-    topic: "GPTs Personalizados",
+    correctAnswer: "m2q8_c",
+    topic: "Modelos",
     difficulty: "medio",
-    source: "El Taller de Proyectos",
+    source: "Guía Completa de ChatGPT",
     feedback:
-      "Una cifra que cambia no debe quedar fija en las instrucciones: se consulta en una fuente actualizada y se muestra con su fecha.",
+      "El modelo rápido basta para resúmenes cortos y el más potente rinde en un análisis complejo: el material correcto para cada capa. El más potente para todo es más lento y no mejora los resúmenes; el rápido para todo se queda corto con el contrato.",
   },
   {
     id: "m2q9",
     question:
-      "Vas a compartir un asistente que usas en tu empresa con otras personas. ¿Qué revisas primero?",
+      "Compartes un Proyecto con otros docentes y quieres subir los informes de tus estudiantes, que son menores de edad. ¿Qué haces antes?",
     options: [
       {
         id: "m2q9_a",
-        label: "Que no guarde ni exponga datos sensibles de clientes",
+        label: "Reviso quién ve el Proyecto y si mi colegio lo permite",
       },
       {
         id: "m2q9_b",
-        label: "El número de estrellas que tiene en la tienda pública",
+        label: "Los subo, porque mis colegas también son docentes",
       },
       {
         id: "m2q9_c",
-        label: "Que tenga el logo más grande posible",
+        label: "Los subo y le pido a ChatGPT que no los muestre",
       },
       {
         id: "m2q9_d",
-        label: "Cuántas veces lo usaste la semana pasada",
+        label: "Subo solo los de este periodo, para que sean menos",
       },
     ],
     correctAnswer: "m2q9_a",
-    topic: "Privacidad GPT",
-    difficulty: "fácil",
-    source: "Guía Completa de ChatGPT",
+    topic: "Datos de menores",
+    difficulty: "medio",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "Antes de compartirlo, lo primero es que no exponga información confidencial.",
+      "Los datos de menores solo se cargan si sabes quién podrá verlos y tu institución lo autoriza. Ser colegas no da acceso a esos datos, pedirle a ChatGPT que no los muestre no controla quién abre el Proyecto, y subir menos los sigue exponiendo.",
   },
   {
     id: "m2q10",
@@ -275,20 +269,22 @@ export const MODULE_2_PART1 = [
       {
         id: "m2q10_a",
         label:
-          "Un asistente que clasifica las quejas y una persona que recibe el aviso",
+          "Un asistente que clasifica las quejas y responde solo las urgentes",
       },
       {
         id: "m2q10_b",
         label:
-          "Dejar que el asistente responda y cierre las quejas sin revisión",
+          "Un asistente que responde todas y manda a soporte un resumen semanal",
       },
       {
         id: "m2q10_c",
-        label: "Un documento compartido que el equipo revisa cuando puede",
+        label:
+          "Una persona revisa todas las quejas y usa la IA solo para redactar",
       },
       {
         id: "m2q10_d",
-        label: "Copiar las quejas a mano cada mañana y responder todas igual",
+        label:
+          "Un asistente que clasifica las quejas y una persona que recibe el aviso",
       },
     ],
     correctAnswer: "m2q10_d",
@@ -296,7 +292,7 @@ export const MODULE_2_PART1 = [
     difficulty: "difícil",
     source: "La Caja de Herramientas",
     feedback:
-      "El asistente clasifica y avisa rápido; una persona revisa la respuesta a una queja urgente. Cerrar quejas sin revisión o esperar sin aviso son los errores.",
+      "Lo urgente necesita aviso inmediato a una persona: el asistente clasifica y avisa, y soporte decide. Responder solo lo urgente o resumir cada semana deja el riesgo sin revisar a tiempo.",
   },
   {
     id: "m2q11",
@@ -312,7 +308,7 @@ export const MODULE_2_PART1 = [
       },
       {
         id: "m2q11_c",
-        label: "Un buscador que devuelve siempre enlaces de internet",
+        label: "Un buscador que devuelve enlaces de internet",
       },
       {
         id: "m2q11_d",
@@ -322,38 +318,38 @@ export const MODULE_2_PART1 = [
     correctAnswer: "m2q11_a",
     topic: "ChatGPT Básico",
     difficulty: "fácil",
-    source: "ChatGPT desde Cero en 6 Minutos",
+    source: "ChatGPT en la práctica",
     feedback:
-      "ChatGPT es un modelo conversacional: respondes con instrucciones y genera texto. Mira el video 'ChatGPT desde Cero en 6 Minutos'.",
+      "ChatGPT es un modelo de lenguaje: genera texto a partir de tus instrucciones. Repásalo en la lección 1 y en el video 'ChatGPT en la práctica'.",
   },
   {
     id: "m2q12",
     question:
-      "De forma predeterminada, ¿qué conviene recordar sobre la información de ChatGPT?",
+      "Le pediste a ChatGPT un correo para tu equipo y quedó demasiado formal. ¿Qué haces?",
     options: [
       {
         id: "m2q12_a",
-        label: "Puede no estar actualizada; verifica los datos críticos",
+        label: "Le digo que suena muy formal y pido ajustar solo eso",
       },
       {
         id: "m2q12_b",
-        label: "Siempre conoce todas las noticias del día en tiempo real",
+        label: "Abro un chat nuevo y repito el mismo pedido",
       },
       {
         id: "m2q12_c",
-        label: "Nunca comete errores en fechas ni en cifras exactas",
+        label: "Le pido que genere otras tres versiones distintas",
       },
       {
         id: "m2q12_d",
-        label: "Solo responde con enlaces verificados a portales oficiales",
+        label: "Lo corrijo a mano, porque la IA no maneja el tono",
       },
     ],
     correctAnswer: "m2q12_a",
-    topic: "Modelos y Capacidades",
+    topic: "Prompts",
     difficulty: "fácil",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Sin herramientas de búsqueda, el conocimiento tiene una fecha de corte: verifica lo importante. Repasa la Guía Completa de ChatGPT.",
+      "Decirle qué falla y pedir que cambie solo esa parte conserva lo que ya estaba bien. Repetir el pedido o pedir versiones nuevas sin decir qué cambiar deja el resultado al azar, y la IA sí ajusta el tono si se lo pides.",
   },
   {
     id: "m2q13",

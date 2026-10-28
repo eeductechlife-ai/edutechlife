@@ -1,60 +1,61 @@
 export const MODULE_3_PT_PART1 = [
   {
     id: "m3q1",
-    question: "O que a ferramenta Deep Research do Gemini faz?",
+    question:
+      "Antes de começar, o Deep Research mostra o plano de pesquisa. O que você faz?",
     options: [
       {
         id: "m3q1_a",
-        label: "Pesquisa a fundo e monta relatórios",
+        label: "Reviso e ajusto o que sobra ou falta",
       },
       {
         id: "m3q1_b",
-        label: "Faz buscas rápidas e superficiais no Google",
+        label: "Aprovo logo para ganhar tempo",
       },
       {
         id: "m3q1_c",
-        label: "Transforma perguntas em jogo",
+        label: "Peço que deixe o plano mais longo",
       },
       {
         id: "m3q1_d",
-        label: "Instala novas extensões no seu navegador",
+        label: "Cancelo e peço um resumo curto",
       },
     ],
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "fácil",
-    source:
-      "Pesquisa acadêmica com IA em minutos: Gemini e Deep Research sem perder o rigor",
+    source: "Guia: Deep Research passo a passo",
     feedback:
-      "Deep Research pesquisa várias fontes e entrega um relatório citado. Veja o vídeo de casos.",
+      "O plano mostra o que ele vai buscar. Revisá-lo e ajustá-lo antes de começar evita um relatório que não responde à sua pergunta. Reveja o Guia: Deep Research passo a passo.",
   },
   {
     id: "m3q2",
-    question: "Por que você deve verificar as fontes que o Gemini cita?",
+    question:
+      "Você vai pedir ao Gemini que leia a foto de um quadro cheio de anotações. O que faz primeiro?",
     options: [
       {
         id: "m3q2_a",
-        label: "Para confirmar fontes e dados",
+        label: "Tiro uma foto nítida e digo o que é",
       },
       {
         id: "m3q2_b",
-        label: "Porque as citações do Gemini são sempre falsas",
+        label: "Envio a foto como saiu e peço que a leia",
       },
       {
         id: "m3q2_c",
-        label: "Porque o Gemini não cita",
+        label: "Envio várias fotos parecidas para ele escolher",
       },
       {
         id: "m3q2_d",
-        label: "Porque as fontes só funcionam em outro idioma",
+        label: "Peço que complete o que não dá para ler",
       },
     ],
     correctAnswer: "m3q2_a",
-    topic: "Verificação de Fontes",
+    topic: "Multimodalidade",
     difficulty: "médio",
-    source: "O Espelho da Verdade",
+    source: "Manual de Campo: Introdução ao Gemini",
     feedback:
-      "O Gemini pode errar ou citar mal: abrir a fonte confirma se o dado existe e se diz o que afirma.",
+      "Uma foto nítida e uma frase de contexto dão ao Gemini pistas claras. Com evidência borrada ou sem contexto, a leitura pode falhar.",
   },
   {
     id: "m3q3",
@@ -123,7 +124,7 @@ export const MODULE_3_PT_PART1 = [
       },
       {
         id: "m3q5_b",
-        label: "Só gerar imagens",
+        label: "Só gerar imagens para as apresentações",
       },
       {
         id: "m3q5_c",
@@ -144,90 +145,89 @@ export const MODULE_3_PT_PART1 = [
   {
     id: "m3q6",
     question:
-      "Um gráfico aparece na tela de uma reunião e você não consegue ler os números. O que pede ao Gemini?",
+      "Você precisa que o Gemini revise o diagrama de um processo do seu trabalho. Qual pedido é melhor?",
     options: [
       {
         id: "m3q6_a",
-        label: "Que aponte a origem de cada número e abra a fonte",
+        label: "Analise como auditor: etapas, falhas e prioridades",
       },
       {
         id: "m3q6_b",
-        label: "Que diga o número sem mostrar nada",
+        label: "Analise este diagrama e diga o que acha",
       },
       {
         id: "m3q6_c",
-        label: "Que troque o número por outro parecido",
+        label: "Descreva em detalhe tudo o que vê no diagrama",
       },
       {
         id: "m3q6_d",
-        label: "Que deixe para depois, sem conferir",
+        label: "Diga se o diagrama está certo ou errado",
       },
     ],
     correctAnswer: "m3q6_a",
-    topic: "Vídeo e áudio com o Gemini",
+    topic: "Multimodalidade",
     difficulty: "médio",
-    source: "A Lupa Multimodal",
+    source: "Manual de Campo: Introdução ao Gemini",
     feedback:
-      "Pedir a origem de cada número permite abrir a fonte e conferir. Um número sem origem não se usa.",
+      "Dizer que análise você precisa e a partir de qual papel orienta o Gemini para o que lhe serve. «Analise isto» ou «descreva tudo» deixam a análise sem direção.",
   },
   {
     id: "m3q7",
     question:
-      "Você precisa pesquisar tendências de IA para um relatório. Qual fluxo dá o melhor resultado verificável?",
+      "Você precisa do número oficial de desemprego da Colômbia. Qual é a fonte primária?",
     options: [
       {
         id: "m3q7_a",
-        label: "Deep Research e depois verificar cada fonte",
+        label: "O boletim do DANE que publicou o número",
       },
       {
         id: "m3q7_b",
-        label: "Perguntar uma vez e aceitar a primeira resposta",
+        label: "Uma notícia que cita o boletim do DANE",
       },
       {
         id: "m3q7_c",
-        label: "Copiar os primeiros resultados do Google",
+        label: "O resumo do Gemini sobre o boletim",
       },
       {
         id: "m3q7_d",
-        label: "Pedir um resumo sem solicitar fontes",
+        label: "Um blog de economia que comenta o número",
       },
     ],
     correctAnswer: "m3q7_a",
     topic: "Pesquisa Profissional",
     difficulty: "médio",
-    source:
-      "Pesquisa acadêmica com IA em minutos: Gemini e Deep Research sem perder o rigor",
+    source: "Guia: Deep Research passo a passo",
     feedback:
-      "Combine Deep Research com verificação de fontes. Veja o vídeo de casos.",
+      "A fonte primária é quem produziu o dado, aqui o DANE (instituto de estatística da Colômbia). Uma notícia, um blog ou um resumo apenas o comentam. Reveja o Guia: Deep Research passo a passo.",
   },
   {
     id: "m3q8",
     question:
-      "Um jornalista tem duas horas para uma matéria com dados. O que prioriza?",
+      "Seu relatório executivo inclui uma projeção de mercado para três anos. Como você a apresenta?",
     options: [
       {
         id: "m3q8_a",
-        label: "A quantidade de dados, mesmo sem conseguir conferi-los",
+        label: "Como estimativa, com a fonte em que se baseia",
       },
       {
         id: "m3q8_b",
-        label: "Publicar rápido e corrigir depois, se alguém avisar",
+        label: "Como um fato, porque o Deep Research a calculou",
       },
       {
         id: "m3q8_c",
-        label: "Os dados que pode conferir com fontes que consegue abrir",
+        label: "Como dado exato, com os números arredondados",
       },
       {
         id: "m3q8_d",
-        label: "Um título chamativo antes de revisar qualquer coisa",
+        label: "Como conclusão principal do relatório",
       },
     ],
-    correctAnswer: "m3q8_c",
-    topic: "Deep Research",
+    correctAnswer: "m3q8_a",
+    topic: "Pesquisa Profissional",
     difficulty: "médio",
-    source: "O Espelho da Verdade",
+    source: "Guia: Deep Research passo a passo",
     feedback:
-      "Em uma matéria, cada dado precisa poder ser conferido. Quantidade sem verificação não dá credibilidade.",
+      "Uma projeção não é um fato: é uma estimativa e deve mostrar sua fonte. Apresentá-la como dado exato ou como conclusão confunde quem decide.",
   },
   {
     id: "m3q9",
@@ -236,7 +236,7 @@ export const MODULE_3_PT_PART1 = [
     options: [
       {
         id: "m3q9_a",
-        label: "Como tutor: perguntar e praticar",
+        label: "Como tutor: perguntar, explicar e praticar",
       },
       {
         id: "m3q9_b",
@@ -244,7 +244,7 @@ export const MODULE_3_PT_PART1 = [
       },
       {
         id: "m3q9_c",
-        label: "Só para traduzir",
+        label: "Usá-lo só para traduzir os textos",
       },
       {
         id: "m3q9_d",
@@ -289,31 +289,32 @@ export const MODULE_3_PT_PART1 = [
   },
   {
     id: "m3q11",
-    question: "O que o Gemini pode fazer com a foto de um recibo?",
+    question:
+      "O Gemini responde sua pergunta de pesquisa com uma explicação geral. O que você faz?",
     options: [
       {
         id: "m3q11_a",
-        label: "Enviar para o seu e-mail sem que você veja",
+        label: "Peço detalhes, exemplos e as fontes de cada ponto",
       },
       {
         id: "m3q11_b",
-        label: "Apagar do seu celular por completo",
+        label: "Uso como está, porque responde à pergunta",
       },
       {
         id: "m3q11_c",
-        label: "Ler valores e data, e perguntar o que não está claro",
+        label: "Repito a mesma pergunta até ela mudar",
       },
       {
         id: "m3q11_d",
-        label: "Publicar na internet com os seus dados",
+        label: "Peço que a escreva mais longa e formal",
       },
     ],
-    correctAnswer: "m3q11_c",
-    topic: "Multimodalidade",
+    correctAnswer: "m3q11_a",
+    topic: "Pensamento Crítico",
     difficulty: "médio",
     source: "Manual de Campo: Introdução ao Gemini",
     feedback:
-      "O Gemini lê os dados visíveis do recibo e pergunta o que é duvidoso; não envia nem publica nada sem a sua ordem.",
+      "A primeira resposta costuma ser geral. Pedir detalhes, exemplos e fontes leva você à segunda camada, onde pode conferir cada ponto.",
   },
   {
     id: "m3q12",
@@ -346,31 +347,32 @@ export const MODULE_3_PT_PART1 = [
   },
   {
     id: "m3q13",
-    question: "O que acontece se uma resposta do Gemini não tem fontes?",
+    question:
+      "Você gravou uma entrevista e vai citar o entrevistado no seu relatório. O que pede ao Gemini?",
     options: [
       {
         id: "m3q13_a",
-        label: "É confiável porque a IA é muito avançada",
+        label: "A transcrição, e comparo as citações com o áudio",
       },
       {
         id: "m3q13_b",
-        label: "Pode usar em um relatório sem mudanças",
+        label: "Um resumo das ideias para citar a partir dele",
       },
       {
         id: "m3q13_c",
-        label: "Você a trata como hipótese e a confere antes de usar",
+        label: "Que melhore a redação das frases ditas",
       },
       {
         id: "m3q13_d",
-        label: "Basta que pareça segura e tenha números",
+        label: "As frases mais marcantes da entrevista",
       },
     ],
-    correctAnswer: "m3q13_c",
-    topic: "Grounding",
+    correctAnswer: "m3q13_a",
+    topic: "Vídeo e áudio com o Gemini",
     difficulty: "médio",
-    source: "Gemini na Prática: Exercícios de Campo",
+    source: "Manual de Campo: Introdução ao Gemini",
     feedback:
-      "Sem fonte, a resposta é uma hipótese. Antes de usá-la, procure-a em fontes que você possa abrir.",
+      "A transcrição dá as palavras exatas, e compará-las com a gravação confirma que a citação é fiel. Um resumo ou uma frase melhorada já não é o que a pessoa disse.",
   },
   {
     id: "m3q14",
@@ -397,7 +399,7 @@ export const MODULE_3_PT_PART1 = [
     correctAnswer: "m3q14_a",
     topic: "Verificação de Fontes",
     difficulty: "médio",
-    source: "O Espelho da Verdade",
+    source: "Gemini na Prática: Exercícios de Campo",
     feedback:
       "Verifique abrindo a fonte: uma citação com formato não garante que o dado esteja correto.",
   },

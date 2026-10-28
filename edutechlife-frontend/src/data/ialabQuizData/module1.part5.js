@@ -26,36 +26,38 @@ export const MODULE_1_PART5 = [
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "Con menores, la política debe limitar el contenido, revisar las respuestas con un adulto y no recopilar datos de más. Repasa la guía de ética.",
+      "Con menores, la política adecuada limita el contenido por edad y deja que un adulto revise. Recopilar más datos va en contra de su protección. Repasa la guía de ética.",
   },
   {
     id: "m1e18",
     question:
-      "La IA sugiere una decisión que afecta a muchas personas. ¿Qué principio exige revisarla?",
+      "Un colegio quiere que una IA decida sola qué estudiantes pierden el año. ¿Qué es lo correcto?",
     options: [
       {
         id: "m1e18_a",
-        label: "Responsabilidad y transparencia con supervisión humana",
+        label:
+          "La IA puede organizar datos, pero deciden personas que explican y revisan",
       },
       {
         id: "m1e18_b",
-        label: "Eficiencia, para resolver el caso rápido",
+        label: "La IA puede decidir sola si avisa a las familias que la usa",
       },
       {
         id: "m1e18_c",
-        label: "Escalabilidad, para que la IA decida el mayor volumen posible",
+        label: "La IA puede decidir sola si los datos de notas están completos",
       },
       {
         id: "m1e18_d",
-        label: "Automatización, para eliminar la intervención de las personas",
+        label:
+          "La IA puede decidir sola si luego un profesor atiende los reclamos",
       },
     ],
     correctAnswer: "m1e18_a",
-    topic: "Responsabilidad",
+    topic: "Decisiones sobre personas",
     difficulty: "medio",
-    source: "Video: IA Ética: Principios y Práctica",
+    source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "Decisiones con impacto requieren transparencia y supervisión humana. Repasa el video de principios.",
+      "La IA puede ayudar a organizar información, pero no debe decidir sola sobre evaluar o sancionar a alguien: esa decisión requiere criterio humano, explicación y posibilidad de revisión. Avisar que usas IA o tener datos completos no reemplaza a la persona que decide. Repasa la guía de ética, sección 8.",
   },
   {
     id: "m1e19",
@@ -88,30 +90,31 @@ export const MODULE_1_PART5 = [
   {
     id: "m1e20",
     question:
-      "Un sistema trata a los usuarios sin decirles que participa una IA. ¿Qué principio se incumple?",
+      "Circula en redes una foto de un evento que nunca ocurrió, creada con IA. Un familiar ya la compartió. ¿Qué haces?",
     options: [
       {
         id: "m1e20_a",
-        label: "Transparencia: avisar cuando una IA participa en una decisión",
+        label:
+          "Busco quién la publicó primero, la contrasto y le envío la verificación",
       },
       {
         id: "m1e20_b",
-        label: "Velocidad: resolver el caso en el menor tiempo",
+        label: "Nada, porque una imagen no cuenta como desinformación",
       },
       {
         id: "m1e20_c",
-        label: "Popularidad: que el sistema guste a los usuarios",
+        label: "La comparto también, con una nota de que podría ser falsa",
       },
       {
         id: "m1e20_d",
-        label: "Ahorro: reducir el costo operativo de la herramienta",
+        label: "Le escribo en el grupo para que todos vean que se equivocó",
       },
     ],
     correctAnswer: "m1e20_a",
-    topic: "Responsabilidad",
+    topic: "Desinformación con imágenes",
     difficulty: "medio",
     source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "La transparencia exige avisar cuando una IA participa en una decisión. Velocidad, popularidad y ahorro no son el principio que se incumple.",
+      "La desinformación también se produce con imágenes creadas con IA. Buscar quién la publicó primero y contrastarla (la guía sugiere dos medios serios) te da la prueba; luego le envías la verificación sin regañarlo. Compartirla con una nota la sigue difundiendo. Repasa la guía de ética, caso 3.",
   },
 ];

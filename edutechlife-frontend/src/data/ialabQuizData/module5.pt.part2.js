@@ -2,34 +2,32 @@ export const MODULE_5_PT_PART2 = [
   {
     id: "m5q14",
     question:
-      "Você quer que o Claude gere uma apresentação para a diretoria. O que você entrega primeiro?",
+      "Você trabalha no Projeto da sua marca e quer fazer uma consulta pessoal que não fique no seu histórico nem na memória do Claude. O que você faz?",
     options: [
       {
         id: "m5q14_a",
-        label: "O tema e o número de slides; a mensagem o Claude decide",
+        label: "Abro um chat incógnito dentro do mesmo Projeto",
       },
       {
         id: "m5q14_b",
-        label: "Os números do trimestre para o Claude escolher o que destacar",
+        label:
+          "Pergunto no Projeto e depois apago essa memória nas configurações",
       },
       {
         id: "m5q14_c",
-        label:
-          "A mensagem central, quem vai ver, os números conferidos e a extensão",
+        label: "Saio do Projeto e abro um chat incógnito",
       },
       {
         id: "m5q14_d",
-        label:
-          "Uma apresentação anterior de outra empresa para copiar o design e o conteúdo",
+        label: "Peço ao Claude, dentro do Projeto, que não guarde a conversa",
       },
     ],
     correctAnswer: "m5q14_c",
-    topic: "Criar com o Claude",
+    topic: "Privacidade e dados",
     difficulty: "médio",
-    source:
-      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
+    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
     feedback:
-      "Uma boa apresentação começa pela mensagem e pelo público. Se o Claude escolhe o que destacar, a decisão é dele e não sua; e os números são conferidos antes de entrar no slide.",
+      "Um chat incógnito não fica salvo no histórico nem na memória, e só existe fora dos Projetos: por isso você sai do Projeto para abri-lo. Apagar a memória depois não tira a conversa do histórico, e pedir ao Claude que não a guarde não muda como a ferramenta funciona.",
   },
   {
     id: "m5q15",
@@ -50,7 +48,7 @@ export const MODULE_5_PT_PART2 = [
       },
       {
         id: "m5q15_d",
-        label: "Voltar à sua versão sem revisar o que mudou",
+        label: "Voltar à sua versão, porque você já a tinha revisado",
       },
     ],
     correctAnswer: "m5q15_b",
@@ -86,7 +84,8 @@ export const MODULE_5_PT_PART2 = [
     correctAnswer: "m5q16_b",
     topic: "Limites e erros",
     difficulty: "médio",
-    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
       "Uma mudança pequena e específica melhora o resultado sem refazer o que já funciona. Recomeçar ou aceitar um tom que você não quer são os erros comuns.",
   },
@@ -142,7 +141,7 @@ export const MODULE_5_PT_PART2 = [
       },
       {
         id: "m5q18_d",
-        label: "Pedir um resumo ao Claude e enviá-lo sem revisar",
+        label: "Enviá-lo pelo e-mail interno, porque ele é da mesma empresa",
       },
     ],
     correctAnswer: "m5q18_c",
@@ -155,32 +154,36 @@ export const MODULE_5_PT_PART2 = [
   {
     id: "m5q19",
     question:
-      "Você precisa de uma decisão que só você pode tomar, como aprovar uma proposta. O que a IA faz?",
+      "Você vai preparar com o Claude uma apresentação de seis slides para a diretoria, com os números do trimestre. Em que ordem você trabalha?",
     options: [
       {
         id: "m5q19_a",
-        label: "Aprova se o relatório estiver bem escrito e bem apresentado",
+        label:
+          "Primeiro a mensagem de cada slide, depois o roteiro e por fim os gráficos",
       },
       {
         id: "m5q19_b",
-        label: "Prepara opções e riscos; a decisão é sua",
+        label:
+          "Primeiro o roteiro, depois a mensagem de cada slide e por fim os gráficos",
       },
       {
         id: "m5q19_c",
-        label: "Marca como pendente e espera que outra pessoa decida",
+        label:
+          "Primeiro os gráficos com os números, depois o roteiro e por fim a mensagem de cada slide",
       },
       {
         id: "m5q19_d",
         label:
-          "Recomenda como aprovada, porque a maioria das propostas é aprovada",
+          "Primeiro o roteiro, depois os gráficos com os números e por fim a mensagem de cada slide",
       },
     ],
     correctAnswer: "m5q19_b",
-    topic: "Delegar com o Claude",
+    topic: "Criar com o Claude",
     difficulty: "difícil",
-    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
-      "A IA acelera a preparação, mas uma decisão com consequências continua sendo sua. Delegar a aprovação é o erro.",
+      "O roteiro define a estrutura; a mensagem de cada slide diz o que a diretoria deve entender; os gráficos, com números verificados, vêm no fim para sustentar essa mensagem. Se os gráficos vêm antes da mensagem, os números acabam decidindo o que se diz; e sem roteiro, as mensagens ficam sem ordem.",
   },
   {
     id: "m5q20",
@@ -214,61 +217,62 @@ export const MODULE_5_PT_PART2 = [
   {
     id: "m5q21",
     question:
-      "Você vai pedir ao Claude um relatório com a média de notas de um grupo. O que compartilha?",
+      "O Claude fez para você, em um Artifact, uma calculadora de parcelas para os seus clientes. O que você faz antes de compartilhá-la?",
     options: [
       {
         id: "m5q21_a",
-        label: "Os nomes completos e as notas, para o relatório ficar preciso",
+        label: "Reviso se o design fica bom no celular",
       },
       {
         id: "m5q21_b",
-        label: "Só as médias do grupo, sem nomes nem dados identificáveis",
+        label: "Testo com casos cujo resultado já conheço",
       },
       {
         id: "m5q21_c",
-        label: "A lista com telefones, para contatar as famílias depois",
+        label: "Peço ao Claude que confirme que os cálculos funcionam",
       },
       {
         id: "m5q21_d",
-        label:
-          "O arquivo inteiro, com os dados de cada aluno, para revisar depois",
+        label: "Passo para um cliente de confiança testar",
       },
     ],
     correctAnswer: "m5q21_b",
-    topic: "Privacidade e dados",
+    topic: "Criar com o Claude",
     difficulty: "fácil",
-    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
-      "As médias do grupo permitem a análise sem identificar ninguém. Dados pessoais de menores não se compartilham com uma ferramenta de IA (Lei 1581 de 2012, na Colômbia).",
+      "Uma peça interativa pode parecer boa e calcular errado: teste com casos cujo resultado você já conhece antes de compartilhá-la. O design não prova o cálculo, a confirmação do Claude não substitui o seu teste e um cliente não deveria ser quem encontra o erro.",
   },
   {
     id: "m5q22",
     question:
-      "Você precisa de um documento de seis páginas que vai editar várias vezes. Onde pede?",
+      "Toda sexta-feira você precisa que o Claude prepare o mesmo resumo da semana sem que você tenha de pedir. O que você usa?",
     options: [
       {
         id: "m5q22_a",
-        label: "Em uma mensagem longa, colando o documento em cada resposta",
+        label: "Uma Skill com os passos do resumo, que você executa toda sexta",
       },
       {
         id: "m5q22_b",
-        label: "Em um Artifact, para ver e editar ao lado do chat",
+        label: "Uma tarefa programada que prepare o resumo toda sexta",
       },
       {
         id: "m5q22_c",
-        label: "Em um chat anônimo, para que não fique salvo",
+        label: "Um Projeto com as instruções do resumo e os arquivos da semana",
       },
       {
         id: "m5q22_d",
-        label: "Em uma mensagem curta, e depois copiar o texto à mão",
+        label:
+          "Um Artifact com o resumo, que você atualiza toda sexta com dados novos",
       },
     ],
     correctAnswer: "m5q22_b",
-    topic: "Limites e erros",
+    topic: "Delegar com o Claude",
     difficulty: "médio",
-    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
+    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
-      "Um Artifact é uma peça que fica ao lado do chat: você a vê, edita e baixa sem perder o fio da conversa.",
+      "Uma tarefa programada automatiza o recorrente: prepara o resumo toda sexta sem que você peça. Uma Skill, um Projeto ou um Artifact poupam passos, mas é você quem precisa iniciá-los. Como em tudo o que você delega, revise o resumo antes de enviá-lo.",
   },
   {
     id: "m5q23",
@@ -290,8 +294,7 @@ export const MODULE_5_PT_PART2 = [
       },
       {
         id: "m5q23_d",
-        label:
-          "Compartilhá-lo com a equipe assim que aparecer e corrigir depois",
+        label: "Pedir primeiro o design e decidir depois que dados ele recebe",
       },
     ],
     correctAnswer: "m5q23_b",
@@ -300,7 +303,7 @@ export const MODULE_5_PT_PART2 = [
     source:
       "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
-      "Descreva o uso, os dados de entrada e o resultado, melhore com mudanças pequenas e teste a peça antes de compartilhar.",
+      "Descrever o resultado antes de pedir o conteúdo (para que serve, que dados recebe e o que mostra) dá ao Claude o que ele precisa; depois você melhora com mudanças pequenas. Pedir tudo de uma vez, deixar o Claude escolher ou começar pelo design afasta a peça do que você precisa.",
   },
   {
     id: "m5q24",
@@ -335,60 +338,66 @@ export const MODULE_5_PT_PART2 = [
   {
     id: "m5q25",
     question:
-      "Você vai usar as mesmas instruções em vários chats de um mesmo trabalho. Onde as deixa?",
+      "Um colega diz que o Claude «é um buscador mais rápido». O que você esclarece?",
     options: [
       {
         id: "m5q25_a",
-        label: "Coladas em cada chat novo, uma por uma",
+        label:
+          "Que o Claude consulta mais páginas que um buscador e por isso acerta mais",
       },
       {
         id: "m5q25_b",
-        label: "Em um Projeto, para que todos os seus chats as usem",
+        label:
+          "Que o buscador mostra páginas e o Claude redige uma resposta ao seu pedido",
       },
       {
         id: "m5q25_c",
-        label: "Em um Artifact compartilhado com todos os chats",
+        label:
+          "Que o Claude responde só com a informação dos arquivos que você envia",
       },
       {
         id: "m5q25_d",
-        label: "Em um chat à parte que ninguém mais vê",
+        label:
+          "Que ele tem razão: o Claude encontra a resposta e a copia de uma página",
       },
     ],
     correctAnswer: "m5q25_b",
-    topic: "Conectores e Skills",
+    topic: "Conhecer o Claude",
     difficulty: "médio",
-    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
+    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
     feedback:
-      "Um Projeto guarda instruções e arquivos que valem para todos os seus chats. Colá-los a cada vez repete o trabalho, e é fácil esquecer algum.",
+      "Um buscador mostra páginas para você ler e comparar; o Claude redige uma resposta própria a partir do seu pedido. Redigir não é o mesmo que acertar: a resposta pode soar segura e ter erros. Ele também não copia uma página nem se limita aos arquivos que você envia.",
   },
   {
     id: "m5q26",
     question:
-      "Você tem o caso de um estudante com necessidades especiais. O que faz?",
+      "Depois de vários ajustes, o Claude entrega o convite para a cerimônia de formatura. O que você revisa antes de enviá-lo?",
     options: [
       {
         id: "m5q26_a",
-        label: "Peço ao Claude a decisão e a aplico",
+        label: "Se o tom e o design ficaram como você pediu no início",
       },
       {
         id: "m5q26_b",
-        label: "Você decide com a equipe; a IA só ajuda a redigir",
+        label: "Cada nome, data e local em relação aos dados originais",
       },
       {
         id: "m5q26_c",
-        label: "Envio ao Claude o nome completo para ele revisar",
+        label:
+          "Só as mudanças do último ajuste, porque o resto já estava certo",
       },
       {
         id: "m5q26_d",
-        label: "Deixo para a IA, porque ela é mais objetiva",
+        label: "A ortografia, porque você mesmo escreveu os dados no início",
       },
     ],
     correctAnswer: "m5q26_b",
-    topic: "Delegar com o Claude",
+    topic: "Supervisão",
     difficulty: "fácil",
-    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
+    source:
+      "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
-      "Decisões sobre pessoas, e ainda mais sobre menores, são humanas. A IA pode ajudar a redigir, mas não a decidir nem a receber dados identificáveis.",
+      "A cada ajuste o Claude reescreve o texto e pode mudar um nome, uma data ou um local mesmo sem você pedir. Por isso, antes de enviar, você compara esses dados com a fonte original. O tom, a ortografia ou a última mudança não dizem se os dados continuam certos.",
   },
   {
     id: "m5q27",
@@ -397,7 +406,7 @@ export const MODULE_5_PT_PART2 = [
     options: [
       {
         id: "m5q27_a",
-        label: "Pedir direto a conclusão final para economizar tempo",
+        label: "Pedir a conclusão e uma tabela com os totais que a sustentam",
       },
       {
         id: "m5q27_b",
@@ -405,12 +414,12 @@ export const MODULE_5_PT_PART2 = [
       },
       {
         id: "m5q27_c",
-        label: "Pedir ao Claude que confirme o resultado duas vezes",
+        label: "Pedir ao Claude que revise a análise e aponte possíveis erros",
       },
       {
         id: "m5q27_d",
         label:
-          "Pedir um gráfico: se ele parecer coerente, então o dado está certo",
+          "Pedir a análise em dois chats e usá-la se os resultados coincidirem",
       },
     ],
     correctAnswer: "m5q27_b",
@@ -419,6 +428,6 @@ export const MODULE_5_PT_PART2 = [
     source:
       "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
-      "Peça o método e valide uma amostra com um cálculo independente. O Claude confirmar ou o gráfico parecer bom não prova que o dado está certo.",
+      "Só um cálculo independente comprova o dado: você pede os passos e valida uma amostra por conta própria. A tabela de totais, a revisão do Claude e duas respostas iguais saem da mesma ferramenta e podem repetir o mesmo erro.",
   },
 ];

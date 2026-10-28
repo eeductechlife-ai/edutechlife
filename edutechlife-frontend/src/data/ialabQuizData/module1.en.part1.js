@@ -9,7 +9,7 @@ export const MODULE_1_EN_PART1 = [
       },
       {
         id: "m1q1_b",
-        label: "Useful answers that match what I need",
+        label: "To get useful answers that match what I need",
       },
       {
         id: "m1q1_c",
@@ -25,7 +25,7 @@ export const MODULE_1_EN_PART1 = [
     difficulty: "easy",
     source: "How to Create Effective Prompts: The Formula to Master AI",
     feedback:
-      "A good prompt is a clear instruction. Review the video and the Prompt Anatomy guide.",
+      "A good prompt tells the AI what you need, for whom and how you want it; that is why the answer fits your goal. Being longer or faster is not what improves it.",
   },
   {
     id: "m1q2",
@@ -58,23 +58,23 @@ export const MODULE_1_EN_PART1 = [
   },
   {
     id: "m1q3",
-    question: "What does the RTF method (Role, Task, Format) achieve?",
+    question: "What do the three letters of the RTF method stand for?",
     options: [
       {
         id: "m1q3_a",
-        label: "It turns the instruction into a shorter prompt",
+        label: "Role, Tone and Format",
       },
       {
         id: "m1q3_b",
-        label: "It structures the request for a clear answer",
+        label: "Role, Task and Format",
       },
       {
         id: "m1q3_c",
-        label: "It removes the need for any extra context",
+        label: "Response, Topic and Format",
       },
       {
         id: "m1q3_d",
-        label: "It guarantees the AI answers without review",
+        label: "Role, Task and Facts",
       },
     ],
     correctAnswer: "m1q3_b",
@@ -82,37 +82,36 @@ export const MODULE_1_EN_PART1 = [
     difficulty: "easy",
     source: "The Chisel",
     feedback:
-      "RTF orders the request into Role, Task and Format. Practice in the OVA The Chisel.",
+      "RTF stands for Role (the point of view the AI answers from), Task (the concrete action) and Format (how it delivers the answer). Tone and length are added separately. Practice in the OVA The Chisel.",
   },
   {
     id: "m1q4",
     question:
-      "You need a summary about the water cycle. Which prompt gives the best result?",
+      "You suspect an AI describes people differently depending on where they come from. What simple test can you run?",
     options: [
       {
         id: "m1q4_a",
-        label: '"Act as a science teacher and summarize the cycle in 4 steps."',
+        label: "Ask for the same task with different profiles and compare",
       },
       {
         id: "m1q4_b",
-        label:
-          '"Explain everything you know about the water cycle, no limits."',
+        label: "Ask the AI whether it is biased and believe it",
       },
       {
         id: "m1q4_c",
-        label: '"Water cycle. Give me general and varied information."',
+        label: "Repeat the same prompt several times with the same profile",
       },
       {
         id: "m1q4_d",
-        label: '"Tell me about water and about other nature topics."',
+        label: "Ask it to answer more briefly to reduce the bias",
       },
     ],
     correctAnswer: "m1q4_a",
-    topic: "Prompt Structure",
+    topic: "Detecting Bias",
     difficulty: "medium",
-    source: "How to Create Effective Prompts: The Formula to Master AI",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "The correct answer defines role, task and format. The others are vague or mix topics.",
+      "If you change only the profile and the answer treats each person differently, you found a bias. Asking the AI whether it is neutral or repeating the same profile does not show that difference. Review the ethics guide, section 4.",
   },
   {
     id: "m1q5",
@@ -177,7 +176,7 @@ export const MODULE_1_EN_PART1 = [
     options: [
       {
         id: "m1q7_a",
-        label: "The prompt you write to instruct the AI",
+        label: "The instruction or message you write to the AI",
       },
       {
         id: "m1q7_b",
@@ -231,31 +230,32 @@ export const MODULE_1_EN_PART1 = [
   {
     id: "m1q9",
     question:
-      "The AI gives you a generic or off-topic answer. What is the best next action?",
+      "You ask AI for a study plan and it gives you a generic one that does not help. What is the prompt missing?",
     options: [
       {
         id: "m1q9_a",
-        label: "Add clear context: goal, audience and desired format",
+        label:
+          "Your situation: how much time you have, your level and the exam date",
       },
       {
         id: "m1q9_b",
-        label: "Repeat the same prompt without changing anything",
+        label: 'A flashier role, like "act as a genius"',
       },
       {
         id: "m1q9_c",
-        label: "Choose another AI tool without understanding the issue",
+        label: "To make it longer and with many more details",
       },
       {
         id: "m1q9_d",
-        label: "Ask again until the answer improves on its own",
+        label: 'Polite words like "please" so it tries harder',
       },
     ],
     correctAnswer: "m1q9_a",
-    topic: "Prompt Refinement",
+    topic: "Context",
     difficulty: "easy",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Refine the prompt by adding context. Practice with the guide Prompt Anatomy.",
+      'The AI does not know your situation. Context (your time, your level and your deadline) is what turns a generic plan into a useful one. A flashier role, more length or polite words do not give it that information. Review the "Guide: Anatomy of a Prompt".',
   },
   {
     id: "m1q10",
@@ -289,31 +289,31 @@ export const MODULE_1_EN_PART1 = [
   {
     id: "m1q11",
     question:
-      "Case: your boss asks for a summary of a 40-page report by tomorrow. Which request to the AI gives the most useful result?",
+      "You ask for examples of professions and all of them show city men. No fact is false. Which question helps you see the problem?",
     options: [
       {
         id: "m1q11_a",
-        label: "Summarize the report in 5 bullets with key figures",
+        label: "Which people or perspectives are left out?",
       },
       {
         id: "m1q11_b",
-        label: "Summarize the full report for today",
+        label: "Is any of the facts in the answer false?",
       },
       {
         id: "m1q11_c",
-        label: "Do what you can with the report, no limits or format",
+        label: "Does the answer cite a reliable source?",
       },
       {
         id: "m1q11_d",
-        label: "Write something about the report for the boss",
+        label: "Do the professions on the list really exist?",
       },
     ],
     correctAnswer: "m1q11_a",
-    topic: "Generative AI",
+    topic: "Omission Bias",
     difficulty: "easy",
-    source: "What is AI and how it is changing the world",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "A good request sets format, length and what to include. 'Summarize' alone leaves the AI to improvise.",
+      "Bias is sometimes not in what the answer says but in what it leaves out. Asking which people or perspectives are left out reveals it; checking whether the facts are true or whether there are sources does not show it. Review the ethics guide, section 4.",
   },
   {
     id: "m1q12",

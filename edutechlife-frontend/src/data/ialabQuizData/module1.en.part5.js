@@ -26,36 +26,37 @@ export const MODULE_1_EN_PART5 = [
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "With minors, the policy must limit content, review answers with an adult and not collect extra data. Review the ethics guide.",
+      "With minors, the right policy limits content by age and lets an adult review. Collecting more data goes against their protection. Review the ethics guide.",
   },
   {
     id: "m1e18",
     question:
-      "The AI suggests a decision that affects many people. Which principle requires reviewing it?",
+      "A school wants an AI to decide on its own which students fail the year. What is correct?",
     options: [
       {
         id: "m1e18_a",
-        label: "Accountability and transparency with human supervision",
+        label:
+          "The AI can organize data, but people decide, explain and review",
       },
       {
         id: "m1e18_b",
-        label: "Efficiency, to settle the case in the shortest possible time",
+        label: "The AI can decide alone if it tells families it uses AI",
       },
       {
         id: "m1e18_c",
-        label: "Scalability, so the AI decides the largest possible volume",
+        label: "The AI can decide alone if the grade data is complete",
       },
       {
         id: "m1e18_d",
-        label: "Automation, to eliminate the intervention of people",
+        label: "The AI can decide alone if a teacher handles complaints later",
       },
     ],
     correctAnswer: "m1e18_a",
-    topic: "Accountability",
+    topic: "Decisions About People",
     difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "High-impact decisions require transparency and human supervision. Review the principles video.",
+      "AI can help organize information, but it must not decide alone about evaluating or sanctioning someone: that decision needs human judgment, an explanation and a chance for review. Telling people you use AI or having complete data does not replace the person who decides. Review the ethics guide, section 8.",
   },
   {
     id: "m1e19",
@@ -88,30 +89,31 @@ export const MODULE_1_EN_PART5 = [
   {
     id: "m1e20",
     question:
-      "A system treats users without telling them an AI is involved. Which principle is broken?",
+      "A photo of an event that never happened, created with AI, is going around social media. A relative already shared it. What do you do?",
     options: [
       {
         id: "m1e20_a",
-        label: "Transparency: tell people when AI takes part in a decision",
+        label:
+          "I find who posted it first, cross-check it and send them the verification",
       },
       {
         id: "m1e20_b",
-        label: "Speed: resolve the case in the shortest time",
+        label: "Nothing, because an image does not count as misinformation",
       },
       {
         id: "m1e20_c",
-        label: "Popularity: the system is liked by users",
+        label: "I share it too, with a note that it might be fake",
       },
       {
         id: "m1e20_d",
-        label: "Savings: lower the operating cost of the tool",
+        label: "I write in the group so everyone sees they were wrong",
       },
     ],
     correctAnswer: "m1e20_a",
-    topic: "Accountability",
+    topic: "Image Misinformation",
     difficulty: "medium",
     source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Transparency requires telling people when AI takes part in a decision. Speed, popularity and savings are not the principle that is broken.",
+      "Misinformation is also produced with AI-generated images. Finding who posted it first and cross-checking it (the guide suggests two serious media outlets) gives you the proof; then you send them the verification without scolding. Sharing it with a note still spreads it. Review the ethics guide, case 3.",
   },
 ];

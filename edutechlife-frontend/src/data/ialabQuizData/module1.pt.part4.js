@@ -64,7 +64,7 @@ export const MODULE_1_PT_PART4 = [
     options: [
       {
         id: "m1e05_a",
-        label: "Avaliação de conformidade e controle",
+        label: "Avaliação de conformidade e supervisão humana",
       },
       {
         id: "m1e05_b",
@@ -113,7 +113,7 @@ export const MODULE_1_PT_PART4 = [
     correctAnswer: "m1e06_a",
     topic: "Princípios Éticos",
     difficulty: "fácil",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    source: "Vídeo «Podcast: ética da IA»",
     feedback:
       "Transparência, equidade, responsabilidade, privacidade e veracidade são os cinco pilares. Revise o vídeo.",
   },
@@ -224,7 +224,7 @@ export const MODULE_1_PT_PART4 = [
       },
     ],
     correctAnswer: "m1e10_d",
-    topic: "Explicabilidade",
+    topic: "Privacidade",
     difficulty: "médio",
     source: "PDF: Ética da Inteligência Artificial",
     feedback:
@@ -255,7 +255,7 @@ export const MODULE_1_PT_PART4 = [
     correctAnswer: "m1e11_a",
     topic: "Supervisão Humana",
     difficulty: "médio",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    source: "Vídeo «Podcast: ética da IA»",
     feedback:
       "Registrar quem revisou e decidiu permite auditar e atribuir responsabilidade. Revise a guia de ética.",
   },
@@ -285,7 +285,7 @@ export const MODULE_1_PT_PART4 = [
     difficulty: "médio",
     source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "A privacidade se projeta desde o início, não se acrescenta no fim. Revise a guia de privacidade.",
+      "A privacidade por design decide quais dados você precisa antes de coletá-los: minimiza, anonimiza e limita o acesso desde o início. Não se acrescenta no fim. Revise o guia de ética, anexo, ponto 3.",
   },
   {
     id: "m1e13",
@@ -380,7 +380,7 @@ export const MODULE_1_PT_PART4 = [
     options: [
       {
         id: "m1e16_a",
-        label: "Suplantar a identidade de alguém com voz ou rosto geral",
+        label: "Suplantar a identidade de alguém com voz ou imagem",
       },
       {
         id: "m1e16_b",
@@ -398,7 +398,7 @@ export const MODULE_1_PT_PART4 = [
     correctAnswer: "m1e16_a",
     topic: "Uso Responsável",
     difficulty: "fácil",
-    source: "Vídeo: IA Ética: Princípios e Prática",
+    source: "Vídeo «Podcast: ética da IA»",
     feedback:
       "Suplantar identidades com IA é um uso não ético e pode ser ilegal. Revise o vídeo.",
   },

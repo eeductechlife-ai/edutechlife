@@ -16,7 +16,11 @@ import {
 } from "../courseRegistry.js";
 import { getModules } from "../../ialab.js";
 import { getModuleExams } from "../../ialabQuizData/index.js";
-import { EXAM_QUESTION_COUNT, PASSING_SCORE, MAX_ATTEMPTS } from "../../ialabQuizData/config.js";
+import {
+  EXAM_QUESTION_COUNT,
+  PASSING_SCORE,
+  MAX_ATTEMPTS,
+} from "../../ialabQuizData/config.js";
 
 describe("courseRegistry (Fase 7 — escalabilidad)", () => {
   it("expone un curso por defecto con 5 módulos", () => {

@@ -41,8 +41,8 @@ export const RESOURCES_ES_PART2 = {
         title: "La Lupa a Prueba",
         description:
           "Mira cómo Gemini mira imágenes, texto y datos juntos: útil para analizar casos reales de tu entorno, con verificación de cada dato.",
-        estimatedTime: "15 minutes",
-        difficulty: "Intermediate",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
         interactiveElements: 6,
         thumbnailType: "premium",
         fullscreen: true,
@@ -266,7 +266,8 @@ export const RESOURCES_ES_PART2 = {
       {
         id: "notebook-audio-video-1",
         type: "video",
-        title: "Crea tu propio podcast",
+        title:
+          "Guía completa de NotebookLM de Google: investiga y estudia sin alucinaciones de IA",
         url: "https://www.youtube.com/embed/JdiLO6z9oXY",
         duration: "2:16",
         thumbnail: "https://img.youtube.com/vi/JdiLO6z9oXY/maxresdefault.jpg",

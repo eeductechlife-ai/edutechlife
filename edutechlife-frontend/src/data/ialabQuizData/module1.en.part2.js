@@ -89,60 +89,62 @@ export const MODULE_1_EN_PART2 = [
   },
   {
     id: "m1q18",
-    question: "What is context in a prompt for?",
+    question:
+      "The Guardian's Oath proposes three questions for every AI result: is it true?, is it fair?, do I disclose it? When can you use the result?",
     options: [
       {
         id: "m1q18_a",
-        label: "So the answer fits your real situation",
+        label: "When all three get a yes: it is true, fair and disclosed",
       },
       {
         id: "m1q18_b",
-        label: "So the AI writes more text without any meaning",
+        label: "When it is true; being fair and disclosing it are optional",
       },
       {
         id: "m1q18_c",
-        label: "So the AI takes less time to respond",
+        label: "When at least two of the three questions get a yes",
       },
       {
         id: "m1q18_d",
-        label: "So you do not have to state the task at all",
+        label: "When you disclose it, because then the AI is responsible",
       },
     ],
     correctAnswer: "m1q18_a",
-    topic: "Prompt Structure",
+    topic: "The Guardian's Three Questions",
     difficulty: "medium",
-    source: "Guide: Anatomy of a Prompt",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Context (goal, audience, situation) steers the answer toward what you need.",
+      "The three questions go together: a result that is true but unfair, or fair but undisclosed, is not ready yet. Disclosing your use does not shift responsibility to the AI: a person still answers for the final decision. Review the ethics guide.",
   },
   {
     id: "m1q19",
     question:
-      "What does the instruction 'Act as a primary school teacher' help with?",
+      "You pasted a customer list and a password into an AI chat by mistake. What do you do?",
     options: [
       {
         id: "m1q19_a",
-        label: "It makes the AI answer faster",
+        label: "I stay in that chat and ask the AI to forget it",
       },
       {
         id: "m1q19_b",
-        label: "It changes the answer's language without notice",
+        label: "I delete only my last message and keep using that chat",
       },
       {
         id: "m1q19_c",
-        label: "It sets the point of view and level",
+        label:
+          "I stop pasting data, delete the chat if possible, change the password and tell the person in charge",
       },
       {
         id: "m1q19_d",
-        label: "It forces the AI not to use examples",
+        label: "I change the password but tell no one, since it was my mistake",
       },
     ],
     correctAnswer: "m1q19_c",
-    topic: "Prompt Clarity",
+    topic: "If You Already Shared Sensitive Data",
     difficulty: "easy",
-    source: "How to Create Effective Prompts: The Formula to Master AI",
+    source: "AI Privacy Manual",
     feedback:
-      "Assigning a role sets the perspective and level of the answer. It does not change speed or language.",
+      'If you already shared something sensitive, act fast and in order: stop pasting information, delete the conversation if the tool allows it, change the passwords and tell the person in charge of data if it belongs to others. Asking the AI to forget it or keeping quiet protects no one. Review the "AI Privacy Manual".',
   },
   {
     id: "m1q20",
@@ -171,7 +173,7 @@ export const MODULE_1_EN_PART2 = [
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Stating the format (table, bullets, length) makes the AI deliver exactly what you need.",
+      "Stating the format (table, bullets or list) makes the AI deliver the answer in the shape you need.",
   },
   {
     id: "m1q21",
@@ -180,27 +182,27 @@ export const MODULE_1_EN_PART2 = [
     options: [
       {
         id: "m1q21_a",
-        label: "The maximum length you need",
+        label: "The maximum length: three lines",
       },
       {
         id: "m1q21_b",
-        label: "The background color of the tool",
+        label: "A warm tone, like in a chat",
       },
       {
         id: "m1q21_c",
-        label: "The brand of your computer",
+        label: "That it answers in a table for easier reading",
       },
       {
         id: "m1q21_d",
-        label: "The language of the operating system",
+        label: "That the AI decides how much to write",
       },
     ],
     correctAnswer: "m1q21_a",
-    topic: "Audience",
+    topic: "Length",
     difficulty: "medium",
     source: "The Chisel",
     feedback:
-      "Stating the length (three lines) avoids long answers that do not fit the chat.",
+      "Stating the length (three lines) avoids long answers that do not fit the chat. Tone or a table do not control how much the AI writes.",
   },
   {
     id: "m1q22",
@@ -225,7 +227,7 @@ export const MODULE_1_EN_PART2 = [
       },
     ],
     correctAnswer: "m1q22_d",
-    topic: "Prompt Refinement",
+    topic: "Privacy",
     difficulty: "easy",
     source: "Guide: Anatomy of a Prompt",
     feedback:
@@ -233,89 +235,95 @@ export const MODULE_1_EN_PART2 = [
   },
   {
     id: "m1q23",
-    question: "You want an explanation for a 10-year-old. What do you specify?",
+    question:
+      "A teacher wants AI to help with report card comments. How does she prepare the list before pasting it?",
     options: [
       {
         id: "m1q23_a",
-        label: "The audience: a 10-year-old, with simple words",
+        label:
+          'She changes names to "Student A, B, C" and removes school and ID',
       },
       {
         id: "m1q23_b",
-        label: "The color of the answer's text",
+        label:
+          "She keeps the names but removes the grades so they are not exposed",
       },
       {
         id: "m1q23_c",
-        label: "The name of the tool you will use",
+        label: "She uses each student's initials and keeps the school",
       },
       {
         id: "m1q23_d",
-        label: "That it uses as many technical words as possible",
+        label: "She pastes the full list and asks the AI not to store it",
       },
     ],
     correctAnswer: "m1q23_a",
-    topic: "Constraints",
+    topic: "Anonymizing",
     difficulty: "easy",
-    source: "How to Create Effective Prompts: The Formula to Master AI",
+    source: "AI Privacy Manual",
     feedback:
-      "Naming the audience sets the language of the answer. Color, the tool's name or jargon do not give that reference.",
+      'Replacing people with roles and removing school and ID lets the AI help with the format without knowing anyone. Initials plus the school can still identify a student, and asking the AI not to store the list does not give you back control of that data. Review the "AI Privacy Manual".',
   },
   {
     id: "m1q24",
     question:
-      "You want an answer you can paste into an email. What do you specify?",
+      "You are about to use an AI tool for the first time. What is a good first step to protect your privacy?",
     options: [
       {
         id: "m1q24_a",
-        label: "That it answers in another language",
+        label: "Create a strong password and assume your chats are private",
       },
       {
         id: "m1q24_b",
-        label: "That it includes many emojis",
+        label: "Assume that, if it is free, the tool stores nothing",
       },
       {
         id: "m1q24_c",
-        label: "No markdown formatting or tables, just plain text",
+        label:
+          "Check in the settings whether your chats are used to improve the service",
       },
       {
         id: "m1q24_d",
-        label: "That it is all in capital letters",
+        label: "Try it by pasting your real data to see how it answers",
       },
     ],
     correctAnswer: "m1q24_c",
-    topic: "Examples in Prompts",
+    topic: "Privacy Settings",
     difficulty: "medium",
-    source: "Guide: Anatomy of a Prompt",
+    source: "AI Privacy Manual",
     feedback:
-      "Asking for plain text avoids symbols and tables that look broken when pasted into an email. Emojis, language or capitals do not solve that.",
+      'Often you do not know whether what you write is used to improve the service. Checking the settings and turning it off if you can is the first step the "AI Privacy Manual" suggests. A password protects your account, but it does not decide what happens to what you write.',
   },
   {
     id: "m1q25",
     question:
-      "The text is for a formal report. What should you state in the prompt?",
+      "You are going to publish an article made with AI help on the school blog, and it uses ideas from other authors. In Colombia, Law 23 of 1982 protects their works. What do you do?",
     options: [
       {
         id: "m1q25_a",
-        label: "The tone: formal, clear and professional",
+        label:
+          "I cite the sources, copy no protected text and declare the AI help",
       },
       {
         id: "m1q25_b",
-        label: "That it should use emojis and slang",
+        label: "I copy the excerpts, since the AI already reworded them",
       },
       {
         id: "m1q25_c",
-        label: "That it should write like in a friends' chat",
+        label:
+          "I publish without citing, since what AI generates has no author",
       },
       {
         id: "m1q25_d",
-        label: "That it should omit all the details",
+        label: "I cite only famous authors; the others need no credit",
       },
     ],
     correctAnswer: "m1q25_a",
-    topic: "Prompt Tone",
+    topic: "Intellectual Property",
     difficulty: "easy",
-    source: "Guide: Anatomy of a Prompt",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "Tone (formal/informal, technical/close) adjusts the register of the answer.",
+      "Law 23 of 1982 protects authors' works, and using AI gives you no rights over them. That is why you cite the sources, do not copy protected texts and declare what you generated with AI when you publish it. Review the ethics guide, section 6.",
   },
   {
     id: "m1q26",
@@ -348,33 +356,33 @@ export const MODULE_1_EN_PART2 = [
   },
   {
     id: "m1q27",
-    question: "What does a style example add inside a prompt?",
+    question:
+      "A 12-year-old student wants to upload photos and names of classmates to an AI for a project. Which rule applies?",
     options: [
       {
         id: "m1q27_a",
         label:
-          "It shows the tone and form you want without copying the content",
+          "With children or teenagers, a responsible adult decides what is shared",
       },
       {
         id: "m1q27_b",
-        label:
-          "It forces the AI to copy the example word for word, changing nothing",
+        label: "It is enough that the classmates say yes",
       },
       {
         id: "m1q27_c",
-        label: "It makes the AI answer with less detail than before",
+        label: "They can upload them if the tool is educational and free",
       },
       {
         id: "m1q27_d",
-        label: "It replaces the task you asked the AI for",
+        label: "They can upload them if they delete them after the project",
       },
     ],
     correctAnswer: "m1q27_a",
-    topic: "RTF Method",
+    topic: "Minors",
     difficulty: "medium",
-    source: "Guide: Anatomy of a Prompt",
+    source: "AI Privacy Manual",
     feedback:
-      "A style example conveys tone and form better than a description. Use it without asking for copying.",
+      "With minors, a responsible adult decides what is shared, chooses the tools and supervises their use; the law restricts the processing of children's and teenagers' data. The classmates' yes, an educational tool or deleting afterwards does not change that rule. Review the \"AI Privacy Manual\".",
   },
   {
     id: "m1q28",

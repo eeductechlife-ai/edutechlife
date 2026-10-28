@@ -27,64 +27,65 @@ export const MODULE_4_EN_PART3 = [
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "The dates explain why the figures change. Using the most recent source with an explanation is the rigorous path.",
+      "The dates explain why the figures change. Using the most recent reliable source, and explaining the change, is the rigorous path.",
   },
   {
     id: "m4q30",
-    question: "What is filtering sources before synthesizing for?",
+    question:
+      "You uploaded two studies with opposite conclusions and, without giving context, ask for a general summary. What risk do you run?",
     options: [
       {
         id: "m4q30_a",
-        label: "So the notebook weighs more and looks better",
+        label: "That the notebook does not accept both studies at once",
       },
       {
         id: "m4q30_b",
-        label: "So the summary rests on what really matters",
+        label: "That it blends both positions as if they agreed",
       },
       {
         id: "m4q30_c",
-        label: "So the AI invents what is missing",
+        label: "That the notebook discards one of the studies",
       },
       {
         id: "m4q30_d",
-        label: "So you upload fewer sources for no reason",
+        label: "That the summary favors the more recent study",
       },
     ],
     correctAnswer: "m4q30_b",
     topic: "Curation",
     difficulty: "easy",
-    source: "Gemini Notebook: the notebook of the future",
+    source: "Gemini Notebook Guide",
     feedback:
-      "Filtering chooses the relevant, reliable sources before summarizing. The synthesis then rests on useful evidence.",
+      "The lesson warns against mixing contradictory sources without context: a general summary can merge both positions as if they said the same thing. Point out why they differ or ask for a comparison.",
   },
   {
     id: "m4q31",
     question:
-      "You want to compare where your sources agree and where they conflict. What do you ask for?",
+      "Your group is going to review with an Audio Overview. What do you add so the review works better?",
     options: [
       {
         id: "m4q31_a",
-        label: "A comparative analysis that cites each source it uses",
+        label: "A written summary with the key ideas of the topic",
       },
       {
         id: "m4q31_b",
-        label: "A summary of a single source as if it were the only one",
+        label: "Another identical audio to listen to it twice",
       },
       {
         id: "m4q31_c",
-        label: "A list of titles without reading the content of any",
+        label: "Some background music to keep everyone's attention",
       },
       {
         id: "m4q31_d",
-        label: "An invented general opinion without reviewing the documents",
+        label: "A longer audio with the same sources",
       },
     ],
     correctAnswer: "m4q31_a",
-    topic: "Synthesis",
+    topic: "Audio Overview",
     difficulty: "medium",
-    source: "The Crucible",
+    source: "Guide: Audio and documents, in order",
     feedback:
-      "A comparative analysis with citations reveals agreements and tensions between sources.",
+      "The lesson warns about this: using only audio, with no written summary, wastes both formats. The audio gives the big picture and the text lets you reread the key ideas calmly.",
   },
   {
     id: "m4q32",
@@ -92,15 +93,16 @@ export const MODULE_4_EN_PART3 = [
     options: [
       {
         id: "m4q32_a",
-        label: "Upload documents and trust the first answer",
+        label: "Generate the audio, listen to it and then choose sources",
       },
       {
         id: "m4q32_b",
-        label: "Generate the audio and review the sources afterwards",
+        label:
+          "Upload all sources, generate the audio and review the citations",
       },
       {
         id: "m4q32_c",
-        label: "Publish the answers without citations",
+        label: "Analyze ideas, generate the audio and then remove weak sources",
       },
       {
         id: "m4q32_d",
@@ -112,64 +114,65 @@ export const MODULE_4_EN_PART3 = [
     difficulty: "hard",
     source: "The Alchemical Studio",
     feedback:
-      "The right flow goes from selecting sources to analysis and, at the end, the audio. Reviewing afterwards leaves the risk in the result.",
+      "Order matters: first you choose the sources, then you analyze their ideas and finally you generate the audio. Choosing or cleaning up sources after generating the audio leaves in the result what should not have gone in.",
   },
   {
     id: "m4q33",
-    question: "What should you check before sharing a notebook with your team?",
+    question:
+      "You are going to share your notebook with your team and only you should make changes. What do you decide first?",
     options: [
       {
         id: "m4q33_a",
-        label: "That it holds no sensitive data and has appropriate access",
+        label: "Who can only view it and who can edit it",
       },
       {
         id: "m4q33_b",
-        label: "That its name is very eye-catching for the whole team",
+        label: "Send each person a copy to edit",
       },
       {
         id: "m4q33_c",
-        label: "That it has the greatest possible number of documents loaded",
+        label: "Give everyone edit permission to go faster",
       },
       {
         id: "m4q33_d",
-        label: "That the answers are long, even if they hold internal data",
+        label: "Post the link in the class group",
       },
     ],
     correctAnswer: "m4q33_a",
-    topic: "Privacy",
+    topic: "Collaboration",
     difficulty: "medium",
-    source: "Gemini Notebook Guide",
+    source: "Guide: Audio and documents, in order",
     feedback:
-      "Before sharing, protect sensitive data and limit access. Review the Gemini Notebook guide.",
+      "The lesson says so: before sharing a notebook, decide who can view it and who can edit it. If only you make changes, the others only view it. Check in your account which access options you have.",
   },
   {
     id: "m4q34",
     question:
-      "What should you do with sources that no longer add to the notebook?",
+      "You have 10 mixed papers on AI. How do you organize them so the connections between ideas show up?",
     options: [
       {
         id: "m4q34_a",
-        label: "Remove them so the notebook stays focused and clean",
+        label: "By topic, such as ethics, technical and applications",
       },
       {
         id: "m4q34_b",
-        label: "Leave them all so the notebook looks more complete",
+        label: "By download date, from newest to oldest",
       },
       {
         id: "m4q34_c",
-        label: "Duplicate them so the AI has more repeated information",
+        label: "By file size, from smallest to largest",
       },
       {
         id: "m4q34_d",
-        label: "Keep them even if they distract the answers to your questions",
+        label: "In a single list, in the order they arrived",
       },
     ],
     correctAnswer: "m4q34_a",
     topic: "Curation",
     difficulty: "medium",
-    source: "The Grimoire",
+    source: "Gemini Notebook Guide",
     feedback:
-      "A focused notebook answers better: remove what does not add. Practice in the activity The Crucible.",
+      "Grouping by topic, as in the lesson's example (ethics, technical, applications), lets connections between documents emerge naturally. Download date, size or arrival order say nothing about the content. Practice in the activity The Crucible.",
   },
   {
     id: "m4q35",
@@ -186,7 +189,7 @@ export const MODULE_4_EN_PART3 = [
       },
       {
         id: "m4q35_c",
-        label: "The word count of the answer",
+        label: "The total word count of the answer it gave",
       },
       {
         id: "m4q35_d",
@@ -203,31 +206,31 @@ export const MODULE_4_EN_PART3 = [
   {
     id: "m4q36",
     question:
-      "What does a student gain by using Gemini Notebook to study their notes?",
+      "In which of these tasks does a general chat help you more than a Gemini Notebook notebook?",
     options: [
       {
         id: "m4q36_a",
-        label: "Asking questions and getting answers with citations",
+        label: "Brainstorming loose ideas on a topic with no documents",
       },
       {
         id: "m4q36_b",
-        label: "Completely avoiding having to study the contents",
+        label: "Answering questions about your class notes",
       },
       {
         id: "m4q36_c",
-        label: "Replacing their notes with generated text without review",
+        label: "Comparing what three reports you uploaded say",
       },
       {
         id: "m4q36_d",
-        label: "Sharing their public notes with no access control",
+        label: "Preparing a study guide from your PDFs",
       },
     ],
     correctAnswer: "m4q36_a",
-    topic: "Learning",
+    topic: "Gemini Notebook",
     difficulty: "easy",
-    source: "Complete NotebookLM guide: get the most out of it (2026)",
+    source: "Gemini Notebook Guide",
     feedback:
-      "Study from your own materials and with citations to verify. Review the getting started video.",
+      "The notebook answers with what you give it: it shines when you work with your documents. For brainstorming with no sources, a general chat helps more; still, check what it suggests. Review the Gemini Notebook Guide.",
   },
   {
     id: "m4q37",
@@ -243,7 +246,7 @@ export const MODULE_4_EN_PART3 = [
       },
       {
         id: "m4q37_c",
-        label: "That the AI has signed it as correct",
+        label: "That the AI marks it as correct at the end",
       },
       {
         id: "m4q37_d",
@@ -255,64 +258,65 @@ export const MODULE_4_EN_PART3 = [
     difficulty: "medium",
     source: "Gemini Notebook Guide",
     feedback:
-      "A synthesis can be trusted when its key statements have a verifiable citation. Length or an AI signature does not guarantee it.",
+      "A synthesis can be trusted when its key statements have a verifiable citation. Neither length nor the AI marking it as correct guarantees it.",
   },
   {
     id: "m4q38",
-    question: "What makes a synthesis useful for making a decision?",
+    question:
+      "Your notebook on cell phone use at school only has articles in favor of banning it. What do you do before synthesizing?",
     options: [
       {
         id: "m4q38_a",
-        label: "It is as long as possible",
+        label: "Synthesize as is, since all the articles are reliable",
       },
       {
         id: "m4q38_b",
-        label: "It uses very technical words even without sources",
+        label: "Ask the AI to imagine the arguments against",
       },
       {
         id: "m4q38_c",
-        label: "It has no date, so it stays valid",
+        label: "Remove the longest articles to balance it out",
       },
       {
         id: "m4q38_d",
-        label: "Each conclusion has a citation you can open",
+        label: "Look for reliable sources with other positions",
       },
     ],
     correctAnswer: "m4q38_d",
     topic: "Curation",
     difficulty: "easy",
-    source: "Gemini Notebook Guide",
+    source: "The Art of Source Curation",
     feedback:
-      "A synthesis helps you decide when each conclusion can be verified. Length, jargon or a missing date do not make it useful.",
+      "If all your sources say the same thing, your synthesis will show a single view. Add reliable sources with other positions. Asking the AI to imagine the counterarguments is not enough: they would not be backed by any source.",
   },
   {
     id: "m4q39",
     question:
-      "How does the Audio Overview help in the document-to-podcast flow?",
+      "You have 5 papers on neuroplasticity and want a memorable 15-minute podcast. What do you ask for when generating it?",
     options: [
       {
         id: "m4q39_a",
-        label: "It turns the conclusions into audio to review them",
+        label: "That it discusses the key findings with practical examples",
       },
       {
         id: "m4q39_b",
-        label: "It replaces source review with a simple summary",
+        label: "That it reads the five papers in order, skipping nothing",
       },
       {
         id: "m4q39_c",
-        label: "It generates images of the documents to illustrate the topic",
+        label: "That it summarizes each paper separately, one after another",
       },
       {
         id: "m4q39_d",
-        label: "It translates the documents into several languages at once",
+        label: "That it covers every technical detail of each paper",
       },
     ],
     correctAnswer: "m4q39_a",
     topic: "Document-to-Podcast Flow",
     difficulty: "hard",
-    source: "The Alchemical Studio",
+    source: "Guide: Audio and documents, in order",
     feedback:
-      "The Audio Overview helps review conclusions that are already curated. It does not replace checking the sources.",
+      "This is the lesson's example: a focused audio discusses the key findings of 5 papers with examples and analogies. Reading the papers or going through them one by one, with every detail, looks like the weak example: voices reading with no structure. Check in your account how to guide the audio.",
   },
   {
     id: "m4q40",
@@ -321,20 +325,19 @@ export const MODULE_4_EN_PART3 = [
     options: [
       {
         id: "m4q40_a",
-        label: "Only background music and a pleasant voice",
+        label: "The list of the 8 documents at the end of the episode",
       },
       {
         id: "m4q40_b",
-        label: "Statements with no source, so it sounds smoother",
+        label: "The authors' names at the start",
       },
       {
         id: "m4q40_c",
-        label:
-          "The citations for each idea, so the listener can go to the source",
+        label: "The source of each idea, so it can be checked",
       },
       {
         id: "m4q40_d",
-        label: "Author names with no dates or documents",
+        label: "A separate written summary, with no citations in the audio",
       },
     ],
     correctAnswer: "m4q40_c",
@@ -342,6 +345,6 @@ export const MODULE_4_EN_PART3 = [
     difficulty: "hard",
     source: "The Alchemical Studio",
     feedback:
-      "A verifiable podcast gives the source of each idea. Music or smoothness do not replace evidence.",
+      "To verify a podcast, the listener needs to know where each idea comes from. A final list of documents or the authors at the start do not say which idea comes from which source, and a separate summary does not cite what is heard.",
   },
 ];

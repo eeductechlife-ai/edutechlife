@@ -58,39 +58,39 @@ export const MODULE_5_EN_PART1 = [
     source:
       "Lesson 2 · Create with Claude: Artifacts, Documents and Presentations",
     feedback:
-      "An Artifact is a piece (document, table or small app) that lives next to the chat: you see it, improve it step by step and export it. Fixed instructions go in a Project, preferences in memory and access to your apps in connectors.",
+      "An Artifact is a piece (document, table or small app) that lives next to the chat: you see it and improve it step by step. Fixed instructions go in a Project, preferences in memory and access to your apps in connectors.",
   },
   {
     id: "m5q3",
     question:
-      "Claude gives you a table with sales figures. What do you do before presenting it to the team?",
+      "Today you must fix the spelling of 20 short emails and, separately, analyze a long contract with complex clauses. How do you choose Claude's model?",
     options: [
       {
         id: "m5q3_a",
-        label: "Ask Claude to check its own figures and trust its answer",
+        label:
+          "The most capable one for both tasks, to ensure the best quality",
       },
       {
         id: "m5q3_b",
         label:
-          "Compare each figure with the original source and redo one calculation",
+          "A fast one for the emails and a more capable one for the contract",
       },
       {
         id: "m5q3_c",
-        label:
-          "Check spelling and format, since the figures come from the file",
+        label: "A fast one for both, since they are both text tasks",
       },
       {
         id: "m5q3_d",
         label:
-          "Ask it to add the source for each figure and present the table like that",
+          "The most capable one for the emails, since there are more, and a fast one for the contract",
       },
     ],
     correctAnswer: "m5q3_b",
-    topic: "Oversight",
+    topic: "Getting to know Claude",
     difficulty: "medium",
-    source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
+    source: "Lesson 1 · Get to Know Claude: the AI That Works With You",
     feedback:
-      "Claude can get figures wrong and still sound sure, even when it checks itself. Citing a source is not checking it: compare with the original data before presenting.",
+      "A fast model is enough for simple, repetitive tasks, such as fixing short emails; a more capable one is better for a long text that requires reasoning, such as the contract. Using the most powerful one for everything spends without gaining, and a fast one may fall short on the contract.",
   },
   {
     id: "m5q4",
@@ -130,7 +130,7 @@ export const MODULE_5_EN_PART1 = [
       {
         id: "m5q5_a",
         label:
-          "Connect only correo, check its permissions and approve the reply yourself",
+          "Connect only email, check its permissions and approve the reply yourself",
       },
       {
         id: "m5q5_b",
@@ -144,7 +144,7 @@ export const MODULE_5_EN_PART1 = [
       },
       {
         id: "m5q5_d",
-        label: "Connect correo and let Claude send the reply",
+        label: "Connect email and let Claude send the reply",
       },
     ],
     correctAnswer: "m5q5_a",
@@ -156,27 +156,25 @@ export const MODULE_5_EN_PART1 = [
   },
   {
     id: "m5q6",
-    question: "What is the difference between a Skill and a Project?",
+    question:
+      "So that Claude can review your sales platform, a coworker suggests typing your username and password into the chat. What do you do?",
     options: [
       {
         id: "m5q6_a",
-        label:
-          "A Skill keeps the files of a job; a Project keeps the steps of a procedure",
+        label: "I share it and change it as soon as Claude finishes the review",
       },
       {
         id: "m5q6_b",
-        label:
-          "A Skill keeps the conversations of a job; a Project keeps your tone and preferences",
+        label: "I type it in an incognito chat so that it is not saved",
       },
       {
         id: "m5q6_c",
         label:
-          "A Skill keeps a procedure with steps and templates; a Project, the context of a job",
+          "I use a connector for that platform and read the permissions it asks for",
       },
       {
         id: "m5q6_d",
-        label:
-          "They are the same thing with another name: both keep instructions and files for one job",
+        label: "I give it to Claude in the instructions of a private Project",
       },
     ],
     correctAnswer: "m5q6_c",
@@ -184,7 +182,7 @@ export const MODULE_5_EN_PART1 = [
     difficulty: "medium",
     source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
-      "A Skill stores a procedure you always do the same way: steps, templates and examples. A Project stores the context of a job that repeats, with its instructions and files. Connectors give access to your apps.",
+      "A password opens your whole account and is not typed into a chat, whether incognito or in a Project. To give access to a tool you use a connector, and before approving it you read the permissions it asks for. Changing it afterwards does not undo that you already shared it.",
   },
   {
     id: "m5q7",
@@ -203,7 +201,8 @@ export const MODULE_5_EN_PART1 = [
       },
       {
         id: "m5q7_c",
-        label: "Use an incognito chat so Claude always starts clean",
+        label:
+          "Use an incognito chat so Claude starts from scratch each Monday",
       },
       {
         id: "m5q7_d",
@@ -219,34 +218,35 @@ export const MODULE_5_EN_PART1 = [
   },
   {
     id: "m5q8",
-    question: "What does 'delegating with judgment' to Claude mean?",
+    question:
+      "You ask Claude for a multi-step task: check your calendar, write invitations and send them to 30 clients. Where do you put the checkpoint?",
     options: [
       {
         id: "m5q8_a",
-        label: "Delegate only easy tasks and do the important ones yourself",
+        label:
+          "At the end: I review the summary of what it did once it finishes",
       },
       {
         id: "m5q8_b",
-        label:
-          "Delegate everything Claude does well and review only if something fails",
+        label: "At the start: I give it detailed instructions and let it work",
       },
       {
         id: "m5q8_c",
         label:
-          "Hand over the task and the decision if the request has all five parts",
+          "At the drafting step: I approve the template and let it send the rest",
       },
       {
         id: "m5q8_d",
         label:
-          "Hand over the draft, review what goes out and keep the decision",
+          "Before sending: I review the invitations and confirm the sending myself",
       },
     ],
     correctAnswer: "m5q8_d",
     topic: "Delegating with Claude",
-    difficulty: "easy",
+    difficulty: "medium",
     source: "Lesson 3 · Delegate with Claude: Projects, Connectors and Skills",
     feedback:
-      "Delegating is not walking away: you hand over the form and the draft, review what goes to third parties and keep the decision. A good request improves the result, but it does not transfer responsibility.",
+      "In a multi-step task, important actions, such as sending something to clients, are confirmed before they happen, because they cannot be undone afterwards. Reviewing at the end comes too late, good instructions do not replace the review and approving the template does not check each invitation.",
   },
   {
     id: "m5q9",
@@ -265,12 +265,12 @@ export const MODULE_5_EN_PART1 = [
       {
         id: "m5q9_c",
         label:
-          "Always write in incognito, even if you need it to remember your tone",
+          "Move your work to incognito chats, even if you want it to remember your tone",
       },
       {
         id: "m5q9_d",
         label:
-          "Ask it to save everything, because more memory always gives better answers in every chat",
+          "Ask it to save everything, because with more memory it gives better answers",
       },
     ],
     correctAnswer: "m5q9_a",

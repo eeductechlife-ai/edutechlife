@@ -10,11 +10,11 @@ export const MODULE_2_EN_PART2 = [
       },
       {
         id: "m2q15_b",
-        label: "data analysis, writing a brand-new formula in the chat",
+        label: "Data Analysis, writing a brand-new formula in the chat",
       },
       {
         id: "m2q15_c",
-        label: "Web Search, to copy images",
+        label: "Web Search, to copy any image from a website",
       },
       {
         id: "m2q15_d",
@@ -31,61 +31,62 @@ export const MODULE_2_EN_PART2 = [
   {
     id: "m2q16",
     question:
-      "You want to edit a long text and highlight changes without losing the original. What do you use?",
+      "You need a poster with a paragraph of instructions for your class. How do you make it?",
     options: [
       {
         id: "m2q16_a",
-        label: "Canvas, which lets you edit and rewrite on a working document",
+        label: "Ask image generation for the whole poster, paragraph included",
       },
       {
         id: "m2q16_b",
         label:
-          "The image generator, to turn the text into a complete detailed image",
+          "Generate the image without text and write the paragraph in Canvas",
       },
       {
         id: "m2q16_c",
-        label: "Web Search, to find the same text already published online",
+        label:
+          "Ask for the image with the text, then ask it to fix the letters",
       },
       {
         id: "m2q16_d",
-        label: "data analysis, to delete the original paragraph entirely",
+        label: "Write the paragraph in Canvas and ask to turn it into an image",
       },
     ],
-    correctAnswer: "m2q16_a",
-    topic: "Canvas",
+    correctAnswer: "m2q16_b",
+    topic: "Image generation",
     difficulty: "medium",
-    source: "Complete ChatGPT Guide",
+    source: "Integrated ChatGPT Tools",
     feedback:
-      "Canvas is the workspace to write and edit text and code with change tracking.",
+      "Text inside a generated image comes out with errors. That is why the image goes without text and the paragraph is written and reviewed in Canvas. Asking it to fix the letters or turning the text into an image repeats the problem.",
   },
   {
     id: "m2q17",
-    question: "What is the difference between Web Search and Data Analysis?",
+    question:
+      "You want to rehearse a presentation out loud and get questions as if from the audience. What do you use?",
     options: [
       {
         id: "m2q17_a",
-        label: "They are the same; only the menu name changes",
+        label: "Canvas, so it corrects the presentation script",
       },
       {
         id: "m2q17_b",
-        label: "Web Search generates images; Data Analysis writes emails",
+        label: "Web Search, to find common questions on the topic",
       },
       {
         id: "m2q17_c",
-        label:
-          "Web Search brings information from the internet; Data Analysis calculates on your file",
+        label: "Voice mode, talking out loud",
       },
       {
         id: "m2q17_d",
-        label: "Data Analysis only works with the internet turned on",
+        label: "Image generation, for the slides",
       },
     ],
     correctAnswer: "m2q17_c",
-    topic: "ChatGPT Projects",
+    topic: "Voice mode",
     difficulty: "medium",
-    source: "Complete ChatGPT Guide",
+    source: "The Toolbox",
     feedback:
-      "Web Search provides current data from the internet; Data Analysis calculates and charts the file you upload.",
+      "Voice mode lets you talk out loud: you rehearse and it answers with questions, like an audience. Canvas improves the written script and search brings ideas, but neither makes you practice speaking. Check in your account whether you have voice mode.",
   },
   {
     id: "m2q18",
@@ -113,30 +114,30 @@ export const MODULE_2_EN_PART2 = [
     correctAnswer: "m2q18_a",
     topic: "Files",
     difficulty: "easy",
-    source: "ChatGPT from Scratch in 6 Minutes",
+    source: "ChatGPT in practice",
     feedback:
       "You can attach files and work on them. Review the ChatGPT intro video.",
   },
   {
     id: "m2q19",
     question:
-      "The Code Interpreter gives you a sales chart. What is the most responsible step?",
+      "Data Analysis gives you a sales chart. What is the most responsible step before using it?",
     options: [
       {
         id: "m2q19_a",
-        label: "Publish it, because code rarely makes mistakes",
+        label: "Ask ChatGPT to review the code and confirm it is right",
       },
       {
         id: "m2q19_b",
-        label: "Compare several rows of the chart with your original file",
+        label: "Compare some values in the chart with your original file",
       },
       {
         id: "m2q19_c",
-        label: "Check only that the title and colors look right",
+        label: "Check that it has a clear title, axes and legend",
       },
       {
         id: "m2q19_d",
-        label: "Ask it to chart again until the trend looks clear",
+        label: "Ask for the code used and save it with the chart",
       },
     ],
     correctAnswer: "m2q19_b",
@@ -144,7 +145,7 @@ export const MODULE_2_EN_PART2 = [
     difficulty: "hard",
     source: "The Toolbox",
     feedback:
-      "Comparing some rows with the original file confirms that the calculation and the chart are correct before you use them.",
+      "Comparing some values with your file confirms that the calculation and the chart are correct. ChatGPT checking itself, a well-labeled chart or saving the code don't prove the figures are right.",
   },
   {
     id: "m2q20",
@@ -177,117 +178,118 @@ export const MODULE_2_EN_PART2 = [
   {
     id: "m2q21",
     question:
-      "Which way of customizing ChatGPT is recommended today, while GPTs are being retired?",
+      "Your account warns that a custom GPT you use is going to be retired. What do you do?",
     options: [
       {
         id: "m2q21_a",
-        label:
-          "A Project with instructions, files and plugins connected to your account",
+        label: "Move its instructions and files to a Project and test it",
       },
       {
         id: "m2q21_b",
-        label:
-          "A new instruction every week, without reviewing the previous one",
+        label: "Keep using it until the day it stops working",
       },
       {
         id: "m2q21_c",
-        label: "A new chat each time, pasting your work context again",
+        label: "Look in the store for another GPT that does the same",
       },
       {
         id: "m2q21_d",
-        label: "One shared account for the whole team, with no limits",
+        label: "Copy only its instructions into a new chat",
       },
     ],
     correctAnswer: "m2q21_a",
-    topic: "Custom GPTs",
-    difficulty: "easy",
-    source: "Complete ChatGPT Guide",
+    topic: "GPT retirement",
+    difficulty: "medium",
+    source: "Guide: GPTs, Projects and agents",
     feedback:
-      "A Project gathers instructions and files for one job; plugins connect tools. Pasting the context every time and sharing accounts are bad practices.",
+      "A Project keeps instructions and files for all its chats, so it preserves what the GPT did; testing it confirms it answers the same way. Waiting until it stops working or looking for another GPT doesn't solve the retirement, and a loose chat loses the files.",
   },
   {
     id: "m2q22",
-    question: "Where are an assistant's role and rules defined in a Project?",
+    question:
+      "You've spent hours in the same chat and ChatGPT no longer follows rules you gave it at the start. What do you do?",
     options: [
       {
         id: "m2q22_a",
-        label: "In its instructions for each chat",
+        label: "Summarize what matters and continue in a new chat with it",
       },
       {
         id: "m2q22_b",
-        label: "In the name of the file you upload",
+        label: "Repeat the rules in capital letters in the same chat",
       },
       {
         id: "m2q22_c",
-        label: "In the account's billing history",
+        label: "Stay in the same chat, since it has all the context there",
       },
       {
         id: "m2q22_d",
-        label: "In the team's contact list",
+        label: "Switch to the most powerful model and continue the same chat",
       },
     ],
     correctAnswer: "m2q22_a",
-    topic: "GPT Instructions",
+    topic: "Context limits",
     difficulty: "medium",
     source: "Complete ChatGPT Guide",
-    feedback: "Instructions are where the role and the rules are set.",
+    feedback:
+      "Every chat has a context limit: in a very long conversation it may stop taking the beginning into account. A summary in a new chat gives it back what matters. Staying in the same chat, even if you switch models or repeat rules, usually keeps the problem.",
   },
   {
     id: "m2q23",
     question:
-      "An assistant must answer using the company's internal policies. What do you set up?",
+      "You uploaded a sheet with 200 sales and need the exact total. What do you ask ChatGPT?",
     options: [
       {
         id: "m2q23_a",
-        label: "A knowledge base with those documents and internal rules",
+        label: "To calculate it carefully, step by step, in the chat",
       },
       {
         id: "m2q23_b",
-        label: "A short sentence asking it to be friendly",
+        label: "To calculate the total twice and compare both",
       },
       {
         id: "m2q23_c",
-        label: "Only the company name in the title",
+        label: "To calculate it with Data Analysis on the file",
       },
       {
         id: "m2q23_d",
-        label: "Nothing, since AI already knows the policies of every company",
+        label: "To give an approximate total, which is faster",
       },
     ],
-    correctAnswer: "m2q23_a",
-    topic: "Knowledge Base",
-    difficulty: "medium",
-    source: "The Project Workshop",
-    feedback: "The knowledge base gives it the real documents it must cite.",
+    correctAnswer: "m2q23_c",
+    topic: "Data Analysis",
+    difficulty: "hard",
+    source: "Integrated ChatGPT Tools",
+    feedback:
+      'Data Analysis runs the calculation with Python on your file, so the total comes from the data and not from an estimate by the model. Calculating "from memory", even step by step or twice, can repeat the same error.',
   },
   {
     id: "m2q24",
-    question: "Which source fits a figure that changes every week?",
+    question:
+      "You work for three clients, each with their own documents and tone. How do you organize your work in ChatGPT?",
     options: [
       {
         id: "m2q24_a",
-        label: "A PDF downloaded a year ago, just in case",
+        label: "One Project for all three, with one file per client",
       },
       {
         id: "m2q24_b",
-        label: "A list written in the instructions that nobody reviews",
+        label: "One Project per document type, with all three clients",
       },
       {
         id: "m2q24_c",
-        label:
-          "An online source with its date, checked at the moment you use it",
+        label: "One Project per client, with its files and instructions",
       },
       {
         id: "m2q24_d",
-        label: "The chat's memory, which the assistant recalls on its own",
+        label: "One chat per client, pasting its context at the start",
       },
     ],
     correctAnswer: "m2q24_c",
-    topic: "Actions / APIs",
+    topic: "Organizing Projects",
     difficulty: "hard",
-    source: "Complete ChatGPT Guide",
+    source: "Guide: GPTs, Projects and agents",
     feedback:
-      "A changing figure needs a current source and a date. An old file or unreviewed memory can give you a number that is no longer valid.",
+      "One Project per goal keeps each client's files and instructions together, without mixing tones or data. A shared Project or one per document type mixes materials from different sites, and pasting the context into each chat is exactly what the Project avoids.",
   },
   {
     id: "m2q25",
@@ -296,8 +298,7 @@ export const MODULE_2_EN_PART2 = [
     options: [
       {
         id: "m2q25_a",
-        label:
-          "I check that the table has 10 rows and the right format, without opening the sources",
+        label: "I check that it has the 10 rows and the requested columns",
       },
       {
         id: "m2q25_b",
@@ -305,13 +306,11 @@ export const MODULE_2_EN_PART2 = [
       },
       {
         id: "m2q25_c",
-        label:
-          "I copy the table into the report, since the agent already searched real sources",
+        label: "I ask the agent to confirm the data",
       },
       {
         id: "m2q25_d",
-        label:
-          "I ask for another identical result and compare the form, not the data",
+        label: "I ask for a second table and compare the two",
       },
     ],
     correctAnswer: "m2q25_b",
@@ -319,7 +318,7 @@ export const MODULE_2_EN_PART2 = [
     difficulty: "hard",
     source: "Complete ChatGPT Guide",
     feedback:
-      "The agent saves steps, but every source and figure must be checked before you decide or publish.",
+      "The agent saves steps, but only opening each source confirms the figure exists and says the same thing. Counting rows, asking it to confirm itself or comparing two of its tables doesn't prove the data is true.",
   },
   {
     id: "m2q26",
@@ -343,7 +342,7 @@ export const MODULE_2_EN_PART2 = [
       },
     ],
     correctAnswer: "m2q26_d",
-    topic: "GPT Store",
+    topic: "Testing before sharing",
     difficulty: "medium",
     source: "Complete ChatGPT Guide",
     feedback:
@@ -401,7 +400,7 @@ export const MODULE_2_EN_PART2 = [
       },
     ],
     correctAnswer: "m2q28_a",
-    topic: "GPT Scope",
+    topic: "Assistant scope",
     difficulty: "easy",
     source: "Complete ChatGPT Guide",
     feedback:

@@ -87,60 +87,63 @@ export const MODULE_1_PT_PART2 = [
   },
   {
     id: "m1q18",
-    question: "Para que serve dar contexto num prompt?",
+    question:
+      "O Juramento do Guardião propõe três perguntas para cada resultado de IA: é verdade?, é justo?, eu declaro? Quando você pode usar o resultado?",
     options: [
       {
         id: "m1q18_a",
-        label: "Para ajustá-la à sua realidade concreta",
+        label: "Quando as três têm um sim: é verdade, é justo e eu declaro",
       },
       {
         id: "m1q18_b",
-        label: "Para que a IA escreva mais texto sem sentido",
+        label: "Quando é verdade; ser justo e declarar são passos opcionais",
       },
       {
         id: "m1q18_c",
-        label: "Para que a IA demore menos para responder",
+        label: "Quando pelo menos duas das três perguntas têm um sim",
       },
       {
         id: "m1q18_d",
-        label: "Para não precisar indicar a tarefa",
+        label:
+          "Quando você declara, porque assim a responsabilidade passa à IA",
       },
     ],
     correctAnswer: "m1q18_a",
-    topic: "Estrutura de Prompts",
+    topic: "Três perguntas do guardião",
     difficulty: "médio",
-    source: "Guia: Anatomia de um Prompt",
+    source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "O contexto (objetivo, público, situação) direciona a resposta ao que você precisa.",
+      "As três perguntas andam juntas: um resultado verdadeiro mas injusto, ou justo mas sem declarar, ainda não está pronto. Declarar o uso não transfere a responsabilidade para a IA: uma pessoa continua respondendo pela decisão final. Revise o guia de ética.",
   },
   {
     id: "m1q19",
     question:
-      "Para que ajuda a instrução «Aja como um professor do ensino fundamental»?",
+      "Você colou por engano em um chat de IA uma lista de clientes e uma senha. O que faz?",
     options: [
       {
         id: "m1q19_a",
-        label: "Faz a IA responder mais rápido",
+        label: "Continuo nessa conversa e peço à IA que esqueça tudo",
       },
       {
         id: "m1q19_b",
-        label: "Muda o idioma da resposta sem avisar",
+        label: "Apago só minha última mensagem e continuo usando esse chat",
       },
       {
         id: "m1q19_c",
-        label: "Define o ponto de vista e o nível da resposta",
+        label:
+          "Paro de colar dados, apago a conversa se der, troco a senha e aviso o responsável",
       },
       {
         id: "m1q19_d",
-        label: "Obriga a IA a não usar exemplos",
+        label: "Troco a senha, mas não aviso ninguém porque o erro foi meu",
       },
     ],
     correctAnswer: "m1q19_c",
-    topic: "Clareza em Prompts",
+    topic: "Se você já compartilhou um dado sensível",
     difficulty: "fácil",
-    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
+    source: "Manual de Privacidade em IA",
     feedback:
-      "Atribuir um papel define o olhar e o nível da resposta. Não muda a velocidade nem o idioma.",
+      "Se você já compartilhou algo sensível, aja rápido e com ordem: pare de colar informação, apague a conversa se a ferramenta permitir, troque as senhas e avise o responsável pelos dados se forem de terceiros. Pedir à IA que esqueça ou calar o erro não protege ninguém. Revise o «Manual de Privacidade em IA».",
   },
   {
     id: "m1q20",
@@ -169,7 +172,7 @@ export const MODULE_1_PT_PART2 = [
     difficulty: "médio",
     source: "Guia: Anatomia de um Prompt",
     feedback:
-      "Indicar o formato (tabela, tópicos, extensão) faz a IA entregar exatamente o que você precisa.",
+      "Indicar o formato (tabela, tópicos ou lista) faz a IA entregar a resposta na forma que você precisa.",
   },
   {
     id: "m1q21",
@@ -178,27 +181,27 @@ export const MODULE_1_PT_PART2 = [
     options: [
       {
         id: "m1q21_a",
-        label: "A extensão máxima que você precisa",
+        label: "A extensão máxima: três linhas",
       },
       {
         id: "m1q21_b",
-        label: "A marca e o modelo do seu computador",
+        label: "Um tom próximo, como num chat",
       },
       {
         id: "m1q21_c",
-        label: "A marca do seu computador",
+        label: "Que responda em uma tabela para ler melhor",
       },
       {
         id: "m1q21_d",
-        label: "O idioma do sistema operacional",
+        label: "Que a IA decida quanto escrever",
       },
     ],
     correctAnswer: "m1q21_a",
-    topic: "Público",
+    topic: "Extensão",
     difficulty: "médio",
     source: "O Cinzel",
     feedback:
-      "Indicar a extensão (três linhas) evita respostas longas que não cabem no chat.",
+      "Indicar a extensão (três linhas) evita respostas longas que não cabem no chat. O tom ou uma tabela não controlam quanto a IA escreve.",
   },
   {
     id: "m1q22",
@@ -223,7 +226,7 @@ export const MODULE_1_PT_PART2 = [
       },
     ],
     correctAnswer: "m1q22_d",
-    topic: "Refinamento de Prompts",
+    topic: "Privacidade",
     difficulty: "fácil",
     source: "Guia: Anatomia de um Prompt",
     feedback:
@@ -232,89 +235,93 @@ export const MODULE_1_PT_PART2 = [
   {
     id: "m1q23",
     question:
-      "Você quer uma explicação para uma criança de 10 anos. O que precisa indicar?",
+      "Uma professora quer que a IA a ajude com os comentários do boletim. Como ela prepara a lista antes de colá-la?",
     options: [
       {
         id: "m1q23_a",
-        label: "O público: uma criança de 10 anos, com palavras simples",
+        label:
+          "Troca os nomes por «Estudante A, B, C» e tira escola e documento",
       },
       {
         id: "m1q23_b",
-        label: "A cor do texto da resposta",
+        label: "Mantém os nomes, mas tira as notas para não expô-las",
       },
       {
         id: "m1q23_c",
-        label: "O nome da ferramenta que vai usar",
+        label: "Usa as iniciais de cada estudante e mantém a escola",
       },
       {
         id: "m1q23_d",
-        label: "Que use o máximo de palavras técnicas",
+        label: "Cola a lista completa e pede à IA que não a guarde",
       },
     ],
     correctAnswer: "m1q23_a",
-    topic: "Restrições",
+    topic: "Anonimizar",
     difficulty: "fácil",
-    source: "Como Criar Prompts Eficazes: A Fórmula para Dominar a IA",
+    source: "Manual de Privacidade em IA",
     feedback:
-      "Indicar o público define a linguagem da resposta. Cor, nome da ferramenta ou jargão não dão essa referência.",
+      "Trocar pessoas por papéis e tirar escola e documento permite que a IA ajude com o formato sem conhecer ninguém. As iniciais junto com a escola ainda podem identificar um estudante, e pedir que não guarde a lista não devolve o controle desses dados. Revise o «Manual de Privacidade em IA».",
   },
   {
     id: "m1q24",
     question:
-      "Você quer uma resposta que possa colar em um e-mail. O que indica?",
+      "Você vai usar uma ferramenta de IA pela primeira vez. Qual é um bom primeiro passo para cuidar da sua privacidade?",
     options: [
       {
         id: "m1q24_a",
-        label: "Que responda em outro idioma",
+        label: "Criar uma senha forte e supor que seus chats são privados",
       },
       {
         id: "m1q24_b",
-        label: "Que inclua muitos emojis",
+        label: "Supor que, se é gratuita, a ferramenta não guarda nada",
       },
       {
         id: "m1q24_c",
-        label: "Que não use tabelas nem markdown",
+        label:
+          "Verificar nas configurações se seus chats são usados para melhorar o serviço",
       },
       {
         id: "m1q24_d",
-        label: "Que escreva tudo em letras maiúsculas",
+        label: "Testá-la colando seus dados reais para ver como responde",
       },
     ],
     correctAnswer: "m1q24_c",
-    topic: "Exemplos no Prompt",
+    topic: "Configurações de privacidade",
     difficulty: "médio",
-    source: "Guia: Anatomia de um Prompt",
+    source: "Manual de Privacidade em IA",
     feedback:
-      "Pedir texto simples evita símbolos e tabelas que ficam quebrados ao colar em um e-mail. Emojis, idioma ou maiúsculas não resolvem isso.",
+      "Muitas vezes você não sabe se o que escreve é usado para melhorar o serviço. Verificar as configurações e desativar isso se puder é o primeiro passo que o «Manual de Privacidade em IA» propõe. Uma senha protege sua conta, mas não decide o que acontece com o que você escreve.",
   },
   {
     id: "m1q25",
     question:
-      "O texto é para um relatório formal. O que deve indicar no prompt?",
+      "Você vai publicar no blog da escola um artigo feito com apoio de IA que usa ideias de outros autores. Na Colômbia, a Lei 23 de 1982 protege as obras deles. O que você faz?",
     options: [
       {
         id: "m1q25_a",
-        label: "O tom: formal e profissional",
+        label:
+          "Cito as fontes, não copio textos protegidos e declaro o apoio de IA",
       },
       {
         id: "m1q25_b",
-        label: "Que use emojis e gírias",
+        label:
+          "Copio os trechos, porque a IA já os reescreveu com outras palavras",
       },
       {
         id: "m1q25_c",
-        label: "Que escreva como num chat de amigos",
+        label: "Publico sem citar, porque o que a IA gera não tem autor",
       },
       {
         id: "m1q25_d",
-        label: "Que omita todos os detalhes",
+        label: "Cito só os autores famosos; os demais não precisam de crédito",
       },
     ],
     correctAnswer: "m1q25_a",
-    topic: "Tom do Prompt",
+    topic: "Propriedade Intelectual",
     difficulty: "fácil",
-    source: "Guia: Anatomia de um Prompt",
+    source: "PDF: Ética da Inteligência Artificial",
     feedback:
-      "O tom (formal/informal, técnico/próximo) ajusta o registro da resposta.",
+      "A Lei 23 de 1982 protege as obras dos autores, e usar IA não dá a você direito sobre elas. Por isso você cita as fontes, não copia textos protegidos e declara o que gerou com IA ao publicar. Revise o guia de ética, seção 6.",
   },
   {
     id: "m1q26",
@@ -347,32 +354,33 @@ export const MODULE_1_PT_PART2 = [
   },
   {
     id: "m1q27",
-    question: "O que um exemplo de estilo acrescenta dentro de um prompt?",
+    question:
+      "Um estudante de 12 anos quer subir para uma IA fotos e nomes dos colegas para um projeto. Que regra se aplica?",
     options: [
       {
         id: "m1q27_a",
-        label: "Mostra o tom e a forma que você quer sem copiar o conteúdo",
+        label:
+          "Com crianças ou adolescentes, um adulto responsável decide o que se compartilha",
       },
       {
         id: "m1q27_b",
-        label:
-          "Obriga a IA a copiar o exemplo palavra por palavra, sem mudar nada",
+        label: "Basta que os colegas digam que sim",
       },
       {
         id: "m1q27_c",
-        label: "Faz a IA responder com menos detalhe do que antes",
+        label: "Pode subi-las se a ferramenta for educativa e gratuita",
       },
       {
         id: "m1q27_d",
-        label: "Substitui a tarefa que você pediu à IA",
+        label: "Pode subi-las se apagá-las ao terminar o projeto",
       },
     ],
     correctAnswer: "m1q27_a",
-    topic: "Método RTF",
+    topic: "Menores de idade",
     difficulty: "médio",
-    source: "Guia: Anatomia de um Prompt",
+    source: "Manual de Privacidade em IA",
     feedback:
-      "Um exemplo de estilo transmite tom e forma melhor que uma descrição. Use-o sem pedir cópia.",
+      "Com menores, um adulto responsável decide o que se compartilha, escolhe as ferramentas e supervisiona o uso; a lei restringe o tratamento de dados de crianças e adolescentes. O sim dos colegas, uma ferramenta educativa ou apagar depois não mudam essa regra. Revise o «Manual de Privacidade em IA».",
   },
   {
     id: "m1q28",

@@ -1,8 +1,27 @@
 import { useIALabStore } from "../../../store/ialabStore";
 import { analyzeQuizFailures } from "../../../utils/ialab";
 import COURSE_KNOWLEDGE from "../constants/courseKnowledge";
+import { getModuleContent } from "../constants/moduleContent";
+import { getResourcesForTopic } from "../constants/moduleResources";
 import { injectSessionContext } from "../../../services/maxMemory";
 import { MaxAcademicMemory } from "../../../services/maxAcademicMemory";
+
+// Recursos reales de cada tema según el catálogo de IALab, para que MAX no cite títulos viejos.
+const getModuleCatalog = (moduleId, locale) => {
+  const topics =
+    getModuleContent(locale)?.[moduleId]?.overviewData?.topics || [];
+  return topics.map((topic) => ({
+    tema: topic.title,
+    recursos: (getResourcesForTopic(topic.title, locale)?.resources || []).map(
+      (r) => ({
+        tipo: r.type,
+        titulo: r.title,
+        ...(r.duration ? { duracion: r.duration } : {}),
+        ...(r.pages ? { paginas: r.pages } : {}),
+      }),
+    ),
+  }));
+};
 
 const PROMPT_MAX_DOCENTE_ES = `Eres MAX, el coach de IA de Edutechlife.
 
@@ -128,7 +147,18 @@ export const buildMaxSystemPrompt = async ({
     (m) => m.id === currentModuleId,
   );
   const moduleContent = currentModuleData
-    ? JSON.stringify(currentModuleData, null, 2)
+    ? JSON.stringify(
+        {
+          ...currentModuleData,
+          topics: currentModuleData.topics?.map((topic) => ({
+            ...topic,
+            resources: undefined,
+          })),
+          recursosDelModulo: getModuleCatalog(currentModuleId, locale || "es"),
+        },
+        null,
+        2,
+      )
     : isEn
       ? "No module information available."
       : "No hay información del módulo disponible.";

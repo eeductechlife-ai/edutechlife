@@ -59,37 +59,38 @@ export const MODULE_5_PT_PART1 = [
     source:
       "Lição 2 · Crie com o Claude: Artifacts, documentos e apresentações",
     feedback:
-      "Um Artifact é uma peça (documento, tabela ou pequeno app) que fica ao lado do chat: você a vê, melhora por partes e exporta. As instruções fixas vão em um Projeto, as preferências na memória e o acesso aos seus apps nos conectores.",
+      "Um Artifact é uma peça (documento, tabela ou pequeno app) que fica ao lado do chat: você a vê e a melhora por partes. As instruções fixas vão em um Projeto, as preferências na memória e o acesso aos seus apps nos conectores.",
   },
   {
     id: "m5q3",
     question:
-      "O Claude entrega uma tabela com números de vendas. O que você faz antes de apresentá-la à equipe?",
+      "Hoje você precisa corrigir a ortografia de 20 e-mails curtos e, à parte, analisar um contrato longo com cláusulas complexas. Como escolhe o modelo do Claude?",
     options: [
       {
         id: "m5q3_a",
         label:
-          "Pedir ao Claude que revise os próprios números e confiar na resposta",
+          "O mais capaz para as duas tarefas, para garantir a melhor qualidade",
       },
       {
         id: "m5q3_b",
-        label: "Comparar cada número com a fonte original e refazer um cálculo",
+        label: "Um rápido para os e-mails e um mais capaz para o contrato",
       },
       {
         id: "m5q3_c",
-        label: "Revisar ortografia e formato, porque os números vêm do arquivo",
+        label: "Um rápido para as duas, porque ambas são tarefas de texto",
       },
       {
         id: "m5q3_d",
-        label: "Pedir que acrescente a fonte de cada dado e apresentar assim",
+        label:
+          "O mais capaz para os e-mails, porque são mais, e um rápido para o contrato",
       },
     ],
     correctAnswer: "m5q3_b",
-    topic: "Supervisão",
+    topic: "Conhecer o Claude",
     difficulty: "médio",
-    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
+    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
     feedback:
-      "O Claude pode errar números e soar seguro, mesmo quando revisa a si mesmo. Citar uma fonte não é conferi-la: compare com o dado original antes de apresentar.",
+      "Um modelo rápido basta para tarefas simples e repetidas, como corrigir e-mails curtos; um mais capaz convém para um texto longo que exige raciocínio, como o contrato. Usar o mais potente para tudo gasta sem ganhar, e um rápido pode ficar aquém no contrato.",
   },
   {
     id: "m5q4",
@@ -129,12 +130,12 @@ export const MODULE_5_PT_PART1 = [
       {
         id: "m5q5_a",
         label:
-          "Conectar só o correo, revisar as permissões e aprovar você a resposta",
+          "Conectar só o e-mail, revisar as permissões e aprovar você a resposta",
       },
       {
         id: "m5q5_b",
         label:
-          "Conectar correo, Drive e Agenda de uma vez para não repetir o processo",
+          "Conectar e-mail, Drive e Agenda de uma vez para não repetir o processo",
       },
       {
         id: "m5q5_c",
@@ -143,7 +144,7 @@ export const MODULE_5_PT_PART1 = [
       },
       {
         id: "m5q5_d",
-        label: "Conectar o correo e deixar o Claude enviar a resposta",
+        label: "Conectar o e-mail e deixar o Claude enviar a resposta",
       },
     ],
     correctAnswer: "m5q5_a",
@@ -155,27 +156,26 @@ export const MODULE_5_PT_PART1 = [
   },
   {
     id: "m5q6",
-    question: "Qual é a diferença entre uma Skill e um Projeto?",
+    question:
+      "Para o Claude revisar a sua plataforma de vendas, um colega sugere escrever no chat o seu usuário e a sua senha. O que você faz?",
     options: [
       {
         id: "m5q6_a",
         label:
-          "Uma Skill guarda os arquivos de um trabalho; um Projeto guarda os passos de um procedimento que se repete",
+          "Compartilho e troco a senha assim que o Claude terminar a revisão",
       },
       {
         id: "m5q6_b",
-        label:
-          "Uma Skill guarda as conversas de um trabalho; um Projeto guarda seu tom e suas preferências",
+        label: "Escrevo em um chat incógnito para que não fique salva",
       },
       {
         id: "m5q6_c",
         label:
-          "Uma Skill guarda um procedimento com passos e modelos; um Projeto, o contexto de um trabalho",
+          "Uso um conector para essa plataforma e leio que permissões ele pede",
       },
       {
         id: "m5q6_d",
-        label:
-          "São a mesma coisa com outro nome: ambos guardam instruções e arquivos de um trabalho",
+        label: "Passo a senha ao Claude nas instruções de um Projeto privado",
       },
     ],
     correctAnswer: "m5q6_c",
@@ -183,7 +183,7 @@ export const MODULE_5_PT_PART1 = [
     difficulty: "médio",
     source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
-      "Uma Skill guarda um procedimento que você faz sempre igual: passos, modelos e exemplos. Um Projeto guarda o contexto de um trabalho que se repete, com suas instruções e arquivos. Os conectores dão acesso aos seus apps.",
+      "Uma senha abre toda a sua conta e não se escreve em um chat, seja incógnito ou de um Projeto. Para dar acesso a uma ferramenta usa-se um conector, e antes de aprová-lo você lê que permissões ele pede. Trocá-la depois não desfaz que você já a compartilhou.",
   },
   {
     id: "m5q7",
@@ -202,7 +202,8 @@ export const MODULE_5_PT_PART1 = [
       },
       {
         id: "m5q7_c",
-        label: "Usar um chat incógnito para o Claude começar sempre do zero",
+        label:
+          "Usar um chat incógnito para o Claude começar do zero cada segunda",
       },
       {
         id: "m5q7_d",
@@ -218,33 +219,33 @@ export const MODULE_5_PT_PART1 = [
   },
   {
     id: "m5q8",
-    question: "O que significa 'delegar com critério' ao Claude?",
+    question:
+      "Você pede ao Claude uma tarefa de várias etapas: revisar a sua agenda, redigir convites e enviá-los a 30 clientes. Onde você coloca o ponto de controle?",
     options: [
       {
         id: "m5q8_a",
-        label: "Delegar só o fácil e fazer você todo o importante",
+        label: "No final: reviso o resumo do que ele fez quando terminar",
       },
       {
         id: "m5q8_b",
-        label:
-          "Delegar tudo o que o Claude faz bem e revisar só se algo falhar",
+        label: "No início: dou instruções detalhadas e deixo ele trabalhar",
       },
       {
         id: "m5q8_c",
-        label:
-          "Entregar a tarefa e a decisão se o pedido tiver as cinco partes",
+        label: "Na redação: aprovo o texto modelo e deixo que envie o restante",
       },
       {
         id: "m5q8_d",
-        label: "Entregar o rascunho, revisar o que sai e manter a decisão",
+        label:
+          "Antes de enviar: reviso os convites e confirmo eu mesmo o envio",
       },
     ],
     correctAnswer: "m5q8_d",
     topic: "Delegar com o Claude",
-    difficulty: "fácil",
+    difficulty: "médio",
     source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
-      "Delegar não é se desligar: você entrega a forma e o rascunho, revisa o que vai para terceiros e mantém a decisão. Um bom pedido melhora o resultado, mas não transfere a responsabilidade.",
+      "Em uma tarefa de várias etapas, as ações importantes, como enviar algo a clientes, são confirmadas antes de acontecer, porque depois não se desfazem. Revisar no final chega tarde, boas instruções não substituem a revisão e aprovar o modelo não revisa cada convite.",
   },
   {
     id: "m5q9",
@@ -263,12 +264,12 @@ export const MODULE_5_PT_PART1 = [
       {
         id: "m5q9_c",
         label:
-          "Escrever sempre no incógnito, mesmo precisando que lembre o seu tom",
+          "Passar o seu trabalho para chats incógnitos, mesmo querendo que lembre o seu tom",
       },
       {
         id: "m5q9_d",
         label:
-          "Pedir que guarde tudo, porque mais memória sempre dá respostas melhores em todos os chats",
+          "Pedir que guarde tudo, porque com mais memória dá respostas melhores",
       },
     ],
     correctAnswer: "m5q9_a",

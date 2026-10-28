@@ -10,7 +10,7 @@ export const MODULE_2_PART2 = [
       },
       {
         id: "m2q15_b",
-        label: "El Intérprete de Código, escribiendo una fórmula nueva",
+        label: "Análisis de Datos, escribiendo una fórmula nueva",
       },
       {
         id: "m2q15_c",
@@ -31,63 +31,61 @@ export const MODULE_2_PART2 = [
   {
     id: "m2q16",
     question:
-      "Quieres editar un texto largo resaltando cambios sin perder la versión original. ¿Qué usas?",
+      "Necesitas un afiche con un párrafo de instrucciones para tu clase. ¿Cómo lo haces?",
     options: [
       {
         id: "m2q16_a",
         label:
-          "Canvas, que permite editar y reescribir sobre un lienzo de trabajo",
+          "Pido todo el afiche, con el párrafo, a la generación de imágenes",
       },
       {
         id: "m2q16_b",
-        label:
-          "El generador de imágenes, para convertir el texto en una imagen completa",
+        label: "Genero la imagen sin texto y escribo el párrafo en Canvas",
       },
       {
         id: "m2q16_c",
-        label: "La Búsqueda Web, para encontrar el mismo texto publicado",
+        label: "Pido la imagen con el texto y luego que corrija las letras",
       },
       {
         id: "m2q16_d",
-        label: "El Intérprete de Código, para borrar el párrafo original",
+        label: "Escribo el párrafo en Canvas y pido convertirlo en imagen",
       },
     ],
-    correctAnswer: "m2q16_a",
-    topic: "Canvas",
+    correctAnswer: "m2q16_b",
+    topic: "Generación de imágenes",
     difficulty: "medio",
-    source: "Guía Completa de ChatGPT",
+    source: "Las Herramientas Integradas de ChatGPT",
     feedback:
-      "Canvas es el lienzo para escribir y editar textos y código con control de cambios. Repasa la Guía Completa de ChatGPT.",
+      "El texto dentro de una imagen generada sale con errores. Por eso la imagen va sin texto y el párrafo se escribe y se revisa en Canvas. Pedir que corrija las letras o convertir el texto en imagen repite el problema.",
   },
   {
     id: "m2q17",
-    question: "¿Cuál es la diferencia entre Búsqueda Web y Análisis de Datos?",
+    question:
+      "Quieres ensayar en voz alta una exposición y que te hagan preguntas como el público. ¿Qué usas?",
     options: [
       {
         id: "m2q17_a",
-        label: "Son lo mismo, solo cambia el nombre del menú",
+        label: "Canvas, para que corrija el guion de la exposición",
       },
       {
         id: "m2q17_b",
-        label:
-          "La Búsqueda Web genera imágenes; el Análisis de Datos escribe correos",
+        label: "Búsqueda Web, para hallar preguntas frecuentes del tema",
       },
       {
         id: "m2q17_c",
-        label:
-          "La Búsqueda Web trae información de internet; el Análisis de Datos calcula sobre tu archivo",
+        label: "El modo de voz, conversando en voz alta",
       },
       {
         id: "m2q17_d",
-        label: "El Análisis de Datos solo funciona con la internet activada",
+        label: "La generación de imágenes, para las diapositivas",
       },
     ],
     correctAnswer: "m2q17_c",
-    topic: "Proyectos ChatGPT",
+    topic: "Modo de voz",
     difficulty: "medio",
-    source: "Guía Completa de ChatGPT",
+    source: "La Caja de Herramientas",
     feedback:
-      "Búsqueda Web sirve para datos actuales de internet; Análisis de Datos calcula y grafica el archivo que subes.",
+      "El modo de voz te deja conversar en voz alta: ensayas y te responde con preguntas, como un público. Canvas mejora el guion escrito y la búsqueda trae ideas, pero ninguno te hace practicar hablando. Revisa en tu cuenta si tienes el modo de voz.",
   },
   {
     id: "m2q18",
@@ -114,31 +112,31 @@ export const MODULE_2_PART2 = [
     correctAnswer: "m2q18_a",
     topic: "Archivos",
     difficulty: "fácil",
-    source: "ChatGPT desde Cero en 6 Minutos",
+    source: "ChatGPT en la práctica",
     feedback:
       "Puedes adjuntar archivos y trabajar sobre ellos. Repasa el video de introducción a ChatGPT.",
   },
   {
     id: "m2q19",
     question:
-      "El Intérprete de Código te da una gráfica de ventas. ¿Cuál es el paso más responsable?",
+      "Análisis de Datos te entrega una gráfica de ventas. ¿Cuál es el paso más responsable antes de usarla?",
     options: [
       {
         id: "m2q19_a",
-        label: "Publicarla, porque el código casi nunca se equivoca",
+        label:
+          "Pedirle a ChatGPT que revise el código y confirme que está bien",
       },
       {
         id: "m2q19_b",
-        label: "Comparar varias filas de la gráfica con tu archivo original",
+        label: "Comparar algunos valores de la gráfica con tu archivo original",
       },
       {
         id: "m2q19_c",
-        label: "Revisar solo que el título y los colores se vean bien",
+        label: "Revisar que tenga título, ejes y leyenda claros",
       },
       {
         id: "m2q19_d",
-        label:
-          "Pedir que la vuelva a graficar hasta que la tendencia se vea clara",
+        label: "Pedir el código usado y guardarlo con la gráfica",
       },
     ],
     correctAnswer: "m2q19_b",
@@ -146,7 +144,7 @@ export const MODULE_2_PART2 = [
     difficulty: "difícil",
     source: "La Caja de Herramientas",
     feedback:
-      "Comparar algunas filas con el archivo original confirma que el cálculo y la gráfica son correctos antes de usarlos.",
+      "Comparar algunos valores con tu archivo confirma que el cálculo y la gráfica son correctos. Que ChatGPT se revise a sí mismo, una gráfica bien rotulada o guardar el código no prueban que las cifras estén bien.",
   },
   {
     id: "m2q20",
@@ -179,121 +177,118 @@ export const MODULE_2_PART2 = [
   {
     id: "m2q21",
     question:
-      "¿Qué forma de personalizar ChatGPT se recomienda hoy, mientras los GPT se retiran?",
+      "Tu cuenta avisa que un GPT personalizado que usas se va a retirar. ¿Qué haces?",
     options: [
       {
         id: "m2q21_a",
-        label:
-          "Un Proyecto con instrucciones, archivos y plugins conectados a tu cuenta",
+        label: "Paso sus instrucciones y archivos a un Proyecto y lo pruebo",
       },
       {
         id: "m2q21_b",
-        label: "Una instrucción nueva cada semana, sin revisar la anterior",
+        label: "Lo sigo usando hasta el día en que deje de funcionar",
       },
       {
         id: "m2q21_c",
-        label:
-          "Un chat nuevo cada vez, pegando otra vez tu contexto de trabajo",
+        label: "Busco en la tienda otro GPT que haga lo mismo",
       },
       {
         id: "m2q21_d",
-        label: "Una sola cuenta para todo el equipo, sin ningún límite",
+        label: "Copio solo sus instrucciones en un chat nuevo",
       },
     ],
     correctAnswer: "m2q21_a",
-    topic: "GPTs Personalizados",
-    difficulty: "fácil",
-    source: "Guía Completa de ChatGPT",
+    topic: "Vigencia de los GPT",
+    difficulty: "medio",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "Un Proyecto reúne instrucciones y archivos de un trabajo; los plugins conectan herramientas. Pegar el contexto cada vez y compartir cuentas son malas prácticas.",
+      "Un Proyecto guarda instrucciones y archivos para todos sus chats, así que conserva lo que hacía el GPT; probarlo confirma que responde igual. Esperar a que deje de funcionar o buscar otro GPT no resuelve el retiro, y un chat suelto pierde los archivos.",
   },
   {
     id: "m2q22",
     question:
-      "¿Dónde se definen el rol y las reglas de un asistente en un Proyecto?",
+      "Llevas horas en un mismo chat y ChatGPT ya no respeta reglas que le diste al principio. ¿Qué haces?",
     options: [
       {
         id: "m2q22_a",
-        label: "En sus instrucciones de comportamiento",
+        label: "Resumo lo importante y sigo en un chat nuevo con ese resumen",
       },
       {
         id: "m2q22_b",
-        label: "En el nombre del archivo que subes",
+        label: "Repito las reglas en mayúsculas en el mismo chat",
       },
       {
         id: "m2q22_c",
-        label: "En el historial de facturación de la cuenta",
+        label: "Sigo en el mismo chat, porque ahí tiene todo el contexto",
       },
       {
         id: "m2q22_d",
-        label: "En la lista de contactos del equipo",
+        label: "Cambio al modelo más potente y continúo el mismo chat",
       },
     ],
     correctAnswer: "m2q22_a",
-    topic: "Instrucciones GPT",
+    topic: "Límites de contexto",
     difficulty: "medio",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "Las instrucciones son el lugar donde se fijan el rol y las reglas.",
+      "Cada chat tiene un límite de contexto: en una conversación muy larga puede dejar de tener en cuenta lo del principio. Un resumen en un chat nuevo le devuelve lo importante. Seguir en el mismo chat, aunque cambies de modelo o repitas reglas, suele mantener el problema.",
   },
   {
     id: "m2q23",
     question:
-      "Un asistente debe responder con las políticas internas de la empresa. ¿Qué configuras?",
+      "Subiste una hoja con 200 ventas y necesitas el total exacto. ¿Qué le pides a ChatGPT?",
     options: [
       {
         id: "m2q23_a",
-        label: "Una base de conocimiento con esos documentos y reglas internas",
+        label: "Que lo calcule con cuidado, paso a paso, en el chat",
       },
       {
         id: "m2q23_b",
-        label: "Una frase corta pidiéndole que sea amable",
+        label: "Que calcule el total dos veces y compare ambos",
       },
       {
         id: "m2q23_c",
-        label: "Solo el nombre de la empresa en el título",
+        label: "Que lo calcule con Análisis de Datos sobre el archivo",
       },
       {
         id: "m2q23_d",
-        label:
-          "Nada, porque la IA ya conoce las políticas de cualquier empresa",
+        label: "Que dé un total aproximado, que es más rápido",
       },
     ],
-    correctAnswer: "m2q23_a",
-    topic: "Base de Conocimiento",
-    difficulty: "medio",
-    source: "El Taller de Proyectos",
+    correctAnswer: "m2q23_c",
+    topic: "Análisis de Datos",
+    difficulty: "difícil",
+    source: "Las Herramientas Integradas de ChatGPT",
     feedback:
-      "La base de conocimiento le da los documentos reales que debe citar.",
+      "Análisis de Datos hace el cálculo con Python sobre tu archivo, así el total sale de los datos y no de una estimación del modelo. Calcular «de memoria», aunque sea paso a paso o dos veces, puede repetir el mismo error.",
   },
   {
     id: "m2q24",
-    question: "¿Qué fuente conviene para un dato que cambia cada semana?",
+    question:
+      "Trabajas para tres clientes, cada uno con sus documentos y su tono. ¿Cómo organizas tu trabajo en ChatGPT?",
     options: [
       {
         id: "m2q24_a",
-        label: "Un PDF descargado hace un año, por si acaso",
+        label: "Un solo Proyecto para los tres, con un archivo por cliente",
       },
       {
         id: "m2q24_b",
-        label: "Una lista escrita en las instrucciones que nadie revisa",
+        label: "Un Proyecto por tipo de documento, con los tres clientes",
       },
       {
         id: "m2q24_c",
-        label:
-          "Una fuente en línea con su fecha, consultada en el momento de usarla",
+        label: "Un Proyecto por cliente, con sus archivos e instrucciones",
       },
       {
         id: "m2q24_d",
-        label: "La memoria del chat, que el asistente recuerda por su cuenta",
+        label: "Un chat por cliente, pegando su contexto al empezar",
       },
     ],
     correctAnswer: "m2q24_c",
-    topic: "Actions / APIs",
+    topic: "Organización en Proyectos",
     difficulty: "difícil",
-    source: "Guía Completa de ChatGPT",
+    source: "Guía: GPTs, Proyectos y agentes",
     feedback:
-      "Un dato que cambia necesita una fuente actual y una fecha. Un archivo viejo o una memoria sin revisar pueden dar una cifra que ya no vale.",
+      "Un Proyecto por objetivo mantiene juntos los archivos y las instrucciones de cada cliente, sin mezclar tonos ni datos. Un Proyecto común o uno por tipo de documento mezcla materiales de obras distintas, y pegar el contexto en cada chat es justo lo que el Proyecto evita.",
   },
   {
     id: "m2q25",
@@ -302,8 +297,7 @@ export const MODULE_2_PART2 = [
     options: [
       {
         id: "m2q25_a",
-        label:
-          "Reviso que la tabla tenga 10 filas y el formato correcto, sin abrir las fuentes",
+        label: "Reviso que tenga las 10 filas y las columnas pedidas",
       },
       {
         id: "m2q25_b",
@@ -311,12 +305,11 @@ export const MODULE_2_PART2 = [
       },
       {
         id: "m2q25_c",
-        label:
-          "Copio la tabla en el informe, porque el agente ya buscó en fuentes reales",
+        label: "Le pido al agente que confirme los datos",
       },
       {
         id: "m2q25_d",
-        label: "Le pido otro resultado igual y comparo la forma, no los datos",
+        label: "Le pido una segunda tabla y comparo las dos",
       },
     ],
     correctAnswer: "m2q25_b",
@@ -324,7 +317,7 @@ export const MODULE_2_PART2 = [
     difficulty: "difícil",
     source: "Guía Completa de ChatGPT",
     feedback:
-      "El agente ahorra pasos, pero cada fuente y cada dato deben comprobarse antes de decidir o publicar.",
+      "El agente ahorra pasos, pero solo abrir cada fuente confirma que el dato existe y dice lo mismo. Contar filas, pedirle que se confirme a sí mismo o comparar dos tablas suyas no prueba que los datos sean ciertos.",
   },
   {
     id: "m2q26",
@@ -348,7 +341,7 @@ export const MODULE_2_PART2 = [
       },
     ],
     correctAnswer: "m2q26_d",
-    topic: "GPT Store",
+    topic: "Pruebas antes de compartir",
     difficulty: "medio",
     source: "Guía Completa de ChatGPT",
     feedback:
@@ -406,7 +399,7 @@ export const MODULE_2_PART2 = [
       },
     ],
     correctAnswer: "m2q28_a",
-    topic: "Alcance del GPT",
+    topic: "Alcance del asistente",
     difficulty: "fácil",
     source: "Guía Completa de ChatGPT",
     feedback:

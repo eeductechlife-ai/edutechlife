@@ -267,7 +267,8 @@ export const RESOURCES_PT_PART2 = {
       {
         id: "notebook-audio-video-1",
         type: "video",
-        title: "Crie seu próprio podcast",
+        title:
+          "Guia completo do NotebookLM do Google: pesquise e estude sem alucinações de IA (em espanhol)",
         url: "https://www.youtube.com/embed/JdiLO6z9oXY",
         duration: "2:16",
         thumbnail: "https://img.youtube.com/vi/JdiLO6z9oXY/maxresdefault.jpg",
@@ -323,7 +324,7 @@ export const RESOURCES_PT_PART2 = {
         provider: "youtube",
         captionLang: "pt",
         title:
-          "Primeiros passos com o Claude.ai (vídeo da Anthropic, em inglês) (em espanhol)",
+          "Primeiros passos com o Claude.ai (vídeo da Anthropic, em inglês)",
         description:
           "Vídeo oficial da Anthropic, em inglês (título original: «Getting started with Claude.ai»): como começar com o Claude.ai e ter a sua primeira conversa útil. Abre com legendas em português (tradução automática do YouTube).",
       },

@@ -31,62 +31,59 @@ export const MODULE_5_PT_PART3 = [
   {
     id: "m5q29",
     question:
-      "Você quer que o Claude lembre uma preferência em todos os seus chats de trabalho. O que faz?",
+      "Você pergunta ao Claude o valor de uma tarifa que o governo atualizou este mês. O que faz com o número que ele dá?",
     options: [
       {
         id: "m5q29_a",
-        label: "Escreve em cada chat novo para não esquecer",
+        label: "Peço que confirme que está atualizado e o uso",
       },
       {
         id: "m5q29_b",
-        label:
-          "Você coloca nas instruções do Projeto e revisa o que o Claude lembra",
+        label: "Confirmo no site oficial antes de usá-lo",
       },
       {
         id: "m5q29_c",
-        label: "Pede para guardar em outro chat, separado do seu trabalho",
+        label: "Uso se vier com data e uma explicação detalhada",
       },
       {
         id: "m5q29_d",
-        label: "Espera: o Claude aprende sozinho, sem nenhum controle",
+        label: "Peço o número em outro chat e uso o que se repetir",
       },
     ],
     correctAnswer: "m5q29_b",
-    topic: "Privacidade e dados",
+    topic: "Limites e erros",
     difficulty: "fácil",
-    source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
+    source: "Lição 1 · Conheça o Claude: a IA que trabalha com você",
     feedback:
-      "As instruções de um Projeto valem para todos os seus chats, e a memória pode ser revisada e controlada. Guardá-la em outro chat também não a leva para todos os seus chats de trabalho.",
+      "O Claude pode não conhecer uma mudança recente, como uma tarifa atualizada este mês, e mesmo assim responder com segurança. O site oficial do órgão é a fonte atual. O Claude confirmar, colocar uma data ou repetir o número em outro chat não prova que ele está vigente.",
   },
   {
     id: "m5q30",
     question:
-      "Ao terminar um projeto com o Claude, qual prática deixa uma base melhor para o próximo?",
+      "Você terminou o relatório para o qual conectou o seu Drive ao Claude e não vai precisar mais desse acesso. O que faz com o conector?",
     options: [
       {
         id: "m5q30_a",
-        label: "Apagar o Projeto para começar o próximo sem contexto",
+        label: "Deixo conectado para não repetir o processo mais adiante",
       },
       {
         id: "m5q30_b",
-        label: "Deixar tudo na memória para o Claude lembrar sozinho",
+        label: "Apago o chat do relatório, e assim o Claude perde o acesso",
       },
       {
         id: "m5q30_c",
-        label:
-          "Guardar instruções, exemplos e aprendizados em um Projeto ou Skill",
+        label: "Desconecto; se precisar de novo, conecto outra vez",
       },
       {
         id: "m5q30_d",
-        label:
-          "Guardar o histórico completo de chats e relê-lo inteiro da próxima vez",
+        label: "Peço ao Claude que não volte a abrir os meus arquivos",
       },
     ],
     correctAnswer: "m5q30_c",
-    topic: "Projetos e memória",
+    topic: "Conectores e Skills",
     difficulty: "médio",
     source: "Lição 3 · Delegue com o Claude: Projetos, conectores e Skills",
     feedback:
-      "O que funciona deve ficar salvo em um Projeto ou uma Skill: assim cada novo trabalho parte do que foi aprendido, sem depender de reler chats nem do que a memória guarda.",
+      "Um conector mantém o acesso até você desconectá-lo: apagar um chat ou pedir ao Claude que não abra os seus arquivos não o retira. Se não precisa mais dele, desconecte; conectá-lo de novo leva um momento.",
   },
 ];

@@ -24,7 +24,7 @@ export const CONTENT_EN_PART2 = {
       title:
         "The Digital Architect: ChatGPT & Automation — Build Your Own Work Ecosystem",
       description:
-        "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, create GPTs as construction modules, organize Projects, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
+        "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, organize Projects as construction modules, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
       mission:
         "Your mission as an architect: complete each lesson and master the art of building with ChatGPT. Every structure you design brings you closer to your automation architect certification. Build your digital masterpiece!",
       topics: [
@@ -60,7 +60,7 @@ export const CONTENT_EN_PART2 = {
         title: "The Architect's Blueprints: Complete ChatGPT Guide",
         description: "The foundations of every great digital construction",
         detailedDescription:
-          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects. Currency note: OpenAI has scheduled the retirement of custom GPTs for December 11, 2026 (date subject to change), replaced by plugins. Start with Projects and plugins, and check the notice in your account. Start now with Projects and with the plugins connected to your account.",
+          "Every building starts with a blueprint. In this lesson you'll get to know ChatGPT end to end: what it is, which models exist, when to use each one, and how to write professional prompts (with task, context, and format) that get results on the first try. ChatGPT is a language model: it generates text from your instructions by predicting the most likely words, and without Web Search its knowledge only reaches a cutoff date. Models change often: use the ones your account's model picker shows today, the fast one for simple tasks and the more powerful one for complex analysis. Every chat has a context limit: in a very long conversation it may stop taking into account what you said at the beginning; summarize what matters and continue in a new chat with that summary. If the first answer doesn't work for you, tell it what is wrong and ask it to adjust only that part. This is the foundation you need before automating anything. Currency note: OpenAI has scheduled the retirement of custom GPTs for December 11, 2026 (date subject to change), to be replaced by plugins. Work now with Projects and with the plugins connected to your account, and check the notice in your account.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -72,7 +72,7 @@ export const CONTENT_EN_PART2 = {
         title: "The Architect's Scaffolding: Integrated Tools",
         description: "The tools that raise your digital construction",
         detailedDescription:
-          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's arsenal: Web Search, Data Analysis with Python, image generation, Canvas, and Projects. Learn to combine them to build powerful automations that multiply your productivity.",
+          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's arsenal: Web Search for current data, Data Analysis with Python to process figures, image generation, Canvas to edit documents, voice mode to talk out loud (for example, to rehearse a presentation), and Projects to organize your work. For an exact calculation on a file, ask it to use Data Analysis: calculating \"from memory\" can give wrong figures. With Web Search, prefer primary sources (whoever produced the figure), with an author and a date. Learn to combine them in workflows that multiply your productivity. Check in your account which tools you have available.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -84,7 +84,7 @@ export const CONTENT_EN_PART2 = {
         title: "The Building's Facade: GPTs, Projects and Agents",
         description: "Connect your work to the real world",
         detailedDescription:
-          "The facade is what the world sees. Here you build tailored assistants: Projects with your instructions and knowledge, plugins that connect your tools, and ChatGPT's agent for multi-step tasks. Learn to design, test, and use them without losing control of any decision. Check the currency note in lesson 1 and consider moving a GPT's instructions to a Project.",
+          "The facade is what the world sees. Here you build tailored assistants: Projects with your instructions and knowledge, plugins that connect your tools, and ChatGPT's agent for multi-step tasks. Learn to design, test, and use them without losing control of any decision. A Project's instructions tell it which role to play, with what tone, which topics it covers, and what it must not do, in all its chats; show the tone with two or three sample answers, which teach more than adjectives. Keep stable rules in the instructions and check data that changes, such as prices, in an updated source. Upload only the data the task needs and anonymize personal data. A good assistant has a narrow scope, can say \"I don't know\", and hands over to a person what it cannot solve. Ask it to state which file and section each piece of data comes from, so you can check it. Before connecting a plugin, read which permissions it asks for (what it can see and what it can do in your account) and grant only those the task needs. Before sharing an assistant, test it with real cases using fictitious data; afterwards, review a sample of its answers against written criteria from time to time. AI prepares; you review, decide, and answer for what you deliver. Check the currency note in lesson 1: if you use a GPT, move its instructions and files to a Project and test that it answers the same way.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -135,7 +135,7 @@ export const CONTENT_EN_PART2 = {
       2: {
         objective: "🏗️ The Architect's Scaffolding",
         objectiveDesc:
-          "Master ChatGPT's tool ecosystem: Web Search, Code, image generation, Canvas, and Projects.",
+          "Master ChatGPT's tool ecosystem: Web Search, Data Analysis, image generation, Canvas, voice, and Projects.",
         achievements: [
           {
             icon: "fa-check",
@@ -161,14 +161,14 @@ export const CONTENT_EN_PART2 = {
           },
           {
             icon: "fa-times",
-            text: "Not organizing projects by specific goals — like mixing materials from 5 different sites",
+            text: "Not organizing Projects by goal (one per client or per job) — like mixing materials from 5 different sites",
           },
         ],
         example: {
           label: "Integrated workflow example",
           weak: "❌ Isolated: Asking for updated data without enabling Web Search → outdated results like a building without foundations",
           strong:
-            "✅ Integrated: Search current data (Browse) → analyze with Python (Code Interpreter) → generate infographic (image) → edit in Canvas — a construction in 4 perfectly orchestrated phases",
+            "✅ Integrated: Search current data (Web Search) → analyze it with Python (Data Analysis) → generate the infographic from those results (image) → write in Canvas the text that comments on it — a construction in 4 perfectly orchestrated phases",
         },
       },
       3: {
@@ -178,7 +178,7 @@ export const CONTENT_EN_PART2 = {
         achievements: [
           {
             icon: "fa-check",
-            text: "Create a custom GPT with clear instructions, your own knowledge, and a defined goal",
+            text: "Create a Project with clear instructions, your own files, and a defined goal, or a plugin connected to your account",
           },
           {
             icon: "fa-check",
@@ -192,7 +192,7 @@ export const CONTENT_EN_PART2 = {
         warnings: [
           {
             icon: "fa-times",
-            text: "Loading sensitive or minors' data into a GPT without checking who can see it — like leaving confidential blueprints on the street",
+            text: "Loading sensitive or minors' data into a Project or plugin without checking who can see it or whether your institution allows it — like leaving confidential blueprints on the street",
           },
           {
             icon: "fa-times",
@@ -207,7 +207,7 @@ export const CONTENT_EN_PART2 = {
           label: "Practical example",
           weak: "❌ Generic: Starting every conversation from scratch, with no instructions or files, and repeating the same context",
           strong:
-            "✅ Facade: A «Proposal advisor» GPT with your tone, your templates, and your prices, inside a Project that stores each client's documents. Every answer comes with your context already loaded.",
+            "✅ Facade: A «Proposal advisor» Project with your tone, your templates, and your prices, which stores each client's documents. Every answer comes with your context already loaded.",
         },
       },
     },

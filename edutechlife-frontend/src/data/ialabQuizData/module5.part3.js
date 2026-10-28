@@ -6,7 +6,8 @@ export const MODULE_5_PART3 = [
     options: [
       {
         id: "m5q27_a",
-        label: "Pedir directamente la conclusión final para ahorrar tiempo",
+        label:
+          "Pedir la conclusión y una tabla con los totales que la respaldan",
       },
       {
         id: "m5q27_b",
@@ -14,11 +15,13 @@ export const MODULE_5_PART3 = [
       },
       {
         id: "m5q27_c",
-        label: "Pedirle a Claude que confirme dos veces el resultado",
+        label:
+          "Pedirle a Claude que revise el análisis y señale posibles errores",
       },
       {
         id: "m5q27_d",
-        label: "Pedir un gráfico: si se ve coherente, el dato es correcto",
+        label:
+          "Pedir el análisis en dos chats y usarlo si los resultados coinciden",
       },
     ],
     correctAnswer: "m5q27_b",
@@ -27,7 +30,7 @@ export const MODULE_5_PART3 = [
     source:
       "Lección 2 · Crea con Claude: Artifacts, documentos y presentaciones",
     feedback:
-      "Pide el método y valida una muestra con un cálculo independiente. Que Claude confirme o que el gráfico se vea bien no prueba que el dato sea correcto.",
+      "Solo un cálculo independiente comprueba el dato: pides los pasos y validas una muestra por tu cuenta. La tabla de totales, la revisión de Claude y dos respuestas iguales salen de la misma herramienta y pueden repetir el mismo error.",
   },
   {
     id: "m5q28",
@@ -61,62 +64,59 @@ export const MODULE_5_PART3 = [
   {
     id: "m5q29",
     question:
-      "Quieres que Claude recuerde una preferencia en todos tus chats de trabajo. ¿Qué haces?",
+      "Le preguntas a Claude el valor de una tarifa que el Gobierno actualizó este mes. ¿Qué haces con la cifra que te da?",
     options: [
       {
         id: "m5q29_a",
-        label: "La escribes en cada chat nuevo para que no se olvide",
+        label: "Le pido que confirme que está actualizada y la uso",
       },
       {
         id: "m5q29_b",
-        label:
-          "La dejas en las instrucciones del Proyecto y revisas qué recuerda Claude",
+        label: "La confirmo en la página oficial antes de usarla",
       },
       {
         id: "m5q29_c",
-        label: "Le pides que la guarde en otro chat, separado de tu trabajo",
+        label: "La uso si viene con fecha y una explicación detallada",
       },
       {
         id: "m5q29_d",
-        label: "Esperas: Claude aprende tus preferencias solo y sin control",
+        label: "Pido la cifra en otro chat y uso la que se repita",
       },
     ],
     correctAnswer: "m5q29_b",
-    topic: "Privacidad y datos",
+    topic: "Límites y errores",
     difficulty: "fácil",
-    source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
+    source: "Lección 1 · Conoce a Claude: la IA que trabaja contigo",
     feedback:
-      "Las instrucciones de un Proyecto aplican a todos sus chats, y la memoria se puede revisar y controlar. Guardarla en otro chat tampoco la lleva a todos tus chats de trabajo.",
+      "Claude puede no conocer un cambio reciente, como una tarifa actualizada este mes, y aun así responder con seguridad. La página oficial de la entidad es la fuente actual. Que Claude la confirme, le ponga fecha o la repita en otro chat no prueba que esté vigente.",
   },
   {
     id: "m5q30",
     question:
-      "Al terminar un proyecto con Claude, ¿qué práctica deja una mejor base para el siguiente?",
+      "Terminaste el informe para el que conectaste tu Drive a Claude y no volverás a necesitar ese acceso. ¿Qué haces con el conector?",
     options: [
       {
         id: "m5q30_a",
-        label: "Borrar el Proyecto para empezar el siguiente sin contexto",
+        label: "Lo dejo conectado para no repetir el proceso más adelante",
       },
       {
         id: "m5q30_b",
-        label: "Dejar todo en la memoria para que Claude lo recuerde solo",
+        label: "Borro el chat del informe, y así Claude pierde el acceso",
       },
       {
         id: "m5q30_c",
-        label:
-          "Guardar instrucciones, ejemplos y aprendizajes en un Proyecto o Skill",
+        label: "Lo desconecto; si lo necesito otra vez, lo conecto de nuevo",
       },
       {
         id: "m5q30_d",
-        label:
-          "Guardar el historial completo de chats y releerlo entero la próxima vez",
+        label: "Le pido a Claude que no vuelva a abrir mis archivos",
       },
     ],
     correctAnswer: "m5q30_c",
-    topic: "Proyectos y memoria",
+    topic: "Conectores y Skills",
     difficulty: "medio",
     source: "Lección 3 · Delega con Claude: Proyectos, conectores y Skills",
     feedback:
-      "Lo que funciona debe quedar guardado en un Proyecto o una Skill: así cada nuevo trabajo parte de lo aprendido, sin depender de releer chats ni de lo que la memoria retenga.",
+      "Un conector mantiene el acceso hasta que lo desconectas: borrar un chat o pedirle a Claude que no abra tus archivos no lo retira. Si ya no lo necesitas, desconéctalo; volver a conectarlo toma un momento.",
   },
 ];

@@ -58,32 +58,33 @@ export const MODULE_1_EN_PART3 = [
   },
   {
     id: "m1q31",
-    question: "What should you watch when sharing a prompt with a colleague?",
+    question:
+      "Under Colombia's Law 1581 of 2012, what can you do as the owner of your personal data?",
     options: [
       {
         id: "m1q31_a",
-        label: "Removing personal and sensitive data before sharing it",
+        label:
+          "Know, update, correct and delete your data, and revoke your authorization",
       },
       {
         id: "m1q31_b",
-        label:
-          "Also pasting your passwords and access details so they can reproduce it",
+        label: "Only ask for a copy of your data once a year",
       },
       {
         id: "m1q31_c",
-        label: "Sharing it without reviewing the answer it gave",
+        label: "Know your data, but not correct it or ask for deletion",
       },
       {
         id: "m1q31_d",
-        label: "Sending it as if the answer were your own work",
+        label: "Ask for deletion, only if the company agrees",
       },
     ],
     correctAnswer: "m1q31_a",
-    topic: "Common Mistakes",
+    topic: "Law 1581 of 2012",
     difficulty: "medium",
-    source: "How to Create Effective Prompts: The Formula to Master AI",
+    source: "AI Privacy Manual",
     feedback:
-      "A prompt may contain other people's data. Anonymize it before sharing.",
+      'As the data owner, Law 1581 of 2012 lets you know, update, correct and delete your data, and revoke the authorization you gave. Those rights go beyond asking for a copy or only knowing your data. Review the "AI Privacy Manual".',
   },
   {
     id: "m1q32",
@@ -145,59 +146,61 @@ export const MODULE_1_EN_PART3 = [
   {
     id: "m1q34",
     question:
-      "The AI gives you two different answers to the same prompt. What is the most critical step?",
+      "You already replaced names with roles in a report and are going to upload it as a file to an AI. What else do you check first?",
     options: [
       {
         id: "m1q34_a",
-        label: "Compare and validate the information",
+        label: "Headers, signatures and hidden data in the file",
       },
       {
         id: "m1q34_b",
-        label: "Choose the longest one without reading it",
+        label: "The file size, so it uploads quickly",
       },
       {
         id: "m1q34_c",
-        label: "Trust the first one that comes out",
+        label: "Spelling, so the AI understands it better",
       },
       {
         id: "m1q34_d",
-        label: "Ask another AI which of the two it prefers",
+        label: "That it is a PDF, so nobody can see the data",
       },
     ],
     correctAnswer: "m1q34_a",
-    topic: "Critical Evaluation",
+    topic: "Anonymizing Documents",
     difficulty: "medium",
-    source: "The Chisel",
+    source: "AI Privacy Manual",
     feedback:
-      "When answers diverge, validate the data and use your judgment. Not every answer is equally reliable.",
+      'A file can carry names and data in headers, signatures or hidden information even when the text is already anonymized. Checking them before uploading is the fourth step to anonymize. File size, spelling or the PDF format do not protect that data. Review the "AI Privacy Manual".',
   },
   {
     id: "m1q35",
-    question: "What must you do before sharing a text that AI drafted?",
+    question:
+      "An AI gives you a striking fact and you want to share it. What do you check first?",
     options: [
       {
         id: "m1q35_a",
-        label: "Check data, names and figures, and declare AI use",
+        label:
+          "The original source, the date and author, and another independent source",
       },
       {
         id: "m1q35_b",
-        label: "Share it as it is, because AI does not make mistakes",
+        label: "That many people have already shared it on social media",
       },
       {
         id: "m1q35_c",
-        label: "Change only the document's logo",
+        label: "That the text is well written and has no spelling mistakes",
       },
       {
         id: "m1q35_d",
-        label: "Send it to someone else without saying AI generated it",
+        label: "That the AI confirms the fact is true",
       },
     ],
     correctAnswer: "m1q35_a",
-    topic: "Responsible Use",
+    topic: "Verify Before Sharing",
     difficulty: "medium",
-    source: "Guide: Anatomy of a Prompt",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "AI can make mistakes in data and names. Checking the text and declaring its use is part of responsible work.",
+      "Before sharing, the ethics guide asks for three checks: open the original source, make sure the date is recent and the author reliable, and find at least one other independent source that confirms it. Being popular, well written or confirmed by the AI does not make it true.",
   },
   {
     id: "m1q36",
@@ -231,31 +234,33 @@ export const MODULE_1_EN_PART3 = [
   },
   {
     id: "m1q37",
-    question: "What is the most honest use of AI in academic work?",
+    question:
+      "In a school assignment, which of these uses of AI is acceptable?",
     options: [
       {
         id: "m1q37_a",
-        label: "Use it as support and declare when you used it",
+        label:
+          "Asking it for explanations and examples to understand the topic",
       },
       {
         id: "m1q37_b",
-        label: "Submit its output as your own without reviewing it",
+        label: "Handing in an essay the AI wrote, after reading it",
       },
       {
         id: "m1q37_c",
-        label: "Copy it without citing any part of it",
+        label: "Answering an exam with answers the AI generates live",
       },
       {
         id: "m1q37_d",
-        label: "Use it to impersonate another person",
+        label: "Presenting as your own an AI text you do not fully understand",
       },
     ],
     correctAnswer: "m1q37_a",
-    topic: "Ethics and Responsible Use",
+    topic: "Academic Honesty",
     difficulty: "easy",
-    source: "Guide: Anatomy of a Prompt",
+    source: "PDF: Ethics of Artificial Intelligence",
     feedback:
-      "AI is support: review it, add your own value and be transparent about its use.",
+      "Asking for explanations and examples helps you learn, and the final text is still yours. Handing in an AI essay even after reading it, answering an exam with it or presenting as yours what you do not understand deceives whoever grades you and harms your learning. Review the ethics guide, section 3.",
   },
   {
     id: "m1q38",
@@ -288,7 +293,7 @@ export const MODULE_1_EN_PART3 = [
   {
     id: "m1q39",
     question:
-      "Iterating the prompt several times until reaching the goal is a…",
+      "Iterating the prompt several times until reaching the goal is a practice that is…",
     options: [
       {
         id: "m1q39_a",
@@ -296,15 +301,15 @@ export const MODULE_1_EN_PART3 = [
       },
       {
         id: "m1q39_b",
-        label: "Wrong practice: you have to get it right the first time",
+        label: "Wrong: you have to get it right the first time",
       },
       {
         id: "m1q39_c",
-        label: "Forbidden practice in the tools",
+        label: "Not useful: each adjustment confuses the AI more",
       },
       {
         id: "m1q39_d",
-        label: "Optional, only if the first answer comes out wrong",
+        label: "Unnecessary if the prompt follows the RTF formula",
       },
     ],
     correctAnswer: "m1q39_a",
@@ -312,7 +317,7 @@ export const MODULE_1_EN_PART3 = [
     difficulty: "medium",
     source: "Guide: Anatomy of a Prompt",
     feedback:
-      "Iterating is normal and effective: each prompt adjustment brings the answer closer to what you need.",
+      "Iterating is normal and effective: each prompt adjustment brings the answer closer to what you need, even when you already used the RTF formula.",
   },
   {
     id: "m1q40",
@@ -322,7 +327,7 @@ export const MODULE_1_EN_PART3 = [
       {
         id: "m1q40_a",
         label:
-          "As an assistant, write a formal, friendly reminder email for Thursday's 10 a.m. meeting",
+          '"As an assistant, write a formal, friendly reminder email for Thursday\'s 10 a.m. meeting"',
       },
       {
         id: "m1q40_b",
@@ -374,7 +379,7 @@ export const MODULE_1_EN_PART3 = [
     difficulty: "medium",
     source: "OVA: The Mirror of Truth",
     feedback:
-      "Historical data reflected a mostly male hiring history: the bias comes from the data, not the algorithm. Review the activity The Mirror of Truth.",
+      "Historical data reflected a mostly male hiring history: the bias comes from the data. Review the activity The Mirror of Truth.",
   },
   {
     id: "m1e02",
@@ -401,7 +406,7 @@ export const MODULE_1_EN_PART3 = [
     correctAnswer: "m1e02_a",
     topic: "Responsibility",
     difficulty: "medium",
-    source: "Video: Ethical AI: Principles and Practice",
+    source: "Video «Podcast: AI ethics»",
     feedback:
       "Asking for the criteria lets you judge whether the recommendation suits you. Review the ethics guide.",
   },

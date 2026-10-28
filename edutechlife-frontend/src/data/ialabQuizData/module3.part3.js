@@ -2,31 +2,31 @@ export const MODULE_3_PART3 = [
   {
     id: "m3q29",
     question:
-      "Antes de basarte en un resumen de Deep Research, ¿qué conviene hacer?",
+      "Necesitas que Gemini responda con los acuerdos del acta que guardaste en tu Drive. ¿Qué haces?",
     options: [
       {
         id: "m3q29_a",
-        label: "Revisar algunas fuentes citadas para confirmar",
+        label: "Le doy el acta y pido que responda con ella",
       },
       {
         id: "m3q29_b",
-        label: "Confiar totalmente en el informe",
+        label: "Le pido que busque en la web actas parecidas",
       },
       {
         id: "m3q29_c",
-        label: "Eliminar las citas para que el texto quede limpio",
+        label: "Le cuento de memoria lo que dice el acta",
       },
       {
         id: "m3q29_d",
-        label: "Cambiar los datos que no encajen con tu opinión",
+        label: "Le pido que responda con lo que ya sabe",
       },
     ],
     correctAnswer: "m3q29_a",
-    topic: "Deep Research",
+    topic: "Grounding",
     difficulty: "medio",
-    source: "El Espejo de la Verdad",
+    source: "Manual de Campo: Introducción a Gemini",
     feedback:
-      "Un informe extenso no garantiza acierto: verifica los hallazgos clave en sus fuentes.",
+      "El grounding también puede usar tus propios archivos de Workspace. Si la respuesta debe salir del acta, dásela como fuente: ni la web ni la memoria del modelo conocen ese documento. Revisa en tu cuenta cómo adjuntar archivos de Drive.",
   },
   {
     id: "m3q30",
@@ -64,7 +64,7 @@ export const MODULE_3_PART3 = [
     options: [
       {
         id: "m3q31_a",
-        label: "Elegir la más larga, porque parece más completa",
+        label: "Pedir una tercera respuesta y quedarte con la que se repita",
       },
       {
         id: "m3q31_b",
@@ -72,11 +72,11 @@ export const MODULE_3_PART3 = [
       },
       {
         id: "m3q31_c",
-        label: "Elegir la que tenga más citas, aunque no las hayas abierto",
+        label: "Quedarte con la que cita más fuentes",
       },
       {
         id: "m3q31_d",
-        label: "Quedarte con la primera y olvidar la otra",
+        label: "Pedirle a Gemini que compare sus respuestas y elija",
       },
     ],
     correctAnswer: "m3q31_b",
@@ -85,7 +85,7 @@ export const MODULE_3_PART3 = [
     source:
       "Investigación académica con IA en minutos: Gemini y Deep Research sin perder rigor",
     feedback:
-      "Dos respuestas distintas se contrastan con fuentes antes de decidir. La extensión o el número de citas no garantizan nada.",
+      "Dos respuestas distintas se contrastan con fuentes que tú abres. Ni la que se repite, ni la que cita más, ni la elección de Gemini prueban cuál es correcta.",
   },
   {
     id: "m3q32",
@@ -130,7 +130,7 @@ export const MODULE_3_PART3 = [
       },
       {
         id: "m3q33_c",
-        label: "Para generar imágenes de apoyo",
+        label: "Para generar imágenes de apoyo para el informe",
       },
       {
         id: "m3q33_d",
@@ -147,31 +147,32 @@ export const MODULE_3_PART3 = [
   {
     id: "m3q34",
     question:
-      "Cuando Gemini comparte un resultado en Workspace, ¿qué debes hacer?",
+      "Quieres que Gemini analice un gráfico de ventas que tienes en pantalla. ¿Qué haces?",
     options: [
       {
         id: "m3q34_a",
-        label: "Revisar bien el texto con calma antes de enviarlo",
+        label: "Subo una captura del gráfico y pido el análisis",
       },
       {
         id: "m3q34_b",
-        label: "Enviarlo de inmediato porque la IA no suele fallar",
+        label: "Le describo el gráfico con mis propias palabras",
       },
       {
         id: "m3q34_c",
-        label: "Confiar en que el destinatario corrija los errores",
+        label: "Le copio solo el título y la leyenda del gráfico",
       },
       {
         id: "m3q34_d",
-        label: "Borrar los datos que no encajen con el mensaje",
+        label: "Le dicto las cifras que recuerdo del gráfico",
       },
     ],
     correctAnswer: "m3q34_a",
-    topic: "Google Workspace",
+    topic: "Multimodalidad",
     difficulty: "fácil",
-    source: "La Lupa Multimodal",
+    source:
+      "Gemini multimodal: tu lupa para imágenes, documentos, audio y video",
     feedback:
-      "Revisa siempre antes de enviar: tú eres responsable del mensaje final.",
+      "Gemini puede leer la imagen del gráfico directamente. Describirlo, copiar solo el título o dictar cifras de memoria deja fuera parte de la evidencia o le suma tus errores.",
   },
   {
     id: "m3q35",
@@ -213,16 +214,15 @@ export const MODULE_3_PART3 = [
       },
       {
         id: "m3q36_b",
-        label:
-          "Cuando la respuesta depende de datos que cambian, como precios o noticias",
+        label: "Cuando depende de datos que cambian, como precios",
       },
       {
         id: "m3q36_c",
-        label: "Siempre, aunque la pregunta sea sobre un poema",
+        label: "Para toda pregunta, aunque sea sobre un poema",
       },
       {
         id: "m3q36_d",
-        label: "Nunca, porque la memoria siempre es más reciente",
+        label: "Cuando la pregunta es larga y tiene varias partes",
       },
     ],
     correctAnswer: "m3q36_b",
@@ -230,36 +230,36 @@ export const MODULE_3_PART3 = [
     difficulty: "medio",
     source: "Gemini a la Práctica: Ejercicios de Campo",
     feedback:
-      "Los datos que cambian requieren fuentes actuales. Un poema o un chiste no necesitan consulta a la web.",
+      "Los datos que cambian requieren fuentes actuales. Que la pregunta sea larga no lo exige, y un poema o un chiste no necesitan consultar la web.",
   },
   {
     id: "m3q37",
     question:
-      "Gemini responde sin haber leído la parte que necesitas. ¿Qué haces?",
+      "Debes entregar una investigación y Deep Research no aparece en tu cuenta. ¿Qué haces?",
     options: [
       {
         id: "m3q37_a",
-        label: "Acepto la respuesta, porque un resumen general suele bastar",
+        label: "Uso el mismo pedido en el chat y verifico cada fuente",
       },
       {
         id: "m3q37_b",
-        label: "Vuelvo a preguntar lo mismo con otras palabras",
+        label: "Espero a tener Deep Research para empezar",
       },
       {
         id: "m3q37_c",
-        label: "Pido que responda rápido aunque no cite la sección",
+        label: "Pido en el chat un informe y lo entrego con sus citas",
       },
       {
         id: "m3q37_d",
-        label: "Pido que cite la sección y la reviso yo",
+        label: "Le pido el informe a otra IA que sí investigue",
       },
     ],
-    correctAnswer: "m3q37_d",
-    topic: "Documentos extensos y citas",
+    correctAnswer: "m3q37_a",
+    topic: "Deep Research",
     difficulty: "difícil",
-    source: "Gemini a la Práctica: Ejercicios de Campo",
+    source: "Guía: Deep Research paso a paso",
     feedback:
-      "Pedir la sección y revisarla confirma si la respuesta sale del documento. Aceptar un resumen general sin comprobarlo no lo hace.",
+      "Si Deep Research no aparece en tu cuenta, el mismo pedido funciona en la conversación normal; lo que no cambia es tu verificación de cada fuente. Esperar o entregar citas que no abriste no resuelve el caso. Repasa la Guía: Deep Research paso a paso.",
   },
   {
     id: "m3q38",
@@ -295,27 +295,27 @@ export const MODULE_3_PART3 = [
     options: [
       {
         id: "m3q39_a",
-        label: "Que sea identificable y tenga el dato",
+        label: "Que sea identificable y el dato esté en su texto",
       },
       {
         id: "m3q39_b",
-        label: "Que tenga muchos seguidores en redes",
+        label: "Que lo citen varios blogs del tema",
       },
       {
         id: "m3q39_c",
-        label: "Que su nombre suene conocido",
+        label: "Que Gemini lo mencione con enlace",
       },
       {
         id: "m3q39_d",
-        label: "Que el blog tenga un diseño profesional",
+        label: "Que tenga un cargo reconocido en una institución",
       },
     ],
     correctAnswer: "m3q39_a",
     topic: "Verificación de Fuentes",
     difficulty: "difícil",
-    source: "El Espejo de la Verdad",
+    source: "Guía: Deep Research paso a paso",
     feedback:
-      "Citar exige un autor identificable y el dato en su texto. Seguidores o diseño no son fuentes.",
+      "Para citar, necesitas saber quién es el autor y encontrar el dato en su propio texto. Que lo citen blogs, que Gemini lo enlace o que tenga un cargo no prueba que el dato sea suyo.",
   },
   {
     id: "m3q40",
@@ -324,19 +324,19 @@ export const MODULE_3_PART3 = [
     options: [
       {
         id: "m3q40_a",
-        label: "Que el informe tenga muchas imágenes",
+        label: "Que cada cifra tenga una fuente citada por Gemini",
       },
       {
         id: "m3q40_b",
-        label: "Que cada cifra tenga fuente abrible y fecha",
+        label: "Que cada cifra tenga una fuente que abriste y su fecha",
       },
       {
         id: "m3q40_c",
-        label: "Que el texto sea más largo que el de un compañero",
+        label: "Que las cifras coincidan con el informe de un compañero",
       },
       {
         id: "m3q40_d",
-        label: "Que nadie haya leído las fuentes antes de entregar",
+        label: "Que las fuentes sean de los últimos cinco años",
       },
     ],
     correctAnswer: "m3q40_b",
@@ -345,6 +345,6 @@ export const MODULE_3_PART3 = [
     source:
       "Investigación académica con IA en minutos: Gemini y Deep Research sin perder rigor",
     feedback:
-      "Cada cifra necesita una fuente que puedas abrir y una fecha. Las imágenes o la extensión no prueban nada.",
+      "En un tema reciente, cada cifra necesita una fuente que tú abriste y su fecha. Una cita de Gemini sin abrir, el informe de un compañero o un rango de años no confirman que la cifra sea correcta y vigente.",
   },
 ];

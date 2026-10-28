@@ -1,60 +1,61 @@
 export const MODULE_3_EN_PART1 = [
   {
     id: "m3q1",
-    question: "What does Gemini's Deep Research tool do?",
+    question:
+      "Before starting, Deep Research shows you its research plan. What do you do?",
     options: [
       {
         id: "m3q1_a",
-        label: "Researches deeply and writes reports",
+        label: "I review it and adjust what is extra or missing",
       },
       {
         id: "m3q1_b",
-        label: "Does quick and shallow searches on Google",
+        label: "I approve it right away to save time",
       },
       {
         id: "m3q1_c",
-        label: "Turns any question into a game",
+        label: "I ask it to make the plan longer",
       },
       {
         id: "m3q1_d",
-        label: "Installs new extensions in your browser",
+        label: "I cancel it and ask for a short summary",
       },
     ],
     correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "easy",
-    source:
-      "Academic research with AI in minutes: Gemini and Deep Research without losing rigor",
+    source: "Guide: Deep Research, step by step",
     feedback:
-      "Deep Research works across sources and returns a cited report. Watch the cases video.",
+      "The plan shows what it will search. Reviewing and adjusting it before it starts avoids a report that misses your question. Review the Guide: Deep Research, step by step.",
   },
   {
     id: "m3q2",
-    question: "Why should you verify the sources Gemini cites?",
+    question:
+      "You will ask Gemini to read a photo of a board full of notes. What do you do first?",
     options: [
       {
         id: "m3q2_a",
-        label: "To confirm sources and facts",
+        label: "Take a sharp photo and tell it what it shows",
       },
       {
         id: "m3q2_b",
-        label: "Because citations are false",
+        label: "Upload the photo as it came out and ask it to read it",
       },
       {
         id: "m3q2_c",
-        label: "Because Gemini almost never shows its sources",
+        label: "Upload several similar photos so it can choose",
       },
       {
         id: "m3q2_d",
-        label: "Because sources only work in another language",
+        label: "Ask it to fill in what cannot be read well",
       },
     ],
     correctAnswer: "m3q2_a",
-    topic: "Source Verification",
+    topic: "Multimodality",
     difficulty: "medium",
-    source: "The Mirror of Truth",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Gemini can be wrong or cite badly: opening the source confirms whether the data exists and says what it claims.",
+      "A sharp photo and a line of context give Gemini clear clues. With blurry evidence or no context, the reading can fail.",
   },
   {
     id: "m3q3",
@@ -62,7 +63,7 @@ export const MODULE_3_EN_PART1 = [
     options: [
       {
         id: "m3q3_a",
-        label: "Connecting answers with current info from Google Search",
+        label: "Connecting answers with current information",
       },
       {
         id: "m3q3_b",
@@ -90,7 +91,7 @@ export const MODULE_3_EN_PART1 = [
     options: [
       {
         id: "m3q4_a",
-        label: "Understands text, images and audio",
+        label: "Understands text, images, audio and video",
       },
       {
         id: "m3q4_b",
@@ -143,91 +144,89 @@ export const MODULE_3_EN_PART1 = [
   {
     id: "m3q6",
     question:
-      "A chart appears on screen in a meeting and you cannot read the figures. What do you ask Gemini?",
+      "You need Gemini to review a process diagram from your job. Which request is best?",
     options: [
       {
         id: "m3q6_a",
-        label:
-          "That it points to where each figure comes from, and that you open it",
+        label: "Analyze it as an auditor: steps, flaws and priorities",
       },
       {
         id: "m3q6_b",
-        label: "That it tells you the figure without showing anything",
+        label: "Analyze this diagram and tell me what you think",
       },
       {
         id: "m3q6_c",
-        label: "That it swaps the figure for a similar one",
+        label: "Describe in detail everything you see in the diagram",
       },
       {
         id: "m3q6_d",
-        label: "That it leaves it for later without checking",
+        label: "Tell me whether the diagram is right or wrong",
       },
     ],
     correctAnswer: "m3q6_a",
-    topic: "Video and audio with Gemini",
+    topic: "Multimodality",
     difficulty: "medium",
-    source: "The Multimodal Lens",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Asking for the origin of each figure lets you open the source and check it. A figure without an origin is not used.",
+      "Saying what analysis you need and from which role points Gemini to what helps you. 'Analyze this' or 'describe everything' leaves the analysis without direction.",
   },
   {
     id: "m3q7",
     question:
-      "You must research AI trends for a report. Which workflow gives the best verifiable result?",
+      "You need Colombia's official unemployment figure. Which is the primary source?",
     options: [
       {
         id: "m3q7_a",
-        label: "Deep Research, then verify each source",
+        label: "The DANE bulletin that published the figure",
       },
       {
         id: "m3q7_b",
-        label: "Ask once and accept the first answer",
+        label: "A news story that cites the DANE bulletin",
       },
       {
         id: "m3q7_c",
-        label: "Copy the first Google results",
+        label: "Gemini's summary of the bulletin",
       },
       {
         id: "m3q7_d",
-        label: "Ask for a summary without requesting sources",
+        label: "An economics blog that comments on the figure",
       },
     ],
     correctAnswer: "m3q7_a",
     topic: "Professional Research",
     difficulty: "medium",
-    source:
-      "Academic research with AI in minutes: Gemini and Deep Research without losing rigor",
+    source: "Guide: Deep Research, step by step",
     feedback:
-      "Combine Deep Research with source verification. Watch the cases video.",
+      "The primary source is whoever produced the data, here DANE (Colombia's statistics office). A news story, a blog or a summary only comment on it. Review the Guide: Deep Research, step by step.",
   },
   {
     id: "m3q8",
     question:
-      "A journalist has two hours for a story with data. What comes first?",
+      "Your executive report includes a three-year market projection. How do you present it?",
     options: [
       {
         id: "m3q8_a",
-        label: "The amount of data, even if it cannot be verified",
+        label: "As an estimate, with the source it is based on",
       },
       {
         id: "m3q8_b",
-        label: "Publishing fast and correcting later if someone warns",
+        label: "As a fact, because Deep Research calculated it",
       },
       {
         id: "m3q8_c",
-        label: "The data they can verify with sources they can open",
+        label: "As an exact figure, with the numbers rounded",
       },
       {
         id: "m3q8_d",
-        label: "A catchy headline before checking anything",
+        label: "As the main conclusion of the report",
       },
     ],
-    correctAnswer: "m3q8_c",
-    topic: "Deep Research",
+    correctAnswer: "m3q8_a",
+    topic: "Professional Research",
     difficulty: "medium",
-    source: "The Mirror of Truth",
+    source: "Guide: Deep Research, step by step",
     feedback:
-      "In a story, every figure must be verifiable. Quantity without verification does not give credibility.",
+      "A projection is not a fact: it is an estimate and must show its source. Presenting it as an exact figure or as a conclusion misleads whoever decides.",
   },
   {
     id: "m3q9",
@@ -289,31 +288,32 @@ export const MODULE_3_EN_PART1 = [
   },
   {
     id: "m3q11",
-    question: "What can Gemini do with a photo of a receipt?",
+    question:
+      "Gemini answers your research question with a general explanation. What do you do?",
     options: [
       {
         id: "m3q11_a",
-        label: "Send it to your email without you seeing it",
+        label: "Ask for details, examples and sources for each point",
       },
       {
         id: "m3q11_b",
-        label: "Delete it from your phone completely",
+        label: "Use it as is, since it answers the question",
       },
       {
         id: "m3q11_c",
-        label: "Read the amounts and date, and ask about what is unclear",
+        label: "Repeat the same question until it changes",
       },
       {
         id: "m3q11_d",
-        label: "Publish it online with your details",
+        label: "Ask it to write it longer and more formally",
       },
     ],
-    correctAnswer: "m3q11_c",
-    topic: "Multimodality",
+    correctAnswer: "m3q11_a",
+    topic: "Critical Thinking",
     difficulty: "medium",
     source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Gemini reads the visible data on the receipt and asks about doubtful parts; it sends or publishes nothing without your order.",
+      "The first answer is usually general. Asking for details, examples and sources takes you to the second layer, where you can check each point.",
   },
   {
     id: "m3q12",
@@ -346,31 +346,32 @@ export const MODULE_3_EN_PART1 = [
   },
   {
     id: "m3q13",
-    question: "What happens if a Gemini answer has no sources?",
+    question:
+      "You recorded an interview and will quote the interviewee in your report. What do you ask Gemini for?",
     options: [
       {
         id: "m3q13_a",
-        label: "It is reliable because AI is very advanced",
+        label: "The transcript, and I check the quotes against the audio",
       },
       {
         id: "m3q13_b",
-        label: "You can use it in a report without changes",
+        label: "A summary of the ideas to quote from it",
       },
       {
         id: "m3q13_c",
-        label: "You treat it as a hypothesis and check it before using it",
+        label: "To polish the wording of what was said",
       },
       {
         id: "m3q13_d",
-        label: "It is enough that it sounds confident and has numbers",
+        label: "The most striking lines from the interview",
       },
     ],
-    correctAnswer: "m3q13_c",
-    topic: "Grounding",
+    correctAnswer: "m3q13_a",
+    topic: "Video and audio with Gemini",
     difficulty: "medium",
-    source: "Gemini in Practice: Field Exercises",
+    source: "Field Guide: Introduction to Gemini",
     feedback:
-      "Without a source, the answer is a hypothesis. Before using it, look for it in sources you can open.",
+      "The transcript gives you the exact words, and checking them against the recording confirms the quote is faithful. A summary or a polished line is no longer what the person said.",
   },
   {
     id: "m3q14",
@@ -397,7 +398,7 @@ export const MODULE_3_EN_PART1 = [
     correctAnswer: "m3q14_a",
     topic: "Source Verification",
     difficulty: "medium",
-    source: "The Mirror of Truth",
+    source: "Gemini in Practice: Field Exercises",
     feedback:
       "Verify by opening the source: a formatted citation does not guarantee the data is correct.",
   },

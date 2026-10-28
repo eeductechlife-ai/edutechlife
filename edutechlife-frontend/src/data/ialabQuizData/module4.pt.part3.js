@@ -11,7 +11,7 @@ export const MODULE_4_PT_PART3 = [
       {
         id: "m4q29_b",
         label:
-          "Comparo as datas, uso a fonte mais recente e confiável e explico a mudança",
+          "Comparo as datas, uso a mais recente e confiável e explico a mudança",
       },
       {
         id: "m4q29_c",
@@ -27,64 +27,65 @@ export const MODULE_4_PT_PART3 = [
     difficulty: "médio",
     source: "Guia do Gemini Notebook",
     feedback:
-      "As datas explicam por que os números mudam. Usar a fonte mais recente com uma explicação é o caminho rigoroso.",
+      "As datas explicam por que os números mudam. Usar a fonte mais recente e confiável, e explicar a mudança, é o caminho rigoroso.",
   },
   {
     id: "m4q30",
-    question: "Para que serve filtrar fontes antes de sintetizar?",
+    question:
+      "Você subiu dois estudos com conclusões opostas e, sem dar contexto, pede um resumo geral. Que risco corre?",
     options: [
       {
         id: "m4q30_a",
-        label: "Para que o caderno fique mais pesado e pareça melhor",
+        label: "Que o caderno não aceite os dois estudos ao mesmo tempo",
       },
       {
         id: "m4q30_b",
-        label: "Para que o resumo se apoie no que realmente importa",
+        label: "Que misture as duas posições como se coincidissem",
       },
       {
         id: "m4q30_c",
-        label: "Para que a IA invente o que falta",
+        label: "Que o caderno descarte um dos estudos",
       },
       {
         id: "m4q30_d",
-        label: "Para subir menos fontes sem nenhum motivo",
+        label: "Que o resumo favoreça o estudo mais recente",
       },
     ],
     correctAnswer: "m4q30_b",
     topic: "Curadoria",
     difficulty: "fácil",
-    source: "Gemini Notebook: o caderno do futuro",
+    source: "Guia do Gemini Notebook",
     feedback:
-      "Filtrar escolhe as fontes relevantes e confiáveis antes de resumir. Assim a síntese se apoia em evidência útil.",
+      "A lição avisa para não misturar fontes contraditórias sem contexto: um resumo geral pode juntar as duas posições como se dissessem o mesmo. Indique por que diferem ou peça uma comparação.",
   },
   {
     id: "m4q31",
     question:
-      "Você quer comparar em que as suas fontes coincidem e em que se contradizem. O que pede?",
+      "Seu grupo vai revisar com um Audio Overview. O que você acrescenta para que a revisão funcione melhor?",
     options: [
       {
         id: "m4q31_a",
-        label: "Análise comparativa que cite cada uma das fontes",
+        label: "Um resumo escrito com as ideias-chave do tema",
       },
       {
         id: "m4q31_b",
-        label: "Um resumo de uma só fonte como se fosse a única",
+        label: "Outro áudio igual para ouvir duas vezes",
       },
       {
         id: "m4q31_c",
-        label: "Uma lista de títulos sem ler o conteúdo de nenhum",
+        label: "Uma música de fundo para manter a atenção",
       },
       {
         id: "m4q31_d",
-        label: "Uma opinião geral inventada sem revisar os documentos",
+        label: "Um áudio mais longo com as mesmas fontes",
       },
     ],
     correctAnswer: "m4q31_a",
-    topic: "Síntese",
+    topic: "Audio Overview",
     difficulty: "médio",
-    source: "O Crisol",
+    source: "Guia: Áudio e documentos com ordem",
     feedback:
-      "Uma análise comparativa com citações revela coincidências e tensões entre fontes.",
+      "A lição avisa: usar só áudio, sem um resumo escrito, desperdiça os dois formatos. O áudio dá o panorama e o texto permite reler as ideias-chave com calma.",
   },
   {
     id: "m4q32",
@@ -92,15 +93,15 @@ export const MODULE_4_PT_PART3 = [
     options: [
       {
         id: "m4q32_a",
-        label: "Subir documentos e confiar na primeira resposta",
+        label: "Gerar o áudio, ouvi-lo e depois escolher as fontes",
       },
       {
         id: "m4q32_b",
-        label: "Gerar o áudio e revisar as fontes depois",
+        label: "Subir todas as fontes, gerar o áudio e revisar as citações",
       },
       {
         id: "m4q32_c",
-        label: "Publicar as respostas sem citações",
+        label: "Analisar ideias, gerar o áudio e depois tirar as fontes fracas",
       },
       {
         id: "m4q32_d",
@@ -112,65 +113,65 @@ export const MODULE_4_PT_PART3 = [
     difficulty: "difícil",
     source: "O Estúdio Alquímico",
     feedback:
-      "O fluxo certo vai da seleção de fontes à análise e, no fim, ao áudio. Revisar depois deixa o risco no resultado.",
+      "A ordem importa: primeiro você escolhe as fontes, depois analisa as ideias e por fim gera o áudio. Escolher ou limpar fontes depois de gerar o áudio deixa no resultado o que não devia entrar.",
   },
   {
     id: "m4q33",
     question:
-      "O que você deve revisar antes de compartilhar um caderno com a sua equipe?",
+      "Você vai compartilhar seu caderno com a equipe e só você deve fazer alterações. O que decide antes?",
     options: [
       {
         id: "m4q33_a",
-        label: "Que não contenha dados sensíveis e acesso adequado",
+        label: "Quem pode só ver e quem pode editar",
       },
       {
         id: "m4q33_b",
-        label: "Que o nome seja bem chamativo para toda a equipe",
+        label: "Enviar a cada um uma cópia para editar",
       },
       {
         id: "m4q33_c",
-        label: "Que tenha a maior quantidade de documentos possível carregados",
+        label: "Dar permissão de edição a todos para ir mais rápido",
       },
       {
         id: "m4q33_d",
-        label: "Que as respostas sejam longas, mesmo com dados internos",
+        label: "Publicar o link no grupo da turma",
       },
     ],
     correctAnswer: "m4q33_a",
-    topic: "Privacidade",
+    topic: "Colaboração",
     difficulty: "médio",
-    source: "Guia do Gemini Notebook",
+    source: "Guia: Áudio e documentos com ordem",
     feedback:
-      "Antes de compartilhar, proteja dados sensíveis e limite o acesso. Revise a guia.",
+      "A lição indica: antes de compartilhar um caderno, decida quem pode vê-lo e quem pode editá-lo. Se só você faz alterações, os demais só veem. Confira na sua conta quais opções de acesso você tem.",
   },
   {
     id: "m4q34",
     question:
-      "O que convém fazer com as fontes que já não contribuem para o caderno?",
+      "Você tem 10 artigos sobre IA misturados. Como os organiza para que apareçam as conexões entre ideias?",
     options: [
       {
         id: "m4q34_a",
-        label: "Removê-las para o caderno ficar focado no que é relevante",
+        label: "Por temas, como ética, técnica e aplicações",
       },
       {
         id: "m4q34_b",
-        label: "Deixar todas para o caderno parecer mais completo",
+        label: "Por data de download, da mais nova à mais antiga",
       },
       {
         id: "m4q34_c",
-        label: "Duplicá-las para a IA ter mais informação repetida",
+        label: "Por tamanho do arquivo, do menor ao maior",
       },
       {
         id: "m4q34_d",
-        label: "Mantê-las ainda que distraiam a resposta das suas perguntas",
+        label: "Em uma só lista, na ordem em que chegaram",
       },
     ],
     correctAnswer: "m4q34_a",
     topic: "Curadoria",
     difficulty: "médio",
-    source: "O Grimório",
+    source: "Guia do Gemini Notebook",
     feedback:
-      "Um caderno focado responde melhor: remova o que não contribui. Pratique na atividade O Crisol.",
+      "Agrupar por temas, como no exemplo da lição (ética, técnica, aplicações), faz as conexões entre documentos surgirem sozinhas. Data de download, tamanho ou ordem de chegada não dizem nada do conteúdo. Pratique na atividade O Crisol.",
   },
   {
     id: "m4q35",
@@ -204,33 +205,31 @@ export const MODULE_4_PT_PART3 = [
   {
     id: "m4q36",
     question:
-      "O que um estudante ganha ao usar o Gemini Notebook para estudar suas anotações?",
+      "Em qual destas tarefas um chat geral ajuda mais do que um caderno do Gemini Notebook?",
     options: [
       {
         id: "m4q36_a",
-        label:
-          "Perguntar e obter respostas citadas dos seus próprios materiais",
+        label: "Propor ideias soltas sobre um tema sem documentos",
       },
       {
         id: "m4q36_b",
-        label: "Evitar por completo ter que estudar os conteúdos",
+        label: "Responder perguntas sobre suas anotações de aula",
       },
       {
         id: "m4q36_c",
-        label: "Substituir as anotações por texto gerado sem revisá-lo",
+        label: "Comparar o que dizem três relatórios que você subiu",
       },
       {
         id: "m4q36_d",
-        label:
-          "Compartilhar as anotações públicas sem nenhum controle de acesso",
+        label: "Preparar um guia de estudo com seus PDFs",
       },
     ],
     correctAnswer: "m4q36_a",
-    topic: "Aprendizagem",
+    topic: "Gemini Notebook",
     difficulty: "fácil",
-    source: "Guia completo do NotebookLM: aproveite ao máximo (2026)",
+    source: "Guia do Gemini Notebook",
     feedback:
-      "Estude a partir dos seus materiais e com citações para verificar. Revise o vídeo.",
+      "O caderno responde com o que você dá: rende quando você trabalha com seus documentos. Para uma chuva de ideias sem fontes, um chat geral ajuda mais; mesmo assim, revise o que ele propuser. Revise o «Guia do Gemini Notebook».",
   },
   {
     id: "m4q37",
@@ -246,7 +245,7 @@ export const MODULE_4_PT_PART3 = [
       },
       {
         id: "m4q37_c",
-        label: "Que a IA a assine como correta",
+        label: "Que a IA a marque como correta no final",
       },
       {
         id: "m4q37_d",
@@ -258,63 +257,65 @@ export const MODULE_4_PT_PART3 = [
     difficulty: "médio",
     source: "Guia do Gemini Notebook",
     feedback:
-      "Uma síntese é confiável quando as afirmações-chave têm citação verificável. Extensão ou assinatura da IA não garantem isso.",
+      "Uma síntese é confiável quando as afirmações-chave têm citação verificável. Nem a extensão nem a IA marcá-la como correta garantem isso.",
   },
   {
     id: "m4q38",
-    question: "O que torna uma síntese útil para tomar uma decisão?",
+    question:
+      "Seu caderno sobre o uso do celular na escola só tem artigos a favor de proibi-lo. O que você faz antes de sintetizar?",
     options: [
       {
         id: "m4q38_a",
-        label: "Que seja a mais longa possível",
+        label: "Sintetizo assim, porque todos os artigos são confiáveis",
       },
       {
         id: "m4q38_b",
-        label: "Que use palavras muito técnicas, mesmo sem fontes",
+        label: "Peço à IA que imagine os argumentos contrários",
       },
       {
         id: "m4q38_c",
-        label: "Que não tenha data, para continuar valendo",
+        label: "Tiro os artigos mais longos para equilibrar",
       },
       {
         id: "m4q38_d",
-        label: "Cada conclusão tem uma citação que você pode abrir",
+        label: "Busco fontes confiáveis com outras posições",
       },
     ],
     correctAnswer: "m4q38_d",
     topic: "Curadoria",
     difficulty: "fácil",
-    source: "Guia do Gemini Notebook",
+    source: "A arte da curadoria de fontes",
     feedback:
-      "Uma síntese serve para decidir quando cada conclusão pode ser verificada. Extensão, tecnicismo ou falta de data não a tornam útil.",
+      "Se todas as suas fontes dizem o mesmo, sua síntese mostrará um só olhar. Acrescente fontes confiáveis com outras posições. Pedir à IA que imagine os argumentos contrários não basta: não estariam respaldados por nenhuma fonte.",
   },
   {
     id: "m4q39",
-    question: "Como o Audio Overview ajuda no fluxo de documento a podcast?",
+    question:
+      "Você tem 5 artigos sobre neuroplasticidade e quer um podcast de 15 minutos que fique na memória. O que pede ao gerá-lo?",
     options: [
       {
         id: "m4q39_a",
-        label: "Transforma as conclusões em áudio para revisá-las",
+        label: "Que discuta os principais achados com exemplos práticos",
       },
       {
         id: "m4q39_b",
-        label: "Substitui a revisão das fontes por um resumo simples",
+        label: "Que leia os cinco artigos em ordem, sem pular nada",
       },
       {
         id: "m4q39_c",
-        label: "Gera imagens dos documentos para ilustrar o tema",
+        label: "Que resuma cada artigo separadamente, um após o outro",
       },
       {
         id: "m4q39_d",
-        label: "Traduz os documentos para vários idiomas ao mesmo tempo",
+        label: "Que cubra todos os detalhes técnicos de cada artigo",
       },
     ],
     correctAnswer: "m4q39_a",
     topic: "Fluxo Documento-Podcast",
     difficulty: "difícil",
-    source: "O Estúdio Alquímico",
+    source: "Guia: Áudio e documentos com ordem",
     feedback:
-      "O Audio Overview serve para revisar conclusões já curadas. Ele não substitui a revisão das fontes.",
+      "É o exemplo da lição: um áudio focado discute os principais achados de 5 artigos com exemplos e analogias. Ler os artigos ou percorrê-los um por um, com todos os detalhes, parece o exemplo fraco: vozes lendo sem estrutura. Confira na sua conta como orientar o áudio.",
   },
   {
     id: "m4q40",
@@ -323,19 +324,19 @@ export const MODULE_4_PT_PART3 = [
     options: [
       {
         id: "m4q40_a",
-        label: "Só a música de fundo e uma voz agradável",
+        label: "A lista dos 8 documentos no fim do episódio",
       },
       {
         id: "m4q40_b",
-        label: "Afirmações sem fonte, para soar mais fluido",
+        label: "Os nomes dos autores no início",
       },
       {
         id: "m4q40_c",
-        label: "As citações de cada ideia, para que o ouvinte possa ir à fonte",
+        label: "A fonte de cada ideia, para poder conferi-la",
       },
       {
         id: "m4q40_d",
-        label: "Os nomes dos autores, sem datas nem documentos",
+        label: "Um resumo escrito à parte, sem citações no áudio",
       },
     ],
     correctAnswer: "m4q40_c",
@@ -343,6 +344,6 @@ export const MODULE_4_PT_PART3 = [
     difficulty: "difícil",
     source: "O Estúdio Alquímico",
     feedback:
-      "Um podcast verificável indica a fonte de cada ideia. Música ou fluidez não substituem a evidência.",
+      "Para verificar um podcast, o ouvinte precisa saber de onde sai cada ideia. Uma lista final de documentos ou os autores no início não dizem que ideia vem de qual fonte, e um resumo à parte não cita o que se ouve.",
   },
 ];

@@ -9,7 +9,7 @@ export const MODULE_1_PART1 = [
       },
       {
         id: "m1q1_b",
-        label: "Respuestas útiles y alineadas con lo que necesito",
+        label: "Para obtener respuestas útiles y alineadas con lo que necesito",
       },
       {
         id: "m1q1_c",
@@ -25,7 +25,7 @@ export const MODULE_1_PART1 = [
     difficulty: "fácil",
     source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
     feedback:
-      'Un buen prompt es una instrucción clara. Revisa el video "Cómo Crear Prompts Efectivos" y la "Guía: Anatomía de un Prompt".',
+      "Un buen prompt le dice a la IA qué necesitas, para quién y cómo lo quieres; por eso la respuesta se ajusta a tu objetivo. Más largo o más rápido no es lo que mejora.",
   },
   {
     id: "m1q2",
@@ -58,23 +58,23 @@ export const MODULE_1_PART1 = [
   },
   {
     id: "m1q3",
-    question: "¿Qué logra el método RTF (Rol, Tarea, Formato)?",
+    question: "¿Qué significan las tres letras del método RTF?",
     options: [
       {
         id: "m1q3_a",
-        label: "Convierte la instrucción en un prompt más corto",
+        label: "Rol, Tono y Formato",
       },
       {
         id: "m1q3_b",
-        label: "Estructura el pedido para obtener una respuesta clara",
+        label: "Rol, Tarea y Formato",
       },
       {
         id: "m1q3_c",
-        label: "Evita que la IA necesite cualquier contexto adicional",
+        label: "Respuesta, Tema y Formato",
       },
       {
         id: "m1q3_d",
-        label: "Garantiza que la IA responda sin necesidad de revisarla",
+        label: "Rol, Tarea y Fuente",
       },
     ],
     correctAnswer: "m1q3_b",
@@ -82,37 +82,36 @@ export const MODULE_1_PART1 = [
     difficulty: "fácil",
     source: "El Cincel",
     feedback:
-      "RTF ordena el pedido en Rol, Tarea y Formato. Practica en el OVA El Cincel.",
+      "RTF significa Rol (desde qué mirada responde la IA), Tarea (la acción concreta) y Formato (cómo entrega la respuesta). El tono y la extensión se suman aparte. Practica en el OVA El Cincel.",
   },
   {
     id: "m1q4",
     question:
-      "Tienes que pedir un resumen sobre el ciclo del agua. ¿Cuál prompt te dará el mejor resultado?",
+      "Sospechas que una IA describe distinto a las personas según su origen. ¿Qué prueba sencilla puedes hacer?",
     options: [
       {
         id: "m1q4_a",
-        label: '"Actúa como profesor y resume el ciclo del agua en 4 pasos."',
+        label: "Pedir la misma tarea con perfiles distintos y comparar",
       },
       {
         id: "m1q4_b",
-        label:
-          '"Explícame todo lo que sepas sobre el ciclo del agua, sin límites."',
+        label: "Preguntarle a la IA si tiene sesgos y creerle",
       },
       {
         id: "m1q4_c",
-        label: '"Ciclo del agua. Dame información general y variada."',
+        label: "Repetir el mismo prompt varias veces con el mismo perfil",
       },
       {
         id: "m1q4_d",
-        label: '"Háblame sobre el agua y de otros temas de la naturaleza."',
+        label: "Pedirle que responda más corto para reducir el sesgo",
       },
     ],
     correctAnswer: "m1q4_a",
-    topic: "Estructura de Prompts",
+    topic: "Detectar sesgos",
     difficulty: "medio",
-    source: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
+    source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      'La respuesta correcta define rol, tarea y un formato claro. Las demás son vagas o mezclan temas. Revisa el video "Cómo Crear Prompts Efectivos".',
+      "Si cambias solo el perfil y la respuesta trata distinto a cada persona, encontraste un sesgo. Preguntarle a la IA si es neutral o repetir el mismo perfil no muestra esa diferencia. Repasa la guía de ética, sección 4.",
   },
   {
     id: "m1q5",
@@ -231,31 +230,32 @@ export const MODULE_1_PART1 = [
   {
     id: "m1q9",
     question:
-      "La IA te devuelve una respuesta genérica o fuera de tema. ¿Cuál es la mejor siguiente acción?",
+      "Pides a la IA un plan de estudio y te da uno genérico que no te sirve. ¿Qué le falta al prompt?",
     options: [
       {
         id: "m1q9_a",
-        label: "Dar contexto claro: objetivo, audiencia y tono de salida",
+        label:
+          "Tu situación: cuánto tiempo tienes, tu nivel y la fecha del examen",
       },
       {
         id: "m1q9_b",
-        label: "Repetir el mismo prompt sin cambiar ninguna palabra",
+        label: 'Un rol más llamativo, como "actúa como un genio"',
       },
       {
         id: "m1q9_c",
-        label: "Elegir otra herramienta de IA sin entender el problema",
+        label: "Que lo haga más largo y con muchos más detalles",
       },
       {
         id: "m1q9_d",
-        label: "Pedir más de una vez hasta que la respuesta mejore sola",
+        label: 'Palabras amables como "por favor" para que se esfuerce',
       },
     ],
     correctAnswer: "m1q9_a",
-    topic: "Refinamiento de Prompts",
+    topic: "Contexto",
     difficulty: "fácil",
     source: "Guía: Anatomía de un Prompt",
     feedback:
-      "Refina el prompt agregando contexto. Practica con la guía Anatomía de un Prompt.",
+      'La IA no conoce tu situación. El contexto (tu tiempo, tu nivel y tu fecha límite) es lo que convierte un plan genérico en uno útil. Un rol llamativo, más extensión o palabras amables no le dan esa información. Repasa la "Guía: Anatomía de un Prompt".',
   },
   {
     id: "m1q10",
@@ -288,31 +288,31 @@ export const MODULE_1_PART1 = [
   {
     id: "m1q11",
     question:
-      "Caso: tu jefe pide un resumen de un informe de 40 páginas para mañana. ¿Qué pedido a la IA da el resultado más útil?",
+      "Pides ejemplos de profesiones y todos muestran a hombres de ciudad. Ningún dato es falso. ¿Qué pregunta te ayuda a ver el problema?",
     options: [
       {
         id: "m1q11_a",
-        label: "Resume el informe en 5 viñetas con cifras clave",
+        label: "¿Qué personas o perspectivas quedan por fuera?",
       },
       {
         id: "m1q11_b",
-        label: "Resume el informe completo para hoy",
+        label: "¿Alguno de los datos de la respuesta es falso?",
       },
       {
         id: "m1q11_c",
-        label: "Haz lo que puedas con el informe, sin límites ni formato",
+        label: "¿La respuesta cita alguna fuente confiable?",
       },
       {
         id: "m1q11_d",
-        label: "Escribe algo sobre el informe para el jefe",
+        label: "¿Las profesiones de la lista existen de verdad?",
       },
     ],
     correctAnswer: "m1q11_a",
-    topic: "IA Generativa",
+    topic: "Sesgo por omisión",
     difficulty: "fácil",
-    source: "Qué es la IA y cómo está cambiando el mundo",
+    source: "PDF: Ética de la Inteligencia artificial",
     feedback:
-      "Un buen pedido fija formato, extensión y lo que debe incluir. Con 'resume' a secas, la IA improvisa.",
+      "El sesgo a veces no está en lo que la respuesta dice, sino en lo que omite. Preguntar qué personas o perspectivas quedan por fuera lo revela; revisar si los datos son ciertos o si hay fuentes no lo muestra. Repasa la guía de ética, sección 4.",
   },
   {
     id: "m1q12",
