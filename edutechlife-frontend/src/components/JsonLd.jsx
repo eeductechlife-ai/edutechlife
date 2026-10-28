@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 import { serializarJsonLd } from "../utils/jsonLd";
 
-const SITE_URL = "https://edutechlife.co";
+const SITE_URL = "https://www.edutechlife.co";
 
 const JsonLd = ({ title, breadcrumbs }) => {
   const { locale } = useTranslation();
