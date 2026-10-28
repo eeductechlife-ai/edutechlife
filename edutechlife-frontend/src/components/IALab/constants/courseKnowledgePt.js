@@ -152,7 +152,7 @@ const COURSE_KNOWLEDGE_PT = [
       {
         title: "O Superpoder Multimodal: Veja o que Ninguém Mais Consegue Ver",
         description:
-          "E se a sua lupa pudesse ler, ouvir e ver ao mesmo tempo? O Gemini processa texto, imagens, áudio e vídeo como um investigador sobre-humano. Uma única ferramenta. Múltiplas dimensões.",
+          "E se a sua lupa pudesse ler, ouvir e ver ao mesmo tempo? O Gemini processa texto, imagens, áudio e vídeo como um investigador cuidadoso. Uma única ferramenta. Múltiplas dimensões.",
         difficulty: "Principiante",
         learningObjectives: [
           "Desbloquear o poder de processar texto, imagens, áudio e vídeo em uma única conversa",

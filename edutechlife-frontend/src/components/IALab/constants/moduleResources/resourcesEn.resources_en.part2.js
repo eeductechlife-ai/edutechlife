@@ -2,10 +2,10 @@ export const RESOURCES_EN_PART2 = {
   "The Multimodal Detective Awakens": {
     title: "The Multimodal Detective Awakens",
     description:
-      "Your first mission as a detective: meet your new secret weapon. Gemini is the AI that processes text, images, audio, and video in a single move. One magnifying glass. Every format.",
+      "Your first mission as a detective: meet your new magnifying glass. Gemini is an AI that reads text, images, audio, and video in the same conversation, and you check what it understood.",
     learningObjectives: [
-      "Discover the power to process any type of evidence in a single tool",
-      "Interrogate Gemini with photos, documents, audio, and video like an expert investigator",
+      "Ask Gemini to read different kinds of evidence in the same conversation",
+      "Ask Gemini questions about photos, documents, audio, and video, like an investigator who asks for proof",
       "Compare what kind of evidence you can ask Gemini for (image, document, audio or video) and how to ask for the source of each fact",
       "Use Gemini to review your own material and note which fact you verified",
     ],
@@ -31,7 +31,7 @@ export const RESOURCES_EN_PART2 = {
         format: "PDF",
         size: "0.88 MB",
         description:
-          "The detective's field manual: learn to use Gemini to study, work, and create content with the precision of a professional investigator.",
+          "The detective's field manual: learn to use Gemini to study, work, and create content checking every fact like a good investigator.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -52,12 +52,12 @@ export const RESOURCES_EN_PART2 = {
   "Grounding: When Evidence Touches the Real World": {
     title: "Grounding: When Evidence Touches the Real World",
     description:
-      "Gemini doesn't float in the air — it connects to your daily tools. Learn to integrate it into Google Docs, Sheets, and Gmail to multiply your investigation speed.",
+      "Gemini doesn't float in the air: it can ground its answers in the web and in your files. Learn to ask it for sources, open them to check them, and use it in Google Docs, Sheets, and Gmail with data you can verify.",
     learningObjectives: [
       "Draft investigation reports with Gemini as your co-author",
-      "Turn raw data into actionable evidence directly in Sheets",
-      "Master your inbox: let Gemini filter, summarize, and prioritize for you",
-      "Generate high-impact presentations with Gemini's assistance",
+      "Ask Gemini to explain a Sheets formula and test it with a known case",
+      "Ask Gemini to summarize your emails and check what it left out",
+      "Draft a presentation with Gemini and verify its data",
     ],
     estimatedTime: "40 minutes",
     difficulty: "Intermediate",
@@ -100,12 +100,12 @@ export const RESOURCES_EN_PART2 = {
   "Deep Research: The Forensic Toolkit": {
     title: "Deep Research: The Forensic Toolkit",
     description:
-      "The most impressive cases aren't solved by luck — they're solved by method. Discover how investigators, marketers, programmers, and educators use Gemini to find what no one else can.",
+      "The most impressive cases aren't solved by luck — they're solved by method. Discover how investigators, marketers, programmers, and educators use Gemini to research step by step and check every source.",
     learningObjectives: [
-      "Design marketing strategies powered by deep research data",
-      "Debug and optimize code with a digital detective by your side",
-      "Create educational experiences that feel like interactive investigations",
-      "Conduct academic research with a PhD's depth and AI's speed",
+      "Commission research on your market and review its sources before deciding",
+      "Ask Gemini to explain a code error and test the fix it suggests",
+      "Prepare a class activity from a Deep Research report",
+      "Use Deep Research to start an academic investigation and check every source in the original text",
     ],
     estimatedTime: "42 minutes",
     difficulty: "Advanced",
@@ -120,7 +120,7 @@ export const RESOURCES_EN_PART2 = {
         thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Companies and professionals reveal how Gemini transformed their investigation methods. Results that look like magic — but it's all method.",
+          "How to use Gemini and Deep Research in academic research without losing rigor. Results that look like magic, but it's all method.",
       },
       {
         id: "deep-research-guide-1",
@@ -140,7 +140,7 @@ export const RESOURCES_EN_PART2 = {
         type: "ova_interactive",
         title: "The Forensic Archive",
         description:
-          "Research in depth and verify every source: analyze evidence, cross-check data and produce reports with forensic traceability using Gemini Deep Research.",
+          "Research in depth and verify every source: analyze evidence, cross-check data and write a report in which every fact carries its source, using Gemini Deep Research.",
         estimatedTime: "25 minutes",
         difficulty: "Advanced",
         interactiveElements: 3,
@@ -152,12 +152,12 @@ export const RESOURCES_EN_PART2 = {
   "The Document Alchemist: Your First Spell with Gemini Notebook": {
     title: "The Document Alchemist: Your First Spell with Gemini Notebook",
     description:
-      "Google's secret tool for digital alchemists: upload your PDFs and get precise answers with verbatim citations. Your personal librarian with AI superpowers.",
+      "Google's tool for digital alchemists: upload your PDFs and get answers with citations you can check. Like a librarian who only answers with the books you give it.",
     learningObjectives: [
       "Build your first intelligent library where documents come to life",
       "Interrogate your sources like a detective uncovering the truth",
       "Distill mountains of text into summaries that cut to the chase",
-      "Compare information across multiple sources with surgical precision",
+      "Compare what several sources say about a topic and locate each fact in its citation",
     ],
     estimatedTime: "28 minutes",
     difficulty: "Beginner",
@@ -182,7 +182,7 @@ export const RESOURCES_EN_PART2 = {
         format: "PDF",
         size: "2.32 MB",
         description:
-          "The alchemist's grimoire: 10 pages to master Gemini Notebook from your first notebook to advanced research techniques.",
+          "The alchemist's grimoire: a guide to using Gemini Notebook, from your first notebook to questions with citations you can check.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -191,7 +191,7 @@ export const RESOURCES_EN_PART2 = {
         type: "ova_interactive",
         title: "The Grimoire",
         description:
-          "7 questions that will make you a Gemini Notebook expert. Complete the challenge with MAX as your personal guide on this alchemical journey.",
+          "7 questions to practice the essentials of Gemini Notebook. Complete the challenge with MAX as your personal guide on this alchemical journey.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 7,
@@ -203,12 +203,12 @@ export const RESOURCES_EN_PART2 = {
   "The Art of Curation: How to Choose and Synthesize Sources": {
     title: "The Art of Curation: How to Choose and Synthesize Sources",
     description:
-      "Turn mountains of documents into summaries, FAQs, and executive reports that look like the work of a team of analysts.",
+      "Choose a few quality sources and turn them into summaries, FAQs, and study guides you can check citation by citation.",
     learningObjectives: [
-      "Generate executive summaries that read like they were written by a team of analysts",
-      "Create FAQs that anticipate every question before it's asked",
-      "Connect every answer to its original source with surgical precision",
-      "Validate that generated information is as accurate as your judgment",
+      "Generate a summary of your sources and check that every idea is in them",
+      "Create a list of frequently asked questions from your documents",
+      "Connect every answer to its original source through the citations",
+      "Check the generated information with your own judgment before using it",
     ],
     estimatedTime: "20 minutes",
     difficulty: "Intermediate",
@@ -232,14 +232,14 @@ export const RESOURCES_EN_PART2 = {
         format: "PDF",
         size: "2.18 MB",
         description:
-          "Professional summary templates for each document type: academic, business, technical, and more. The alchemist's toolkit for every occasion.",
+          "Summary templates for each document type: academic, business, technical, and more. The alchemist's toolkit for every occasion.",
       },
       {
         id: "notebook-summary-ova-1",
         type: "ova_interactive",
         title: "The Crucible",
         description:
-          "Practical simulator: take real documents and generate professional-level summaries in minutes. Put your alchemical skills to the test.",
+          "Practical simulator: take real documents and generate summaries you can check citation by citation. Put your alchemical skills to the test.",
         estimatedTime: "20 minutes",
         difficulty: "Intermediate",
         interactiveElements: 5,
@@ -251,12 +251,12 @@ export const RESOURCES_EN_PART2 = {
   "The Secret Formula: Audio Overviews and Document Management": {
     title: "The Secret Formula: Audio Overviews and Document Management",
     description:
-      "Turn your notes into podcasts that sound like professional radio: two AI voices discuss your documents like old friends.",
+      "Turn your notes into a podcast-style audio summary: two AI voices discuss your documents like old friends.",
     learningObjectives: [
-      "Bring your documents to life with Audio Overviews that feel like radio shows",
+      "Generate an Audio Overview of your documents and review what it says",
       "Fine-tune the tone: deep academic or casual storytelling — you choose",
       "Learn on the move: turn study time into an audio experience",
-      "Share your sonic creations with entire teams",
+      "Share a notebook or an audio file, deciding who can view it and who can edit it",
     ],
     estimatedTime: "47 minutes",
     difficulty: "Advanced",

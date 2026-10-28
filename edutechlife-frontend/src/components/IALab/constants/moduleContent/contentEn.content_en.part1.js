@@ -1,7 +1,7 @@
 export const CONTENT_EN_PART1 = {
   1: {
     objective:
-      "By the end of this module you will be able to write prompts with the RTF formula (Role + Task + Format) plus the needed context, getting useful answers from any AI model on the first try.",
+      "By the end of this module you will be able to write prompts with the RTF formula (Role + Task + Format) plus the needed context, and improve them by iterating until you get useful answers from any AI model.",
     learningPoints: [
       {
         text: "Explain what generative AI is and why it sometimes gets things wrong",
@@ -24,7 +24,7 @@ export const CONTENT_EN_PART1 = {
       title:
         "The Digital Craftsman: Prompts and Ethics — The Foundations of Every AI Interaction",
       description:
-        "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence. A responsible craftsman also knows when not to use the tool: here you will learn to verify, protect data and use AI within the law.",
+        "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt clear instructions, review what the AI gives back and polish them until they work for you, starting with the fundamentals. A responsible craftsman also knows when not to use the tool: here you will learn to verify, protect data and use AI within the law.",
       mission:
         "Your mission as an artisan: complete each lesson and multimedia resource (videos, guides, and labs). Every tool you master brings you 20% closer to your certification. Precise instructions are your quality seal! This module includes the guardian's oath: without verifying, protecting data and disclosing your AI use, no prompt is finished.",
       topics: [

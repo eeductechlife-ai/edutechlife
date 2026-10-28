@@ -39,7 +39,7 @@ export const RESOURCES_ES_PART3 = {
         type: "ova_interactive",
         title: "El Taller de Artifacts",
         description:
-          "Arma el pedido perfecto para un documento o una presentación: elige objetivo, público, formato y restricciones, y mira el resultado antes de pedirlo.",
+          "Arma un pedido completo para un documento o una presentación: elige objetivo, público, formato y restricciones, y mira el resultado antes de pedirlo.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 4,

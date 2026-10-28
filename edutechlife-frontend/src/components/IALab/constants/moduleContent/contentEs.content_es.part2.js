@@ -1,10 +1,10 @@
 export const CONTENT_ES_PART2 = {
   2: {
     objective:
-      "Diseña y construye sistemas inteligentes con ChatGPT: desde los cimientos hasta la automatización completa de tu trabajo diario como un verdadero arquitecto digital.",
+      "Construye con ChatGPT como un arquitecto digital: escribe pedidos claros, elige la herramienta adecuada para cada tarea, organiza tu trabajo repetido en Proyectos y revisa cada paso que delegas.",
     learningPoints: [
       {
-        text: "Diseñar planos maestros con System Prompts avanzados",
+        text: "Trazar el plano de un Proyecto: instrucciones con rol, tono y límites",
         icon: "fa-sliders",
       },
       {
@@ -16,7 +16,7 @@ export const CONTENT_ES_PART2 = {
         icon: "fa-robot",
       },
       {
-        text: "Automatizar flujos de obra completos",
+        text: "Delegar al agente una tarea de varios pasos y aprobar cada paso",
         icon: "fa-cog",
       },
     ],
@@ -24,9 +24,9 @@ export const CONTENT_ES_PART2 = {
       title:
         "El Arquitecto Digital: ChatGPT y Automatización — Construye tu Propio Ecosistema de Trabajo",
       description:
-        "Bienvenido a la obra maestra de la automatización. Aquí no solo usarás ChatGPT — construirás con él. Aprenderás a diseñar prompts de sistema como si trazaras planos, a usar herramientas integradas como andamios, a organizar Proyectos como módulos de construcción y a delegar tareas de varios pasos al agente de ChatGPT, siempre con tu supervisión.",
+        "Bienvenido a la obra. Aquí no solo usarás ChatGPT — construirás con él. Aprenderás a escribir las instrucciones de un Proyecto como si trazaras planos, a usar herramientas integradas como andamios, a organizar Proyectos como módulos de construcción y a delegar tareas de varios pasos al agente de ChatGPT, siempre con tu supervisión.",
       mission:
-        "Tu misión como arquitecto: completa cada lección y domina el arte de construir con ChatGPT. Cada estructura que diseñes te acerca a tu certificación como arquitecto de automatización. ¡Construye tu obra maestra digital!",
+        "Tu misión como arquitecto: completa cada lección y construye con ChatGPT un Proyecto que te sirva en tu trabajo real. Cada estructura que diseñes te acerca a tu certificación. ¡Construye tu primera obra!",
       topics: [
         {
           title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
@@ -60,7 +60,7 @@ export const CONTENT_ES_PART2 = {
         title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
         description: "Los cimientos de toda gran construcción digital",
         detailedDescription:
-          "Todo edificio comienza con un plano. En esta lección conocerás ChatGPT de punta a punta: qué es, qué modelos existen, cuándo usar cada uno y cómo escribir prompts profesionales (con tarea, contexto y formato) que obtienen resultados en el primer intento. ChatGPT es un modelo de lenguaje: genera texto a partir de tus instrucciones, prediciendo las palabras más probables, y sin Búsqueda Web su conocimiento llega solo hasta una fecha de corte. Los modelos cambian con frecuencia: usa los que muestre hoy el selector de tu cuenta, el rápido para tareas simples y el más potente para análisis complejos. Cada chat tiene un límite de contexto: en una conversación muy larga puede dejar de tener en cuenta lo que dijiste al principio; resume lo importante y sigue en un chat nuevo con ese resumen. Si la primera respuesta no te sirve, dile qué falla y pide que ajuste solo esa parte. La base que necesitas antes de automatizar cualquier cosa. Nota de vigencia: OpenAI programó retirar los GPT personalizados el 11 de diciembre de 2026 (fecha sujeta a cambios) y reemplazarlos por plugins. Trabaja desde ya con Proyectos y con los plugins conectados a tu cuenta, y verifica el aviso de tu cuenta.",
+          "Todo edificio comienza con un plano. En esta lección conocerás ChatGPT de punta a punta: qué es, qué modelos existen, cuándo usar cada uno y cómo escribir prompts claros (con tarea, contexto y formato) para obtener una respuesta útil en menos intentos. ChatGPT es un modelo de lenguaje: genera texto a partir de tus instrucciones, prediciendo las palabras más probables, y sin Búsqueda Web su conocimiento llega solo hasta una fecha de corte. Los modelos cambian con frecuencia: usa los que muestre hoy el selector de tu cuenta, el rápido para tareas simples y el más potente para análisis complejos. Cada chat tiene un límite de contexto: en una conversación muy larga puede dejar de tener en cuenta lo que dijiste al principio; resume lo importante y sigue en un chat nuevo con ese resumen. Si la primera respuesta no te sirve, dile qué falla y pide que ajuste solo esa parte. La base que necesitas antes de delegarle tareas más largas. Nota de vigencia: OpenAI programó retirar los GPT personalizados el 11 de diciembre de 2026 (fecha sujeta a cambios) y reemplazarlos por plugins. Trabaja desde ya con Proyectos y con los plugins conectados a tu cuenta, y verifica el aviso de tu cuenta.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -72,7 +72,7 @@ export const CONTENT_ES_PART2 = {
         title: "El Andamio del Arquitecto: Herramientas Integradas",
         description: "Las herramientas que levantan tu construcción digital",
         detailedDescription:
-          "Un arquitecto usa las herramientas correctas para cada fase. Descubre el arsenal completo de ChatGPT: Búsqueda Web para datos actuales, Análisis de Datos con Python para procesar cifras, generación de imágenes, Canvas para editar documentos, el modo de voz para conversar en voz alta (por ejemplo, para ensayar una exposición) y Proyectos para organizar tu trabajo. Para un cálculo exacto sobre un archivo, pide que use Análisis de Datos: calcular «de memoria» puede dar cifras erradas. Con Búsqueda Web, prefiere fuentes primarias (quien produjo el dato), con autor y fecha. Aprende a combinarlos en flujos que multiplican tu productividad real. Revisa en tu cuenta qué herramientas tienes disponibles.",
+          "Un arquitecto usa las herramientas correctas para cada fase. Descubre las herramientas principales de ChatGPT: Búsqueda Web para datos actuales, Análisis de Datos con Python para procesar cifras, generación de imágenes, Canvas para editar documentos, el modo de voz para conversar en voz alta (por ejemplo, para ensayar una exposición) y Proyectos para organizar tu trabajo. Para un cálculo exacto sobre un archivo, pide que use Análisis de Datos: calcular «de memoria» puede dar cifras erradas. Con Búsqueda Web, prefiere fuentes primarias (quien produjo el dato), con autor y fecha. Aprende a combinarlas en un flujo sencillo de dos o tres pasos y a revisar lo que entrega cada una. Revisa en tu cuenta qué herramientas tienes disponibles.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -96,15 +96,15 @@ export const CONTENT_ES_PART2 = {
       1: {
         objective: "🎯 Los Cimientos del Arquitecto",
         objectiveDesc:
-          "Domina los fundamentos de ChatGPT: modelos, límites y técnicas profesionales de prompt engineering.",
+          "Conoce lo básico de ChatGPT: qué modelos hay, cuáles son sus límites y cómo escribir un pedido claro.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Comprender la arquitectura y evolución de los modelos GPT como un plano maestro",
+            text: "Explicar con tus palabras qué es un modelo de lenguaje y por qué tiene una fecha de corte",
           },
           {
             icon: "fa-check",
-            text: "Aplicar técnicas de prompt engineering profesional como herramientas de construcción",
+            text: "Escribir un pedido con tarea, contexto y formato, y ajustarlo cuando la respuesta no sirve",
           },
           {
             icon: "fa-check",
@@ -135,7 +135,7 @@ export const CONTENT_ES_PART2 = {
       2: {
         objective: "🏗️ El Andamio del Arquitecto",
         objectiveDesc:
-          "Domina el ecosistema de herramientas de ChatGPT: Búsqueda Web, Análisis de Datos, generación de imágenes, Canvas, voz y Proyectos.",
+          "Conoce las herramientas de ChatGPT: Búsqueda Web, Análisis de Datos, generación de imágenes, Canvas, voz y Proyectos.",
         achievements: [
           {
             icon: "fa-check",
@@ -147,7 +147,7 @@ export const CONTENT_ES_PART2 = {
           },
           {
             icon: "fa-check",
-            text: "Crear automatizaciones que resuelvan problemas reales — tu obra terminada",
+            text: "Resolver una tarea real con dos o tres herramientas y revisar el resultado — tu obra terminada",
           },
         ],
         warnings: [
@@ -168,7 +168,7 @@ export const CONTENT_ES_PART2 = {
           label: "Ejemplo de flujo integrado",
           weak: "❌ Aislado: Pedir datos actualizados sin activar Búsqueda Web → resultado desactualizado como un edificio sin cimientos",
           strong:
-            "✅ Integrado: Buscar datos actuales (Búsqueda Web) → analizarlos con Python (Análisis de Datos) → generar la infografía con esos resultados (imagen) → escribir en Canvas el texto que la comenta — una construcción en 4 fases perfectamente orquestadas",
+            "✅ Integrado: Buscar datos actuales (Búsqueda Web) → analizarlos con Python (Análisis de Datos) → generar la infografía con esos resultados (imagen) → escribir en Canvas el texto que la comenta — una construcción en 4 fases, revisando cada una antes de pasar a la siguiente",
         },
       },
       3: {

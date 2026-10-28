@@ -1,7 +1,7 @@
 export const CONTENT_PT_PART1 = {
   1: {
     objective:
-      "Ao final deste módulo você poderá redigir prompts com a fórmula RTF (Papel + Tarefa + Formato) e o contexto necessário, obtendo respostas úteis de qualquer modelo de IA já na primeira tentativa.",
+      "Ao final deste módulo você poderá redigir prompts com a fórmula RTF (Papel + Tarefa + Formato) e o contexto necessário, e melhorá-los iterando até obter respostas úteis de qualquer modelo de IA.",
     learningPoints: [
       {
         text: "Explicar o que é a IA generativa e por que às vezes erra",
@@ -24,7 +24,7 @@ export const CONTENT_PT_PART1 = {
       title:
         "O Artesão Digital: Prompts e Ética — Os Fundamentos de Toda Interação com IA",
       description:
-        "Todo artesão começa com as ferramentas básicas e, com prática, torna-se mestre. Aqui você aprenderá a esculpir instruções que a IA entende perfeitamente. Dos fundamentos até técnicas avançadas que transformarão sua forma de trabalhar com inteligência artificial. Um artesão responsável também sabe quando não usar a ferramenta: aqui você aprenderá a verificar, proteger dados e usar a IA dentro da lei.",
+        "Todo artesão começa com as ferramentas básicas e, com prática, torna-se mestre. Aqui você aprenderá a esculpir instruções claras, revisar o que a IA devolve e lapidá-las até que funcionem para você, começando pelos fundamentos. Um artesão responsável também sabe quando não usar a ferramenta: aqui você aprenderá a verificar, proteger dados e usar a IA dentro da lei.",
       mission:
         "Sua missão como artesão: complete cada lição e recurso multimídia (vídeos, guias e laboratórios). Cada ferramenta que você dominar o aproxima 20% mais da sua certificação. Instruções precisas são o seu selo de qualidade! Este módulo inclui o juramento do guardião: sem verificar, proteger dados e declarar seu uso de IA, nenhum prompt está concluído.",
       topics: [

@@ -2,7 +2,7 @@ export const RESOURCES_EN_PART1 = {
   "The Artisan's Foundations: What is Generative AI?": {
     title: "The Artisan's Foundations: What is Generative AI?",
     description:
-      "Every artisan knows their raw material. Discover what Generative AI is, how it works, and why mastering it is the most valuable tool in the digital artisan's workshop.",
+      "Every artisan knows their raw material. Discover what generative AI is, how it works, and what it can and cannot do in the digital artisan's workshop.",
     learningObjectives: [
       "Understand what Generative AI is and how it works — the artisan's raw material",
       "Differentiate between narrow AI and general AI like a master distinguishes their tools",
@@ -21,7 +21,7 @@ export const RESOURCES_EN_PART1 = {
         thumbnail: "https://img.youtube.com/vi/Gq6qG_oK6HY/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Discover what artificial intelligence is, how it works, and the impact it is having on today's world. The perfect introduction for your digital artisan workshop.",
+          "Discover what artificial intelligence is, how it works, and the impact it is having on today's world. A good starting point for your digital artisan workshop.",
       },
       {
         id: "intro-ova-1",
@@ -53,10 +53,10 @@ export const RESOURCES_EN_PART1 = {
   "The Artisan's Chisel: What is a Prompt?": {
     title: "The Artisan's Chisel: What is a Prompt?",
     description:
-      "The chisel is the sculptor's most basic tool — and also the most important. Master the art of writing precise instructions that AI understands perfectly.",
+      "The chisel is the sculptor's most basic tool — and also the most important. Learn to write clear instructions and improve them until the AI gives you what you need.",
     learningObjectives: [
       "Understand what a prompt is and how to use it as the digital artisan's primary tool",
-      "Master the anatomy of an instruction: context, intent, format, and constraints",
+      "Build an instruction from its parts: context, intent, format, and constraints",
       "Practice the art of clarity — less ambiguity, more precision, better results",
     ],
     estimatedTime: "15 minutes",
@@ -71,7 +71,7 @@ export const RESOURCES_EN_PART1 = {
         thumbnail: "https://img.youtube.com/vi/kvQkEIuuFbU/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Learn the ultimate formula for creating effective prompts and mastering artificial intelligence. Like a master artisan sharing their workshop secrets.",
+          "Learn a simple formula for writing effective prompts and getting more useful answers. Like a master artisan sharing their workshop tricks.",
       },
       {
         id: "prompt-guide-1",
@@ -82,7 +82,7 @@ export const RESOURCES_EN_PART1 = {
         format: "PDF",
         size: "1.36 MB",
         description:
-          "Your artisan's reference manual: proven techniques, ready-to-use examples, and craft secrets that will transform how you work with AI.",
+          "Your artisan's reference manual: techniques for writing clear prompts and examples ready to adapt to your work.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -91,7 +91,7 @@ export const RESOURCES_EN_PART1 = {
         type: "ova_interactive",
         title: "The Chisel",
         description:
-          "Put what you've learned into practice: sculpt your own prompts and get immediate feedback. The artisan's workshop where every practice brings you closer to mastery.",
+          "Put what you've learned into practice: sculpt your own prompts and get immediate feedback. The artisan's workshop where every practice sharpens your craft.",
         estimatedTime: "10 minutes",
         difficulty: "Beginner",
         fullscreen: true,
@@ -120,7 +120,7 @@ export const RESOURCES_EN_PART1 = {
         thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "9:20 that can save your reputation. Discover the privacy risks lurking in every AI tool and how to neutralize them.",
+          "9:20 to learn about the privacy risks, biases, and dependence that come with using AI tools, and how to reduce them.",
       },
       {
         id: "privacy-guide-1",
@@ -170,7 +170,7 @@ export const RESOURCES_EN_PART1 = {
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "6:05 that condense everything you need to implement ethical AI in the real world. The ultimate guardian guide.",
+          "6:05 with the key ideas for using AI ethically in your daily life. A good starting point for guardians.",
       },
       {
         id: "bias-guide-1",
@@ -181,7 +181,7 @@ export const RESOURCES_EN_PART1 = {
         format: "PDF",
         size: "0.64 MB",
         description:
-          "5 pages that condense everything you need to ethically shield your relationship with AI. Required reading for guardians.",
+          "5 pages with the key questions and practices for using AI ethically. Recommended reading for guardians.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -190,7 +190,7 @@ export const RESOURCES_EN_PART1 = {
         type: "ova_interactive",
         title: "The Mirror of Truth",
         description:
-          "Test your guardian eye: analyze real AI responses and uncover biases most people would never notice. 6 challenges that will sharpen your instinct.",
+          "Test your guardian eye: analyze real AI responses and uncover biases that often go unnoticed. 6 challenges to train your eye.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 6,
@@ -202,11 +202,11 @@ export const RESOURCES_EN_PART1 = {
   "The Architect's Blueprints: Complete ChatGPT Guide": {
     title: "The Architect's Blueprints: Complete ChatGPT Guide",
     description:
-      "Every great building starts with a master blueprint. Learn the complete architecture of ChatGPT: models, interface, prompt engineering techniques, and the best practices of the digital architect's craft.",
+      "Every great building starts with a master blueprint. Learn the essentials of ChatGPT: models, interface, how to write a good request, and good practices of the digital architect's craft.",
     learningObjectives: [
       "Navigate the ChatGPT interface like an architect knows their studio",
       "Set up conversations as detailed blueprints for each purpose",
-      "Apply prompt engineering techniques as professional construction tools",
+      "Write requests with task, context, and format, as construction tools",
       "Select the optimal model like an architect chooses the right material for each project",
     ],
     estimatedTime: "26 minutes",
@@ -232,7 +232,7 @@ export const RESOURCES_EN_PART1 = {
         format: "PDF",
         size: "1.67 MB",
         description:
-          "The architect's handbook: tips, tricks, and practical examples organized to build any project with ChatGPT. Quick reference for digital construction professionals.",
+          "The architect's handbook: tips, tricks, and practical examples organized for your first projects with ChatGPT. Quick reference for your digital build.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -241,7 +241,7 @@ export const RESOURCES_EN_PART1 = {
         type: "ova_interactive",
         title: "The Master Blueprint",
         description:
-          "Interactive journey through the ChatGPT universe: discover each tool, learn to combine them, and become an automation architect. The complete tour of your new construction site.",
+          "Interactive journey through the ChatGPT universe: discover each tool, learn to combine them, and decide which one to use for each task. The complete tour of your new construction site.",
         estimatedTime: "20 minutes",
         difficulty: "Beginner",
         interactiveElements: 5,
@@ -253,11 +253,11 @@ export const RESOURCES_EN_PART1 = {
   "The Architect's Scaffolding: Integrated Tools": {
     title: "The Architect's Scaffolding: Integrated Tools",
     description:
-      "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized equipment. Discover the 5 integrated ChatGPT tools that will multiply your productivity.",
+      "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized equipment. Discover the 5 integrated ChatGPT tools and what each one is for.",
     learningObjectives: [
       "Identify the 5 key tools of the ChatGPT ecosystem and when to use each one",
       "Select the right tool like an architect chooses the right material",
-      "Combine multiple tools into efficient, automated workflows",
+      "Combine two or three tools in a simple workflow and review each result",
       "Solve real-world scenarios using integrated tools like a master builder",
     ],
     estimatedTime: "25 minutes",
@@ -282,7 +282,7 @@ export const RESOURCES_EN_PART1 = {
         format: "PDF",
         size: "1.23 MB",
         description:
-          "Discover how Web Search, Data Analysis, image generation, and Canvas work together like a construction crew to solve complex problems.",
+          "Discover how Web Search, Data Analysis, image generation, and Canvas work together like a construction crew to solve a multi-step task.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -291,7 +291,7 @@ export const RESOURCES_EN_PART1 = {
         type: "ova_interactive",
         title: "The Toolbox",
         description:
-          "Explore each ChatGPT tool with practical exercises and guided audio. Like an architect testing their tools before the big project. Complete the challenge to prove your mastery.",
+          "Explore each ChatGPT tool with practical exercises and guided audio. Like an architect testing their tools before the big project. Complete the challenge to show what you learned.",
         estimatedTime: "25 minutes",
         difficulty: "Intermediate",
         interactiveElements: 5,
@@ -303,7 +303,7 @@ export const RESOURCES_EN_PART1 = {
   "The Building's Facade: GPTs, Projects and Agents": {
     title: "The Building's Facade: GPTs, Projects and Agents",
     description:
-      "The facade is what the world sees. Build custom GPTs with your own instructions and knowledge, organize your work in Projects, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
+      "The facade is what the world sees. Organize your work in Projects with your instructions and files, connect plugins after reviewing their permissions, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
     learningObjectives: [
       "Design Projects with instructions and files, and decide when a plugin or an agent fits",
       "Organize a Project with files and instructions for one piece of work",

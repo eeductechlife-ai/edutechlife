@@ -1,10 +1,10 @@
 export const CONTENT_EN_PART2 = {
   2: {
     objective:
-      "Design and build intelligent systems with ChatGPT: from foundations to full automation of your daily work as a true digital architect.",
+      "Build with ChatGPT like a digital architect: write clear requests, choose the right tool for each task, organize your recurring work in Projects, and review every step you delegate.",
     learningPoints: [
       {
-        text: "Design master blueprints with advanced System Prompts",
+        text: "Draw a Project's blueprint: instructions with role, tone, and limits",
         icon: "fa-sliders",
       },
       {
@@ -16,7 +16,7 @@ export const CONTENT_EN_PART2 = {
         icon: "fa-robot",
       },
       {
-        text: "Automate complete construction workflows",
+        text: "Delegate a multi-step task to the agent and approve each step",
         icon: "fa-cog",
       },
     ],
@@ -24,9 +24,9 @@ export const CONTENT_EN_PART2 = {
       title:
         "The Digital Architect: ChatGPT & Automation — Build Your Own Work Ecosystem",
       description:
-        "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, organize Projects as construction modules, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
+        "Welcome to the construction site. Here you won't just use ChatGPT — you'll build with it. Learn to write a Project's instructions like architectural blueprints, use integrated tools as scaffolding, organize Projects as construction modules, and delegate multi-step tasks to ChatGPT's agent, always under your supervision.",
       mission:
-        "Your mission as an architect: complete each lesson and master the art of building with ChatGPT. Every structure you design brings you closer to your automation architect certification. Build your digital masterpiece!",
+        "Your mission as an architect: complete each lesson and build with ChatGPT a Project you can use in your real work. Every structure you design brings you closer to your certification. Build your first structure!",
       topics: [
         {
           title: "The Architect's Blueprints: Complete ChatGPT Guide",
@@ -60,7 +60,7 @@ export const CONTENT_EN_PART2 = {
         title: "The Architect's Blueprints: Complete ChatGPT Guide",
         description: "The foundations of every great digital construction",
         detailedDescription:
-          "Every building starts with a blueprint. In this lesson you'll get to know ChatGPT end to end: what it is, which models exist, when to use each one, and how to write professional prompts (with task, context, and format) that get results on the first try. ChatGPT is a language model: it generates text from your instructions by predicting the most likely words, and without Web Search its knowledge only reaches a cutoff date. Models change often: use the ones your account's model picker shows today, the fast one for simple tasks and the more powerful one for complex analysis. Every chat has a context limit: in a very long conversation it may stop taking into account what you said at the beginning; summarize what matters and continue in a new chat with that summary. If the first answer doesn't work for you, tell it what is wrong and ask it to adjust only that part. This is the foundation you need before automating anything. Currency note: OpenAI has scheduled the retirement of custom GPTs for December 11, 2026 (date subject to change), to be replaced by plugins. Work now with Projects and with the plugins connected to your account, and check the notice in your account.",
+          "Every building starts with a blueprint. In this lesson you'll get to know ChatGPT end to end: what it is, which models exist, when to use each one, and how to write clear prompts (with task, context, and format) to get a useful answer in fewer tries. ChatGPT is a language model: it generates text from your instructions by predicting the most likely words, and without Web Search its knowledge only reaches a cutoff date. Models change often: use the ones your account's model picker shows today, the fast one for simple tasks and the more powerful one for complex analysis. Every chat has a context limit: in a very long conversation it may stop taking into account what you said at the beginning; summarize what matters and continue in a new chat with that summary. If the first answer doesn't work for you, tell it what is wrong and ask it to adjust only that part. This is the foundation you need before delegating longer tasks to it. Currency note: OpenAI has scheduled the retirement of custom GPTs for December 11, 2026 (date subject to change), to be replaced by plugins. Work now with Projects and with the plugins connected to your account, and check the notice in your account.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -72,7 +72,7 @@ export const CONTENT_EN_PART2 = {
         title: "The Architect's Scaffolding: Integrated Tools",
         description: "The tools that raise your digital construction",
         detailedDescription:
-          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's arsenal: Web Search for current data, Data Analysis with Python to process figures, image generation, Canvas to edit documents, voice mode to talk out loud (for example, to rehearse a presentation), and Projects to organize your work. For an exact calculation on a file, ask it to use Data Analysis: calculating \"from memory\" can give wrong figures. With Web Search, prefer primary sources (whoever produced the figure), with an author and a date. Learn to combine them in workflows that multiply your productivity. Check in your account which tools you have available.",
+          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's main tools: Web Search for current data, Data Analysis with Python to process figures, image generation, Canvas to edit documents, voice mode to talk out loud (for example, to rehearse a presentation), and Projects to organize your work. For an exact calculation on a file, ask it to use Data Analysis: calculating \"from memory\" can give wrong figures. With Web Search, prefer primary sources (whoever produced the figure), with an author and a date. Learn to combine them in a simple two- or three-step workflow and to review what each one delivers. Check in your account which tools you have available.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -96,15 +96,15 @@ export const CONTENT_EN_PART2 = {
       1: {
         objective: "🎯 The Architect's Foundations",
         objectiveDesc:
-          "Master ChatGPT's fundamentals: models, limits, and professional prompt engineering techniques.",
+          "Learn ChatGPT's basics: which models there are, what their limits are, and how to write a clear request.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Understand GPT model architecture and evolution as a master blueprint",
+            text: "Explain in your own words what a language model is and why it has a cutoff date",
           },
           {
             icon: "fa-check",
-            text: "Apply professional prompt engineering techniques as construction tools",
+            text: "Write a request with task, context, and format, and adjust it when the answer doesn't work",
           },
           {
             icon: "fa-check",
@@ -135,7 +135,7 @@ export const CONTENT_EN_PART2 = {
       2: {
         objective: "🏗️ The Architect's Scaffolding",
         objectiveDesc:
-          "Master ChatGPT's tool ecosystem: Web Search, Data Analysis, image generation, Canvas, voice, and Projects.",
+          "Get to know ChatGPT's tools: Web Search, Data Analysis, image generation, Canvas, voice, and Projects.",
         achievements: [
           {
             icon: "fa-check",
@@ -147,7 +147,7 @@ export const CONTENT_EN_PART2 = {
           },
           {
             icon: "fa-check",
-            text: "Create automations that solve real problems — your finished building",
+            text: "Solve a real task with two or three tools and review the result — your finished building",
           },
         ],
         warnings: [
@@ -168,7 +168,7 @@ export const CONTENT_EN_PART2 = {
           label: "Integrated workflow example",
           weak: "❌ Isolated: Asking for updated data without enabling Web Search → outdated results like a building without foundations",
           strong:
-            "✅ Integrated: Search current data (Web Search) → analyze it with Python (Data Analysis) → generate the infographic from those results (image) → write in Canvas the text that comments on it — a construction in 4 perfectly orchestrated phases",
+            "✅ Integrated: Search current data (Web Search) → analyze it with Python (Data Analysis) → generate the infographic from those results (image) → write in Canvas the text that comments on it — a construction in 4 phases, each one checked before moving on to the next",
         },
       },
       3: {

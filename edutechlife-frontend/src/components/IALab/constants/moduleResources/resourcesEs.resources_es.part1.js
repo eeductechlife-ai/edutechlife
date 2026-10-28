@@ -2,7 +2,7 @@ export const RESOURCES_ES_PART1 = {
   "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?": {
     title: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
     description:
-      "Todo artesano conoce su material prima. Descubre qué es la IA Generativa, cómo funciona y por qué dominarla es la herramienta más valiosa en el taller del artesano digital.",
+      "Todo artesano conoce su materia prima. Descubre qué es la IA generativa, cómo funciona y qué puede y no puede hacer en el taller del artesano digital.",
     learningObjectives: [
       "Comprender qué es la IA Generativa y cómo funciona — la materia prima del artesano",
       "Diferenciar entre IA débil (narrow) y IA fuerte (general) como un maestro distingue sus herramientas",
@@ -21,7 +21,7 @@ export const RESOURCES_ES_PART1 = {
         thumbnail: "https://img.youtube.com/vi/Gq6qG_oK6HY/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre qué es la inteligencia artificial, cómo funciona y el impacto que está teniendo en el mundo actual. La introducción perfecta para tu taller de artesano digital.",
+          "Descubre qué es la inteligencia artificial, cómo funciona y el impacto que está teniendo en el mundo actual. Un buen punto de partida para tu taller de artesano digital.",
       },
       {
         id: "intro-ova-1",
@@ -53,10 +53,10 @@ export const RESOURCES_ES_PART1 = {
   "El Cincel del Artesano: ¿Qué es un Prompt?": {
     title: "El Cincel del Artesano: ¿Qué es un Prompt?",
     description:
-      "El cincel es la herramienta más básica del escultor — y también la más importante. Domina el arte de escribir instrucciones precisas que la IA entiende a la perfección.",
+      "El cincel es la herramienta más básica del escultor — y también la más importante. Aprende a escribir instrucciones claras y a mejorarlas hasta que la IA te dé lo que necesitas.",
     learningObjectives: [
       "Comprender qué es un prompt y cómo usarlo como la herramienta principal del artesano digital",
-      "Dominar la anatomía de una instrucción: contexto, intención, formato y restricciones",
+      "Armar una instrucción con sus partes: contexto, intención, formato y restricciones",
       "Practicar el arte de la claridad — menos ambigüedad, más precisión, mejores resultados",
     ],
     estimatedTime: "15 minutos",
@@ -71,7 +71,7 @@ export const RESOURCES_ES_PART1 = {
         thumbnail: "https://img.youtube.com/vi/kvQkEIuuFbU/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Aprende la fórmula definitiva para crear prompts efectivos y dominar la inteligencia artificial. Como un maestro artesano compartiendo sus secretos de taller.",
+          "Aprende una fórmula sencilla para escribir prompts efectivos y obtener respuestas más útiles. Como un maestro artesano que comparte sus trucos de taller.",
       },
       {
         id: "prompt-guide-1",
@@ -82,7 +82,7 @@ export const RESOURCES_ES_PART1 = {
         format: "PDF",
         size: "1.36 MB",
         description:
-          "Tu manual de referencia del artesano: técnicas comprobadas, ejemplos listos para usar y secretos del oficio que transformarán tu forma de trabajar con IA.",
+          "Tu manual de referencia del artesano: técnicas para escribir prompts claros y ejemplos listos para adaptar a tu trabajo.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -91,7 +91,7 @@ export const RESOURCES_ES_PART1 = {
         type: "ova_interactive",
         title: "El Cincel",
         description:
-          "Pon en práctica lo aprendido: esculpe tus propios prompts y recibe feedback inmediato. El taller del artesano donde cada práctica te acerca a la maestría.",
+          "Pon en práctica lo aprendido: esculpe tus propios prompts y recibe feedback inmediato. El taller del artesano donde cada práctica afina tu oficio.",
         estimatedTime: "10 minutos",
         difficulty: "Principiante",
         fullscreen: true,
@@ -120,7 +120,7 @@ export const RESOURCES_ES_PART1 = {
         thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "9:20 que pueden salvar tu reputación. Descubre los riesgos de privacidad que acechan en cada herramienta de IA y cómo neutralizarlos.",
+          "9:20 para conocer los riesgos de privacidad, los sesgos y la dependencia al usar herramientas de IA, y cómo reducirlos.",
       },
       {
         id: "privacy-guide-1",
@@ -170,7 +170,7 @@ export const RESOURCES_ES_PART1 = {
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "6:05 que condensan todo lo que necesitas saber para implementar IA ética en el mundo real. La guía definitiva para guardianes.",
+          "6:05 con las ideas clave para usar la IA de forma ética en tu día a día. Un buen punto de partida para guardianes.",
       },
       {
         id: "bias-guide-1",
@@ -181,7 +181,7 @@ export const RESOURCES_ES_PART1 = {
         format: "PDF",
         size: "0.64 MB",
         description:
-          "5 páginas que condensan todo lo que necesitas saber para blindar éticamente tu relación con la IA. Lectura obligatoria para guardianes.",
+          "5 páginas con las preguntas y prácticas clave para usar la IA de forma ética. Lectura recomendada para guardianes.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -190,7 +190,7 @@ export const RESOURCES_ES_PART1 = {
         type: "ova_interactive",
         title: "El Espejo de la Verdad",
         description:
-          "Pon a prueba tu ojo de guardián: analiza respuestas de IA reales y descubre los sesgos que la mayoría de la gente nunca notaría. 6 desafíos que agudizarán tu instinto.",
+          "Pon a prueba tu ojo de guardián: analiza respuestas de IA reales y descubre sesgos que suelen pasar inadvertidos. 6 desafíos para entrenar tu ojo.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 6,
@@ -202,11 +202,11 @@ export const RESOURCES_ES_PART1 = {
   "Los Planos del Arquitecto: Guía Completa de ChatGPT": {
     title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
     description:
-      "Todo gran edificio comienza con un plano maestro. Conoce la arquitectura completa de ChatGPT: modelos, interfaz, técnicas de prompt engineering y las mejores prácticas del oficio de arquitecto digital.",
+      "Todo gran edificio comienza con un plano maestro. Conoce lo esencial de ChatGPT: modelos, interfaz, cómo escribir un buen pedido y las buenas prácticas del oficio de arquitecto digital.",
     learningObjectives: [
       "Navegar la interfaz de ChatGPT como un arquitecto conoce su estudio",
       "Configurar conversaciones como planos detallados para cada propósito",
-      "Aplicar técnicas de prompt engineering como herramientas de construcción profesional",
+      "Escribir pedidos con tarea, contexto y formato, como herramientas de construcción",
       "Seleccionar el modelo óptimo como un arquitecto elige el material correcto para cada obra",
     ],
     estimatedTime: "26 minutos",
@@ -232,7 +232,7 @@ export const RESOURCES_ES_PART1 = {
         format: "PDF",
         size: "1.67 MB",
         description:
-          "El manual del arquitecto: tips, trucos y ejemplos prácticos organizados para construir cualquier proyecto con ChatGPT. Consulta rápida para profesionales de la construcción digital.",
+          "El manual del arquitecto: tips, trucos y ejemplos prácticos organizados para tus primeros proyectos con ChatGPT. Consulta rápida para tu obra digital.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -241,7 +241,7 @@ export const RESOURCES_ES_PART1 = {
         type: "ova_interactive",
         title: "El Plano Maestro",
         description:
-          "Recorrido interactivo por el universo ChatGPT: descubre cada herramienta, aprende a combinarlas y conviértete en un arquitecto de automatización. El tour completo de tu nueva obra.",
+          "Recorrido interactivo por el universo ChatGPT: descubre cada herramienta, aprende a combinarlas y decide cuál usar en cada tarea. El recorrido completo de tu nueva obra.",
         estimatedTime: "20 minutos",
         difficulty: "Principiante",
         interactiveElements: 5,
@@ -253,11 +253,11 @@ export const RESOURCES_ES_PART1 = {
   "El Andamio del Arquitecto: Herramientas Integradas": {
     title: "El Andamio del Arquitecto: Herramientas Integradas",
     description:
-      "Un arquitecto no construye solo con las manos — usa andamios, grúas y herramientas especializadas. Descubre las 5 herramientas integradas de ChatGPT que multiplicarán tu productividad.",
+      "Un arquitecto no construye solo con las manos — usa andamios, grúas y herramientas especializadas. Descubre las 5 herramientas integradas de ChatGPT y para qué sirve cada una.",
     learningObjectives: [
       "Identificar las 5 herramientas clave del ecosistema ChatGPT y cuándo usar cada una",
       "Seleccionar la herramienta correcta como un arquitecto elige el material adecuado",
-      "Combinar múltiples herramientas en flujos de trabajo eficientes y automatizados",
+      "Combinar dos o tres herramientas en un flujo de trabajo sencillo y revisar cada resultado",
       "Resolver escenarios reales usando las herramientas integradas como un maestro de obra",
     ],
     estimatedTime: "25 minutos",
@@ -282,7 +282,7 @@ export const RESOURCES_ES_PART1 = {
         format: "PDF",
         size: "1.23 MB",
         description:
-          "Descubre cómo Búsqueda Web, Análisis de Datos, la generación de imágenes y Canvas trabajan juntos como un equipo de construcción para resolver problemas complejos.",
+          "Descubre cómo Búsqueda Web, Análisis de Datos, la generación de imágenes y Canvas trabajan juntos como un equipo de construcción para resolver una tarea de varios pasos.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -291,7 +291,7 @@ export const RESOURCES_ES_PART1 = {
         type: "ova_interactive",
         title: "La Caja de Herramientas",
         description:
-          "Explora cada herramienta de ChatGPT con ejercicios prácticos y audio guiado. Como un arquitecto probando sus herramientas antes de la gran obra. Completa el desafío para demostrar tu maestría.",
+          "Explora cada herramienta de ChatGPT con ejercicios prácticos y audio guiado. Como un arquitecto probando sus herramientas antes de la gran obra. Completa el desafío para demostrar lo que aprendiste.",
         estimatedTime: "25 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -303,7 +303,7 @@ export const RESOURCES_ES_PART1 = {
   "La Fachada del Edificio: GPTs, Proyectos y Agentes": {
     title: "La Fachada del Edificio: GPTs, Proyectos y Agentes",
     description:
-      "La fachada es lo que el mundo ve. Construye GPTs personalizados con tus instrucciones y tu conocimiento, organiza tu trabajo en Proyectos y delega tareas de varios pasos al agente de ChatGPT, siempre bajo tu supervisión.",
+      "La fachada es lo que el mundo ve. Organiza tu trabajo en Proyectos con tus instrucciones y archivos, conecta plugins revisando sus permisos y delega tareas de varios pasos al agente de ChatGPT, siempre bajo tu supervisión.",
     learningObjectives: [
       "Diseñar Proyectos con instrucciones y archivos, y decidir cuándo conviene un plugin o un agente",
       "Organizar un Proyecto con archivos e instrucciones de un mismo trabajo",

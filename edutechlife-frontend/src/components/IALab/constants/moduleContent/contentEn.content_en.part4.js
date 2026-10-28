@@ -1,22 +1,22 @@
 export const CONTENT_EN_PART4 = {
   4: {
     objective:
-      "Turn documents into gold: podcasts that sound like professional radio, summaries that cut to the chase, and answers that cite every source without making things up.",
+      "Turn your documents into gold: summaries that cut to the chase, audio summaries to review on the go, and answers with citations you can check.",
     learningPoints: [
       {
         text: "Curate your sources like a jeweler picks gemstones",
         icon: "fa-book-open",
       },
       {
-        text: "Distill documents into pure knowledge with AI",
+        text: "Distill your documents into summaries and study guides you can verify",
         icon: "fa-file-alt",
       },
       {
-        text: "Create radio-quality podcasts from your files",
+        text: "Create a podcast-style audio summary from your files",
         icon: "fa-microphone",
       },
       {
-        text: "Manage your digital library with superhuman intelligence",
+        text: "Organize your digital library: one notebook per project, with a clear name",
         icon: "fa-folder-open",
       },
     ],
@@ -24,9 +24,9 @@ export const CONTENT_EN_PART4 = {
       title:
         "The Digital Alchemist: Gemini Notebook — Where Your Documents Become Knowledge",
       description:
-        "In this module, you will become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in formats that captivate, educate, and transform.",
+        "In this module, you will become a digital alchemist: your PDFs, articles, and notes hold more than meets the eye. Learn to ask them questions, turn them into summaries, study guides, and audio, and check every citation before sharing them.",
       mission:
-        "Become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in ways that captivate, educate, and transform.",
+        "Become a digital alchemist: build a notebook with your own documents, transform it into a summary, a study guide, or an audio, and share it only after checking its citations.",
       topics: [
         {
           title:
@@ -61,7 +61,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Document Alchemist: Your First Spell with Gemini Notebook",
         description: "Where PDFs come to life",
         detailedDescription:
-          "Meet Gemini Notebook, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with citations you can verify. It reduces the risk of error, but does not eliminate it: each statement is checked against its citation. If you ask about something that is not in your sources, add a reliable source; for general ideas with no documents, a general chat works better. It's your librarian with superpowers.",
+          "Meet Gemini Notebook, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with citations you can verify. It reduces the risk of error, but does not eliminate it: each statement is checked against its citation. If you ask about something that is not in your sources, add a reliable source; for general ideas with no documents, a general chat works better. It's like a librarian who only answers with the books you give it.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -73,7 +73,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Art of Curation: How to Choose and Synthesize Sources",
         description: "Quality over quantity, always",
         detailedDescription:
-          "Learn to select the best sources like a jeweler picks gemstones, organize them by topic, and weave ideas across documents to create professional-level summaries and analyses. A reliable source has an identifiable author, a date and references you can check. Include sources with different positions, so your synthesis does not show a single view.",
+          "Learn to select the best sources like a jeweler picks gemstones, organize them by topic, and weave ideas across documents to create summaries and analyses you can check citation by citation. A reliable source has an identifiable author, a date and references you can check. Include sources with different positions, so your synthesis does not show a single view. Gemini Notebook also creates, from your sources, a mind map (a diagram of how their topics connect) and flashcards or quizzes for review. Before studying with them, check each question and its answer in the source (depending on your plan; check your account).",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -85,7 +85,7 @@ export const CONTENT_EN_PART4 = {
         title: "The Secret Formula: Audio Overviews and Document Management",
         description: "Your documents speak for themselves",
         detailedDescription:
-          "Transform your documents into podcast conversations with two AI voices. A sonic experience that sounds like professional radio. Perfect for learning on the go. Manage your digital library with superhuman intelligence: one notebook per project, with a clear name, so you can find everything. Before sharing a notebook, remove personal or sensitive data (anonymize lists of people) and decide who can view it and who can edit it. The audio summarizes; to cite an idea, find it in the notebook's citations and cite the document, not the audio.",
+          "Transform your documents into podcast conversations with two AI voices. It sounds like a conversation between two people. Perfect for learning on the go. Organize your digital library: one notebook per project, with a clear name, so you can find everything. Before sharing a notebook, remove personal or sensitive data (anonymize lists of people) and decide who can view it and who can edit it. The audio summarizes; to cite an idea, find it in the notebook's citations and cite the document, not the audio. If you'd rather watch it, create a video overview: a narrated video with images, quotes, and figures taken from your documents (depending on your plan; check your account). As with audio, compare it with your sources before sharing it.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",
@@ -97,7 +97,7 @@ export const CONTENT_EN_PART4 = {
       1: {
         objective: "🎯 The First Spell",
         objectiveDesc:
-          "Gemini Notebook answers based on your sources and shows you where each answer comes from. The AI that transforms knowledge management.",
+          "Gemini Notebook answers based on your sources and shows you where each answer comes from. That way you can check every answer in its document.",
         achievements: [
           {
             icon: "fa-check",
@@ -130,7 +130,7 @@ export const CONTENT_EN_PART4 = {
           label: "Practical example",
           weak: "❌ Sarah uploaded 50 disorganized PDFs and got confusing answers. Garbage in, garbage out.",
           strong:
-            "✅ Felipe selected 5 key papers, organized them by topic, added context — and his notebook became an expert assistant that answered with exact citations. The difference: quality over quantity.",
+            "✅ Felipe selected 5 key papers, organized them by topic, added context — and his notebook answered with citations he could check. The difference: quality over quantity.",
         },
       },
       2: {
@@ -175,7 +175,7 @@ export const CONTENT_EN_PART4 = {
       3: {
         objective: "🎙️ Audio Overviews",
         objectiveDesc:
-          "Turn your documents into AI-generated audio conversations, like a show made just for you. 🧪 The Master Alchemist: master the full workflow, from your documents to a podcast ready to share.",
+          "Turn your documents into AI-generated audio conversations, like a show made just for you. 🧪 The alchemist walks the full path: from your documents to an audio you review before sharing.",
         achievements: [
           {
             icon: "fa-check",
@@ -208,7 +208,7 @@ export const CONTENT_EN_PART4 = {
           label: "Practical example",
           weak: "❌ Generic audio: Two voices reading the document with no spark or structure",
           strong:
-            "✅ Focused audio: 15-minute podcast where two hosts discuss key findings from 5 papers on neuroplasticity, with practical examples, analogies, and even an 'aha!' moment that makes it unforgettable",
+            "✅ Focused audio: 15-minute podcast where two hosts discuss key findings from 5 papers on neuroplasticity, with practical examples and analogies, checked against the sources before sharing",
         },
       },
     },

@@ -4,7 +4,7 @@ export const ALL_LESSONS_EN = {
       id: 1,
       title: "Generative AI: Your First Step",
       description:
-        "Discover how generative AI is transforming education and master the key concepts to apply it starting today.",
+        "Discover what generative AI is, what it does well and why it sometimes gets things wrong, so you can use it with judgment starting today.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
@@ -19,7 +19,7 @@ export const ALL_LESSONS_EN = {
       id: 2,
       title: "The Power of a Good Prompt",
       description:
-        "Learn to communicate with AI like an expert: the right prompt makes the difference between a generic result and a custom solution.",
+        "Learn to ask AI for what you need: the right prompt makes the difference between a generic result and one tailored to you.",
       duration: "20 min",
       type: "práctica",
       hasMedia: true,
@@ -34,14 +34,14 @@ export const ALL_LESSONS_EN = {
       id: 3,
       title: "Build Flawless Prompts",
       description:
-        "Learn the magic formula: Context + Instruction + Format = Precise Result.",
+        "Learn the RTF formula: Role + Task + Format (with the context needed) = a more useful result.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
       icon: "fa-sitemap",
       objectives: [
-        "Master the Context + Instruction + Format formula",
-        "Build structured prompts with precise results",
+        "Write a prompt with the RTF formula: Role + Task + Format",
+        "Improve a prompt by asking for adjustments until you get a useful answer",
         "Evaluate and refine AI response quality",
       ],
     },
@@ -51,7 +51,7 @@ export const ALL_LESSONS_EN = {
       id: 1,
       title: "Get to Know ChatGPT",
       description:
-        "What ChatGPT is, what it can and cannot do, and how to ask for useful results on the first try.",
+        "What ChatGPT is, what it can and cannot do, and how to ask for useful results in fewer tries.",
       duration: "25 min",
       type: "teoría",
       hasMedia: true,
@@ -98,14 +98,14 @@ export const ALL_LESSONS_EN = {
       id: 1,
       title: "See, Read, and Analyze with Gemini",
       description:
-        "Analyze text, images, and data in one place with the multimodal power of AI.",
+        "Analyze text, images, and data in one place and check what the AI understood.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
       icon: "fa-brain",
       objectives: [
         "Combine text, images, and data in a single analysis",
-        "Understand current AI multimodal capabilities",
+        "Ask the AI to read an image or a document and check what it understood",
         "Apply multimodal reasoning to research cases",
       ],
     },
@@ -113,7 +113,7 @@ export const ALL_LESSONS_EN = {
       id: 2,
       title: "Always Up-to-Date Answers",
       description:
-        "Get real-time answers by connecting AI to live information sources.",
+        "Ask for answers with current web sources and open them to check they say the same.",
       duration: "25 min",
       type: "práctica",
       hasMedia: true,
@@ -121,21 +121,21 @@ export const ALL_LESSONS_EN = {
       objectives: [
         "Connect AI with live data sources",
         "Verify answers with up-to-date information",
-        "Implement grounding in practical applications",
+        "Tell an answer with sources from one that only sounds good",
       ],
     },
     {
       id: 3,
       title: "The Art of Research with AI",
       description:
-        "Research deeply and verify any facts with advanced AI-assisted research techniques.",
+        "Commission research from the AI, review its plan, and check every source in its report.",
       duration: "30 min",
       type: "laboratorio",
       hasMedia: false,
       icon: "fa-microscope",
       objectives: [
-        "Conduct deep AI-assisted research",
-        "Automatically verify facts and sources",
+        "Commission a deep research task and review its plan",
+        "Verify facts and sources one by one",
         "Structure research reports with AI",
       ],
     },
@@ -166,9 +166,9 @@ export const ALL_LESSONS_EN = {
       hasMedia: true,
       icon: "fa-compress",
       objectives: [
-        "Transform complex documents into executive summaries",
+        "Summarize long documents into key ideas you can check",
         "Extract key insights from multiple sources",
-        "Structure knowledge in an actionable way",
+        "Turn a summary into a study guide or a task list",
       ],
     },
     {
@@ -183,7 +183,7 @@ export const ALL_LESSONS_EN = {
       objectives: [
         "Convert written documents into audio content",
         "Manage a digital knowledge library",
-        "Optimize documentation workflows with AI",
+        "Name and organize your notebooks so you can find every document",
       ],
     },
   ],

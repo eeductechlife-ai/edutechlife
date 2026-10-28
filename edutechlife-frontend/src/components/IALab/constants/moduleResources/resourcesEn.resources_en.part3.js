@@ -39,7 +39,7 @@ export const RESOURCES_EN_PART3 = {
         type: "ova_interactive",
         title: "The Artifacts Workshop",
         description:
-          "Build the perfect request for a document or presentation: choose goal, audience, format and constraints, and see the result before asking.",
+          "Build a complete request for a document or presentation: choose goal, audience, format and constraints, and see the result before asking.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 4,
