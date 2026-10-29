@@ -7,7 +7,7 @@ export function QuestionProgressBar({ quizQuestions, quizAnswers, currentQuestio
   if (showScoreResult) return null;
 
   return (
-    <div className="px-6 py-2 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2 overflow-x-auto">
+    <div className="px-3 sm:px-6 py-2 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex flex-wrap sm:flex-nowrap items-center gap-1.5 sm:gap-2 overflow-x-auto">
       {quizQuestions.map((q, idx) => {
         const answered = !!quizAnswers[q.id];
         const marked = markedQuestions.has(q.id);
@@ -15,6 +15,8 @@ export function QuestionProgressBar({ quizQuestions, quizAnswers, currentQuestio
           <button
             key={q.id}
             onClick={() => onSelectQuestion(idx)}
+            aria-current={idx === currentQuestion ? "step" : undefined}
+            aria-label={t('ialab.quiz.question_count', { current: idx + 1, total: quizQuestions.length }) + (marked ? ' — ' + t('ialab.quiz.marked') : '')}
             className={`w-11 h-11 rounded-lg text-xs font-bold transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
               idx === currentQuestion
                 ? 'ring-2 ring-[var(--theme-primary)] ring-offset-1 dark:ring-offset-slate-800'

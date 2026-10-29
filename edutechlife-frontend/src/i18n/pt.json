@@ -856,6 +856,7 @@
   "ialab.doc_guide.answer_hint": "Escreva pelo menos {min} caracteres para ganhar pontos.",
   "ialab.doc_guide.answer_saved": "Reflexão salva · +{xp} XP",
   "ialab.viewer_modal.download": "Baixar",
+  "ialab.viewer_modal.open_pdf": "Abrir PDF",
   "ialab.viewer_modal.pages": "{pages} páginas",
   "ialab.viewer_modal.scroll_to_end": "Role até o final",
   "ialab.viewer_modal.cannot_load": "Não foi possível carregar o documento",

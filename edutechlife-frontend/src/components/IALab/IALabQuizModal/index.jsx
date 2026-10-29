@@ -306,7 +306,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           >
             <a
               href="#quiz-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[110] focus:px-4 focus:py-2 focus:bg-white focus:text-[var(--theme-emphasis)] focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
+              className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-2 focus-visible:left-2 focus-visible:z-[110] focus-visible:px-4 focus-visible:py-2 focus-visible:bg-white focus-visible:text-[var(--theme-emphasis)] focus-visible:rounded-lg focus-visible:text-sm focus-visible:font-bold focus-visible:shadow-lg"
             >
               {t("ialab.skip_link")}
             </a>

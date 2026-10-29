@@ -52,13 +52,28 @@ const PDFThumbnailViewer = ({
   return (
     <div className="w-full h-full flex flex-col">
       <DocGuidePanel resourceId={resource?.id} />
-      {!alreadyViewed && !completedRef.current && !hasScrolledEnough && (
-        <div className="mb-2 px-1">
+      <div className="mb-2 flex items-center justify-between gap-2 px-1">
+        {!alreadyViewed && !completedRef.current && !hasScrolledEnough ? (
           <span className="text-xs text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-3 py-1 rounded-full font-medium backdrop-blur-sm">
             {t("ialab.viewer_modal.scroll_to_end")}
           </span>
-        </div>
-      )}
+        ) : (
+          <span />
+        )}
+        <a
+          href={resource.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-[var(--theme-primary)]/30 bg-white/80 px-3 py-2 text-xs font-semibold text-[var(--theme-primary)] shadow-sm backdrop-blur-sm dark:border-slate-600 dark:bg-slate-800/80 dark:text-[#4DA8C4]"
+          aria-label={t("ialab.viewer_modal.open_pdf")}
+        >
+          <Icon
+            name="fa-arrow-up-right-from-square"
+            className="w-3.5 h-3.5"
+          />
+          {t("ialab.viewer_modal.open_pdf")}
+        </a>
+      </div>
       <div
         ref={scrollRef}
         onScroll={handleScroll}

@@ -900,6 +900,7 @@
   "ialab.doc_guide.answer_hint": "Write at least {min} characters to earn points.",
   "ialab.doc_guide.answer_saved": "Reflection saved · +{xp} XP",
   "ialab.viewer_modal.download": "Download",
+  "ialab.viewer_modal.open_pdf": "Open PDF",
   "ialab.viewer_modal.pages": "{pages} pages",
   "ialab.viewer_modal.scroll_to_end": "Scroll to the end",
   "ialab.viewer_modal.cannot_load": "Could not load document",

@@ -268,6 +268,10 @@ const ResourceViewerModal = ({
     return null;
   }
 
+  const isOVA = ["ova", "ova_interactive", "ova-thumbnail"].includes(
+    resource.type,
+  );
+
   const renderViewer = () => {
     if (!resource) {
       return (
@@ -655,7 +659,12 @@ const ResourceViewerModal = ({
                         </button>
                       </div>
                       {totalResources > 1 && (
-                        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                        <div
+                          className={cn(
+                            "flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start",
+                            isOVA && "hidden sm:flex",
+                          )}
+                        >
                           <button
                             onClick={onPreviousResource}
                             disabled={currentIndex <= 0}

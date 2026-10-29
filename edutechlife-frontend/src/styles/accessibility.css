@@ -15,7 +15,7 @@
   outline: none;
 }
 
-.skip-link:focus {
+.skip-link:focus-visible {
   top: 0;
   outline: var(--a11y-focus-ring-width, 3px) solid
     var(--a11y-focus-ring-color, #0097a7);
@@ -56,6 +56,18 @@
   button,
   [role="button"] {
     border-width: 2px;
+  }
+}
+
+/* Deja espacio para el botón flotante de MAX y la barra inferior en móvil.
+   Sin esto, la última tarjeta de recursos queda debajo del avatar de MAX. */
+.ialab-mobile-bottom-safe {
+  padding-bottom: calc(9.5rem + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media (min-width: 768px) {
+  .ialab-mobile-bottom-safe {
+    padding-bottom: 0.5rem !important;
   }
 }
 

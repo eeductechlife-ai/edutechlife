@@ -901,6 +901,7 @@
   "ialab.doc_guide.answer_hint": "Escribe al menos {min} caracteres para sumar puntos.",
   "ialab.doc_guide.answer_saved": "Reflexión guardada · +{xp} XP",
   "ialab.viewer_modal.download": "Descargar",
+  "ialab.viewer_modal.open_pdf": "Abrir PDF",
   "ialab.viewer_modal.pages": "{pages} páginas",
   "ialab.viewer_modal.scroll_to_end": "Desplázate hasta el final",
   "ialab.viewer_modal.cannot_load": "No se pudo cargar el documento",
