@@ -174,7 +174,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
   const performSubmit = useCallback(async () => {
     setIsSubmitting(true);
-    const submitResult = await submitQuiz();
+    const submitResult = await submitQuiz({ practice: practiceMode });
     setIsSubmitting(false);
 
     applyQuizSubmitResult({

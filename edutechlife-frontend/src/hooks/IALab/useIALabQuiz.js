@@ -189,65 +189,71 @@ export const useIALabQuiz = () => {
     setShowSecurityMessage,
   ]);
 
-  const submitQuiz = useCallback(async () => {
-    let result;
-    try {
-      result = calculateQuizScore(quizAnswers);
-
-      setQuizScore(result.score);
-      setQuizPassed(result.passed);
-      setQuizResult(result);
-      setShowScoreResult(true);
-
-      const attempt = {
-        id: Date.now(),
-        moduleId: activeMod,
-        score: result.score,
-        passed: result.passed,
-        correctCount: result.correctCount,
-        totalQuestions: quizQuestions.length,
-        date: new Date().toISOString(),
-        timeElapsed: timeElapsed,
-        failedQuestions: result.failedQuestions,
-      };
-
-      const updatedAttempts = [...quizAttempts, attempt];
-      setQuizAttempts(updatedAttempts);
-      useIALabStore
-        .getState()
-        .storageSet(`quizAttempts_${activeMod}`, updatedAttempts);
-
-      // Consumir un intento al enviar. Es aquí (no al "reintentar") para que
-      // cada envío cuente exactamente una vez: 3 intentos, sin espera entre
-      // ellos; al agotar el 3º se aplica el cooldown de 12h para recargar.
+  // `practice`: el modo práctica no registra el intento ni consume intentos del examen.
+  const submitQuiz = useCallback(
+    async ({ practice = false } = {}) => {
+      let result;
       try {
-        useIALabStore.getState().decrementExamAttempt(activeMod);
-      } catch {
-        /* no crítico */
+        result = calculateQuizScore(quizAnswers);
+
+        setQuizScore(result.score);
+        setQuizPassed(result.passed);
+        setQuizResult(result);
+        setShowScoreResult(true);
+
+        const attempt = {
+          id: Date.now(),
+          moduleId: activeMod,
+          score: result.score,
+          passed: result.passed,
+          correctCount: result.correctCount,
+          totalQuestions: quizQuestions.length,
+          date: new Date().toISOString(),
+          timeElapsed: timeElapsed,
+          failedQuestions: result.failedQuestions,
+        };
+
+        if (!practice) {
+          const updatedAttempts = [...quizAttempts, attempt];
+          setQuizAttempts(updatedAttempts);
+          useIALabStore
+            .getState()
+            .storageSet(`quizAttempts_${activeMod}`, updatedAttempts);
+
+          // Consumir un intento al enviar. Es aquí (no al "reintentar") para que
+          // cada envío cuente exactamente una vez: 3 intentos, sin espera entre
+          // ellos; al agotar el 3º se aplica el cooldown de 12h para recargar.
+          try {
+            useIALabStore.getState().decrementExamAttempt(activeMod);
+          } catch {
+            /* no crítico */
+          }
+        }
+
+        setIsTimerRunning(false);
+
+        return { success: true, result };
+      } catch (error) {
+        console.error("Error al enviar quiz:", error);
+        return { success: false, error: error.message, result };
       }
-
-      setIsTimerRunning(false);
-
-      return { success: true, result };
-    } catch (error) {
-      console.error("Error al enviar quiz:", error);
-      return { success: false, error: error.message, result };
-    }
-  }, [
-    quizAnswers,
-    activeMod,
-    quizAttempts,
-    timeElapsed,
-    calculateQuizScore,
-    setQuizScore,
-    setQuizPassed,
-    setQuizResult,
-    setShowScoreResult,
-    setQuizAttempts,
-    setDailyAttemptsCount,
-    setLastAttemptDate,
-    setIsTimerRunning,
-  ]);
+    },
+    [
+      quizAnswers,
+      activeMod,
+      quizAttempts,
+      timeElapsed,
+      calculateQuizScore,
+      setQuizScore,
+      setQuizPassed,
+      setQuizResult,
+      setShowScoreResult,
+      setQuizAttempts,
+      setDailyAttemptsCount,
+      setLastAttemptDate,
+      setIsTimerRunning,
+    ],
+  );
 
   const updateQuizAnswer = useCallback(
     (questionId, answer) => {
